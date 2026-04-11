@@ -1,62 +1,180 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
+import artworks from '../data/artworks.json';
 
-// 1. フォルダの場所を特定する
 const galleryDir = path.resolve('./public/gallery');
-
-// 2. フォルダの中にある「ファイル名」を全部自動で読み込む
-// (jpg, png, webpなどの画像ファイルだけを抜き出します)
 const imageFiles = fs.existsSync(galleryDir) 
   ? fs.readdirSync(galleryDir).filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
   : [];
 
+const base = import.meta.env.BASE_URL;
 const title = "デジタル・アーカイブ美術館";
 ---
 
 <html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<title>{title}</title>
-		<style>
-			/* 美術館らしいデザイン設定 */
-			body { font-family: "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f0f0f0; }
-			.header { text-align: center; padding: 60px 20px; background: #222; color: #fff; }
-			.gallery-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-				gap: 25px;
-				padding: 40px;
-			}
-			.card {
-				background: white;
-				border: 1px solid #ddd;
-				border-radius: 4px;
-				overflow: hidden;
-				box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-			}
-			.card img {
-				width: 100%;
-				height: 250px;
-				object-fit: contain; /* 絵の全体が収まるように表示 */
-				background: #fafafa;
-			}
-			.filename { padding: 10px; font-size: 0.8rem; color: #666; text-align: center; border-top: 1px solid #eee; }
-		</style>
-	</head>
-	<body>
-		<div class="header">
-			<h1>{title}</h1>
-			<p>{imageFiles.length} 点の作品を展示中</p>
-		</div>
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <style>
+      body { font-family: "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f0f0f0; }
+      .header { text-align: center; padding: 60px 20px; background: #222; color: #fff; }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 40px;
+      }
+      .card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .card:hover { transform: scale(1.02); }
+      .card img {
+        width: 100%;
+        height: 250px;
+        object-fit: contain;
+        background: #fafafa;
+      }
+      .card-title {
+        padding: 10px;
+        font-size: 0.9rem;
+        color: #333;
+        text-align: center;
+        border-top: 1px solid #eee;
+        font-weight: bold;
+      }
 
-		<div class="gallery-grid">
-			{imageFiles.map((img) => (
-				<div class="card">
-					<img src={`/gallery/${img}`} alt={img} loading="lazy" />
-					<div class="filename">{img}</div>
-				</div>
-			))}
-		</div>
-	</body>
+      /* モーダル */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-overlay.active { display: flex; }
+      .modal {
+        background: white;
+        border-radius: 8px;
+        max-width: 700px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 30px;
+        position: relative;
+      }
+      .modal-close {
+        position: absolute;
+        top: 15px; right: 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: #333;
+      }
+      .modal img {
+        width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+        background: #fafafa;
+        margin-bottom: 20px;
+      }
+      .modal-info table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .modal-info th {
+        text-align: left;
+        padding: 8px 12px;
+        color: #666;
+        font-size: 0.85rem;
+        width: 80px;
+        border-bottom: 1px solid #eee;
+      }
+      .modal-info td {
+        padding: 8px 12px;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #eee;
+      }
+      .modal-description {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>{title}</h1>
+      <p>{imageFiles.length} 点の作品を展示中</p>
+    </div>
+
+    <div class="gallery-grid">
+      {imageFiles.map((img) => {
+        const info = artworks.find(a => a.file === img);
+        return (
+          <div
+            class="card"
+            onclick={`openModal('${img}', '${info?.title ?? img}', '${info?.artist ?? "不明"}', '${info?.year ?? "不明"}', '${info?.size ?? "不明"}', '${info?.description ?? ""}')`}
+          >
+            <img src={`${base}/gallery/${img}`} alt={info?.title ?? img} loading="lazy" />
+            <div class="card-title">{info?.title ?? img}</div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- モーダル -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <img id="modalImg" src="" alt="" />
+        <div class="modal-info">
+          <table>
+            <tr><th>タイトル</th><td id="modalTitle"></td></tr>
+            <tr><th>作者</th><td id="modalArtist"></td></tr>
+            <tr><th>制作年</th><td id="modalYear"></td></tr>
+            <tr><th>サイズ</th><td id="modalSize"></td></tr>
+          </table>
+          <div class="modal-description" id="modalDescription"></div>
+        </div>
+      </div>
+    </div>
+
+    <script define:vars={{ base }}>
+      function openModal(file, title, artist, year, size, description) {
+        document.getElementById('modalImg').src = base + '/gallery/' + file;
+        document.getElementById('modalImg').alt = title;
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalArtist').textContent = artist;
+        document.getElementById('modalYear').textContent = year;
+        document.getElementById('modalSize').textContent = size;
+        document.getElementById('modalDescription').textContent = description;
+        document.getElementById('modalOverlay').classList.add('active');
+      }
+
+      function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+      }
+
+      function closeModalOnOverlay(event) {
+        if (event.target === document.getElementById('modalOverlay')) {
+          closeModal();
+        }
+      }
+    </script>
+  </body>
 </html>
