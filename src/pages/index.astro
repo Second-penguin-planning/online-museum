@@ -3,30 +3,6 @@ import artworks from '../data/artworks.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const title = "デジタル・アーカイブ美術館";
-
-// ★ 追加：実際のサイズ（例: "120 × 80 cm"）から、画面表示用の縦横比を計算
-function getArtworkStyle(sizeStr) {
-  const baseWidth = 260; // 基準となるカードの横幅(px)
-  
-  if (!sizeStr) return `width: ${baseWidth}px; height: 320px;`;
-
-  // 文字列から数字を2つ抽出（美術表記の基本である「縦 × 横」を想定）
-  const nums = sizeStr.match(/\d+(\.\d+)?/g);
-  if (nums && nums.length >= 2) {
-    const h = parseFloat(nums[0]); // 縦
-    const w = parseFloat(nums[1]); // 横
-    
-    // 実際の縦横比から、画面上での高さを計算
-    let calcHeight = baseWidth * (h / w);
-    
-    // レイアウト崩れを防ぐためのサイズ制限
-    if (calcHeight > 420) calcHeight = 420;
-    if (calcHeight < 160) calcHeight = 160;
-
-    return `width: ${baseWidth}px; height: ${calcHeight}px;`;
-  }
-  return `width: ${baseWidth}px; height: 320px;`;
-}
 ---
 
 <html lang="ja">
@@ -153,14 +129,14 @@ function getArtworkStyle(sizeStr) {
       }
       .gallery-track {
         display: flex;
-        gap: 40px; /* 余白を少し広げました */
+        gap: 50px;
         padding: 20px 80px;
         overflow-x: auto;
         scroll-behavior: smooth;
         scrollbar-width: none;
         -ms-overflow-style: none;
         cursor: grab;
-        align-items: flex-end; /* ★追加：高さの違う絵を、床（下端）で揃える */
+        align-items: flex-end; /* 高さが違う絵を下（床）で揃える */
       }
       .gallery-track:active { cursor: grabbing; }
       .gallery-track::-webkit-scrollbar { display: none; }
@@ -187,16 +163,13 @@ function getArtworkStyle(sizeStr) {
       .scroll-arrow.left { left: 15px; }
       .scroll-arrow.right { right: 15px; }
 
-      /* 絵カード */
+      /* 絵カード（横幅を固定し、高さは画像に任せる） */
       .artwork-card {
+        width: 280px;
         flex: 0 0 auto;
         cursor: pointer;
         transition: transform 0.3s;
         position: relative;
-        /* 高さが可変になるため、タイトルを下部に押し下げる設定 */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
       }
       .artwork-card:hover { transform: translateY(-8px); }
 
@@ -208,13 +181,10 @@ function getArtworkStyle(sizeStr) {
           inset 0 0 20px rgba(0,0,0,0.5),
           0 20px 60px rgba(0,0,0,0.6);
         border-radius: 2px;
-        overflow: hidden;
         position: relative;
         width: 100%;
-        height: 100%; /* 親の計算された高さに合わせる */
+        /* 額縁が画像にピッタリ沿うようにする */
         display: flex;
-        align-items: center;
-        justify-content: center;
       }
       .artwork-frame::before {
         content: '';
@@ -226,17 +196,14 @@ function getArtworkStyle(sizeStr) {
       }
       .artwork-frame img {
         width: 100%;
-        height: 100%;
-        object-fit: cover; /* 枠の比率とピッタリ合わせる */
+        height: auto; /* ★ 画像本来の縦横比を維持する */
         display: block;
-        mix-blend-mode: multiply; /* ★追加：画像内の白い部分を透過させる */
       }
 
       .artwork-label {
         text-align: center;
         margin-top: 15px;
         padding: 0 5px;
-        height: 40px; /* タイトルの高さを固定してガタつき防止 */
       }
       .artwork-label .artwork-title {
         font-size: 0.85rem;
@@ -287,7 +254,6 @@ function getArtworkStyle(sizeStr) {
       }
       .modal-close:hover { color: #fff; }
 
-      /* モーダル内の画像エリア */
       .modal-img-wrap {
         text-align: center;
         margin-bottom: 25px;
@@ -297,10 +263,9 @@ function getArtworkStyle(sizeStr) {
       .modal-img-wrap img {
         width: auto;
         max-width: 100%;
-        max-height: 420px;
+        max-height: 500px;
         object-fit: contain;
         display: inline-block;
-        mix-blend-mode: multiply; /* ★追加：モーダルでも白を透過 */
       }
 
       .modal-info table {
@@ -336,7 +301,6 @@ function getArtworkStyle(sizeStr) {
   </head>
   <body>
 
-    <!-- エントランス画面 -->
     <div class="entrance" id="entrance">
       <div class="entrance-decoration">
         <div class="frame"></div>
@@ -348,7 +312,6 @@ function getArtworkStyle(sizeStr) {
       <button class="enter-btn" id="enterBtn">― 入　館 ―</button>
     </div>
 
-    <!-- メインギャラリー -->
     <div class="museum" id="museum">
       <div class="museum-header">
         <h2>{title}</h2>
@@ -363,7 +326,6 @@ function getArtworkStyle(sizeStr) {
           {artworks.map((info) => (
             <div
               class="artwork-card"
-              style={getArtworkStyle(info.size)}  <!-- ★ここで計算した比率(縦横サイズ)を適用 -->
               data-file={info.file}
               data-title={info.title}
               data-artist={info.artist}
@@ -385,7 +347,6 @@ function getArtworkStyle(sizeStr) {
       </div>
     </div>
 
-    <!-- モーダル -->
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal">
         <button class="modal-close" id="modalClose">✕</button>
@@ -407,14 +368,12 @@ function getArtworkStyle(sizeStr) {
     <script>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
 
-      // ── エントランス → ギャラリー ──
       document.getElementById('enterBtn').addEventListener('click', () => {
         document.getElementById('entrance').classList.add('hidden');
         const museum = document.getElementById('museum');
         museum.classList.add('visible');
       });
 
-      // ── 矢印スクロール ──
       const track = document.getElementById('galleryTrack');
       document.getElementById('arrowLeft').addEventListener('click', () => {
         track.scrollBy({ left: -320, behavior: 'smooth' });
@@ -423,7 +382,6 @@ function getArtworkStyle(sizeStr) {
         track.scrollBy({ left: 320, behavior: 'smooth' });
       });
 
-      // ── マウスドラッグスクロール ──
       let isDragging = false;
       let startX = 0;
       let scrollLeft = 0;
@@ -440,7 +398,6 @@ function getArtworkStyle(sizeStr) {
         track.scrollLeft = scrollLeft - (x - startX);
       });
 
-      // ── モーダル ──
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.addEventListener('click', () => {
           document.getElementById('modalImg').src = base + '/gallery/' + card.dataset.file;
