@@ -2,32 +2,27 @@
 import artworks from '../data/artworks.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const title = "デジタル・アーカイブ美術館";
+const title = "德永アートミュージアム";
+const headerTitle = "德永デジタル美術館";
 
 // サイズデータから倍率を計算し、カードの横幅(px)を決定する関数
 function getCardWidth(sizeStr) {
   const defaultWidth = 280; // 30号の基準サイズ(横幅280px)
   if (!sizeStr) return defaultWidth;
 
-  // データから最初の「数字」を抽出
   const match = sizeStr.match(/(\d+(?:\.\d+)?)/);
   if (!match) return defaultWidth;
 
   const num = parseFloat(match[1]);
   let scale = 1;
 
-  // 「号」が含まれている、または数字が100未満の場合は号数として計算
   if (sizeStr.includes('号') || num < 100) {
     scale = num / 30; // 30号を 1.0倍 とする
   } else {
-    // cm表記など（数字が100以上）の場合、長辺90cmを30号相当とする仮計算
     scale = num / 90;
   }
 
-  // レイアウト崩れを防ぐため、倍率を 0.5倍 〜 2.5倍 の間に制限
   const clampedScale = Math.max(0.5, Math.min(scale, 2.5));
-  
-  // 基準幅に倍率を掛けて四捨五入したピクセル数を返す
   return Math.round(defaultWidth * clampedScale);
 }
 ---
@@ -36,17 +31,72 @@ function getCardWidth(sizeStr) {
   <head>
     <meta charset="utf-8" />
     <meta name="base-url" content={base} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font-family: "Helvetica Neue", Arial, sans-serif; background: #111; color: #fff; overflow-x: hidden; }
+
+      /* ========== ヘッダー ========== */
+      .site-header {
+        position: fixed;
+        top: 0; left: 0; width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 50px;
+        z-index: 1000;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+      }
+      .header-logo {
+        font-size: 1.2rem;
+        letter-spacing: 0.2em;
+        font-weight: 300;
+        color: #fff;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      }
+      .header-nav {
+        display: flex;
+        gap: 30px;
+      }
+      .header-nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.9rem;
+        letter-spacing: 0.1em;
+        opacity: 0.7;
+        transition: opacity 0.3s, transform 0.3s;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      }
+      .header-nav a:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+
+      /* スマホ向けヘッダー調整 */
+      @media (max-width: 768px) {
+        .site-header {
+          flex-direction: column;
+          padding: 15px 20px;
+          gap: 15px;
+          background: rgba(0,0,0,0.5); /* スマホでは少し背景を濃くして視認性確保 */
+        }
+        .header-nav {
+          gap: 15px;
+        }
+        .header-nav a {
+          font-size: 0.8rem;
+        }
+      }
 
       /* ========== エントランス ========== */
       .entrance {
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
-        background: radial-gradient(ellipse at center, #1a1a2e 0%, #0d0d0d 70%);
+        background: 
+          linear-gradient(rgba(17, 17, 17, 0.5), rgba(17, 17, 17, 0.85)),
+          url('https://images.unsplash.com/photo-1577083165239-0bd9f19fc08f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -58,45 +108,28 @@ function getCardWidth(sizeStr) {
         opacity: 0;
         visibility: hidden;
       }
-      .entrance-decoration {
-        display: flex;
-        gap: 30px;
-        margin-bottom: 50px;
-      }
-      .entrance-decoration .frame {
-        width: 80px;
-        height: 100px;
-        border: 2px solid rgba(255,255,255,0.3);
-        background: rgba(255,255,255,0.05);
-        border-radius: 2px;
-        animation: float 3s ease-in-out infinite;
-      }
-      .entrance-decoration .frame:nth-child(2) { animation-delay: 0.5s; height: 120px; }
-      .entrance-decoration .frame:nth-child(3) { animation-delay: 1s; }
-      @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
+      
       .entrance h1 {
         font-size: clamp(2rem, 5vw, 3.5rem);
         letter-spacing: 0.3em;
         text-align: center;
         margin-bottom: 15px;
         font-weight: 300;
-        background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #fff;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.8);
       }
       .entrance p {
         font-size: 0.9rem;
-        letter-spacing: 0.2em;
-        color: rgba(255,255,255,0.4);
+        letter-spacing: 0.25em;
+        color: rgba(255,255,255,0.8);
         margin-bottom: 60px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8);
       }
       .enter-btn {
         padding: 16px 50px;
-        border: 1px solid rgba(255,255,255,0.5);
-        background: transparent;
+        border: 1px solid rgba(255,255,255,0.6);
+        background: rgba(0,0,0,0.4);
+        backdrop-filter: blur(4px);
         color: #fff;
         font-size: 0.9rem;
         letter-spacing: 0.3em;
@@ -105,7 +138,7 @@ function getCardWidth(sizeStr) {
         border-radius: 2px;
       }
       .enter-btn:hover {
-        background: rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.2);
         border-color: #fff;
         transform: scale(1.05);
       }
@@ -113,14 +146,19 @@ function getCardWidth(sizeStr) {
       /* ========== メインギャラリー ========== */
       .museum {
         opacity: 0;
-        transition: opacity 1.2s ease;
+        visibility: hidden;
+        transition: opacity 1.2s ease, visibility 1.2s ease;
         min-height: 100vh;
       }
-      .museum.visible { opacity: 1; }
+      .museum.visible { 
+        opacity: 1; 
+        visibility: visible;
+      }
 
       .museum-header {
         text-align: center;
-        padding: 50px 20px 30px;
+        /* ヘッダーが上部に固定されているため、被らないように上部余白を大きめに取る */
+        padding: 120px 20px 30px;
         background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
       }
       .museum-header h2 {
@@ -163,7 +201,7 @@ function getCardWidth(sizeStr) {
         scrollbar-width: none;
         -ms-overflow-style: none;
         cursor: grab;
-        align-items: flex-end; /* 高さが違う絵を下（床）で揃える */
+        align-items: flex-end; 
       }
       .gallery-track:active { cursor: grabbing; }
       .gallery-track::-webkit-scrollbar { display: none; }
@@ -190,7 +228,7 @@ function getCardWidth(sizeStr) {
       .scroll-arrow.left { left: 15px; }
       .scroll-arrow.right { right: 15px; }
 
-      /* 絵カード（横幅はプログラムがインラインで自動指定します） */
+      /* 絵カード */
       .artwork-card {
         flex: 0 0 auto;
         cursor: pointer;
@@ -326,17 +364,25 @@ function getCardWidth(sizeStr) {
   </head>
   <body>
 
+    <!-- 常に上部に表示されるヘッダー -->
+    <header class="site-header">
+      <div class="header-logo">{headerTitle}</div>
+      <nav class="header-nav">
+        <a href="#" id="navTop">TOP</a>
+        <a href="#" onclick="alert('概要ページは準備中です。'); return false;">概要</a>
+        <a href="#" id="navExhibition">展示室</a>
+        <a href="#" onclick="alert('商品販売ページは準備中です。'); return false;">商品販売</a>
+      </nav>
+    </header>
+
+    <!-- エントランス画面 -->
     <div class="entrance" id="entrance">
-      <div class="entrance-decoration">
-        <div class="frame"></div>
-        <div class="frame"></div>
-        <div class="frame"></div>
-      </div>
       <h1>{title}</h1>
-      <p>DIGITAL ARCHIVE MUSEUM</p>
+      <p>TOKUNAGA ART MUSEUM</p>
       <button class="enter-btn" id="enterBtn">― 入　館 ―</button>
     </div>
 
+    <!-- メインギャラリー画面 -->
     <div class="museum" id="museum">
       <div class="museum-header">
         <h2>{title}</h2>
@@ -349,7 +395,6 @@ function getCardWidth(sizeStr) {
         <button class="scroll-arrow left" id="arrowLeft">‹</button>
         <div class="gallery-track" id="galleryTrack">
           {artworks.map((info) => (
-            <!-- ここで、上で計算した幅(px)を個別の style として設定しています -->
             <div
               class="artwork-card"
               style={`width: ${getCardWidth(info.size)}px;`}
@@ -374,6 +419,7 @@ function getCardWidth(sizeStr) {
       </div>
     </div>
 
+    <!-- 作品詳細モーダル -->
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal">
         <button class="modal-close" id="modalClose">✕</button>
@@ -395,12 +441,37 @@ function getCardWidth(sizeStr) {
     <script>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
 
-      document.getElementById('enterBtn').addEventListener('click', () => {
-        document.getElementById('entrance').classList.add('hidden');
-        const museum = document.getElementById('museum');
+      // --- 画面切り替えのロジック ---
+      const entrance = document.getElementById('entrance');
+      const museum = document.getElementById('museum');
+
+      // 展示室へ入る（エントランスを隠す）
+      function enterMuseum() {
+        entrance.classList.add('hidden');
         museum.classList.add('visible');
+      }
+
+      // TOP（エントランス）へ戻る
+      function goToTop() {
+        entrance.classList.remove('hidden');
+        museum.classList.remove('visible');
+      }
+
+      // ボタンやナビゲーションへのイベント紐付け
+      document.getElementById('enterBtn').addEventListener('click', enterMuseum);
+      
+      document.getElementById('navExhibition').addEventListener('click', (e) => {
+        e.preventDefault(); // リンクのデフォルト動作を無効化
+        enterMuseum();
       });
 
+      document.getElementById('navTop').addEventListener('click', (e) => {
+        e.preventDefault();
+        goToTop();
+      });
+
+
+      // --- 横スクロールのロジック ---
       const track = document.getElementById('galleryTrack');
       document.getElementById('arrowLeft').addEventListener('click', () => {
         track.scrollBy({ left: -320, behavior: 'smooth' });
@@ -425,6 +496,7 @@ function getCardWidth(sizeStr) {
         track.scrollLeft = scrollLeft - (x - startX);
       });
 
+      // --- モーダルのロジック ---
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.addEventListener('click', () => {
           document.getElementById('modalImg').src = base + '/gallery/' + card.dataset.file;
