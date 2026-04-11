@@ -127,7 +127,8 @@ const title = "デジタル・アーカイブ美術館";
           data-size={info.size}
           data-description={info.description}
         >
-          <img src={`${base}gallery/${info.file}`} alt={info.title} loading="lazy" />
+          <img src={`${base}gallery/${info.file}`.replace('//', '/')} alt={info.title} loading="lazy" />
+
           <div class="card-title">{info.title}</div>
         </div>
       ))}
