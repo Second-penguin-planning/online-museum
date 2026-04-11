@@ -1,7 +1,7 @@
 ---
 import artworks from '../data/artworks.json';
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const title = "デジタル・アーカイブ美術館";
 ---
 
@@ -127,8 +127,7 @@ const title = "デジタル・アーカイブ美術館";
           data-size={info.size}
           data-description={info.description}
         >
-          <img src={`${base}gallery/${info.file}`.replace('//', '/')} alt={info.title} loading="lazy" />
-
+          <img src={`${base}/gallery/${info.file}`} alt={info.title} loading="lazy" />
           <div class="card-title">{info.title}</div>
         </div>
       ))}
@@ -152,7 +151,7 @@ const title = "デジタル・アーカイブ美術館";
     </div>
 
     <script>
-      const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '/';
+      const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
 
       document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', () => {
@@ -163,7 +162,7 @@ const title = "デジタル・アーカイブ美術館";
           const size = card.getAttribute('data-size');
           const description = card.getAttribute('data-description');
 
-          document.getElementById('modalImg').src = base + 'gallery/' + file;
+          document.getElementById('modalImg').src = base + '/gallery/' + file;
           document.getElementById('modalImg').alt = title;
           document.getElementById('modalTitle').textContent = title;
           document.getElementById('modalArtist').textContent = artist;
