@@ -4,27 +4,28 @@ import artworks from '../data/artworks.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const title = "デジタル・アーカイブ美術館";
 
-// サイズ文字列 "120 × 80 cm" → アスペクト比を計算するヘルパー
-function parseAspectRatio(sizeStr: string): { w: number; h: number } | null {
-  if (!sizeStr) return null;
-  // "120 × 80 cm" / "120x80" / "120 cm × 80 cm" などに対応
-  const match = sizeStr.match(/([\d.]+)\s*[×xX×]\s*([\d.]+)/);
-  if (!match) return null;
-  const w = parseFloat(match[1]);
-  const h = parseFloat(match[2]);
-  if (!w || !h) return null;
-  return { w, h };
-}
+// ★ 追加：実際のサイズ（例: "120 × 80 cm"）から、画面表示用の縦横比を計算
+function getArtworkStyle(sizeStr) {
+  const baseWidth = 260; // 基準となるカードの横幅(px)
+  
+  if (!sizeStr) return `width: ${baseWidth}px; height: 320px;`;
 
-// カードの基準幅(px)
-const BASE_WIDTH = 260;
-const MAX_HEIGHT = 420;
+  // 文字列から数字を2つ抽出（美術表記の基本である「縦 × 横」を想定）
+  const nums = sizeStr.match(/\d+(\.\d+)?/g);
+  if (nums && nums.length >= 2) {
+    const h = parseFloat(nums[0]); // 縦
+    const w = parseFloat(nums[1]); // 横
+    
+    // 実際の縦横比から、画面上での高さを計算
+    let calcHeight = baseWidth * (h / w);
+    
+    // レイアウト崩れを防ぐためのサイズ制限
+    if (calcHeight > 420) calcHeight = 420;
+    if (calcHeight < 160) calcHeight = 160;
 
-function cardHeight(sizeStr: string): number {
-  const ratio = parseAspectRatio(sizeStr);
-  if (!ratio) return 320; // フォールバック
-  const h = Math.round((BASE_WIDTH * ratio.h) / ratio.w);
-  return Math.min(h, MAX_HEIGHT);
+    return `width: ${baseWidth}px; height: ${calcHeight}px;`;
+  }
+  return `width: ${baseWidth}px; height: 320px;`;
 }
 ---
 
@@ -50,10 +51,18 @@ function cardHeight(sizeStr: string): number {
         z-index: 999;
         transition: opacity 1.2s ease, visibility 1.2s ease;
       }
-      .entrance.hidden { opacity: 0; visibility: hidden; }
-      .entrance-decoration { display: flex; gap: 30px; margin-bottom: 50px; }
+      .entrance.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .entrance-decoration {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 50px;
+      }
       .entrance-decoration .frame {
-        width: 80px; height: 100px;
+        width: 80px;
+        height: 100px;
         border: 2px solid rgba(255,255,255,0.3);
         background: rgba(255,255,255,0.05);
         border-radius: 2px;
@@ -67,77 +76,131 @@ function cardHeight(sizeStr: string): number {
       }
       .entrance h1 {
         font-size: clamp(2rem, 5vw, 3.5rem);
-        letter-spacing: 0.3em; text-align: center;
-        margin-bottom: 15px; font-weight: 300;
+        letter-spacing: 0.3em;
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: 300;
         background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
-      .entrance p { font-size: 0.9rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.4); margin-bottom: 60px; }
+      .entrance p {
+        font-size: 0.9rem;
+        letter-spacing: 0.2em;
+        color: rgba(255,255,255,0.4);
+        margin-bottom: 60px;
+      }
       .enter-btn {
         padding: 16px 50px;
         border: 1px solid rgba(255,255,255,0.5);
-        background: transparent; color: #fff;
-        font-size: 0.9rem; letter-spacing: 0.3em;
-        cursor: pointer; transition: all 0.4s; border-radius: 2px;
+        background: transparent;
+        color: #fff;
+        font-size: 0.9rem;
+        letter-spacing: 0.3em;
+        cursor: pointer;
+        transition: all 0.4s;
+        border-radius: 2px;
       }
-      .enter-btn:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: scale(1.05); }
+      .enter-btn:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: #fff;
+        transform: scale(1.05);
+      }
 
       /* ========== メインギャラリー ========== */
-      .museum { opacity: 0; transition: opacity 1.2s ease; min-height: 100vh; }
+      .museum {
+        opacity: 0;
+        transition: opacity 1.2s ease;
+        min-height: 100vh;
+      }
       .museum.visible { opacity: 1; }
+
       .museum-header {
-        text-align: center; padding: 50px 20px 30px;
+        text-align: center;
+        padding: 50px 20px 30px;
         background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
       }
-      .museum-header h2 { font-size: 1.2rem; letter-spacing: 0.4em; font-weight: 300; color: rgba(255,255,255,0.6); }
-      .museum-header .count { font-size: 0.8rem; color: rgba(255,255,255,0.3); margin-top: 8px; letter-spacing: 0.2em; }
-
-      /* ========== 横スクロール ========== */
-      .scroll-hint {
-        text-align: center; padding: 10px;
-        font-size: 0.75rem; color: rgba(255,255,255,0.25);
-        letter-spacing: 0.2em; animation: pulse 2s ease-in-out infinite;
+      .museum-header h2 {
+        font-size: 1.2rem;
+        letter-spacing: 0.4em;
+        font-weight: 300;
+        color: rgba(255,255,255,0.6);
       }
-      @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+      .museum-header .count {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.3);
+        margin-top: 8px;
+        letter-spacing: 0.2em;
+      }
 
-      .gallery-track-wrapper { position: relative; padding: 40px 0 60px; }
+      /* ========== 横スクロールエリア ========== */
+      .scroll-hint {
+        text-align: center;
+        padding: 10px;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.25);
+        letter-spacing: 0.2em;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+      }
+
+      .gallery-track-wrapper {
+        position: relative;
+        padding: 40px 0 60px;
+      }
       .gallery-track {
         display: flex;
-        /* カードの高さが異なるため、下揃えにして額縁ラインを統一感ある見た目に */
-        align-items: flex-end;
-        gap: 40px;
+        gap: 40px; /* 余白を少し広げました */
         padding: 20px 80px;
         overflow-x: auto;
         scroll-behavior: smooth;
         scrollbar-width: none;
         -ms-overflow-style: none;
         cursor: grab;
+        align-items: flex-end; /* ★追加：高さの違う絵を、床（下端）で揃える */
       }
       .gallery-track:active { cursor: grabbing; }
       .gallery-track::-webkit-scrollbar { display: none; }
 
       .scroll-arrow {
-        position: absolute; top: 50%; transform: translateY(-50%);
-        background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-        color: #fff; width: 50px; height: 50px; border-radius: 50%;
-        font-size: 1.2rem; cursor: pointer; z-index: 10;
-        transition: all 0.3s; display: flex; align-items: center; justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .scroll-arrow:hover { background: rgba(255,255,255,0.25); }
       .scroll-arrow.left { left: 15px; }
       .scroll-arrow.right { right: 15px; }
 
-      /* ========== 絵カード ========== */
+      /* 絵カード */
       .artwork-card {
         flex: 0 0 auto;
-        width: 260px;
         cursor: pointer;
         transition: transform 0.3s;
+        position: relative;
+        /* 高さが可変になるため、タイトルを下部に押し下げる設定 */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
       }
       .artwork-card:hover { transform: translateY(-8px); }
 
       .artwork-frame {
-        /* ① 白背景を透過させるため背景を暗色に */
         background: #1a1a1a;
         border: 8px solid #2a2a2a;
         box-shadow:
@@ -147,102 +210,133 @@ function cardHeight(sizeStr: string): number {
         border-radius: 2px;
         overflow: hidden;
         position: relative;
+        width: 100%;
+        height: 100%; /* 親の計算された高さに合わせる */
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .artwork-frame::before {
         content: '';
-        position: absolute; inset: 0;
+        position: absolute;
+        inset: 0;
         background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
-        z-index: 1; pointer-events: none;
+        z-index: 1;
+        pointer-events: none;
       }
-
-      /* ② 実際のサイズ比率に合わせた高さを data 属性で各カードに設定 */
       .artwork-frame img {
         width: 100%;
-        /* height は各カードの style で上書き */
-        object-fit: contain;
+        height: 100%;
+        object-fit: cover; /* 枠の比率とピッタリ合わせる */
         display: block;
-
-        /* ① 白い部分を透明化: multiply で白(#fff)を背景色と合成 */
-        mix-blend-mode: multiply;
-        /* multiply だけでは暗い背景上では不十分な場合があるため
-           さらに luminosity で明度の高い部分を抑える */
-        /* → multiply のみで十分な場合が多い。必要に応じてコメント解除 */
+        mix-blend-mode: multiply; /* ★追加：画像内の白い部分を透過させる */
       }
 
-      .artwork-label { text-align: center; margin-top: 15px; padding: 0 5px; }
-      .artwork-label .artwork-title { font-size: 0.85rem; color: rgba(255,255,255,0.8); letter-spacing: 0.05em; }
-      .artwork-label .artwork-artist { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px; }
+      .artwork-label {
+        text-align: center;
+        margin-top: 15px;
+        padding: 0 5px;
+        height: 40px; /* タイトルの高さを固定してガタつき防止 */
+      }
+      .artwork-label .artwork-title {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.8);
+        letter-spacing: 0.05em;
+      }
+      .artwork-label .artwork-artist {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.35);
+        margin-top: 4px;
+      }
 
       /* ========== モーダル ========== */
       .modal-overlay {
-        display: none; position: fixed; top: 0; left: 0;
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
         width: 100%; height: 100%;
-        background: rgba(0,0,0,0.92);
-        z-index: 2000; justify-content: center; align-items: center;
+        background: rgba(0,0,0,0.9);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
       }
       .modal-overlay.active { display: flex; }
+      
       .modal {
-        background: #1a1a1a; border: 1px solid #333; border-radius: 4px;
-        max-width: 720px; width: 92%; max-height: 90vh;
-        overflow-y: auto; padding: 35px; position: relative; color: #fff;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 4px;
+        max-width: 720px;
+        width: 92%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 35px;
+        position: relative;
+        color: #fff;
       }
+      
       .modal-close {
-        position: absolute; top: 15px; right: 20px;
-        font-size: 1.3rem; cursor: pointer;
-        background: none; border: none; color: rgba(255,255,255,0.5); transition: color 0.2s;
+        position: absolute;
+        top: 15px; right: 20px;
+        font-size: 1.3rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.5);
+        transition: color 0.2s;
       }
       .modal-close:hover { color: #fff; }
 
-      /* モーダル内の画像コンテナ：実際の比率を保持 */
+      /* モーダル内の画像エリア */
       .modal-img-wrap {
-        width: 100%;
-        max-height: 420px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        text-align: center;
         margin-bottom: 25px;
-        /* ① 暗背景上で multiply を適用 */
         background: #1a1a1a;
         border-radius: 2px;
-        overflow: hidden;
       }
       .modal-img-wrap img {
-        /* ② 実際の縦横比を保持 */
+        width: auto;
         max-width: 100%;
         max-height: 420px;
-        width: auto;
-        height: auto;
-        display: block;
-        /* ① 白を透明化 */
-        mix-blend-mode: multiply;
+        object-fit: contain;
+        display: inline-block;
+        mix-blend-mode: multiply; /* ★追加：モーダルでも白を透過 */
       }
 
-      .modal-info table { width: 100%; border-collapse: collapse; }
+      .modal-info table {
+        width: 100%;
+        border-collapse: collapse;
+      }
       .modal-info th {
-        text-align: left; padding: 9px 12px;
-        color: rgba(255,255,255,0.35); font-size: 0.8rem;
-        width: 80px; border-bottom: 1px solid #2a2a2a;
-        font-weight: normal; letter-spacing: 0.1em;
+        text-align: left;
+        padding: 9px 12px;
+        color: rgba(255,255,255,0.35);
+        font-size: 0.8rem;
+        width: 80px;
+        border-bottom: 1px solid #2a2a2a;
+        font-weight: normal;
+        letter-spacing: 0.1em;
       }
-      .modal-info td { padding: 9px 12px; font-size: 0.9rem; border-bottom: 1px solid #2a2a2a; color: rgba(255,255,255,0.8); }
+      .modal-info td {
+        padding: 9px 12px;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #2a2a2a;
+        color: rgba(255,255,255,0.8);
+      }
       .modal-description {
-        margin-top: 20px; padding: 18px; background: #222; border-radius: 4px;
-        font-size: 0.88rem; line-height: 1.8; color: rgba(255,255,255,0.6);
-      }
-
-      /* サイズ表示バー（モーダル） */
-      .size-indicator {
-        margin-top: 6px;
-        font-size: 0.75rem;
-        color: rgba(255,255,255,0.3);
-        letter-spacing: 0.05em;
-        text-align: center;
+        margin-top: 20px;
+        padding: 18px;
+        background: #222;
+        border-radius: 4px;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.6);
       }
     </style>
   </head>
   <body>
 
-    <!-- エントランス -->
+    <!-- エントランス画面 -->
     <div class="entrance" id="entrance">
       <div class="entrance-decoration">
         <div class="frame"></div>
@@ -266,34 +360,26 @@ function cardHeight(sizeStr: string): number {
       <div class="gallery-track-wrapper">
         <button class="scroll-arrow left" id="arrowLeft">‹</button>
         <div class="gallery-track" id="galleryTrack">
-          {artworks.map((info) => {
-            const h = cardHeight(info.size);
-            return (
-              <div
-                class="artwork-card"
-                data-file={info.file}
-                data-title={info.title}
-                data-artist={info.artist}
-                data-year={info.year}
-                data-size={info.size}
-                data-description={info.description}
-              >
-                <div class="artwork-frame">
-                  {/* ② style で高さを実際の比率に設定 */}
-                  <img
-                    src={`${base}/gallery/${info.file}`}
-                    alt={info.title}
-                    loading="lazy"
-                    style={`height: ${h}px;`}
-                  />
-                </div>
-                <div class="artwork-label">
-                  <div class="artwork-title">{info.title}</div>
-                  <div class="artwork-artist">{info.artist}</div>
-                </div>
+          {artworks.map((info) => (
+            <div
+              class="artwork-card"
+              style={getArtworkStyle(info.size)}  <!-- ★ここで計算した比率(縦横サイズ)を適用 -->
+              data-file={info.file}
+              data-title={info.title}
+              data-artist={info.artist}
+              data-year={info.year}
+              data-size={info.size}
+              data-description={info.description}
+            >
+              <div class="artwork-frame">
+                <img src={`${base}/gallery/${info.file}`} alt={info.title} loading="lazy" />
               </div>
-            );
-          })}
+              <div class="artwork-label">
+                <div class="artwork-title">{info.title}</div>
+                <div class="artwork-artist">{info.artist}</div>
+              </div>
+            </div>
+          ))}
         </div>
         <button class="scroll-arrow right" id="arrowRight">›</button>
       </div>
@@ -303,10 +389,9 @@ function cardHeight(sizeStr: string): number {
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal">
         <button class="modal-close" id="modalClose">✕</button>
-        <div class="modal-img-wrap" id="modalImgWrap">
+        <div class="modal-img-wrap">
           <img id="modalImg" src="" alt="" />
         </div>
-        <div class="size-indicator" id="modalSizeIndicator"></div>
         <div class="modal-info">
           <table>
             <tr><th>タイトル</th><td id="modalTitle"></td></tr>
@@ -322,68 +407,57 @@ function cardHeight(sizeStr: string): number {
     <script>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
 
-      // ── エントランス ──
+      // ── エントランス → ギャラリー ──
       document.getElementById('enterBtn').addEventListener('click', () => {
         document.getElementById('entrance').classList.add('hidden');
-        document.getElementById('museum').classList.add('visible');
+        const museum = document.getElementById('museum');
+        museum.classList.add('visible');
       });
 
       // ── 矢印スクロール ──
       const track = document.getElementById('galleryTrack');
-      document.getElementById('arrowLeft').addEventListener('click', () => track.scrollBy({ left: -320, behavior: 'smooth' }));
-      document.getElementById('arrowRight').addEventListener('click', () => track.scrollBy({ left: 320, behavior: 'smooth' }));
+      document.getElementById('arrowLeft').addEventListener('click', () => {
+        track.scrollBy({ left: -320, behavior: 'smooth' });
+      });
+      document.getElementById('arrowRight').addEventListener('click', () => {
+        track.scrollBy({ left: 320, behavior: 'smooth' });
+      });
 
-      // ── ドラッグスクロール ──
-      let isDragging = false, startX = 0, scrollLeft = 0;
-      track.addEventListener('mousedown', (e) => { isDragging = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+      // ── マウスドラッグスクロール ──
+      let isDragging = false;
+      let startX = 0;
+      let scrollLeft = 0;
+      track.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
       document.addEventListener('mouseup', () => { isDragging = false; });
       track.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
         e.preventDefault();
-        track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX);
+        const x = e.pageX - track.offsetLeft;
+        track.scrollLeft = scrollLeft - (x - startX);
       });
-
-      // ── サイズ文字列 → アスペクト比 ──
-      function parseRatio(sizeStr) {
-        if (!sizeStr) return null;
-        const m = sizeStr.match(/([\d.]+)\s*[×xX×]\s*([\d.]+)/);
-        if (!m) return null;
-        return { w: parseFloat(m[1]), h: parseFloat(m[2]) };
-      }
 
       // ── モーダル ──
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.addEventListener('click', () => {
-          const file = card.dataset.file;
-          const sizeStr = card.dataset.size;
-
-          const img = document.getElementById('modalImg');
-          img.src = base + '/gallery/' + file;
-          img.alt = card.dataset.title;
-
-          // ② モーダル内でも比率を保持（CSS の max-width/max-height で自動調整）
-          img.style.width = 'auto';
-          img.style.height = 'auto';
-
-          // アスペクト比ヒント表示
-          const ratio = parseRatio(sizeStr);
-          const indicator = document.getElementById('modalSizeIndicator');
-          indicator.textContent = ratio
-            ? `縦横比 ${ratio.w} : ${ratio.h}（原寸 ${sizeStr}）`
-            : '';
-
+          document.getElementById('modalImg').src = base + '/gallery/' + card.dataset.file;
+          document.getElementById('modalImg').alt = card.dataset.title;
           document.getElementById('modalTitle').textContent = card.dataset.title;
           document.getElementById('modalArtist').textContent = card.dataset.artist;
           document.getElementById('modalYear').textContent = card.dataset.year;
-          document.getElementById('modalSize').textContent = sizeStr;
+          document.getElementById('modalSize').textContent = card.dataset.size;
           document.getElementById('modalDescription').textContent = card.dataset.description;
           document.getElementById('modalOverlay').classList.add('active');
         });
       });
 
       document.getElementById('modalOverlay').addEventListener('click', (e) => {
-        if (e.target === document.getElementById('modalOverlay'))
+        if (e.target === document.getElementById('modalOverlay')) {
           document.getElementById('modalOverlay').classList.remove('active');
+        }
       });
       document.getElementById('modalClose').addEventListener('click', () => {
         document.getElementById('modalOverlay').classList.remove('active');
