@@ -3,6 +3,33 @@ import artworks from '../data/artworks.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const title = "デジタル・アーカイブ美術館";
+
+// サイズデータから倍率を計算し、カードの横幅(px)を決定する関数
+function getCardWidth(sizeStr) {
+  const defaultWidth = 280; // 30号の基準サイズ(横幅280px)
+  if (!sizeStr) return defaultWidth;
+
+  // データから最初の「数字」を抽出
+  const match = sizeStr.match(/(\d+(?:\.\d+)?)/);
+  if (!match) return defaultWidth;
+
+  const num = parseFloat(match[1]);
+  let scale = 1;
+
+  // 「号」が含まれている、または数字が100未満の場合は号数として計算
+  if (sizeStr.includes('号') || num < 100) {
+    scale = num / 30; // 30号を 1.0倍 とする
+  } else {
+    // cm表記など（数字が100以上）の場合、長辺90cmを30号相当とする仮計算
+    scale = num / 90;
+  }
+
+  // レイアウト崩れを防ぐため、倍率を 0.5倍 〜 2.5倍 の間に制限
+  const clampedScale = Math.max(0.5, Math.min(scale, 2.5));
+  
+  // 基準幅に倍率を掛けて四捨五入したピクセル数を返す
+  return Math.round(defaultWidth * clampedScale);
+}
 ---
 
 <html lang="ja">
@@ -129,7 +156,7 @@ const title = "デジタル・アーカイブ美術館";
       }
       .gallery-track {
         display: flex;
-        gap: 50px;
+        gap: 60px;
         padding: 20px 80px;
         overflow-x: auto;
         scroll-behavior: smooth;
@@ -163,9 +190,8 @@ const title = "デジタル・アーカイブ美術館";
       .scroll-arrow.left { left: 15px; }
       .scroll-arrow.right { right: 15px; }
 
-      /* 絵カード（横幅を固定し、高さは画像に任せる） */
+      /* 絵カード（横幅はプログラムがインラインで自動指定します） */
       .artwork-card {
-        width: 280px;
         flex: 0 0 auto;
         cursor: pointer;
         transition: transform 0.3s;
@@ -183,7 +209,6 @@ const title = "デジタル・アーカイブ美術館";
         border-radius: 2px;
         position: relative;
         width: 100%;
-        /* 額縁が画像にピッタリ沿うようにする */
         display: flex;
       }
       .artwork-frame::before {
@@ -196,7 +221,7 @@ const title = "デジタル・アーカイブ美術館";
       }
       .artwork-frame img {
         width: 100%;
-        height: auto; /* ★ 画像本来の縦横比を維持する */
+        height: auto;
         display: block;
       }
 
@@ -324,8 +349,10 @@ const title = "デジタル・アーカイブ美術館";
         <button class="scroll-arrow left" id="arrowLeft">‹</button>
         <div class="gallery-track" id="galleryTrack">
           {artworks.map((info) => (
+            <!-- ここで、上で計算した幅(px)を個別の style として設定しています -->
             <div
               class="artwork-card"
+              style={`width: ${getCardWidth(info.size)}px;`}
               data-file={info.file}
               data-title={info.title}
               data-artist={info.artist}
