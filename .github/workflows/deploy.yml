@@ -1,4 +1,4 @@
-name: Online Museum Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
