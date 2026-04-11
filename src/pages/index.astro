@@ -15,6 +15,7 @@ const title = "デジタル・アーカイブ美術館";
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
+    <meta name="base-url" content={base} />
     <title>{title}</title>
     <style>
       body { font-family: "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f0f0f0; }
@@ -128,9 +129,14 @@ const title = "デジタル・アーカイブ美術館";
         return (
           <div
             class="card"
-            onclick={`openModal('${img}', '${info?.title ?? img}', '${info?.artist ?? "不明"}', '${info?.year ?? "不明"}', '${info?.size ?? "不明"}', '${info?.description ?? ""}')`}
+            data-file={img}
+            data-title={info?.title ?? img}
+            data-artist={info?.artist ?? "不明"}
+            data-year={info?.year ?? "不明"}
+            data-size={info?.size ?? "不明"}
+            data-description={info?.description ?? ""}
           >
-            <img src={`${base}/gallery/${img}`} alt={info?.title ?? img} loading="lazy" />
+            <img src={`${base}gallery/${img}`} alt={info?.title ?? img} loading="lazy" />
             <div class="card-title">{info?.title ?? img}</div>
           </div>
         );
@@ -138,9 +144,9 @@ const title = "デジタル・アーカイブ美術館";
     </div>
 
     <!-- モーダル -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay" id="modalOverlay">
       <div class="modal">
-        <button class="modal-close" onclick="closeModal()">✕</button>
+        <button class="modal-close" id="modalClose">✕</button>
         <img id="modalImg" src="" alt="" />
         <div class="modal-info">
           <table>
@@ -154,27 +160,38 @@ const title = "デジタル・アーカイブ美術館";
       </div>
     </div>
 
-    <script define:vars={{ base }}>
-      function openModal(file, title, artist, year, size, description) {
-        document.getElementById('modalImg').src = base + '/gallery/' + file;
-        document.getElementById('modalImg').alt = title;
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalArtist').textContent = artist;
-        document.getElementById('modalYear').textContent = year;
-        document.getElementById('modalSize').textContent = size;
-        document.getElementById('modalDescription').textContent = description;
-        document.getElementById('modalOverlay').classList.add('active');
-      }
+    <script>
+      const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '/';
 
-      function closeModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
-      }
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const file = card.getAttribute('data-file');
+          const title = card.getAttribute('data-title');
+          const artist = card.getAttribute('data-artist');
+          const year = card.getAttribute('data-year');
+          const size = card.getAttribute('data-size');
+          const description = card.getAttribute('data-description');
 
-      function closeModalOnOverlay(event) {
-        if (event.target === document.getElementById('modalOverlay')) {
-          closeModal();
+          document.getElementById('modalImg').src = base + 'gallery/' + file;
+          document.getElementById('modalImg').alt = title;
+          document.getElementById('modalTitle').textContent = title;
+          document.getElementById('modalArtist').textContent = artist;
+          document.getElementById('modalYear').textContent = year;
+          document.getElementById('modalSize').textContent = size;
+          document.getElementById('modalDescription').textContent = description;
+          document.getElementById('modalOverlay').classList.add('active');
+        });
+      });
+
+      document.getElementById('modalOverlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('modalOverlay')) {
+          document.getElementById('modalOverlay').classList.remove('active');
         }
-      }
+      });
+
+      document.getElementById('modalClose').addEventListener('click', () => {
+        document.getElementById('modalOverlay').classList.remove('active');
+      });
     </script>
   </body>
 </html>
