@@ -1,12 +1,5 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import artworks from '../data/artworks.json';
-
-const galleryDir = path.resolve('./public/gallery');
-const imageFiles = fs.existsSync(galleryDir) 
-  ? fs.readdirSync(galleryDir).filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
-  : [];
 
 const base = import.meta.env.BASE_URL;
 const title = "デジタル・アーカイブ美術館";
@@ -120,27 +113,24 @@ const title = "デジタル・アーカイブ美術館";
   <body>
     <div class="header">
       <h1>{title}</h1>
-      <p>{imageFiles.length} 点の作品を展示中</p>
+      <p>{artworks.length} 点の作品を展示中</p>
     </div>
 
     <div class="gallery-grid">
-      {imageFiles.map((img) => {
-        const info = artworks.find(a => a.file === img);
-        return (
-          <div
-            class="card"
-            data-file={img}
-            data-title={info?.title ?? img}
-            data-artist={info?.artist ?? "不明"}
-            data-year={info?.year ?? "不明"}
-            data-size={info?.size ?? "不明"}
-            data-description={info?.description ?? ""}
-          >
-            <img src={`${base}gallery/${img}`} alt={info?.title ?? img} loading="lazy" />
-            <div class="card-title">{info?.title ?? img}</div>
-          </div>
-        );
-      })}
+      {artworks.map((info) => (
+        <div
+          class="card"
+          data-file={info.file}
+          data-title={info.title}
+          data-artist={info.artist}
+          data-year={info.year}
+          data-size={info.size}
+          data-description={info.description}
+        >
+          <img src={`${base}gallery/${info.file}`} alt={info.title} loading="lazy" />
+          <div class="card-title">{info.title}</div>
+        </div>
+      ))}
     </div>
 
     <!-- モーダル -->
