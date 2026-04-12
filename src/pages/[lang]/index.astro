@@ -73,17 +73,17 @@ function getCardWidth(sizeStr) {
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
       :root {
-        --crimson-deep:   #4a0a0a;   /* 最深部のえんじ */
-        --crimson-mid:    #6b1212;   /* 中間えんじ */
-        --crimson-rich:   #8b1a1a;   /* メインえんじ */
-        --crimson-warm:   #a52020;   /* 明るめえんじ */
-        --gold-dim:       #b8960c;   /* くすみゴールド */
-        --gold-bright:    #d4af37;   /* 明るいゴールド */
-        --gold-light:     #e8cc6a;   /* ハイライトゴールド */
-        --parchment:      #f5efe0;   /* 羊皮紙色 */
-        --text-main:      #f0e6d3;   /* メインテキスト */
-        --text-sub:       #c4a882;   /* サブテキスト */
-        --text-muted:     #7a6452;   /* 控えめテキスト */
+        --crimson-deep:   #4a0a0a;
+        --crimson-mid:    #6b1212;
+        --crimson-rich:   #8b1a1a;
+        --crimson-warm:   #a52020;
+        --gold-dim:       #b8960c;
+        --gold-bright:    #d4af37;
+        --gold-light:     #e8cc6a;
+        --parchment:      #f5efe0;
+        --text-main:      #f0e6d3;
+        --text-sub:       #c4a882;
+        --text-muted:     #7a6452;
         --overlay-dark:   rgba(20, 4, 4, 0.75);
       }
 
@@ -102,11 +102,11 @@ function getCardWidth(sizeStr) {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 50px;
+        padding: 16px 50px;
         z-index: 1000;
         background: linear-gradient(
           to bottom,
-          rgba(20, 4, 4, 0.92) 0%,
+          rgba(20, 4, 4, 0.95) 0%,
           rgba(20, 4, 4, 0.0) 100%
         );
         border-bottom: 1px solid rgba(212, 175, 55, 0.15);
@@ -118,8 +118,10 @@ function getCardWidth(sizeStr) {
         font-weight: 400;
         color: var(--gold-bright);
         text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+        flex-shrink: 0;
       }
 
+      /* PCナビ */
       .header-nav {
         display: flex;
         align-items: center;
@@ -134,6 +136,7 @@ function getCardWidth(sizeStr) {
         opacity: 0.85;
         transition: opacity 0.3s, color 0.3s, transform 0.3s;
         text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+        white-space: nowrap;
       }
 
       .header-nav a:hover {
@@ -165,6 +168,148 @@ function getCardWidth(sizeStr) {
         color: var(--gold-bright);
       }
 
+      /* ========== ハンバーガーボタン ========== */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        background: none;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        cursor: pointer;
+        padding: 8px;
+        flex-shrink: 0;
+        transition: border-color 0.3s;
+        z-index: 1100;
+      }
+
+      .hamburger:hover {
+        border-color: var(--gold-bright);
+      }
+
+      .hamburger span {
+        display: block;
+        width: 22px;
+        height: 1.5px;
+        background: var(--gold-bright);
+        transition: transform 0.35s ease, opacity 0.35s ease;
+        transform-origin: center;
+      }
+
+      /* ハンバーガー → ✕ アニメ */
+      .hamburger.open span:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+      }
+      .hamburger.open span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      .hamburger.open span:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+      }
+
+      /* ========== モバイルメニュー（ドロワー） ========== */
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 0; right: 0;
+        width: min(280px, 80vw);
+        height: 100%;
+        background: linear-gradient(
+          160deg,
+          rgba(20, 4, 4, 0.98) 0%,
+          rgba(50, 8, 8, 0.98) 100%
+        );
+        border-left: 1px solid rgba(212, 175, 55, 0.2);
+        z-index: 1050;
+        flex-direction: column;
+        padding: 80px 32px 40px;
+        gap: 0;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+        box-shadow: -8px 0 30px rgba(0,0,0,0.6);
+      }
+
+      .mobile-menu.open {
+        transform: translateX(0);
+      }
+
+      /* モバイルメニューのオーバーレイ */
+      .mobile-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1040;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .mobile-overlay.open {
+        opacity: 1;
+      }
+
+      .mobile-menu-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .mobile-menu-nav a,
+      .mobile-menu-nav button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+        color: var(--text-sub);
+        font-family: inherit;
+        font-size: 0.88rem;
+        letter-spacing: 0.2em;
+        padding: 18px 0;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.3s, padding-left 0.3s;
+      }
+
+      .mobile-menu-nav a:hover,
+      .mobile-menu-nav button:hover {
+        color: var(--gold-light);
+        padding-left: 8px;
+      }
+
+      .mobile-menu-nav a:first-child,
+      .mobile-menu-nav button:first-child {
+        border-top: 1px solid rgba(212, 175, 55, 0.12);
+      }
+
+      .mobile-lang-switcher {
+        display: flex;
+        gap: 16px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+      }
+
+      .mobile-lang-switcher a {
+        font-size: 0.8rem;
+        text-decoration: none;
+        color: var(--text-sub);
+        opacity: 0.55;
+        letter-spacing: 0.12em;
+        transition: opacity 0.3s, color 0.3s;
+      }
+
+      .mobile-lang-switcher a.active {
+        opacity: 1;
+        font-weight: bold;
+        color: var(--gold-bright);
+      }
+
       /* ========== 入口（ヒーロー）セクション ========== */
       .entrance {
         position: fixed;
@@ -177,9 +322,7 @@ function getCardWidth(sizeStr) {
         z-index: 999;
         transition: opacity 1.4s ease, visibility 1.4s ease;
 
-        /* 重厚な背景レイヤー */
         background:
-          /* 最上層: えんじグラデーション */
           linear-gradient(
             160deg,
             rgba(30, 4, 4, 0.88) 0%,
@@ -187,7 +330,6 @@ function getCardWidth(sizeStr) {
             rgba(107, 18, 18, 0.65) 65%,
             rgba(30, 4, 4, 0.90) 100%
           ),
-          /* 中層: テクスチャ風ノイズ */
           repeating-linear-gradient(
             45deg,
             rgba(0,0,0,0.03) 0px,
@@ -195,7 +337,6 @@ function getCardWidth(sizeStr) {
             transparent 1px,
             transparent 8px
           ),
-          /* 下層: 美術館イメージ写真 */
           url('https://images.unsplash.com/photo-1577083165239-0bd9f19fc08f?auto=format&fit=crop&w=1920&q=80')
           center / cover no-repeat;
       }
@@ -205,15 +346,14 @@ function getCardWidth(sizeStr) {
         visibility: hidden;
       }
 
-      /* ヒーロー装飾ライン */
       .entrance::before {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: min(680px, 90vw);
-        height: min(340px, 60vh);
+        width: min(680px, 88vw);
+        height: min(340px, 55vh);
         border: 1px solid rgba(212, 175, 55, 0.25);
         pointer-events: none;
       }
@@ -224,13 +364,12 @@ function getCardWidth(sizeStr) {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: min(700px, 92vw);
-        height: min(360px, 62vh);
+        width: min(700px, 91vw);
+        height: min(360px, 58vh);
         border: 1px solid rgba(212, 175, 55, 0.10);
         pointer-events: none;
       }
 
-      /* ヒーロー内テキストブロック */
       .hero-inner {
         position: relative;
         text-align: center;
@@ -238,22 +377,22 @@ function getCardWidth(sizeStr) {
         flex-direction: column;
         align-items: center;
         gap: 0;
-        padding: 0 20px;
+        padding: 0 24px;
       }
 
       .hero-eyebrow {
-        font-size: clamp(0.6rem, 1.2vw, 0.75rem);
-        letter-spacing: 0.45em;
+        font-size: clamp(0.55rem, 2.5vw, 0.75rem);
+        letter-spacing: 0.35em;
         color: var(--gold-dim);
         text-transform: uppercase;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
         opacity: 0.9;
       }
 
       .hero-title {
-        font-size: clamp(2rem, 5.5vw, 3.8rem);
+        font-size: clamp(1.6rem, 6vw, 3.8rem);
         font-weight: 400;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.15em;
         line-height: 1.15;
         color: var(--text-main);
         text-shadow:
@@ -263,21 +402,20 @@ function getCardWidth(sizeStr) {
       }
 
       .hero-subtitle {
-        font-size: clamp(0.65rem, 1.5vw, 0.85rem);
-        letter-spacing: 0.5em;
+        font-size: clamp(0.55rem, 2.5vw, 0.85rem);
+        letter-spacing: 0.4em;
         color: var(--gold-bright);
         text-transform: uppercase;
-        margin-bottom: 48px;
+        margin-bottom: 36px;
         opacity: 0.8;
       }
 
-      /* 区切り装飾 */
       .hero-divider {
         display: flex;
         align-items: center;
         gap: 14px;
-        margin-bottom: 48px;
-        width: 260px;
+        margin-bottom: 36px;
+        width: min(260px, 70vw);
       }
 
       .hero-divider::before,
@@ -301,23 +439,22 @@ function getCardWidth(sizeStr) {
         flex-shrink: 0;
       }
 
-      /* 入館ボタン */
       .enter-btn {
         position: relative;
-        padding: 15px 58px;
+        padding: 14px 48px;
         background: transparent;
         color: var(--gold-bright);
         font-family: inherit;
-        font-size: clamp(0.72rem, 1.4vw, 0.82rem);
-        letter-spacing: 0.45em;
+        font-size: clamp(0.68rem, 2.5vw, 0.82rem);
+        letter-spacing: 0.4em;
         text-transform: uppercase;
         cursor: pointer;
         border: none;
         overflow: hidden;
         transition: color 0.45s ease;
+        touch-action: manipulation;
       }
 
-      /* 外枠 */
       .enter-btn::before {
         content: '';
         position: absolute;
@@ -326,7 +463,6 @@ function getCardWidth(sizeStr) {
         transition: border-color 0.45s ease;
       }
 
-      /* 塗りつぶしアニメ */
       .enter-btn::after {
         content: '';
         position: absolute;
@@ -361,6 +497,8 @@ function getCardWidth(sizeStr) {
         align-items: center;
         z-index: 998;
         transition: opacity 1.2s ease, visibility 1.2s ease;
+        overflow-y: auto;
+        padding: 80px 20px 40px;
 
         background:
           linear-gradient(
@@ -384,49 +522,50 @@ function getCardWidth(sizeStr) {
       }
 
       .room-selector-title {
-        font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+        font-size: clamp(0.6rem, 2.5vw, 0.78rem);
         letter-spacing: 0.5em;
         color: var(--gold-dim);
         text-transform: uppercase;
         margin-bottom: 12px;
-      }
-
-      .room-selector-heading {
-        font-size: clamp(1.4rem, 3vw, 2rem);
-        font-weight: 400;
-        letter-spacing: 0.2em;
-        color: var(--text-main);
-        margin-bottom: 50px;
         text-align: center;
       }
 
-      /* 室選択ボタングリッド */
+      .room-selector-heading {
+        font-size: clamp(1.2rem, 4vw, 2rem);
+        font-weight: 400;
+        letter-spacing: 0.2em;
+        color: var(--text-main);
+        margin-bottom: 40px;
+        text-align: center;
+      }
+
       .room-list {
         display: flex;
         flex-wrap: wrap;
-        gap: 18px;
+        gap: 14px;
         justify-content: center;
         max-width: 860px;
-        padding: 0 20px;
+        width: 100%;
+        padding: 0;
       }
 
       .room-btn {
         position: relative;
-        padding: 20px 36px;
+        padding: 18px 28px;
         background: rgba(74, 10, 10, 0.35);
         color: var(--text-sub);
         font-family: inherit;
-        font-size: 0.82rem;
-        letter-spacing: 0.22em;
-        min-width: 230px;
+        font-size: clamp(0.78rem, 2.5vw, 0.82rem);
+        letter-spacing: 0.18em;
+        min-width: min(210px, 42vw);
         cursor: pointer;
         border: none;
         text-align: left;
         transition: color 0.35s ease, background 0.35s ease;
         overflow: hidden;
+        touch-action: manipulation;
       }
 
-      /* 左アクセントライン */
       .room-btn::before {
         content: '';
         position: absolute;
@@ -439,7 +578,6 @@ function getCardWidth(sizeStr) {
         transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
       }
 
-      /* 外枠 */
       .room-btn::after {
         content: '';
         position: absolute;
@@ -474,9 +612,8 @@ function getCardWidth(sizeStr) {
         color: var(--gold-bright);
       }
 
-      /* 戻るボタン（セレクター内） */
       .back-btn {
-        margin-top: 50px;
+        margin-top: 40px;
         background: none;
         border: none;
         color: var(--text-muted);
@@ -488,6 +625,7 @@ function getCardWidth(sizeStr) {
         transition: color 0.3s;
         position: relative;
         padding: 6px 0;
+        touch-action: manipulation;
       }
 
       .back-btn::after {
@@ -516,7 +654,6 @@ function getCardWidth(sizeStr) {
         transition: opacity 1.2s ease, visibility 1.2s ease;
         min-height: 100vh;
 
-        /* えんじから深みある暗色へのグラデ背景 */
         background:
           linear-gradient(
             to bottom,
@@ -534,9 +671,11 @@ function getCardWidth(sizeStr) {
 
       .museum-header {
         text-align: center;
-        padding-top: 130px;
+        padding-top: 100px;
         padding-bottom: 10px;
         position: relative;
+        padding-left: 20px;
+        padding-right: 20px;
       }
 
       .museum-header::after {
@@ -549,9 +688,9 @@ function getCardWidth(sizeStr) {
       }
 
       .museum-title {
-        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        font-size: clamp(1rem, 4vw, 1.8rem);
         font-weight: 400;
-        letter-spacing: 0.4em;
+        letter-spacing: 0.3em;
         color: var(--text-main);
       }
 
@@ -581,28 +720,29 @@ function getCardWidth(sizeStr) {
 
       .gallery-track {
         display: flex;
-        gap: 80px;
-        padding: 60px 100px 150px;
+        gap: 60px;
+        padding: 60px 80px 120px;
         overflow-x: auto;
         scroll-behavior: smooth;
         align-items: center;
         scrollbar-width: thin;
         scrollbar-color: var(--crimson-mid) var(--crimson-deep);
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
       }
 
       .gallery-track::-webkit-scrollbar { height: 4px; }
       .gallery-track::-webkit-scrollbar-track { background: var(--crimson-deep); }
       .gallery-track::-webkit-scrollbar-thumb { background: var(--crimson-mid); border-radius: 2px; }
 
-      /* スクロール矢印 */
       .scroll-arrow {
         position: absolute;
         z-index: 10;
         background: rgba(74, 10, 10, 0.7);
         border: 1px solid rgba(212, 175, 55, 0.3);
         color: var(--gold-bright);
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         cursor: pointer;
         font-size: 1.3rem;
@@ -610,6 +750,8 @@ function getCardWidth(sizeStr) {
         display: flex;
         align-items: center;
         justify-content: center;
+        touch-action: manipulation;
+        flex-shrink: 0;
       }
 
       .scroll-arrow:hover {
@@ -617,8 +759,8 @@ function getCardWidth(sizeStr) {
         border-color: var(--gold-bright);
       }
 
-      .scroll-arrow.left { left: 18px; }
-      .scroll-arrow.right { right: 18px; }
+      .scroll-arrow.left { left: 6px; }
+      .scroll-arrow.right { right: 6px; }
 
       /* 作品カード */
       .artwork-card {
@@ -626,6 +768,7 @@ function getCardWidth(sizeStr) {
         cursor: pointer;
         position: relative;
         transition: transform 0.35s ease;
+        touch-action: manipulation;
       }
 
       .artwork-card:hover {
@@ -634,17 +777,17 @@ function getCardWidth(sizeStr) {
 
       .artwork-frame {
         border-style: solid;
-        border-width: 18px;
+        border-width: 14px;
         border-color:
           var(--frame-light)
           var(--frame-dark)
           var(--frame-dark)
           var(--frame-light);
-        border-radius: 10px;
+        border-radius: 8px;
         box-shadow:
-          10px 15px 35px rgba(0,0,0,0.8),
+          8px 12px 28px rgba(0,0,0,0.8),
           0 0 0 1px rgba(0,0,0,0.4),
-          inset 0 0 20px rgba(0,0,0,0.3);
+          inset 0 0 16px rgba(0,0,0,0.3);
       }
 
       .artwork-frame img {
@@ -654,7 +797,7 @@ function getCardWidth(sizeStr) {
 
       .artwork-label {
         text-align: center;
-        margin-top: 22px;
+        margin-top: 18px;
         padding: 0 4px;
       }
 
@@ -682,6 +825,7 @@ function getCardWidth(sizeStr) {
         justify-content: center;
         align-items: center;
         backdrop-filter: blur(4px);
+        padding: 16px;
       }
 
       .modal-overlay.active { display: flex; }
@@ -689,20 +833,21 @@ function getCardWidth(sizeStr) {
       .modal {
         background: linear-gradient(160deg, #1e0808 0%, #150404 100%);
         border: 1px solid rgba(212, 175, 55, 0.2);
-        padding: 40px;
+        padding: 32px 24px;
         max-width: 740px;
-        width: 92%;
+        width: 100%;
         max-height: 90vh;
         overflow-y: auto;
         position: relative;
         box-shadow:
           0 30px 80px rgba(0,0,0,0.8),
           inset 0 1px 0 rgba(212, 175, 55, 0.1);
+        -webkit-overflow-scrolling: touch;
       }
 
       .modal-close {
         position: absolute;
-        top: 16px; right: 20px;
+        top: 12px; right: 14px;
         background: none;
         border: 1px solid rgba(212, 175, 55, 0.25);
         color: var(--text-sub);
@@ -714,6 +859,7 @@ function getCardWidth(sizeStr) {
         display: flex;
         align-items: center;
         justify-content: center;
+        touch-action: manipulation;
       }
 
       .modal-close:hover {
@@ -722,27 +868,122 @@ function getCardWidth(sizeStr) {
       }
 
       .modal-title {
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 3.5vw, 1.2rem);
         font-weight: 400;
         letter-spacing: 0.1em;
         color: var(--text-main);
         margin-bottom: 10px;
+        padding-right: 40px;
       }
 
       .modal-meta {
-        font-size: 0.82rem;
+        font-size: clamp(0.72rem, 2.5vw, 0.82rem);
         color: var(--text-muted);
         margin-bottom: 22px;
         letter-spacing: 0.05em;
+        line-height: 1.8;
       }
 
       .modal-description {
-        font-size: 0.85rem;
+        font-size: clamp(0.8rem, 2.5vw, 0.85rem);
         line-height: 1.75;
         color: var(--text-sub);
         background: rgba(255,255,255,0.03);
         border-left: 2px solid var(--gold-dim);
-        padding: 16px 18px;
+        padding: 14px 16px;
+      }
+
+      /* ========== スマホ専用 レスポンシブ ========== */
+      @media (max-width: 768px) {
+        /* ヘッダー */
+        .site-header {
+          padding: 12px 18px;
+        }
+
+        .header-logo {
+          font-size: 0.82rem;
+          letter-spacing: 0.15em;
+        }
+
+        /* PCナビを非表示、ハンバーガーを表示 */
+        .header-nav {
+          display: none;
+        }
+
+        .hamburger {
+          display: flex;
+        }
+
+        /* モバイルメニューを有効化 */
+        .mobile-menu {
+          display: flex;
+        }
+
+        .mobile-overlay {
+          display: block;
+        }
+
+        /* ギャラリー */
+        .gallery-track {
+          gap: 36px;
+          padding: 40px 56px 80px;
+        }
+
+        .scroll-arrow {
+          width: 32px;
+          height: 32px;
+          font-size: 1.1rem;
+        }
+
+        .scroll-arrow.left { left: 4px; }
+        .scroll-arrow.right { right: 4px; }
+
+        /* モーダル */
+        .modal {
+          padding: 28px 18px;
+          max-height: 88vh;
+        }
+
+        .modal-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .modal-meta span + span::before {
+          display: none;
+        }
+
+        /* モーダルのスラッシュ区切りをスマホでは非表示 */
+        .modal-meta .sep {
+          display: none;
+        }
+
+        /* ルームセレクター */
+        .room-btn {
+          min-width: calc(50vw - 28px);
+          padding: 16px 18px;
+        }
+
+        /* 美術館ヘッダー */
+        .museum-header {
+          padding-top: 80px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .gallery-track {
+          gap: 28px;
+          padding: 36px 48px 70px;
+        }
+
+        .room-list {
+          gap: 10px;
+        }
+
+        .room-btn {
+          min-width: calc(100vw - 56px);
+        }
       }
     </style>
   </head>
@@ -751,6 +992,8 @@ function getCardWidth(sizeStr) {
     <!-- ヘッダー -->
     <header class="site-header">
       <div class="header-logo">{t.headerTitle}</div>
+
+      <!-- PC用ナビ -->
       <nav class="header-nav">
         <a href="#" id="navTop">{t.backTop}</a>
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
@@ -762,7 +1005,32 @@ function getCardWidth(sizeStr) {
           <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
         </div>
       </nav>
+
+      <!-- ハンバーガーボタン（スマホ用） -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </header>
+
+    <!-- モバイルメニュー背景オーバーレイ -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- モバイルドロワーメニュー -->
+    <div class="mobile-menu" id="mobileMenu">
+      <nav class="mobile-menu-nav">
+        <a href="#" id="mNavTop">{t.backTop}</a>
+        <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
+        <button id="mNavExhibition">{t.roomSelect}</button>
+        <button onclick={`alert('${t.alertShop}')`}>{t.navShop}</button>
+      </nav>
+      <div class="mobile-lang-switcher">
+        <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
+        <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
+        <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+      </div>
+    </div>
 
     <!-- ヒーロー / 入口 -->
     <div class="entrance" id="entrance">
@@ -833,14 +1101,14 @@ function getCardWidth(sizeStr) {
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal">
         <button class="modal-close" id="modalClose">✕</button>
-        <div style="text-align: center; margin-bottom: 24px;">
-          <img id="modalImg" src="" style="max-width: 100%; max-height: 58vh; object-fit: contain;" />
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img id="modalImg" src="" style="max-width: 100%; max-height: 50vh; object-fit: contain;" />
         </div>
         <h3 class="modal-title" id="modalTitle"></h3>
         <p class="modal-meta">
           <span id="modalArtist"></span>
-          &ensp;/&ensp;<span id="modalYear"></span>
-          &ensp;/&ensp;<span id="modalSize"></span>
+          <span class="sep">&ensp;/&ensp;</span><span id="modalYear"></span>
+          <span class="sep">&ensp;/&ensp;</span><span id="modalSize"></span>
         </p>
         <div class="modal-description" id="modalDescription"></div>
       </div>
@@ -848,27 +1116,66 @@ function getCardWidth(sizeStr) {
 
     <script define:vars={{ alertPreparing: t.alertPreparing }}>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
-      const entrance    = document.getElementById('entrance');
+      const entrance     = document.getElementById('entrance');
       const roomSelector = document.getElementById('roomSelector');
-      const museum      = document.getElementById('museum');
+      const museum       = document.getElementById('museum');
       const galleryTrack = document.getElementById('galleryTrack');
 
+      /* ---- ハンバーガーメニュー ---- */
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu   = document.getElementById('mobileMenu');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+
+      function openMobileMenu() {
+        hamburgerBtn.classList.add('open');
+        mobileMenu.classList.add('open');
+        mobileOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        hamburgerBtn.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        mobileOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      hamburgerBtn.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('open')) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      });
+
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+
+      /* ---- 画面遷移 ---- */
       function showEntrance() {
         entrance.classList.remove('hidden');
         roomSelector.classList.add('hidden');
         museum.classList.remove('visible');
+        closeMobileMenu();
       }
+
       function showSelector() {
         entrance.classList.add('hidden');
         roomSelector.classList.remove('hidden');
         museum.classList.remove('visible');
+        closeMobileMenu();
       }
 
-      document.getElementById('enterBtn').onclick = showSelector;
+      /* PCナビ */
+      document.getElementById('enterBtn').onclick      = showSelector;
       document.getElementById('navExhibition').onclick = (e) => { e.preventDefault(); showSelector(); };
-      document.getElementById('navTop').onclick      = (e) => { e.preventDefault(); showEntrance(); };
+      document.getElementById('navTop').onclick        = (e) => { e.preventDefault(); showEntrance(); };
       document.getElementById('backToTopFromSelector').onclick = showEntrance;
 
+      /* モバイルナビ */
+      document.getElementById('mNavTop').onclick = (e) => { e.preventDefault(); showEntrance(); };
+      document.getElementById('mNavExhibition').onclick = showSelector;
+
+      /* ---- 展示室選択 ---- */
       document.querySelectorAll('.room-btn').forEach(btn => {
         btn.onclick = () => {
           const roomId   = btn.dataset.room;
@@ -898,12 +1205,14 @@ function getCardWidth(sizeStr) {
         };
       });
 
-      document.getElementById('arrowLeft').onclick  = () => galleryTrack.scrollBy({ left: -400, behavior: 'smooth' });
-      document.getElementById('arrowRight').onclick = () => galleryTrack.scrollBy({ left:  400, behavior: 'smooth' });
+      /* ---- スクロール矢印 ---- */
+      document.getElementById('arrowLeft').onclick  = () => galleryTrack.scrollBy({ left: -360, behavior: 'smooth' });
+      document.getElementById('arrowRight').onclick = () => galleryTrack.scrollBy({ left:  360, behavior: 'smooth' });
 
+      /* ---- モーダル ---- */
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.onclick = () => {
-          document.getElementById('modalImg').src        = `${base}/gallery/${card.dataset.file}`;
+          document.getElementById('modalImg').src                 = `${base}/gallery/${card.dataset.file}`;
           document.getElementById('modalTitle').textContent       = card.dataset.title;
           document.getElementById('modalArtist').textContent      = card.dataset.artist;
           document.getElementById('modalYear').textContent        = card.dataset.year;
@@ -915,6 +1224,7 @@ function getCardWidth(sizeStr) {
 
       document.getElementById('modalClose').onclick = () =>
         document.getElementById('modalOverlay').classList.remove('active');
+
       document.getElementById('modalOverlay').onclick = (e) => {
         if (e.target.id === 'modalOverlay') e.target.classList.remove('active');
       };
