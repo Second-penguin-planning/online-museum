@@ -3,7 +3,7 @@ import artworks from '../data/artworks.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const title = "德永デジタル美術館";
-const headerTitle = "德永卓磨と幸子の絵画をご覧ください";
+const headerTitle = "德永卓磨と幸子の絵画をご覧ください;
 
 // 展示室のリスト定義
 const roomNames = [
@@ -16,8 +16,8 @@ const roomNames = [
   { id: 7, prefix: '７）', name: 'その他' }
 ];
 
-// ファイル名(001.jpg等)から番号を抽出し、展示室(カテゴリ)を振り分ける
-const categorizedArtworks = artworks.map(info => {
+// ファイル名から展示室を振り分け＆額縁のランダムカラーを生成
+const categorizedArtworks = artworks.map((info, i) => {
   let category = 0;
   const match = info.file?.match(/(\d+)/);
   if (match) {
@@ -25,12 +25,25 @@ const categorizedArtworks = artworks.map(info => {
     if (num >= 1 && num <= 6) category = 1;       // 001〜006 は 1)異人館
     else if (num >= 7 && num <= 12) category = 2; // 007〜012 は 2)ラ・マンチャ
   }
-  return { ...info, category };
+  
+  // 茶色〜黄土色のランダムな色合い（作品のインデックスを元に生成し固定化）
+  // 色相(Hue): 30〜45 (オレンジ〜黄土色)
+  // 彩度(Sat): 40〜65%
+  // 明度(Lit): 25〜40% (少し暗めにして額縁の重厚感を出す)
+  const hue = 30 + ((i * 7) % 16);
+  const sat = 40 + ((i * 11) % 26);
+  const lit = 25 + ((i * 13) % 16);
+
+  // 光が当たっている面（明）と影の面（暗）の色を生成
+  const frameLight = `hsl(${hue}, ${sat}%, ${lit + 15}%)`;
+  const frameDark = `hsl(${hue}, ${sat}%, ${lit - 12}%)`;
+
+  return { ...info, category, frameLight, frameDark };
 });
 
 // サイズデータから倍率を計算し、カードの横幅(px)を決定する関数
 function getCardWidth(sizeStr) {
-  const defaultWidth = 280; // 30号の基準サイズ(横幅280px)
+  const defaultWidth = 280; 
   if (!sizeStr) return defaultWidth;
 
   const match = sizeStr.match(/(\d+(?:\.\d+)?)/);
@@ -96,7 +109,6 @@ function getCardWidth(sizeStr) {
         transform: translateY(-2px);
       }
 
-      /* スマホ向けヘッダー調整 */
       @media (max-width: 768px) {
         .site-header {
           flex-direction: column;
@@ -104,12 +116,8 @@ function getCardWidth(sizeStr) {
           gap: 15px;
           background: rgba(0,0,0,0.5);
         }
-        .header-nav {
-          gap: 15px;
-        }
-        .header-nav a {
-          font-size: 0.8rem;
-        }
+        .header-nav { gap: 15px; }
+        .header-nav a { font-size: 0.8rem; }
       }
 
       /* ========== エントランス ========== */
@@ -127,10 +135,7 @@ function getCardWidth(sizeStr) {
         z-index: 999;
         transition: opacity 1.2s ease, visibility 1.2s ease;
       }
-      .entrance.hidden {
-        opacity: 0;
-        visibility: hidden;
-      }
+      .entrance.hidden { opacity: 0; visibility: hidden; }
       
       .entrance h1 {
         font-size: clamp(2rem, 5vw, 3.5rem);
@@ -181,10 +186,7 @@ function getCardWidth(sizeStr) {
         z-index: 999;
         transition: opacity 1.2s ease, visibility 1.2s ease;
       }
-      .room-selector.hidden {
-        opacity: 0;
-        visibility: hidden;
-      }
+      .room-selector.hidden { opacity: 0; visibility: hidden; }
       .room-selector h2 {
         font-size: clamp(1.5rem, 5vw, 2.5rem);
         letter-spacing: 0.3em;
@@ -230,15 +232,10 @@ function getCardWidth(sizeStr) {
         font-size: 0.9rem;
         transition: color 0.3s;
       }
-      .back-btn:hover {
-        color: #fff;
-      }
+      .back-btn:hover { color: #fff; }
+
       @media (max-width: 768px) {
-        .room-btn {
-          min-width: 140px;
-          padding: 12px 15px;
-          font-size: 0.9rem;
-        }
+        .room-btn { min-width: 140px; padding: 12px 15px; font-size: 0.9rem; }
       }
 
       /* ========== メインギャラリー ========== */
@@ -247,6 +244,8 @@ function getCardWidth(sizeStr) {
         visibility: hidden;
         transition: opacity 1.2s ease, visibility 1.2s ease;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
       }
       .museum.visible { 
         opacity: 1; 
@@ -255,14 +254,13 @@ function getCardWidth(sizeStr) {
 
       .museum-header {
         text-align: center;
-        padding: 120px 20px 30px;
-        background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+        padding: 100px 20px 10px;
       }
       .museum-header h2 {
         font-size: 1.2rem;
         letter-spacing: 0.4em;
         font-weight: 300;
-        color: rgba(255,255,255,0.6);
+        color: rgba(255,255,255,0.7);
       }
       .museum-header .count {
         font-size: 0.8rem;
@@ -271,7 +269,6 @@ function getCardWidth(sizeStr) {
         letter-spacing: 0.2em;
       }
 
-      /* ========== 横スクロールエリア ========== */
       .scroll-hint {
         text-align: center;
         padding: 10px;
@@ -285,20 +282,26 @@ function getCardWidth(sizeStr) {
         50% { opacity: 0.8; }
       }
 
+      /* ========== 横スクロールエリア ========== */
       .gallery-track-wrapper {
         position: relative;
-        padding: 40px 0 60px;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
       }
       .gallery-track {
         display: flex;
-        gap: 60px;
-        padding: 20px 80px;
+        gap: 80px;
+        /* 下部のラベルが見切れないようbottom paddingを多めに確保 */
+        padding: 40px 100px 120px;
         overflow-x: auto;
         scroll-behavior: smooth;
         scrollbar-width: none;
         -ms-overflow-style: none;
         cursor: grab;
-        align-items: flex-end; 
+        /* 絵画の中心を水平に揃える設定 */
+        align-items: center; 
+        width: 100%;
       }
       .gallery-track:active { cursor: grabbing; }
       .gallery-track::-webkit-scrollbar { display: none; }
@@ -329,50 +332,73 @@ function getCardWidth(sizeStr) {
       .artwork-card {
         flex: 0 0 auto;
         cursor: pointer;
-        transition: transform 0.3s;
         position: relative;
+        transition: transform 0.3s;
       }
-      .artwork-card:hover { transform: translateY(-8px); }
+      .artwork-card:hover { transform: scale(1.02); }
 
+      /* 立体感のある額縁（茶色〜黄土色） */
       .artwork-frame {
-        background: #1a1a1a;
-        border: 8px solid #2a2a2a;
+        background: #2a1b12; /* キャンバスの裏板・隙間の色 */
+        border-style: solid;
+        border-width: 14px;
+        /* 光の当たり方を表現するボーダーカラー（JSから受け取った変数を使用） */
+        border-color: var(--frame-light) var(--frame-dark) var(--frame-dark) var(--frame-light);
         box-shadow:
-          0 0 0 1px #444,
-          inset 0 0 20px rgba(0,0,0,0.5),
-          0 20px 60px rgba(0,0,0,0.6);
-        border-radius: 2px;
+          0 0 0 1px #000,                  /* 外枠の細い締めライン */
+          inset 0 0 15px rgba(0,0,0,0.9),  /* 額縁内側からキャンバスへの落ち影 */
+          inset 0 0 0 2px rgba(0,0,0,0.5), /* キャンバスと額縁の僅かな隙間 */
+          8px 15px 30px rgba(0,0,0,0.7);   /* 壁（背景）への落ち影 */
+        border-radius: 3px;
         position: relative;
         width: 100%;
         display: flex;
       }
+      
+      /* 額縁内側の金色の装飾ライン（より本格的な額縁感を演出） */
       .artwork-frame::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
-        z-index: 1;
+        border: 2px solid rgba(255, 215, 0, 0.2);
+        z-index: 2;
         pointer-events: none;
       }
+      /* ガラス・アクリルの反射光 */
+      .artwork-frame::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 45%);
+        z-index: 3;
+        pointer-events: none;
+      }
+
       .artwork-frame img {
         width: 100%;
         height: auto;
         display: block;
       }
 
+      /* タイトルラベル（額縁の底辺から少し下に配置） */
       .artwork-label {
+        position: absolute;
+        top: calc(100% + 25px); /* 底辺から25px下 */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150%; /* タイトルが長い場合の折り返しを防ぐため広めに設定 */
         text-align: center;
-        margin-top: 15px;
-        padding: 0 5px;
+        pointer-events: none;
       }
       .artwork-label .artwork-title {
         font-size: 0.85rem;
         color: rgba(255,255,255,0.8);
         letter-spacing: 0.05em;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
       }
       .artwork-label .artwork-artist {
         font-size: 0.75rem;
-        color: rgba(255,255,255,0.35);
+        color: rgba(255,255,255,0.4);
         margin-top: 4px;
       }
 
@@ -428,10 +454,7 @@ function getCardWidth(sizeStr) {
         display: inline-block;
       }
 
-      .modal-info table {
-        width: 100%;
-        border-collapse: collapse;
-      }
+      .modal-info table { width: 100%; border-collapse: collapse; }
       .modal-info th {
         text-align: left;
         padding: 9px 12px;
@@ -461,7 +484,6 @@ function getCardWidth(sizeStr) {
   </head>
   <body>
 
-    <!-- 常に上部に表示されるヘッダー -->
     <header class="site-header">
       <div class="header-logo">{headerTitle}</div>
       <nav class="header-nav">
@@ -472,14 +494,12 @@ function getCardWidth(sizeStr) {
       </nav>
     </header>
 
-    <!-- エントランス画面 -->
     <div class="entrance" id="entrance">
       <h1>{title}</h1>
       <p>TOKUNAGA ART MUSEUM</p>
       <button class="enter-btn" id="enterBtn">― 入　館 ―</button>
     </div>
 
-    <!-- 展示室選択画面 -->
     <div class="room-selector hidden" id="roomSelector">
       <h2>展示室を選択</h2>
       <div class="room-list">
@@ -492,13 +512,11 @@ function getCardWidth(sizeStr) {
       <button class="back-btn" id="backToTopFromSelector">← TOPへ戻る</button>
     </div>
 
-    <!-- メインギャラリー画面 -->
     <div class="museum" id="museum">
       <div class="museum-header">
         <h2 id="museumTitle">{title}</h2>
         <div class="count" id="museumCount">{categorizedArtworks.length} WORKS</div>
       </div>
-
       <div class="scroll-hint">← 左右にスクロール →</div>
 
       <div class="gallery-track-wrapper">
@@ -507,7 +525,11 @@ function getCardWidth(sizeStr) {
           {categorizedArtworks.map((info) => (
             <div
               class="artwork-card"
-              style={`width: ${getCardWidth(info.size)}px;`}
+              style={`
+                width: ${getCardWidth(info.size)}px; 
+                --frame-light: ${info.frameLight}; 
+                --frame-dark: ${info.frameDark};
+              `}
               data-category={info.category}
               data-file={info.file}
               data-title={info.title}
@@ -552,91 +574,74 @@ function getCardWidth(sizeStr) {
     <script>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
 
-      // --- 画面切り替えのロジック ---
       const entrance = document.getElementById('entrance');
       const roomSelector = document.getElementById('roomSelector');
       const museum = document.getElementById('museum');
       const galleryTrack = document.getElementById('galleryTrack');
 
-      // 展示室選択画面を開く
       function openRoomSelector() {
         entrance.classList.add('hidden');
         museum.classList.remove('visible');
         roomSelector.classList.remove('hidden');
       }
 
-      // 選択画面からTOP（エントランス）へ戻る
       function closeRoomSelector() {
         roomSelector.classList.add('hidden');
         entrance.classList.remove('hidden');
       }
 
-      // TOPへ強制的に戻る
       function goToTop() {
         roomSelector.classList.add('hidden');
         museum.classList.remove('visible');
         entrance.classList.remove('hidden');
       }
 
-      // ボタンやナビゲーションへのイベント紐付け
       document.getElementById('enterBtn').addEventListener('click', openRoomSelector);
-      
       document.getElementById('navExhibition').addEventListener('click', (e) => {
         e.preventDefault();
         openRoomSelector();
       });
-
       document.getElementById('navTop').addEventListener('click', (e) => {
         e.preventDefault();
         goToTop();
       });
-      
       document.getElementById('backToTopFromSelector').addEventListener('click', closeRoomSelector);
 
-
-      // --- 展示室（カテゴリ）選択のロジック ---
       document.querySelectorAll('.room-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const roomId = parseInt(btn.dataset.room, 10);
           const roomName = btn.dataset.name;
           
-          // 3番以降は整理中としてアラートを表示
           if (roomId >= 3 && roomId <= 7) {
             alert('現在整理中です。');
             return;
           }
           
-          // 選択された展示室に紐づく作品のみを抽出（フィルタリング）
           const cards = document.querySelectorAll('.artwork-card');
           let count = 0;
           cards.forEach(card => {
             if (card.dataset.category === String(roomId)) {
-              card.style.display = ''; // CSSのデフォルトに戻して表示
+              card.style.display = ''; 
               count++;
             } else {
-              card.style.display = 'none'; // 条件外の作品は非表示
+              card.style.display = 'none'; 
             }
           });
 
-          // ヘッダー情報（タイトルと作品数）の更新
           document.getElementById('museumTitle').textContent = `展示室：${roomName}`;
           document.getElementById('museumCount').textContent = `${count} WORKS`;
 
-          // スクロール位置の初期化 (アニメーションを一旦切って一瞬で戻す)
           galleryTrack.style.scrollBehavior = 'auto';
           galleryTrack.scrollLeft = 0;
           setTimeout(() => {
             galleryTrack.style.scrollBehavior = 'smooth';
           }, 50);
 
-          // ギャラリー画面へ遷移
           roomSelector.classList.add('hidden');
           museum.classList.add('visible');
         });
       });
 
-
-      // --- 横スクロールのロジック ---
       const track = document.getElementById('galleryTrack');
       document.getElementById('arrowLeft').addEventListener('click', () => {
         track.scrollBy({ left: -320, behavior: 'smooth' });
@@ -661,8 +666,6 @@ function getCardWidth(sizeStr) {
         track.scrollLeft = scrollLeft - (x - startX);
       });
 
-
-      // --- モーダルのロジック ---
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.addEventListener('click', () => {
           document.getElementById('modalImg').src = base + '/gallery/' + card.dataset.file;
