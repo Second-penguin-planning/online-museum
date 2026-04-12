@@ -117,13 +117,11 @@ const categorizedArtworks = artworks.map((info, i) => {
     category, 
     frameLight, 
     frameDark,
-    // JSONのオブジェクトから現在の言語のテキストを抽出
     title: info.title[lang],
     artist: info.artist[lang],
     year: info.year[lang],
     size: info.size[lang],
     description: info.description[lang],
-    // 額縁の幅計算ロジック用に「日本語のサイズ（〇〇号）」を保持させる
     rawSizeJa: info.size.ja
   };
 });
@@ -209,7 +207,7 @@ function getCardWidth(sizeStr) {
       .lang-switcher a.active {
         opacity: 1;
         font-weight: bold;
-        color: #f1c40f; /* 選択中の言語を少し目立たせる */
+        color: #f1c40f;
       }
 
       @media (max-width: 900px) {
@@ -679,7 +677,6 @@ function getCardWidth(sizeStr) {
       </div>
     </div>
 
-    <!-- define:vars を使用して JS にサーバー側の多言語テキストを渡す -->
     <script define:vars={{ alertPreparing: t.alertPreparing, worksText: t.works }}>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
 
@@ -722,7 +719,7 @@ function getCardWidth(sizeStr) {
           const roomName = btn.dataset.name;
           
           if (roomId >= 3 && roomId <= 7) {
-            alert(alertPreparing); // 多言語化されたアラート文
+            alert(alertPreparing); 
             return;
           }
           
@@ -737,7 +734,6 @@ function getCardWidth(sizeStr) {
             }
           });
 
-          // 作品数を多言語で表示
           document.getElementById('museumTitle').textContent = roomName;
           document.getElementById('museumCount').textContent = `${count} ${worksText}`;
 
