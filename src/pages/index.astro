@@ -2,8 +2,31 @@
 import artworks from '../data/artworks.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const title = "德永アートミュージアム";
-const headerTitle = "德永デジタル美術館";
+const title = "德永デジタル美術館";
+const headerTitle = "德永卓磨と幸子の絵画をご覧ください";
+
+// 展示室のリスト定義
+const roomNames = [
+  { id: 1, prefix: '１）', name: '異人館' },
+  { id: 2, prefix: '２）', name: 'ラ・マンチャ' },
+  { id: 3, prefix: '３）', name: '神戸風景' },
+  { id: 4, prefix: '４）', name: '静物' },
+  { id: 5, prefix: '５）', name: '人物' },
+  { id: 6, prefix: '６）', name: '記憶' },
+  { id: 7, prefix: '７）', name: 'その他' }
+];
+
+// ファイル名(001.jpg等)から番号を抽出し、展示室(カテゴリ)を振り分ける
+const categorizedArtworks = artworks.map(info => {
+  let category = 0;
+  const match = info.file?.match(/(\d+)/);
+  if (match) {
+    const num = parseInt(match[1], 10);
+    if (num >= 1 && num <= 6) category = 1;       // 001〜006 は 1)異人館
+    else if (num >= 7 && num <= 12) category = 2; // 007〜012 は 2)ラ・マンチャ
+  }
+  return { ...info, category };
+});
 
 // サイズデータから倍率を計算し、カードの横幅(px)を決定する関数
 function getCardWidth(sizeStr) {
@@ -79,7 +102,7 @@ function getCardWidth(sizeStr) {
           flex-direction: column;
           padding: 15px 20px;
           gap: 15px;
-          background: rgba(0,0,0,0.5); /* スマホでは少し背景を濃くして視認性確保 */
+          background: rgba(0,0,0,0.5);
         }
         .header-nav {
           gap: 15px;
@@ -143,6 +166,81 @@ function getCardWidth(sizeStr) {
         transform: scale(1.05);
       }
 
+      /* ========== 展示室選択画面 ========== */
+      .room-selector {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: 
+          linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.95)),
+          url('https://images.unsplash.com/photo-1577083165239-0bd9f19fc08f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        transition: opacity 1.2s ease, visibility 1.2s ease;
+      }
+      .room-selector.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .room-selector h2 {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        letter-spacing: 0.3em;
+        font-weight: 300;
+        color: #fff;
+        margin-bottom: 50px;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      }
+      .room-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        max-width: 900px;
+        padding: 0 20px;
+      }
+      .room-btn {
+        padding: 15px 30px;
+        border: 1px solid rgba(255,255,255,0.4);
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 220px;
+        border-radius: 2px;
+        text-align: center;
+      }
+      .room-btn:hover {
+        background: rgba(255,255,255,0.2);
+        border-color: #fff;
+        transform: translateY(-2px);
+      }
+      .back-btn {
+        margin-top: 50px;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.6);
+        cursor: pointer;
+        letter-spacing: 0.2em;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+      .back-btn:hover {
+        color: #fff;
+      }
+      @media (max-width: 768px) {
+        .room-btn {
+          min-width: 140px;
+          padding: 12px 15px;
+          font-size: 0.9rem;
+        }
+      }
+
       /* ========== メインギャラリー ========== */
       .museum {
         opacity: 0;
@@ -157,7 +255,6 @@ function getCardWidth(sizeStr) {
 
       .museum-header {
         text-align: center;
-        /* ヘッダーが上部に固定されているため、被らないように上部余白を大きめに取る */
         padding: 120px 20px 30px;
         background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
       }
@@ -382,11 +479,24 @@ function getCardWidth(sizeStr) {
       <button class="enter-btn" id="enterBtn">― 入　館 ―</button>
     </div>
 
+    <!-- 展示室選択画面 -->
+    <div class="room-selector hidden" id="roomSelector">
+      <h2>展示室を選択</h2>
+      <div class="room-list">
+        {roomNames.map(room => (
+          <button class="room-btn" data-room={room.id} data-name={room.name}>
+            {room.prefix}{room.name}
+          </button>
+        ))}
+      </div>
+      <button class="back-btn" id="backToTopFromSelector">← TOPへ戻る</button>
+    </div>
+
     <!-- メインギャラリー画面 -->
     <div class="museum" id="museum">
       <div class="museum-header">
-        <h2>{title}</h2>
-        <div class="count">{artworks.length} WORKS</div>
+        <h2 id="museumTitle">{title}</h2>
+        <div class="count" id="museumCount">{categorizedArtworks.length} WORKS</div>
       </div>
 
       <div class="scroll-hint">← 左右にスクロール →</div>
@@ -394,10 +504,11 @@ function getCardWidth(sizeStr) {
       <div class="gallery-track-wrapper">
         <button class="scroll-arrow left" id="arrowLeft">‹</button>
         <div class="gallery-track" id="galleryTrack">
-          {artworks.map((info) => (
+          {categorizedArtworks.map((info) => (
             <div
               class="artwork-card"
               style={`width: ${getCardWidth(info.size)}px;`}
+              data-category={info.category}
               data-file={info.file}
               data-title={info.title}
               data-artist={info.artist}
@@ -443,31 +554,85 @@ function getCardWidth(sizeStr) {
 
       // --- 画面切り替えのロジック ---
       const entrance = document.getElementById('entrance');
+      const roomSelector = document.getElementById('roomSelector');
       const museum = document.getElementById('museum');
+      const galleryTrack = document.getElementById('galleryTrack');
 
-      // 展示室へ入る（エントランスを隠す）
-      function enterMuseum() {
+      // 展示室選択画面を開く
+      function openRoomSelector() {
         entrance.classList.add('hidden');
-        museum.classList.add('visible');
+        museum.classList.remove('visible');
+        roomSelector.classList.remove('hidden');
       }
 
-      // TOP（エントランス）へ戻る
-      function goToTop() {
+      // 選択画面からTOP（エントランス）へ戻る
+      function closeRoomSelector() {
+        roomSelector.classList.add('hidden');
         entrance.classList.remove('hidden');
+      }
+
+      // TOPへ強制的に戻る
+      function goToTop() {
+        roomSelector.classList.add('hidden');
         museum.classList.remove('visible');
+        entrance.classList.remove('hidden');
       }
 
       // ボタンやナビゲーションへのイベント紐付け
-      document.getElementById('enterBtn').addEventListener('click', enterMuseum);
+      document.getElementById('enterBtn').addEventListener('click', openRoomSelector);
       
       document.getElementById('navExhibition').addEventListener('click', (e) => {
-        e.preventDefault(); // リンクのデフォルト動作を無効化
-        enterMuseum();
+        e.preventDefault();
+        openRoomSelector();
       });
 
       document.getElementById('navTop').addEventListener('click', (e) => {
         e.preventDefault();
         goToTop();
+      });
+      
+      document.getElementById('backToTopFromSelector').addEventListener('click', closeRoomSelector);
+
+
+      // --- 展示室（カテゴリ）選択のロジック ---
+      document.querySelectorAll('.room-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const roomId = parseInt(btn.dataset.room, 10);
+          const roomName = btn.dataset.name;
+          
+          // 3番以降は整理中としてアラートを表示
+          if (roomId >= 3 && roomId <= 7) {
+            alert('現在整理中です。');
+            return;
+          }
+          
+          // 選択された展示室に紐づく作品のみを抽出（フィルタリング）
+          const cards = document.querySelectorAll('.artwork-card');
+          let count = 0;
+          cards.forEach(card => {
+            if (card.dataset.category === String(roomId)) {
+              card.style.display = ''; // CSSのデフォルトに戻して表示
+              count++;
+            } else {
+              card.style.display = 'none'; // 条件外の作品は非表示
+            }
+          });
+
+          // ヘッダー情報（タイトルと作品数）の更新
+          document.getElementById('museumTitle').textContent = `展示室：${roomName}`;
+          document.getElementById('museumCount').textContent = `${count} WORKS`;
+
+          // スクロール位置の初期化 (アニメーションを一旦切って一瞬で戻す)
+          galleryTrack.style.scrollBehavior = 'auto';
+          galleryTrack.scrollLeft = 0;
+          setTimeout(() => {
+            galleryTrack.style.scrollBehavior = 'smooth';
+          }, 50);
+
+          // ギャラリー画面へ遷移
+          roomSelector.classList.add('hidden');
+          museum.classList.add('visible');
+        });
       });
 
 
@@ -495,6 +660,7 @@ function getCardWidth(sizeStr) {
         const x = e.pageX - track.offsetLeft;
         track.scrollLeft = scrollLeft - (x - startX);
       });
+
 
       // --- モーダルのロジック ---
       document.querySelectorAll('.artwork-card').forEach(card => {
