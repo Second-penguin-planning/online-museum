@@ -338,38 +338,48 @@ function getCardWidth(sizeStr) {
       }
       .artwork-card:hover { transform: scale(1.02); }
 
-      /* 立体感のある額縁（茶色〜黄土色） */
+           /* 立体感のある額縁（丸みを帯びたリアルな形） */
       .artwork-frame {
-        background: #2a1b12; /* キャンバスの裏板・隙間の色 */
+        background: #1a110a; /* キャンバスの奥の隙間の色 */
         border-style: solid;
-        border-width: 14px;
-        /* 光の当たり方を表現するボーダーカラー（JSから受け取った変数を使用） */
+        border-width: 18px; /* 丸みを強調するため少し太く設定 */
         border-color: var(--frame-light) var(--frame-dark) var(--frame-dark) var(--frame-light);
+        
+        /* 外角を丸くして、全体のかまぼこ型のふくらみを表現 */
+        border-radius: 12px;
+        
+        /* ハイライトとシャドウを重ねて、枠の断面の「丸み」を表現 */
         box-shadow:
-          0 0 0 1px #000,                  /* 外枠の細い締めライン */
-          inset 0 0 15px rgba(0,0,0,0.9),  /* 額縁内側からキャンバスへの落ち影 */
-          inset 0 0 0 2px rgba(0,0,0,0.5), /* キャンバスと額縁の僅かな隙間 */
-          8px 15px 30px rgba(0,0,0,0.7);   /* 壁（背景）への落ち影 */
-        border-radius: 3px;
+          0 0 0 1px rgba(0,0,0,0.8),            /* 外枠の輪郭を締めるライン */
+          inset 0 0 5px rgba(255,255,255,0.25), /* 枠自体のふくらみに当たるハイライト */
+          inset 0 0 16px rgba(0,0,0,0.9),       /* 内側(絵画側)へ向かって丸く落ち込む影 */
+          inset 0 0 0 2px rgba(0,0,0,0.7),      /* 絵画と額縁の僅かな隙間の暗がり */
+          10px 15px 35px rgba(0,0,0,0.7);       /* 壁への落ち影 */
+          
         position: relative;
         width: 100%;
         display: flex;
       }
       
-      /* 額縁内側の金色の装飾ライン（より本格的な額縁感を演出） */
+      /* 額縁内側の金色の装飾ライン */
       .artwork-frame::before {
         content: '';
         position: absolute;
         inset: 0;
-        border: 2px solid rgba(255, 215, 0, 0.2);
+        /* 内側の金ラインも額縁の丸みに合わせて少し角を落とす */
+        border-radius: 3px;
+        border: 2px solid rgba(255, 215, 0, 0.25);
+        box-shadow: inset 0 0 6px rgba(255, 215, 0, 0.1); /* 金色のほのかな光沢 */
         z-index: 2;
         pointer-events: none;
       }
+      
       /* ガラス・アクリルの反射光 */
       .artwork-frame::after {
         content: '';
         position: absolute;
         inset: 0;
+        border-radius: 2px;
         background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 45%);
         z-index: 3;
         pointer-events: none;
@@ -379,7 +389,10 @@ function getCardWidth(sizeStr) {
         width: 100%;
         height: auto;
         display: block;
+        /* 絵画の角もごく僅かに丸めて額縁に馴染ませる */
+        border-radius: 2px;
       }
+
 
       /* タイトルラベル（額縁の底辺から少し下に配置） */
       .artwork-label {
