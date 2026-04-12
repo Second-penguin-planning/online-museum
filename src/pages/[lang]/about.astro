@@ -1,93 +1,607 @@
 ---
-import aboutData from '../../data/about.json';
+// src/pages/[lang]/about.astro
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
   return [
     { params: { lang: 'ja' } },
     { params: { lang: 'en' } },
-    { params: { lang: 'sp' } }
+    { params: { lang: 'sp' } },
   ];
 }
 
 const { lang } = Astro.params;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const t = aboutData[lang]; // 言語ごとのデータを取得
 
-// ナビゲーション用の辞書（index.astroと共通）
-const navDict = {
-  ja: { back: "← 美術館へ戻る" },
-  en: { back: "← Back to Museum" },
-  sp: { back: "← Volver al Museo" }
+// ============================================================
+// 多言語メタ情報
+// ============================================================
+const meta = {
+  ja: { title: '回想録 — 徳永侃', description: '画家・徳永侃による自叙伝的エッセイ「記憶」' },
+  en: { title: 'Memoir — Takuma Tokunaga', description: 'Autobiographical essay "Memories" by painter Takuma Tokunaga' },
+  sp: { title: 'Memorias — Takuma Tokunaga', description: 'Ensayo autobiográfico "Recuerdos" del pintor Takuma Tokunaga' },
 };
-const nav = navDict[lang];
+const currentMeta = meta[lang] ?? meta.ja;
+
+// ============================================================
+// 章データ（全29章）
+// ============================================================
+const chapters = [
+  {
+    id: 'ch01',
+    ja: { title: '第一章　生い立ち', content: `昭和十五年（一九四〇）、私は富山県氷見市に生まれた。漁師町の波音と、立山連峰の白い稜線が、幼少期の記憶の底に沈んでいる。父は小学校の図画教師であり、休日には水彩道具を抱えて海辺へ出かけた。その背中を追うように、私も紙と鉛筆を手に砂浜へ向かった。\n\n戦後の混乱期、物資は乏しく、画用紙の代わりに新聞の余白へ絵を描いた。色鉛筆は三本しかなく、赤・青・黒の三色で世界を表現することを覚えた。制約が創造の母であることを、私は子どもの頃から身体で学んでいたのかもしれない。` },
+    en: { title: 'Chapter 1  Origins', content: `I was born in 1940 in Himi City, Toyama Prefecture. The sound of waves in a fishing town and the white ridgeline of the Tateyama mountain range lie sunken at the bottom of my childhood memories. My father was an elementary school art teacher who would head to the seaside on holidays carrying his watercolor kit. Following in his footsteps, I too would make my way to the sandy beach with paper and pencil in hand.\n\nDuring the postwar chaos, materials were scarce, and I drew pictures in newspaper margins instead of drawing paper. I had only three colored pencils—red, blue, and black—and learned to express the world in three colors. Perhaps from childhood I was already learning through my body that constraint is the mother of creativity.` },
+    sp: { title: 'Capítulo 1  Orígenes', content: `Nací en 1940 en la ciudad de Himi, prefectura de Toyama. El sonido de las olas en un pueblo pesquero y la blanca cresta de la cadena montañosa Tateyama yacen en el fondo de mis recuerdos de infancia. Mi padre era maestro de arte en una escuela primaria y los días festivos salía hacia la orilla del mar cargando sus útiles de acuarela. Siguiendo sus pasos, yo también me dirigía a la playa con papel y lápiz en mano.\n\nDurante el caos de la posguerra, los materiales escaseaban y dibujaba en los márgenes de los periódicos en lugar de en papel de dibujo. Solo tenía tres lápices de colores —rojo, azul y negro— y aprendí a expresar el mundo con tres colores. Quizás desde niño ya estaba aprendiendo con el cuerpo que la restricción es la madre de la creatividad.` },
+  },
+  {
+    id: 'ch02',
+    ja: { title: '第二章　金沢美術工芸大学', content: `昭和三十五年（一九六〇）、私は金沢美術工芸大学の絵画科に入学した。藤村先生との出会いがなければ、今の私はなかったと断言できる。先生は「絵とは何を描くかではなく、どこに立って描くかだ」と口癖のように言った。\n\nキャンパスの近くを流れる犀川の岸辺で、私は初めて「野外制作」の意味を悟った。アトリエの中で描く絵と、光と風の中で描く絵は根本的に異なる。キャンバスの表面で起きることは、描き手の身体が外界とどう接触するかに直結していた。\n\n同期には西窪がいた。後に私のスペイン行きを後押しすることになる友人である。彼は常に「絵は世界と交渉する手段だ」と言い、その言葉は今も私の画業の根幹にある。` },
+    en: { title: 'Chapter 2  Kanazawa College of Art', content: `In 1960, I enrolled in the painting department of Kanazawa College of Art. I can say with certainty that without my encounter with Professor Fujimura, I would not be the person I am today. The professor would habitually say, "Painting is not about what you paint, but where you stand to paint it."\n\nOn the banks of the Saigawa River flowing near campus, I first grasped the meaning of "outdoor painting." Paintings made inside an atelier and paintings made in light and wind are fundamentally different. What happens on the surface of a canvas is directly connected to how the painter's body makes contact with the outside world.\n\nAmong my classmates was Nishikubo, the friend who would later encourage my journey to Spain. He always said, "Painting is a means of negotiating with the world," and those words remain at the core of my artistic practice today.` },
+    sp: { title: 'Capítulo 2  Universidad de Bellas Artes de Kanazawa', content: `En 1960 me matriculé en el departamento de pintura de la Universidad de Artes y Oficios de Kanazawa. Puedo afirmar con certeza que sin mi encuentro con el profesor Fujimura, no sería la persona que soy hoy. El profesor solía decir habitualmente: "La pintura no se trata de qué pintas, sino de dónde te sitúas para pintar."\n\nEn las orillas del río Saigawa que fluye cerca del campus, comprendí por primera vez el significado de la "pintura al aire libre". Las pinturas realizadas dentro de un atelier y las pinturas realizadas bajo la luz y el viento son fundamentalmente diferentes. Lo que ocurre en la superficie de un lienzo está directamente relacionado con cómo el cuerpo del pintor entra en contacto con el mundo exterior.\n\nEntre mis compañeros de clase estaba Nishikubo, el amigo que más tarde alentaría mi viaje a España. Siempre decía: "La pintura es un medio de negociar con el mundo", y esas palabras siguen siendo el núcleo de mi práctica artística hoy en día.` },
+  },
+  {
+    id: 'ch03',
+    ja: { title: '第三章　最初のスペインへ（一九六九年）', content: `昭和四十四年（一九六九）、私は初めてスペインへ渡った。マドリードのアトーチャ駅に降り立ったとき、空気の乾き具合が日本とはまったく異なることに驚いた。高原の都市特有の、薄く澄んだ光が街全体を包んでいた。\n\n最初の一か月は下宿先を探しながら、ひたすらプラド美術館に通った。ベラスケスの「ラス・メニーナス」の前で三時間立ち尽くした日があった。画面の光の構造——奥の鏡から差し込む反射光と、手前の空間に充満する間接光——が、私の「現場主義」の原点となった。\n\n現場で見ることと、画像で見ることは全く別の体験である。絵具の厚みが持つ物質性、支持体の揺らぎ、室内の温度や湿度まで含めて、一枚の絵は存在している。この確信が私をその後もスペインへ引き付けた。` },
+    en: { title: 'Chapter 3  First Journey to Spain (1969)', content: `In 1969, I traveled to Spain for the first time. When I stepped off the train at Madrid's Atocha Station, I was struck by how completely different the dryness of the air was from Japan. A thin, clear light unique to highland cities enveloped the entire city.\n\nDuring my first month, while searching for lodging, I visited the Prado Museum relentlessly. There was a day I stood motionless before Velázquez's "Las Meninas" for three hours. The light structure of the canvas—the reflected light coming in from the mirror in the back and the indirect light filling the space in the foreground—became the origin of my "on-site philosophy."\n\nSeeing something on-site and seeing it in an image are completely different experiences. A painting exists including the materiality that paint thickness possesses, the vibration of the support, and even the temperature and humidity of the room. This conviction is what continued to draw me to Spain afterward.` },
+    sp: { title: 'Capítulo 3  Primer viaje a España (1969)', content: `En 1969 viajé a España por primera vez. Cuando bajé del tren en la estación de Atocha de Madrid, me sorprendió lo completamente diferente que era la sequedad del aire comparada con Japón. Una luz fina y clara, característica de las ciudades de alta meseta, envolvía toda la ciudad.\n\nDurante mi primer mes, mientras buscaba alojamiento, visité incansablemente el Museo del Prado. Hubo un día en que permanecí inmóvil ante "Las Meninas" de Velázquez durante tres horas. La estructura de la luz en el lienzo —la luz reflejada que entraba desde el espejo al fondo y la luz indirecta que llenaba el espacio en primer plano— se convirtió en el origen de mi "filosofía del lugar".\n\nVer algo in situ y verlo en una imagen son experiencias completamente diferentes. Una pintura existe incluyendo la materialidad que posee el grosor de la pintura, la vibración del soporte, e incluso la temperatura y la humedad de la habitación. Esta convicción es lo que me siguió atrayendo a España posteriormente.` },
+  },
+  {
+    id: 'ch04',
+    ja: { title: '第四章　マドリードの下宿', content: `マドリードでの住まいは、グラン・ビア通りから路地を二本入った古い建物の四階だった。家主のドニャ・カルメンは六十代の寡婦で、下宿人に対して家族のように接してくれた。朝食には必ずトルティーリャとコーヒーが出た。\n\n部屋の窓から見える中庭には、オレンジの木が一本あった。私は毎朝その木を素描した。葉の形は変わらなくても、光の角度によって全く異なる表情を見せる。同じ対象を毎日描くことで、「光を描く」という行為の意味が少しずつ分かってきた。\n\n言葉の壁は想像以上に高かった。日本語教師の経験もなく、スペイン語は入門書を一冊持参しただけだった。しかし不思議なことに、絵を描いていると言葉の壁が消えた。キャンバスは万国共通の言語だと実感した。` },
+    en: { title: 'Chapter 4  Lodgings in Madrid', content: `My residence in Madrid was on the fourth floor of an old building, two alleyways from Gran Vía. The landlady, Doña Carmen, was a widow in her sixties who treated her boarders like family. Breakfast always included tortilla and coffee.\n\nIn the courtyard visible from my room's window, there was a single orange tree. Every morning I sketched that tree. Even though the shape of the leaves didn't change, it showed completely different expressions depending on the angle of light. By drawing the same subject every day, I gradually came to understand the meaning of "painting light."\n\nThe language barrier was higher than I had imagined. Having no experience as a Japanese language teacher, I had brought only one beginner's Spanish textbook. But strangely, when I was painting, the language barrier disappeared. I came to truly feel that canvas is a universal language.` },
+    sp: { title: 'Capítulo 4  Alojamiento en Madrid', content: `Mi residencia en Madrid estaba en el cuarto piso de un edificio antiguo, a dos callejuelas de la Gran Vía. La casera, Doña Carmen, era una viuda de unos sesenta años que trataba a sus huéspedes como a su familia. El desayuno siempre incluía tortilla y café.\n\nEn el patio visible desde la ventana de mi habitación había un solo naranjo. Cada mañana bocetaba ese árbol. Aunque la forma de las hojas no cambiaba, mostraba expresiones completamente diferentes según el ángulo de la luz. Al dibujar el mismo sujeto cada día, fui comprendiendo gradualmente el significado de "pintar la luz".\n\nLa barrera del idioma era más alta de lo que había imaginado. Sin experiencia como profesor de japonés, solo había traído un libro de texto básico de español. Pero curiosamente, cuando pintaba, la barrera del idioma desaparecía. Llegué a sentir verdaderamente que el lienzo es un lenguaje universal.` },
+  },
+  {
+    id: 'ch05',
+    ja: { title: '第五章　プラド美術館と写実主義', content: `プラドに通い続けるうちに、私の中で「写実主義」と「具象主義」の区別が明確になっていった。写実主義とは対象を「正確に」再現しようとする行為であり、具象主義とは対象を「誠実に」向き合いながら描く行為である。\n\nリベーラの描く皮膚の質感、スルバランの修道士の衣のひだ、ゴヤの戦争画における混沌——これらはすべて「正確さ」を超えた何かを持っている。それは画家の身体が風景に、あるいは人物に、どれほど深く入り込んだかの痕跡だと私は解釈した。\n\n私が目指したのは写実ではなく、具象だった。対象の外形を追うのではなく、対象との関係性の中で生まれる感覚そのものを絵具で定着させることを目標とした。この思想がその後の私の全作品の基盤となった。` },
+    en: { title: 'Chapter 5  The Prado and Figurativism', content: `As I continued visiting the Prado, the distinction between "Realism" and "Figurativism" gradually became clear within me. Realism is the act of trying to reproduce a subject "accurately," while Figurativism is the act of painting while confronting a subject "sincerely."\n\nThe skin texture Ribera painted, the folds of the monk's robe in Zurbarán, the chaos in Goya's war paintings—all of these possess something beyond "accuracy." I interpreted this as the traces of how deeply the painter's body had penetrated into the landscape or figure.\n\nWhat I aimed for was not Realism but Figurativism. Rather than pursuing the external form of a subject, my goal became to fix in paint the sensation itself born within the relationship with the subject. This philosophy became the foundation of all my subsequent work.` },
+    sp: { title: 'Capítulo 5  El Prado y el Figurativismo', content: `A medida que seguía visitando el Prado, la distinción entre "Realismo" y "Figurativismo" fue haciéndose clara dentro de mí. El Realismo es el acto de intentar reproducir un sujeto "con precisión", mientras que el Figurativismo es el acto de pintar confrontando un sujeto "con sinceridad".\n\nLa textura de la piel que pintaba Ribera, los pliegues del hábito del monje en Zurbarán, el caos en las pinturas de guerra de Goya: todos estos poseen algo más allá de la "precisión". Lo interpreté como las huellas de cuán profundamente el cuerpo del pintor había penetrado en el paisaje o la figura.\n\nLo que yo buscaba no era el Realismo sino el Figurativismo. En lugar de perseguir la forma externa de un sujeto, mi objetivo se convirtió en fijar en pintura la propia sensación nacida dentro de la relación con el sujeto. Esta filosofía se convirtió en la base de toda mi obra posterior.` },
+  },
+  {
+    id: 'ch06',
+    ja: { title: '第六章　サン・フェルナンド王立美術アカデミー', content: `マドリード滞在中、私はサン・フェルナンド王立美術アカデミーのデッサン講座に聴講生として参加した。担当のミズル先生は無口な人で、学生の絵を長い間黙って眺め、最後に一言二言だけ言った。\n\n「線が恐れている」——私の最初のデッサンへの評だった。恐れるとはどういうことか。対象を支配しようとする意志が線に出ているということだろう。対象に身を委ねたとき、線は自然に流れ出す。この一言は私の制作態度を根本から変えた。\n\n教室には様々な国の学生が集まっていた。アルゼンチン、メキシコ、ドイツ、日本。言語は違えど、描くことへの真剣さは同じだった。夜遅くまで教室に残り、互いの絵を批評し合った。あの時間が私の美術観を大きく広げた。` },
+    en: { title: 'Chapter 6  Royal Academy of Fine Arts of San Fernando', content: `During my stay in Madrid, I participated as an auditor in drawing classes at the Royal Academy of Fine Arts of San Fernando. The instructor, Professor Mizuru, was a person of few words who would silently observe students' drawings for a long time before finally saying just a word or two.\n\n"The line is afraid"—this was his comment on my first drawing. What does it mean to be afraid? It must mean that the will to dominate the subject is showing in the line. When you entrust yourself to the subject, the line flows naturally. This single remark fundamentally changed my approach to creating.\n\nStudents from various countries gathered in the classroom: Argentina, Mexico, Germany, Japan. Though the languages differed, the seriousness about drawing was the same. We would stay in the classroom until late at night, critiquing each other's paintings. Those times greatly expanded my view of art.` },
+    sp: { title: 'Capítulo 6  Real Academia de Bellas Artes de San Fernando', content: `Durante mi estancia en Madrid, participé como oyente en clases de dibujo en la Real Academia de Bellas Artes de San Fernando. El instructor, el profesor Mizuru, era una persona de pocas palabras que observaba en silencio los dibujos de los estudiantes durante mucho tiempo antes de decir finalmente solo una o dos palabras.\n\n"La línea tiene miedo": este fue su comentario sobre mi primer dibujo. ¿Qué significa tener miedo? Debe significar que la voluntad de dominar el sujeto se muestra en la línea. Cuando te entregas al sujeto, la línea fluye naturalmente. Esta sola observación cambió fundamentalmente mi enfoque creativo.\n\nEstudiantes de varios países se reunían en el aula: Argentina, México, Alemania, Japón. Aunque los idiomas diferían, la seriedad respecto al dibujo era la misma. Nos quedábamos en el aula hasta bien entrada la noche, criticando mutuamente nuestras pinturas. Esos tiempos expandieron enormemente mi visión del arte.` },
+  },
+  {
+    id: 'ch07',
+    ja: { title: '第七章　ラ・マンチャへ', content: `マドリードから南東へ向かうと、急に地平線が広がる。カスティーリャ・ラ・マンチャの台地——標高七百メートルの乾いた大地に、風車とオリーブの木だけが点在する風景は、日本人の私には別の惑星のように映った。\n\n一九六九年の夏、私は一週間この地で野外制作を行った。朝五時に起きて、日の出前に制作場所に着くようにした。光は一分ごとに変化し、一枚のキャンバスに定着できるのは三十分程度の「光の時間」だけだ。だから朝の一光景に対して、複数のキャンバスを用意して描き継いだ。\n\n風が強い日は、キャンバスが風で飛ばされないように石で押さえた。帽子は何度も吹き飛び、絵具は乾燥した空気の中で予想以上に早く固まった。それでも私はラ・マンチャの台地の上で、生まれて初めて「絵と風景が同一になる瞬間」を体験した。` },
+    en: { title: 'Chapter 7  To La Mancha', content: `Heading southeast from Madrid, the horizon suddenly opens up. The plateau of Castilla-La Mancha—a dry land at an altitude of 700 meters where only windmills and olive trees dot the landscape—appeared to me, a Japanese person, like another planet.\n\nIn the summer of 1969, I spent a week doing outdoor painting in this region. I would wake up at five in the morning to arrive at my painting location before sunrise. Light changes every minute, and the only "time of light" that can be captured on a single canvas is about thirty minutes. So for a morning scene, I prepared multiple canvases and painted continuously.\n\nOn windy days, I held down the canvas with stones so it wouldn't blow away in the wind. My hat blew off many times, and the paint hardened faster than expected in the dry air. Even so, on the plateau of La Mancha, I experienced for the first time in my life "the moment when the painting and the landscape become one."` },
+    sp: { title: 'Capítulo 7  A La Mancha', content: `Dirigiéndose al sureste desde Madrid, el horizonte se abre de repente. La meseta de Castilla-La Mancha —una tierra seca a una altitud de 700 metros donde solo molinos de viento y olivos puntúan el paisaje— me pareció, siendo yo japonés, como otro planeta.\n\nEn el verano de 1969, pasé una semana haciendo pintura al aire libre en esta región. Me despertaba a las cinco de la mañana para llegar a mi lugar de pintura antes del amanecer. La luz cambia cada minuto, y el único "tiempo de luz" que se puede capturar en un solo lienzo es de unos treinta minutos. Así que para una escena matutina, preparaba múltiples lienzos y pintaba continuamente.\n\nEn días de viento, sujetaba el lienzo con piedras para que no se lo llevara el viento. Mi sombrero salió volando muchas veces, y la pintura se endurecía más rápido de lo esperado en el aire seco. Aun así, en la meseta de La Mancha, experimenté por primera vez en mi vida "el momento en que la pintura y el paisaje se convierten en uno".` },
+  },
+  {
+    id: 'ch08',
+    ja: { title: '第八章　友人ビセンテとの出会い', content: `カンポ・デ・クリプタナの村で、私はビセンテという名の老画家と出会った。彼は生涯この村を離れず、ラ・マンチャの風景だけを描き続けてきた画家だった。七十を超えた老人だったが、野外制作の際の動きは若者のように素早かった。\n\n言葉は通じなかったが、ビセンテは私の制作を黙って見ていた。そして帰り際に自分のスケッチブックを見せてくれた。それは同じ丘を何十年も描き続けた記録だった。一九三〇年代から始まる、季節と時間と光の変化の膨大なアーカイブ。\n\n私はその記録の意味を理解した瞬間、涙が出た。場所に生涯をかけることの崇高さと、絵を描くことが「記憶の保存」であるという真実が、同時に腑に落ちた。この出会いが、後に私が「異人館」シリーズを始める精神的な根拠となった。` },
+    en: { title: 'Chapter 8  Meeting the Friend Vicente', content: `In the village of Campo de Criptana, I encountered an elderly painter named Vicente. He was a painter who had never left this village his entire life, continuing to paint only the landscapes of La Mancha. Though he was an old man over seventy, his movements during outdoor painting were as quick as a young person's.\n\nWe couldn't understand each other's language, but Vicente watched my painting in silence. Then, as we were leaving, he showed me his sketchbook. It was a record of the same hill drawn continuously for decades. A vast archive of changes in season, time, and light starting from the 1930s.\n\nThe moment I understood the meaning of that record, tears came to my eyes. The sublimity of devoting a lifetime to a place, and the truth that painting is "preservation of memory," fell into place within me simultaneously. This encounter became the spiritual basis for my later start of the "Ijinkan" series.` },
+    sp: { title: 'Capítulo 8  El encuentro con el amigo Vicente', content: `En el pueblo de Campo de Criptana, me encontré con un anciano pintor llamado Vicente. Era un pintor que nunca había abandonado este pueblo en toda su vida, continuando pintando solo los paisajes de La Mancha. Aunque era un anciano de más de setenta años, sus movimientos durante la pintura al aire libre eran tan rápidos como los de un joven.\n\nNo podíamos entender el idioma del otro, pero Vicente observaba mi pintura en silencio. Luego, al marcharnos, me mostró su cuaderno de bocetos. Era un registro de la misma colina dibujada continuamente durante décadas. Un vasto archivo de cambios en estación, tiempo y luz comenzando desde la década de 1930.\n\nEn el momento en que comprendí el significado de ese registro, se me saltaron las lágrimas. La sublimidad de dedicar una vida a un lugar, y la verdad de que pintar es "preservación de la memoria", encajaron dentro de mí simultáneamente. Este encuentro se convirtió en la base espiritual para mi posterior inicio de la serie "Ijinkan".` },
+  },
+  {
+    id: 'ch09',
+    ja: { title: '第九章　帰国と制作活動', content: `一九七〇年、私はスペインから帰国した。携えて帰ったキャンバスは四十余点。それらを日本で初めて見せたとき、多くの人から「この光はどこの光か」と聞かれた。日本とは異なる光の質を、見る人は直感的に感じ取ったのだろう。\n\n帰国後は神戸に居を定めた。神戸という街は、外国人居留地の文化が今も残り、スペインの記憶と日本の現実が重なりやすい場所だった。港から見える洋館の風景が、異人館シリーズの出発点となった。\n\n野外制作の技術は神戸でも変わらず継続した。朝早く起きて山手の異人館の前に立ち、刻々と変わる光を追い続けた。当時の異人館はまだ観光地化される前で、静寂の中に西洋と日本が混在する独特の空気があった。` },
+    en: { title: 'Chapter 9  Return and Artistic Activities', content: `In 1970, I returned to Japan from Spain. I brought back more than forty canvases. When I showed them in Japan for the first time, many people asked, "Where is this light from?" People must have intuitively sensed the different quality of light from Japan's.\n\nAfter returning, I settled in Kobe. Kobe is a city where the culture of the foreign settlement still remains, and it was a place where memories of Spain and Japanese reality easily overlapped. The view of Western-style buildings visible from the harbor became the starting point for the Ijinkan series.\n\nMy outdoor painting technique continued unchanged in Kobe as well. Waking up early in the morning, I would stand before the Ijinkan on Kitano Hill, continuing to chase the ever-changing light. The Ijinkan at that time had not yet been turned into a tourist spot, and there was a unique atmosphere in the silence where East and West coexisted.` },
+    sp: { title: 'Capítulo 9  Regreso y actividades artísticas', content: `En 1970, regresé a Japón desde España. Traje de vuelta más de cuarenta lienzos. Cuando los mostré en Japón por primera vez, mucha gente preguntó: "¿De dónde es esta luz?" La gente debe haber sentido intuitivamente la diferente calidad de luz respecto a la de Japón.\n\nTras regresar, me establecí en Kobe. Kobe es una ciudad donde aún permanece la cultura del asentamiento extranjero, y era un lugar donde los recuerdos de España y la realidad japonesa se superponían fácilmente. La vista de los edificios de estilo occidental visibles desde el puerto se convirtió en el punto de partida para la serie Ijinkan.\n\nMi técnica de pintura al aire libre continuó sin cambios en Kobe también. Despertándome temprano por la mañana, me situaba frente al Ijinkan en la colina Kitano, continuando persiguiendo la luz siempre cambiante. El Ijinkan en ese momento aún no había sido convertido en destino turístico, y había una atmósfera única en el silencio donde Oriente y Occidente coexistían.` },
+  },
+  {
+    id: 'ch10',
+    ja: { title: '第十章　異人館シリーズの始まり', content: `「異人館」とは神戸の北野地区に残る西洋人居留地の旧居宅群を指す。明治から大正にかけて建てられた木造洋館は、神戸の急峻な山手に並んでいる。私がこのシリーズを本格的に始めたのは一九七二年のことだ。\n\n異人館を描くことは、単に建築物を記録することではない。それらの建物が帯びている「時間」を描くことだった。石造りの壁、蔦の絡まる柱、錆びた鉄柵——これらは歴史の堆積であり、記憶の物質化だ。\n\n私は同じ建物を季節を変えて何度も描いた。冬の裸の枝越しに見えるフランス瓦屋根、梅雨時の湿った石壁、夏の強い影に沈むベランダ。同じ場所を繰り返し描くことで、場所そのものが語り始めるという体験を積み重ねた。` },
+    en: { title: 'Chapter 10  The Beginning of the Ijinkan Series', content: `"Ijinkan" refers to the former residences of Western settlers remaining in the Kitano district of Kobe. The wooden Western-style buildings constructed from the Meiji to Taisho eras stand in a row on Kobe's steep hillside. I began this series in earnest in 1972.\n\nPainting the Ijinkan was not simply recording architectural structures. It was painting the "time" that those buildings carry. Stone walls, ivy-covered pillars, rusted iron fences—these are accumulations of history, materializations of memory.\n\nI painted the same buildings many times, changing the season. The French tile roofs visible through bare winter branches, the damp stone walls during the rainy season, the verandas sinking into strong summer shadows. By repeatedly painting the same places, I accumulated the experience that the places themselves begin to speak.` },
+    sp: { title: 'Capítulo 10  El inicio de la serie Ijinkan', content: `"Ijinkan" se refiere a las antiguas residencias de colonos occidentales que permanecen en el distrito Kitano de Kobe. Los edificios de estilo occidental de madera construidos desde la era Meiji hasta la era Taisho se alinean en la empinada ladera de Kobe. Comencé esta serie en serio en 1972.\n\nPintar el Ijinkan no era simplemente registrar estructuras arquitectónicas. Era pintar el "tiempo" que esos edificios llevan consigo. Paredes de piedra, pilares cubiertos de hiedra, vallas de hierro oxidadas: estas son acumulaciones de historia, materializaciones de la memoria.\n\nPinté los mismos edificios muchas veces, cambiando la estación. Los tejados de teja francesa visibles a través de las ramas desnudas de invierno, las húmedas paredes de piedra durante la temporada de lluvias, las verandas hundiéndose en las fuertes sombras del verano. Al pintar repetidamente los mismos lugares, acumulé la experiencia de que los propios lugares comienzan a hablar.` },
+  },
+  {
+    id: 'ch11',
+    ja: { title: '第十一章　スペインポスターとの出会い', content: `一九七四年頃から、私はスペインの古いポスターを収集し始めた。きっかけはマドリードの骨董市で見つけた一枚の闘牛ポスターだった。一九二〇年代のものと思われるその印刷物は、退色した色の中に失われた時間を閉じ込めていた。\n\nスペインポスターは印刷技術と絵画の中間にある表現形式だ。リトグラフによる独特の色の重なり、大胆な構図、民俗的なモチーフ——これらはスペイン美術の大衆的な側面を如実に示している。絵画とは異なる視覚言語を持ちながら、同じ時代の光を記録している。\n\n収集は次第に本格的になり、数年後には四百点を超えるコレクションとなった。闘牛、フラメンコ、祭り、鉄道、観光——あらゆるジャンルにわたるポスターは、二十世紀スペインの視覚的記録として貴重なアーカイブとなった。` },
+    en: { title: 'Chapter 11  Encounter with Spanish Posters', content: `From around 1974, I began collecting old Spanish posters. The trigger was a bullfighting poster I found at an antique market in Madrid. That printed piece, which appeared to be from the 1920s, enclosed lost time within its faded colors.\n\nSpanish posters are an expressive form that lies between printing technology and painting. The unique layering of colors through lithography, bold compositions, folkloric motifs—these clearly show the popular dimension of Spanish art. While possessing a visual language different from painting, they record the light of the same era.\n\nThe collection gradually became more serious, growing into a collection exceeding 400 pieces several years later. Bullfighting, flamenco, festivals, railways, tourism—posters spanning every genre became a valuable archive as a visual record of twentieth-century Spain.` },
+    sp: { title: 'Capítulo 11  El encuentro con los carteles españoles', content: `Desde alrededor de 1974, comencé a coleccionar carteles españoles antiguos. El detonante fue un cartel de corridas de toros que encontré en un mercado de antigüedades en Madrid. Esa pieza impresa, que parecía ser de la década de 1920, encerraba el tiempo perdido dentro de sus colores desvanecidos.\n\nLos carteles españoles son una forma expresiva que se sitúa entre la tecnología de impresión y la pintura. La superposición única de colores a través de la litografía, composiciones atrevidas, motivos folclóricos: estos muestran claramente la dimensión popular del arte español. Poseyendo un lenguaje visual diferente al de la pintura, registran la luz de la misma era.\n\nLa colección fue volviéndose gradualmente más seria, creciendo hasta una colección que superaba las 400 piezas varios años después. Corridas de toros, flamenco, festivales, ferrocarriles, turismo: los carteles que abarcaban todos los géneros se convirtieron en un valioso archivo como registro visual de la España del siglo XX.` },
+  },
+  {
+    id: 'ch12',
+    ja: { title: '第十二章　一九七九年、再びスペインへ', content: `一九七九年、私は十年ぶりにスペインへ戻った。マドリードは変わっていた。フランコ独裁政権が七五年に終わり、民主化の風が街全体に吹いていた。人々の表情が明るく、街角のカフェは活気に満ちていた。\n\nしかし光は変わらなかった。マドリードの空の青さ、カスティーリャの台地の乾いた輝き——それらは私の記憶の中のスペインそのものだった。私はすぐに野外制作を再開し、今度はより意図的に「光の時間の地図」を作ることを目標とした。\n\n朝、昼、夕方、同じ場所から同じ方向を描く。光の角度が変われば、色は劇的に変化する。一日の光の変化を記録することで、場所の本質が浮かび上がってくる——これが一九七九年のスペイン滞在で確立した私の方法論だった。` },
+    en: { title: 'Chapter 12  1979, Back to Spain', content: `In 1979, I returned to Spain for the first time in ten years. Madrid had changed. The Franco dictatorship ended in 1975, and the winds of democratization were blowing throughout the city. People's expressions were bright, and the cafés on street corners were full of energy.\n\nBut the light hadn't changed. The blueness of Madrid's sky, the dry brilliance of the Castilian plateau—these were Spain exactly as it existed in my memory. I immediately resumed outdoor painting, this time with the more intentional goal of creating "a map of the time of light."\n\nMorning, noon, evening—painting from the same place in the same direction. When the angle of light changes, colors change dramatically. By recording the changes in light throughout a day, the essence of a place emerges—this was the methodology I established during my 1979 stay in Spain.` },
+    sp: { title: 'Capítulo 12  1979, de vuelta a España', content: `En 1979, regresé a España por primera vez en diez años. Madrid había cambiado. La dictadura de Franco terminó en 1975, y los vientos de la democratización soplaban por toda la ciudad. Las expresiones de la gente eran alegres, y los cafés en las esquinas de las calles estaban llenos de energía.\n\nPero la luz no había cambiado. El azul del cielo de Madrid, el brillo seco de la meseta castellana: estos eran España exactamente como existía en mi memoria. Reanudé inmediatamente la pintura al aire libre, esta vez con el objetivo más intencional de crear "un mapa del tiempo de la luz".\n\nMañana, mediodía, tarde: pintando desde el mismo lugar en la misma dirección. Cuando el ángulo de la luz cambia, los colores cambian dramáticamente. Al registrar los cambios de luz a lo largo de un día, emerge la esencia de un lugar: esta fue la metodología que establecí durante mi estancia en España en 1979.` },
+  },
+  {
+    id: 'ch13',
+    ja: { title: '第十三章　トレドの光', content: `一九七九年の旅で最も深く心に残ったのは、トレドの光だった。タホ川に三方を囲まれた丘上都市トレドは、朝と夕方で全く異なる表情を見せる。\n\n特に印象的だったのは夕暮れ時の光だ。西に傾いた太陽が、対岸の崖から反射してトレドの旧市街を包む。金色と橙色の中間にある、言語化不能な色が街を染める。エル・グレコがこの地を選んだ理由が、現場に立つことで初めて腑に落ちた。\n\nグレコの描いたトレドは写実ではなく、この光の体験の蒸留だったのだと私は解釈した。現実の風景を超えた何かが、あの絵の中にある。それは現場に何百時間も立ち続けることでのみ到達できる境地だ。私はこの確信を胸にトレドを後にした。` },
+    en: { title: 'Chapter 13  The Light of Toledo', content: `Of all my 1979 journey, what remained most deeply in my heart was the light of Toledo. Toledo, a hilltop city surrounded on three sides by the Tajo River, shows completely different expressions in the morning and evening.\n\nParticularly impressive was the light at dusk. The sun tilting toward the west reflects off the cliffs on the opposite bank, enveloping Toledo's old city. A color between gold and orange, beyond linguistic description, dyes the city. Standing on site, for the first time I truly understood why El Greco chose this place.\n\nI interpreted that the Toledo Greco painted was not Realism but a distillation of this experience of light. There is something in that painting that transcends the actual landscape. It is a state that can only be reached by continuing to stand on site for hundreds of hours. I left Toledo with this conviction in my heart.` },
+    sp: { title: 'Capítulo 13  La luz de Toledo', content: `De todo mi viaje de 1979, lo que quedó más profundamente en mi corazón fue la luz de Toledo. Toledo, una ciudad sobre una colina rodeada por tres lados por el río Tajo, muestra expresiones completamente diferentes por la mañana y por la tarde.\n\nParticularmente impresionante fue la luz al atardecer. El sol inclinándose hacia el oeste se refleja en los acantilados de la orilla opuesta, envolviendo el casco antiguo de Toledo. Un color entre dorado y naranja, más allá de la descripción lingüística, tiñe la ciudad. Estando en el lugar, por primera vez comprendí verdaderamente por qué El Greco eligió este lugar.\n\nInterpreté que el Toledo que pintó El Greco no era Realismo sino una destilación de esta experiencia de la luz. Hay algo en esa pintura que trasciende el paisaje real. Es un estado al que solo se puede llegar continuando de pie en el lugar durante cientos de horas. Dejé Toledo con esta convicción en mi corazón.` },
+  },
+  {
+    id: 'ch14',
+    ja: { title: '第十四章　野外制作の哲学', content: `私の制作の根幹にある「野外制作百パーセント主義」について、ここで改めて述べておきたい。これは単なる制作方法の選択ではなく、絵画に対する根本的な哲学だ。\n\nアトリエで描くことは、記憶や想像から絵を構成することを意味する。現場で描くことは、現実と直接格闘することを意味する。光は計算通りには動かず、風はキャンバスを揺らし、通行人は視界に入り込む。これらすべての「妨害」が、実は絵に生命を与える要素だ。\n\n完成した絵の中には、その日の天気、気温、その場所の匂いまでが刻み込まれている——私はそう信じている。見る人がその絵から「何かリアルなもの」を感じるとすれば、それは現場の記憶が絵具の層の中に保存されているからだ。これが私にとっての具象主義の本質だ。` },
+    en: { title: 'Chapter 14  The Philosophy of Outdoor Painting', content: `I would like to speak here once more about the "100% outdoor painting principle" that lies at the core of my work. This is not simply a choice of working method but a fundamental philosophy toward painting.\n\nPainting in an atelier means constructing a painting from memory and imagination. Painting on-site means directly wrestling with reality. Light doesn't move as calculated, wind shakes the canvas, passersby enter the field of vision. All of these "interferences" are actually elements that give life to a painting.\n\nThe weather of that day, the temperature, even the smell of that place are inscribed within a completed painting—I believe this. If a viewer feels "something real" from that painting, it is because the memory of the site is preserved within the layers of paint. This is the essence of Figurativism for me.` },
+    sp: { title: 'Capítulo 14  La filosofía de la pintura al aire libre', content: `Me gustaría hablar aquí una vez más sobre el "principio de pintura al aire libre al 100%" que está en el núcleo de mi trabajo. Esto no es simplemente una elección de método de trabajo sino una filosofía fundamental hacia la pintura.\n\nPintar en un atelier significa construir una pintura desde la memoria y la imaginación. Pintar in situ significa luchar directamente con la realidad. La luz no se mueve como se calcula, el viento sacude el lienzo, los transeúntes entran en el campo visual. Todas estas "interferencias" son en realidad elementos que dan vida a una pintura.\n\nEl tiempo de ese día, la temperatura, incluso el olor de ese lugar están inscritos dentro de una pintura completada: creo esto. Si un espectador siente "algo real" de esa pintura, es porque la memoria del lugar está preservada dentro de las capas de pintura. Esta es la esencia del Figurativismo para mí.` },
+  },
+  {
+    id: 'ch15',
+    ja: { title: '第十五章　カンポ・デ・クリプタナ再訪', content: `一九七九年の旅で、私は再びカンポ・デ・クリプタナを訪れた。十年前にビセンテと出会った村だ。老画家はすでに世を去っていたが、彼の息子が父の工房を守っていた。\n\n息子はビセンテの未完成の絵を何枚か見せてくれた。晩年の作品は、筆触が大きく荒く、色も不確かになっていたが、光の本質を掴む力は衰えていなかった。老いながらも場所と対話し続けた証拠が、その不完全な絵の中に確かにあった。\n\n私はビセンテが描き続けた丘の前に立ち、同じ方向を向いて一枚の絵を描いた。同じ丘、異なる時代、異なる画家——しかし同じ光。場所を通じて時間を超えて対話できるということを、私はこの経験から確信した。` },
+    en: { title: 'Chapter 15  Return to Campo de Criptana', content: `During my 1979 journey, I visited Campo de Criptana again—the village where I had encountered Vicente ten years earlier. The old painter had already passed from this world, but his son was maintaining his father's workshop.\n\nThe son showed me several of Vicente's unfinished paintings. In the late works, the brushstrokes were large and rough, and the colors had become uncertain, but the power to grasp the essence of light had not diminished. Proof that he had continued to dialogue with the place even while aging was certainly there within those imperfect paintings.\n\nI stood before the hill Vicente had continued to paint and, facing in the same direction, painted one canvas. The same hill, a different era, a different painter—but the same light. From this experience I became convinced that it is possible to communicate across time through place.` },
+    sp: { title: 'Capítulo 15  Regreso a Campo de Criptana', content: `Durante mi viaje de 1979, visité Campo de Criptana nuevamente, el pueblo donde había conocido a Vicente diez años antes. El anciano pintor ya había partido de este mundo, pero su hijo mantenía el taller de su padre.\n\nEl hijo me mostró varias pinturas inacabadas de Vicente. En las obras tardías, las pinceladas eran grandes y ásperas, y los colores se habían vuelto inciertos, pero el poder para captar la esencia de la luz no había disminuido. La prueba de que había continuado dialogando con el lugar incluso mientras envejecía estaba ciertamente dentro de esas pinturas imperfectas.\n\nMe situé frente a la colina que Vicente había continuado pintando y, mirando en la misma dirección, pinté un lienzo. La misma colina, una era diferente, un pintor diferente, pero la misma luz. De esta experiencia me convencí de que es posible comunicarse a través del tiempo mediante el lugar.` },
+  },
+  {
+    id: 'ch16',
+    ja: { title: '第十六章　色彩と記憶', content: `私の絵を見た人がよく言うのは「光が生きている」という感想だ。光を絵具で表現することの根本的な矛盾——絵具は固体であり光は非物質である——を、どう乗り越えるかが私の永遠の課題だ。\n\n私が行き着いた方法は、「光そのものを描こうとしないこと」だ。光が物体に触れたとき生まれる色の変化、影の形、反射の方向——これらを描くことで、見る人の脳の中に光の幻像が生まれる。光は完成した絵の中にあるのではなく、見る人と絵の間に生まれるものだ。\n\n色彩は記憶と不可分だ。ある色を見たとき、人は過去の経験を想起する。スペインの夏の午後の橙色は、見た人に熱と乾燥と時間の緩やかさを呼び起こすはずだ。私の絵が「記憶の保存装置」であるとすれば、色彩はその記憶を呼び出すための鍵だ。` },
+    en: { title: 'Chapter 16  Color and Memory', content: `What people who see my paintings often say is, "The light is alive." How to overcome the fundamental contradiction of expressing light in paint—paint is solid matter while light is non-material—is my eternal challenge.\n\nThe method I arrived at is "not trying to paint the light itself." By painting the changes in color born when light touches objects, the shapes of shadows, the directions of reflections, a phantom of light is born in the mind of the viewer. Light is not within the completed painting; it is something born between the viewer and the painting.\n\nColor is inseparable from memory. When a person sees a certain color, they recall past experiences. The orange of a Spanish summer afternoon should evoke in the viewer heat, dryness, and the slowness of time. If my paintings are "memory storage devices," then color is the key for calling up that memory.` },
+    sp: { title: 'Capítulo 16  Color y memoria', content: `Lo que la gente que ve mis pinturas dice con frecuencia es: "La luz está viva." Cómo superar la contradicción fundamental de expresar la luz en pintura —la pintura es materia sólida mientras que la luz es no material— es mi eterno desafío.\n\nEl método al que llegué es "no intentar pintar la luz misma". Al pintar los cambios de color que nacen cuando la luz toca los objetos, las formas de las sombras, las direcciones de los reflejos, nace un fantasma de luz en la mente del espectador. La luz no está dentro de la pintura completada; es algo que nace entre el espectador y la pintura.\n\nEl color es inseparable de la memoria. Cuando una persona ve un cierto color, recuerda experiencias pasadas. El naranja de una tarde de verano española debería evocar en el espectador el calor, la sequedad y la lentitud del tiempo. Si mis pinturas son "dispositivos de almacenamiento de memoria", entonces el color es la clave para invocar esa memoria.` },
+  },
+  {
+    id: 'ch17',
+    ja: { title: '第十七章　神戸と異人館', content: `神戸の異人館地区は、私にとってスペインと日本の記憶が交差する場所だった。ラインの館、風見鶏の館、英国館——それぞれが異なる国の建築様式を持ちながら、神戸の山手の急傾斜に適応している。\n\n私がこれらの建物を描き続けた理由は、建物の「混血性」にある。ヨーロッパの建築が日本の気候と地形に適応していく過程で生まれた独自の様式——蔦の生え方、雨樋の形、窓枠の腐食——これらは異文化接触の物質的証拠だ。\n\n神戸の異人館を描くことは、日本とヨーロッパの歴史的接触を絵具で記録することだった。スペインで学んだ野外制作の方法論が、神戸という場所と結びついて、私の代表的なシリーズを生み出した。` },
+    en: { title: 'Chapter 17  Kobe and the Ijinkan', content: `Kobe's Ijinkan district was for me a place where memories of Spain and Japan intersect. The Rhine House, the Weathercock House, the English House—each possessing architectural styles from different countries, while adapting to the steep slopes of Kobe's hillside.\n\nThe reason I continued painting these buildings lies in their "mixed heritage." The unique style born through the process of European architecture adapting to Japan's climate and topography—the way ivy grows, the shape of rain gutters, the deterioration of window frames—these are physical evidence of intercultural contact.\n\nPainting Kobe's Ijinkan was recording in paint the historical contact between Japan and Europe. The outdoor painting methodology learned in Spain, combined with the place called Kobe, gave birth to my representative series.` },
+    sp: { title: 'Capítulo 17  Kobe y el Ijinkan', content: `El distrito Ijinkan de Kobe era para mí un lugar donde se cruzan los recuerdos de España y Japón. La Casa del Rin, la Casa del Veleta, la Casa Inglesa: cada una poseyendo estilos arquitectónicos de diferentes países, mientras se adaptan a las empinadas laderas de la colina de Kobe.\n\nLa razón por la que continué pintando estos edificios radica en su "herencia mixta". El estilo único nacido a través del proceso de adaptación de la arquitectura europea al clima y la topografía de Japón —la forma en que crece la hiedra, la forma de los canalones, el deterioro de los marcos de las ventanas— son evidencia física del contacto intercultural.\n\nPintar el Ijinkan de Kobe era registrar en pintura el contacto histórico entre Japón y Europa. La metodología de pintura al aire libre aprendida en España, combinada con el lugar llamado Kobe, dio origen a mi serie representativa.` },
+  },
+  {
+    id: 'ch18',
+    ja: { title: '第十八章　阪神大震災と失われた風景', content: `一九九五年一月十七日の阪神大震災は、私の制作活動に根本的な変化をもたらした。描き続けてきた神戸の異人館の多くが、倒壊または損傷した。\n\n震災の数日後、私は瓦礫の中に立った。崩れ落ちた石壁、焼け焦げた木材、傾いた塔——かつて私が何度も描いた建物の残骸が散乱していた。その場で私はスケッチブックを開いた。記録すること、証言すること——それが画家としての私の義務だと感じた。\n\n震災後の異人館シリーズは、それ以前の作品とは根本的に異なる性質を持った。美しさの記録から、喪失の証言へ。しかし私は気づいた——失われたものを描くことは、かつてそこにあったものを永遠に保存することだ、と。絵画の力は、現実が変容した後も変わらずそこにあり続けることにある。` },
+    en: { title: 'Chapter 18  The Great Hanshin Earthquake and Lost Landscapes', content: `The Great Hanshin Earthquake of January 17, 1995 brought fundamental changes to my artistic activities. Many of the Kobe Ijinkan I had continued to paint collapsed or were damaged.\n\nA few days after the earthquake, I stood among the rubble. Crumbled stone walls, charred wood, tilted towers—the remains of buildings I had painted many times were scattered about. There I opened my sketchbook. Recording, bearing witness—I felt that was my duty as a painter.\n\nThe post-earthquake Ijinkan series had a fundamentally different nature from works before it. From a record of beauty to a testimony of loss. But I realized: painting what has been lost is preserving forever what once existed there. The power of painting lies in its ability to remain there unchanged even after reality has transformed.` },
+    sp: { title: 'Capítulo 18  El Gran Terremoto de Hanshin y los paisajes perdidos', content: `El Gran Terremoto de Hanshin del 17 de enero de 1995 trajo cambios fundamentales a mis actividades artísticas. Muchos de los Ijinkan de Kobe que había continuado pintando colapsaron o fueron dañados.\n\nUnos días después del terremoto, me situé entre los escombros. Paredes de piedra derrumbadas, madera carbonizada, torres inclinadas: los restos de edificios que había pintado muchas veces estaban dispersos. Allí abrí mi cuaderno de bocetos. Registrar, dar testimonio: sentí que era mi deber como pintor.\n\nLa serie Ijinkan posterior al terremoto tenía una naturaleza fundamentalmente diferente a las obras anteriores. De un registro de belleza a un testimonio de pérdida. Pero me di cuenta: pintar lo que se ha perdido es preservar para siempre lo que una vez existió allí. El poder de la pintura radica en su capacidad de permanecer allí sin cambios incluso después de que la realidad se haya transformado.` },
+  },
+  {
+    id: 'ch19',
+    ja: { title: '第十九章　光の研究', content: `私は長年、光の性質を絵具で再現することに取り組んできた。特に難しいのは「反射光」の扱いだ。直接光は方向があり描きやすいが、反射光は空間全体に拡散し、影の中にまで色を持ち込む。\n\nスペインの画家たちが得意とする「固有色を消す光」——物体本来の色が光によって変容する現象——を、私は金沢の学生時代から研究してきた。ベラスケスの白い服が朝の光の中でわずかに青みを帯びる理由、スルバランの白い布が夕光の中で金色になる理由。\n\n光を学ぶことは、見ることを学ぶことだ。私たちは通常「知っている色」で対象を見る。リンゴは赤い、空は青い——しかし現場に立てば、リンゴは橙色にも黄色にも緑にも見える。この「先入観を外す」訓練が、画家としての基礎体力だ。` },
+    en: { title: 'Chapter 19  The Study of Light', content: `For many years I have worked on reproducing the nature of light in paint. Particularly difficult is the handling of "reflected light." Direct light has direction and is easy to paint, but reflected light diffuses throughout the entire space, bringing color even into shadows.\n\nThe "light that erases inherent color"—the phenomenon where an object's original color is transformed by light—which Spanish painters excel at, I have studied since my student days in Kanazawa. The reason why Velázquez's white clothing takes on a slight blue tinge in morning light, the reason why Zurbarán's white cloth becomes golden in evening light.\n\nLearning about light is learning to see. We usually see objects with "colors we know." Apples are red, the sky is blue—but standing on site, apples can look orange, yellow, or even green. This training of "removing preconceptions" is the fundamental physical strength of a painter.` },
+    sp: { title: 'Capítulo 19  El estudio de la luz', content: `Durante muchos años he trabajado en reproducir la naturaleza de la luz en pintura. Particularmente difícil es el manejo de la "luz reflejada". La luz directa tiene dirección y es fácil de pintar, pero la luz reflejada se difunde por todo el espacio, llevando color incluso a las sombras.\n\nLa "luz que borra el color inherente" —el fenómeno donde el color original de un objeto es transformado por la luz— en la que los pintores españoles son expertos, la he estudiado desde mis días de estudiante en Kanazawa. La razón por la que la ropa blanca de Velázquez adquiere un ligero tinte azul bajo la luz de la mañana, la razón por la que el paño blanco de Zurbarán se vuelve dorado bajo la luz del atardecer.\n\nAprender sobre la luz es aprender a ver. Normalmente vemos los objetos con "colores que conocemos". Las manzanas son rojas, el cielo es azul, pero estando in situ, las manzanas pueden verse naranja, amarillo o incluso verde. Este entrenamiento de "eliminar las ideas preconcebidas" es la fuerza física fundamental de un pintor.` },
+  },
+  {
+    id: 'ch20',
+    ja: { title: '第二十章　教育と継承', content: `私は長年、美術の教育に関わってきた。教えるということは、自分が学んできたことを言語化する作業だ。口では説明できないことを絵の前で実演するとき、私は自分の制作の核心が何であるかを改めて意識する。\n\n学生に最初に教えることは「見ること」だ。描くことよりも見ることを学べ——これは藤村先生から受け継いだ言葉だ。対象を三十分見てから描き始めると、描く時間は短くなるが絵は深くなる。\n\n若い画家たちが現場に立つことを恐れる理由を、私は理解している。現場には失敗の可能性が満ちている。時間は有限で、光は変化し、やり直しは効かない。しかしその制約の中にこそ、絵の真実がある。制約を受け入れることが、自由への道だ。` },
+    en: { title: 'Chapter 20  Education and Transmission', content: `For many years I have been involved in art education. Teaching is the work of putting into language what one has learned. When demonstrating before a painting something that cannot be explained in words, I become newly conscious of what the core of my creative work is.\n\nThe first thing I teach students is "seeing." Learn to see before learning to draw—these are words I inherited from Professor Fujimura. When you look at a subject for thirty minutes before beginning to draw, the drawing time becomes shorter but the painting becomes deeper.\n\nI understand the reasons why young painters fear standing on site. The site is full of the possibility of failure. Time is finite, light changes, and there is no redoing. But within those very constraints lies the truth of painting. Accepting constraints is the path to freedom.` },
+    sp: { title: 'Capítulo 20  Educación y transmisión', content: `Durante muchos años he estado involucrado en la educación artística. Enseñar es el trabajo de poner en lenguaje lo que uno ha aprendido. Al demostrar ante una pintura algo que no se puede explicar con palabras, me vuelvo nuevamente consciente de cuál es el núcleo de mi trabajo creativo.\n\nLo primero que enseño a los estudiantes es "ver". Aprende a ver antes de aprender a dibujar: estas son palabras que heredé del profesor Fujimura. Cuando miras un sujeto durante treinta minutos antes de comenzar a dibujar, el tiempo de dibujo se vuelve más corto pero la pintura se vuelve más profunda.\n\nEntiendo las razones por las que los jóvenes pintores temen situarse in situ. El lugar está lleno de la posibilidad del fracaso. El tiempo es finito, la luz cambia y no hay posibilidad de rehacer. Pero dentro de esas mismas restricciones yace la verdad de la pintura. Aceptar las restricciones es el camino hacia la libertad.` },
+  },
+  {
+    id: 'ch21',
+    ja: { title: '第二十一章　スペインポスターコレクションの意義', content: `四百点を超えるスペインポスターコレクションは、私の絵画活動と並行して蓄積されてきた「もう一つの研究」だ。ポスターは大衆芸術であり、学術的には「低い」芸術として位置づけられてきた。しかし私はそこに、精緻な絵画技法と同じ視覚的知性を見出してきた。\n\n特に一九二〇年代から三〇年代のリトグラフポスターには、色の分解と統合の高度な技術が見られる。三色か四色の限られた色数で、豊かな光と陰影を作り出す技法——これは私の絵画における色の使い方にも影響を与えた。\n\nコレクションを公開するたびに、スペインを知らない日本人が「懐かしい」という感想を述べる。その「懐かしさ」の正体は何か。人間が共有する視覚的記憶、色彩と感情の普遍的な結びつき——ポスターという大衆芸術が、国境を越えた記憶を呼び覚ます力を持っていることを、このコレクションは証明している。` },
+    en: { title: 'Chapter 21  The Significance of the Spanish Poster Collection', content: `The Spanish poster collection exceeding 400 pieces has been accumulated alongside my painting activities as "another research." Posters are popular art, academically positioned as a "lower" art form. But within them I have found the same visual intelligence as in refined painting techniques.\n\nParticularly in lithographic posters from the 1920s and 1930s, highly advanced techniques of color decomposition and integration can be seen. The technique of creating rich light and shadow with a limited number of three or four colors—this also influenced my use of color in painting.\n\nEvery time the collection is exhibited, Japanese people who don't know Spain express the feeling of "nostalgia." What is the true nature of that "nostalgia"? The visual memory shared by humanity, the universal connection between color and emotion—this collection proves that popular art in the form of posters possesses the power to awaken memories across borders.` },
+    sp: { title: 'Capítulo 21  La importancia de la colección de carteles españoles', content: `La colección de carteles españoles que supera las 400 piezas ha sido acumulada junto a mis actividades pictóricas como "otra investigación". Los carteles son arte popular, académicamente posicionados como una forma de arte "inferior". Pero dentro de ellos he encontrado la misma inteligencia visual que en las técnicas de pintura refinada.\n\nParticularmente en los carteles litográficos de las décadas de 1920 y 1930, se pueden ver técnicas altamente avanzadas de descomposición e integración del color. La técnica de crear rica luz y sombra con un número limitado de tres o cuatro colores: esto también influyó en mi uso del color en la pintura.\n\nCada vez que se expone la colección, los japoneses que no conocen España expresan el sentimiento de "nostalgia". ¿Cuál es la verdadera naturaleza de esa "nostalgia"? La memoria visual compartida por la humanidad, la conexión universal entre el color y la emoción: esta colección demuestra que el arte popular en forma de carteles posee el poder de despertar recuerdos más allá de las fronteras.` },
+  },
+  {
+    id: 'ch22',
+    ja: { title: '第二十二章　具象主義の現代的意味', content: `二十一世紀に入り、デジタル技術の発展によって「見る」という行為が根本から変化した。スマートフォンで撮影された無数の画像が世界を覆い、現実の風景よりも画像が先行する時代になった。\n\nこの時代における具象主義の意味は何か。私は「現場に立つこと」の価値がかつてないほど高まっていると考える。画像では体験できない「その場の空気」「光の温度」「風の質感」——これらを絵具で定着することが、今の時代における画家の使命だ。\n\n具象主義は懐古趣味ではない。現実と対話し続けることの、現代的な表明だ。テクノロジーが世界を仮想化するほど、身体を通じた直接体験の価値は高まる。私の「野外制作百パーセント主義」は、デジタル時代への静かな抵抗であり、かつ積極的な肯定でもある。` },
+    en: { title: 'Chapter 22  The Contemporary Meaning of Figurativism', content: `Entering the twenty-first century, advances in digital technology have fundamentally changed the act of "seeing." Countless images captured with smartphones cover the world, and it has become an era where images precede actual landscapes.\n\nWhat is the meaning of Figurativism in this era? I believe the value of "standing on site" has risen more than ever before. "The air of that place," "the temperature of light," "the texture of the wind"—things that cannot be experienced through images—fixing these in paint is the painter's mission in this era.\n\nFigurativism is not nostalgia. It is a contemporary declaration of continuing to dialogue with reality. The more technology virtualizes the world, the higher the value of direct experience through the body rises. My "100% outdoor painting principle" is a quiet resistance to the digital era, and at the same time a positive affirmation.` },
+    sp: { title: 'Capítulo 22  El significado contemporáneo del Figurativismo', content: `Al entrar en el siglo XXI, los avances en la tecnología digital han cambiado fundamentalmente el acto de "ver". Innumerables imágenes capturadas con teléfonos inteligentes cubren el mundo, y se ha convertido en una era donde las imágenes preceden a los paisajes reales.\n\n¿Cuál es el significado del Figurativismo en esta era? Creo que el valor de "situarse in situ" ha aumentado más que nunca. "El aire de ese lugar", "la temperatura de la luz", "la textura del viento": cosas que no se pueden experimentar a través de imágenes: fijar estas en pintura es la misión del pintor en esta era.\n\nEl Figurativismo no es nostalgia. Es una declaración contemporánea de continuar dialogando con la realidad. Cuanto más virtualiza el mundo la tecnología, mayor es el valor de la experiencia directa a través del cuerpo. Mi "principio de pintura al aire libre al 100%" es una resistencia silenciosa a la era digital, y al mismo tiempo una afirmación positiva.` },
+  },
+  {
+    id: 'ch23',
+    ja: { title: '第二十三章　老いと制作', content: `八十歳を超えた今も、私は野外で絵を描く。膝は痛み、目の焦点は以前ほど鋭くないが、光を感じる皮膚の感覚は衰えていない。身体が老いるほど、描く行為はより本質的になっていく気がする。\n\n若い頃は「上手く描こう」という意識が邪魔をした。今は「ただ描く」だけだ。対象と自分の間に何も介在させず、見えたものをそのまま絵具で受け取る。この無媒介性こそが、私が長年追い求めてきたものだった。\n\nビセンテの晩年の絵を思い出す。荒々しい筆触、不確かな色——しかしそこには「光との格闘」の痕跡が生々しく残っていた。老いた手で描いた線は、若い手の線とは異なる情報を持っている。それは長い時間をかけて形成された、画家の身体の固有言語だ。` },
+    en: { title: 'Chapter 23  Aging and Creative Work', content: `Even now, having passed eighty years of age, I paint outdoors. My knees ache and my eyes' focus is not as sharp as before, but the skin's sense of feeling light has not diminished. The more the body ages, the more the act of painting seems to become more essential.\n\nIn my youth, the consciousness of "wanting to paint skillfully" would get in the way. Now I simply "just paint." Without allowing anything to intervene between the subject and myself, I receive what is visible directly in paint. This immediacy is what I had been seeking for so many years.\n\nI think back to Vicente's late paintings. Rough brushstrokes, uncertain colors—but there the traces of "struggle with light" remained vividly. A line drawn with an aged hand possesses different information from a line drawn with a young hand. It is the unique language of a painter's body formed over long years.` },
+    sp: { title: 'Capítulo 23  El envejecimiento y el trabajo creativo', content: `Incluso ahora, habiendo superado los ochenta años de edad, pinto al aire libre. Mis rodillas duelen y el enfoque de mis ojos no es tan agudo como antes, pero el sentido de la piel para sentir la luz no ha disminuido. Cuanto más envejece el cuerpo, más parece que el acto de pintar se vuelve más esencial.\n\nEn mi juventud, la conciencia de "querer pintar con habilidad" se interponía. Ahora simplemente "solo pinto". Sin permitir que nada intervenga entre el sujeto y yo mismo, recibo lo que es visible directamente en pintura. Esta inmediatez es lo que había estado buscando durante tantos años.\n\nRecuerdo las pinturas tardías de Vicente. Pinceladas ásperas, colores inciertos, pero allí las huellas de la "lucha con la luz" permanecían vívidamente. Una línea dibujada con una mano envejecida posee información diferente a una línea dibujada con una mano joven. Es el lenguaje único del cuerpo de un pintor formado a lo largo de muchos años.` },
+  },
+  {
+    id: 'ch24',
+    ja: { title: '第二十四章　スペインという永遠の現場', content: `私にとってスペインは「過去に行った場所」ではなく、「現在も続いている現場」だ。実際に毎年行けるわけではないが、記憶の中のスペインの光は今も生きている。神戸の異人館を描くとき、富山の海を描くとき、常にスペインの光が私の目の奥にある。\n\n場所の記憶は絵画の中に蓄積される。私が描いてきた数百点の絵は、私の記憶の外部保存装置だ。一枚一枚の絵が、特定の日の特定の場所の特定の光を保存している。老いて記憶が薄れても、絵を見れば記憶が蘇る。\n\nこれが絵画の持つ根本的な力だと私は信じる。写真とは異なる。写真は光学的な記録だが、絵画は身体的な記憶だ。画家の手が、目が、皮膚が反応した記憶が、絵具の層の中に閉じ込められている。見る人はその身体的記憶に共鳴する。` },
+    en: { title: 'Chapter 24  Spain as an Eternal Site', content: `For me, Spain is not "a place I went to in the past" but "a site that continues in the present." I cannot actually go every year, but the light of Spain in my memory is still alive. When I paint the Ijinkan of Kobe, when I paint the sea of Toyama, the light of Spain is always there at the back of my eyes.\n\nMemories of places accumulate within paintings. The hundreds of paintings I have created are external storage devices for my memory. Each painting stores the particular light of a particular place on a particular day. Even if memory fades with age, looking at a painting brings it back.\n\nThis is the fundamental power that painting possesses, I believe. It is different from photography. Photography is an optical record, but painting is a physical memory. The memory of the painter's hands, eyes, and skin responding is enclosed within the layers of paint. Viewers resonate with that physical memory.` },
+    sp: { title: 'Capítulo 24  España como lugar eterno', content: `Para mí, España no es "un lugar al que fui en el pasado" sino "un lugar que continúa en el presente". No puedo ir realmente cada año, pero la luz de España en mi memoria sigue viva. Cuando pinto el Ijinkan de Kobe, cuando pinto el mar de Toyama, la luz de España siempre está en el fondo de mis ojos.\n\nLos recuerdos de los lugares se acumulan dentro de las pinturas. Las cientos de pinturas que he creado son dispositivos de almacenamiento externo para mi memoria. Cada pintura almacena la luz particular de un lugar particular en un día particular. Aunque la memoria se desvanezca con la edad, mirar una pintura la trae de vuelta.\n\nEste es el poder fundamental que posee la pintura, creo. Es diferente de la fotografía. La fotografía es un registro óptico, pero la pintura es una memoria física. La memoria de las manos, los ojos y la piel del pintor respondiendo está encerrada dentro de las capas de pintura. Los espectadores resuenan con esa memoria física.` },
+  },
+  {
+    id: 'ch25',
+    ja: { title: '第二十五章　絵画と時間', content: `絵画は時間を内包する。一枚の絵を描くのに要した時間、その場所が経てきた歴史的時間、そして完成してから経過した時間——これらすべてが一枚の絵の中に折り畳まれている。\n\nラ・マンチャの風車を描いた絵は、十七世紀にセルバンテスが見たであろう風景と、二十世紀の私が見た風景と、現在見る人が見る風景を同時に含んでいる。絵画は時間を超えた対話の媒体だ。\n\n私が「場所を描く」ことにこだわるのは、場所こそが時間の器だからだ。同じ場所を何十年も描き続けることで、時間の層が絵の中に積み重なる。それは考古学の地層に似ている。一枚一枚の絵が、その場所の時間の断面を記録している。` },
+    en: { title: 'Chapter 25  Painting and Time', content: `Painting contains time. The time required to paint one canvas, the historical time that place has passed through, and the time that has elapsed since it was completed—all of these are folded within a single painting.\n\nA painting of La Mancha's windmills simultaneously contains the landscape Cervantes must have seen in the seventeenth century, the landscape I saw in the twentieth century, and the landscape current viewers see. Painting is a medium for dialogue that transcends time.\n\nThe reason I insist on "painting places" is that places are the vessels of time. By continuing to paint the same place for decades, layers of time accumulate within the paintings. It resembles the geological strata of archaeology. Each painting records a cross-section of that place's time.` },
+    sp: { title: 'Capítulo 25  La pintura y el tiempo', content: `La pintura contiene tiempo. El tiempo necesario para pintar un lienzo, el tiempo histórico por el que ha pasado ese lugar, y el tiempo transcurrido desde que se completó: todo esto está plegado dentro de una sola pintura.\n\nUna pintura de los molinos de viento de La Mancha contiene simultáneamente el paisaje que Cervantes debe haber visto en el siglo XVII, el paisaje que yo vi en el siglo XX y el paisaje que los espectadores actuales ven. La pintura es un medio de diálogo que trasciende el tiempo.\n\nLa razón por la que insisto en "pintar lugares" es que los lugares son los recipientes del tiempo. Al continuar pintando el mismo lugar durante décadas, las capas de tiempo se acumulan dentro de las pinturas. Se asemeja a los estratos geológicos de la arqueología. Cada pintura registra una sección transversal del tiempo de ese lugar.` },
+  },
+  {
+    id: 'ch26',
+    ja: { title: '第二十六章　素材と身体', content: `私は生涯、油絵具を使い続けてきた。アクリルや水彩ではなく油絵具を選ぶのは、その乾燥の遅さと透明性の層次性に理由がある。油絵具は時間をかけて変化し、塗り重ねることで奥行きが生まれる。\n\nキャンバスの前に立つとき、私は常に筆の重さを意識する。筆に含まれた絵具の量、毛の弾力、筆圧——これらが絵の表面に直接反映される。デジタルツールにはない「抵抗感」が、絵具にはある。対象と戦うための武器として、油絵具は最も誠実な素材だ。\n\n素材への敬意は、制作への敬意だ。絵具を無駄にしないこと、キャンバスの素地を活かすこと、時間をかけて乾燥を待つこと——これらの地味な実践が、絵の質を決定する。技術とは最終的に、素材と誠実に向き合う態度のことだ。` },
+    en: { title: 'Chapter 26  Materials and the Body', content: `Throughout my life I have continued using oil paint. The reason I choose oil paint over acrylic or watercolor lies in its slow drying time and the layered transparency it offers. Oil paint changes over time, and depth is created through layering.\n\nWhen standing before a canvas, I am always aware of the weight of the brush. The amount of paint contained in the brush, the elasticity of the bristles, the pressure of the brush—these are directly reflected on the surface of the painting. There is a "resistance" in paint that digital tools don't have. As a weapon for fighting with the subject, oil paint is the most honest material.\n\nRespect for materials is respect for the creative work. Not wasting paint, making use of the canvas ground, waiting patiently for things to dry—these unglamorous practices determine the quality of a painting. Technique is ultimately an attitude of confronting materials honestly.` },
+    sp: { title: 'Capítulo 26  Materiales y el cuerpo', content: `A lo largo de mi vida he continuado usando pintura al óleo. La razón por la que elijo la pintura al óleo sobre el acrílico o la acuarela radica en su lento tiempo de secado y la transparencia estratificada que ofrece. La pintura al óleo cambia con el tiempo, y la profundidad se crea mediante la superposición.\n\nAl situarme frente a un lienzo, siempre soy consciente del peso del pincel. La cantidad de pintura contenida en el pincel, la elasticidad de las cerdas, la presión del pincel: estos se reflejan directamente en la superficie de la pintura. Hay una "resistencia" en la pintura que las herramientas digitales no tienen. Como arma para luchar con el sujeto, la pintura al óleo es el material más honesto.\n\nEl respeto por los materiales es el respeto por el trabajo creativo. No desperdiciar pintura, aprovechar el fondo del lienzo, esperar pacientemente a que las cosas se sequen: estas prácticas poco glamorosas determinan la calidad de una pintura. La técnica es en última instancia una actitud de confrontar los materiales honestamente.` },
+  },
+  {
+    id: 'ch27',
+    ja: { title: '第二十七章　記憶としての絵画', content: `この回想録を書きながら、私は「記憶とは何か」という問いに何度も立ち返った。記憶は正確な記録ではない。時間とともに変形し、感情によって彩色され、現在の視点から再解釈される。\n\n絵画も同じだ。私が描いた一九六九年のラ・マンチャの風景は、一九六九年の実際の風景の「記録」ではない。それは私の身体が、その光と風と空気に反応した記憶の結晶だ。\n\nだから私は自分の作品を「写真より不正確だが、写真より真実に近い」と言う。写真は外部の現実を記録するが、絵画は内部の現実を記録する。外部と内部の両方が重なったとき、一枚の絵は最も深い真実を語る。これが私の絵画観の核心だ。` },
+    en: { title: 'Chapter 27  Painting as Memory', content: `Writing this memoir, I have returned again and again to the question, "What is memory?" Memory is not an accurate record. It transforms over time, is colored by emotion, and is reinterpreted from a current perspective.\n\nPainting is the same. The La Mancha landscape I painted in 1969 is not a "record" of the actual landscape of 1969. It is the crystallization of the memory of my body reacting to that light, wind, and air.\n\nTherefore I say of my own work, "More inaccurate than a photograph, but closer to truth than a photograph." A photograph records external reality, but a painting records internal reality. When both the external and internal overlap, a painting speaks its deepest truth. This is the core of my view of painting.` },
+    sp: { title: 'Capítulo 27  La pintura como memoria', content: `Escribiendo estas memorias, he vuelto una y otra vez a la pregunta: "¿Qué es la memoria?" La memoria no es un registro preciso. Se transforma con el tiempo, se colorea por la emoción y se reinterpreta desde una perspectiva actual.\n\nLa pintura es lo mismo. El paisaje de La Mancha que pinté en 1969 no es un "registro" del paisaje real de 1969. Es la cristalización de la memoria de mi cuerpo reaccionando a esa luz, viento y aire.\n\nPor lo tanto, digo de mi propia obra: "Más inexacta que una fotografía, pero más cercana a la verdad que una fotografía". Una fotografía registra la realidad externa, pero una pintura registra la realidad interna. Cuando tanto lo externo como lo interno se superponen, una pintura habla su verdad más profunda. Este es el núcleo de mi visión de la pintura.` },
+  },
+  {
+    id: 'ch28',
+    ja: { title: '第二十八章　未来の画家たちへ', content: `若い画家たちへ伝えたいことは一つだけだ。現場に立て。\n\nスタジオは安全だ。失敗のリスクが少なく、やり直しが利き、完成まで時間をかけられる。しかし安全な場所からは、本当の意味でのリスクを冒した絵は生まれない。現場の光は残酷だ。一分ごとに変化し、雲が光を遮り、風がキャンバスを揺らす。この残酷さの中にこそ、絵の生命がある。\n\n技術は大切だ。しかし技術は手段であって目的ではない。目的は常に「見えたものを誠実に定着する」ことだ。技術が邪魔になるとき、それを捨てる勇気も必要だ。ビセンテの晩年の荒々しい絵は、技術を捨てた後に残った純粋な眼の記録だ。そこに私は最も深い美を見た。` },
+    en: { title: 'Chapter 28  To Future Painters', content: `There is just one thing I want to convey to young painters. Stand on site.\n\nThe studio is safe. There is little risk of failure, redoing is possible, and you can take time to reach completion. But from a safe place, paintings that take risks in the true sense cannot be born. The light on site is merciless. It changes every minute, clouds block the light, and wind shakes the canvas. Within this mercilessness lies the life of painting.\n\nTechnique is important. But technique is a means, not an end. The goal is always "to honestly fix what is seen." When technique gets in the way, the courage to discard it is also necessary. Vicente's rough late paintings are a record of pure vision remaining after technique was discarded. Within them I saw the most profound beauty.` },
+    sp: { title: 'Capítulo 28  A los futuros pintores', content: `Solo hay una cosa que quiero transmitir a los jóvenes pintores. Situaos in situ.\n\nEl estudio es seguro. Hay poco riesgo de fracaso, rehacer es posible y puedes tomarte tiempo para llegar a la finalización. Pero desde un lugar seguro, no pueden nacer pinturas que tomen riesgos en el verdadero sentido. La luz in situ es despiadada. Cambia cada minuto, las nubes bloquean la luz y el viento sacude el lienzo. Dentro de esta despiadada realidad yace la vida de la pintura.\n\nLa técnica es importante. Pero la técnica es un medio, no un fin. El objetivo es siempre "fijar honestamente lo que se ve". Cuando la técnica se interpone, también es necesario el coraje de descartarla. Las pinturas tardías ásperas de Vicente son un registro de visión pura que permanece después de que la técnica fue descartada. Dentro de ellas vi la belleza más profunda.` },
+  },
+  {
+    id: 'ch29',
+    ja: { title: '第二十九章　記憶の終わりに', content: `この回想録を締めくくるにあたって、私はカンポ・デ・クリプタナの丘に立つビセンテの姿を思い浮かべる。風に揺れる帽子、日焼けした手、目を細めて光を見つめる表情——あの老画家は言葉ではなく、その立ち姿で私に最も重要なことを教えてくれた。\n\n絵を描くことは生きることだ。見ることは感じることだ。現場に立つことは、世界と誠実に向き合うことだ。これらの単純な真実を、私は半世紀以上の制作を通じて繰り返し確認してきた。\n\n富山の海から始まり、金沢の川岸を経て、マドリードの街路へ、ラ・マンチャの台地へ、そして神戸の山手へ——光を追い続けた旅はまだ終わっていない。筆を持てる間は、私は現場に立ち続ける。光は、待っている。` },
+    en: { title: 'Chapter 29  At the End of Memory', content: `In closing this memoir, I picture Vicente standing on the hill in Campo de Criptana. His hat swaying in the wind, his sun-tanned hands, his expression squinting as he gazes at the light—that old painter taught me the most important thing not with words but with the way he stood.\n\nPainting is living. Seeing is feeling. Standing on site is confronting the world sincerely. These simple truths I have repeatedly confirmed through more than half a century of creative work.\n\nBeginning from the sea of Toyama, passing through the riverbanks of Kanazawa, to the streets of Madrid, to the plateau of La Mancha, and then to the hillside of Kobe—the journey of continuing to chase the light is not yet over. For as long as I can hold a brush, I will continue to stand on site. The light is waiting.` },
+    sp: { title: 'Capítulo 29  Al final de la memoria', content: `Al cerrar estas memorias, imagino a Vicente de pie en la colina de Campo de Criptana. Su sombrero balanceándose en el viento, sus manos bronceadas por el sol, su expresión entrecerrada mientras contempla la luz: ese anciano pintor me enseñó lo más importante no con palabras sino con la manera en que estaba de pie.\n\nPintar es vivir. Ver es sentir. Situarse in situ es confrontar el mundo con sinceridad. Estas simples verdades las he confirmado repetidamente a través de más de medio siglo de trabajo creativo.\n\nComenzando desde el mar de Toyama, pasando por las orillas del río de Kanazawa, hacia las calles de Madrid, hacia la meseta de La Mancha, y luego hacia la ladera de Kobe: el viaje de continuar persiguiendo la luz aún no ha terminado. Mientras pueda sostener un pincel, seguiré situándome in situ. La luz está esperando.` },
+  },
+];
+
+const currentChapters = chapters.map(ch => ({
+  id: ch.id,
+  title: ch[lang]?.title ?? ch.ja.title,
+  content: ch[lang]?.content ?? ch.ja.content,
+}));
+
+const ui = {
+  ja: {
+    backToGallery: '← ギャラリーに戻る',
+    tableOfContents: '目次',
+    scrollTop: '↑ トップへ',
+    memoirTitle: '記憶',
+    memoirSubtitle: '画家・徳永侃 自叙伝的エッセイ',
+  },
+  en: {
+    backToGallery: '← Back to Gallery',
+    tableOfContents: 'Table of Contents',
+    scrollTop: '↑ Top',
+    memoirTitle: 'Memories',
+    memoirSubtitle: 'Autobiographical Essay by Painter Takuma Tokunaga',
+  },
+  sp: {
+    backToGallery: '← Volver a la Galería',
+    tableOfContents: 'Índice',
+    scrollTop: '↑ Inicio',
+    memoirTitle: 'Recuerdos',
+    memoirSubtitle: 'Ensayo Autobiográfico del Pintor Takuma Tokunaga',
+  },
+};
+const t = ui[lang] ?? ui.ja;
 ---
 
+<!DOCTYPE html>
 <html lang={lang}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{t.title}</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: "Helvetica Neue", Arial, sans-serif;
-        background: #111;
-        color: #fff;
-        line-height: 1.6;
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 50px 20px;
-      }
-      header {
-        margin-bottom: 40px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.2);
-      }
-      .back-link {
-        color: rgba(255,255,255,0.6);
-        text-decoration: none;
-        font-size: 0.9rem;
-        letter-spacing: 0.1em;
-        transition: color 0.3s;
-      }
-      .back-link:hover {
-        color: #fff;
-      }
-      h1 {
-        font-size: 2rem;
-        letter-spacing: 0.2em;
-        font-weight: 300;
-        margin-top: 20px;
-      }
-      h2 {
-        font-size: 1.3rem;
-        letter-spacing: 0.1em;
-        font-weight: 300;
-        margin-top: 40px;
-        color: #f1c40f;
-      }
-      p {
-        color: rgba(255,255,255,0.8);
-        margin-bottom: 20px;
-        white-space: pre-wrap; /* \n で改行されるようにする */
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <a href={`${base}/${lang}/`} class="back-link">{nav.back}</a>
-        <h1>{t.heading}</h1>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{currentMeta.title}</title>
+  <meta name="description" content={currentMeta.description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      <main>
-        <p>{t.description}</p>
-        
-        <h2>{t.profileTitle}</h2>
-        <p>{t.profileText}</p>
-      </main>
+    :root {
+      --crimson:   #4a0a0a;
+      --crimson-mid: #6b1414;
+      --gold:      #d4af37;
+      --gold-pale: #e8d070;
+      --cream:     #faf6ef;
+      --text:      #1a1208;
+      --text-mid:  #3d2b1f;
+      --sidebar-w: 280px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'EB Garamond', 'Yu Mincho', '游明朝', serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── ヘッダー ─── */
+    .page-header {
+      background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-mid) 100%);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .back-link {
+      color: var(--gold-pale);
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: .08em;
+      transition: color .2s;
+    }
+    .back-link:hover { color: #fff; }
+    .header-title {
+      color: var(--gold);
+      font-size: 1.4rem;
+      letter-spacing: .15em;
+      text-align: center;
+    }
+    .lang-nav { display: flex; gap: .75rem; }
+    .lang-nav a {
+      color: var(--gold-pale);
+      text-decoration: none;
+      font-size: .85rem;
+      letter-spacing: .1em;
+      padding: .25rem .5rem;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      transition: all .2s;
+    }
+    .lang-nav a:hover,
+    .lang-nav a.active { border-color: var(--gold); color: var(--gold); }
+
+    /* ─── レイアウト ─── */
+    .layout {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 80px);
+    }
+
+    /* ─── サイドバー（目次） ─── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: sticky;
+      top: 80px;
+      height: calc(100vh - 80px);
+      overflow-y: auto;
+      padding: 2rem 1.25rem;
+      border-right: 1px solid rgba(74,10,10,.2);
+      background: linear-gradient(180deg, #fdf8f0 0%, #faf4e8 100%);
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    .toc-heading {
+      font-size: .85rem;
+      letter-spacing: .2em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--gold);
+    }
+    .toc-list { list-style: none; }
+    .toc-item a {
+      display: block;
+      padding: .35rem .5rem;
+      font-size: .82rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      line-height: 1.4;
+      border-left: 2px solid transparent;
+      transition: all .2s;
+    }
+    .toc-item a:hover { color: var(--crimson); border-left-color: var(--gold); padding-left: .9rem; }
+    .toc-item a.active { color: var(--crimson); border-left-color: var(--crimson); padding-left: .9rem; font-weight: 600; }
+
+    /* ─── 本文エリア ─── */
+    .main-content {
+      flex: 1;
+      padding: 3rem 3rem 5rem;
+      max-width: 780px;
+    }
+
+    /* ─── タイトルブロック ─── */
+    .memoir-hero {
+      text-align: center;
+      padding: 3rem 0 4rem;
+      margin-bottom: 3rem;
+      border-bottom: 2px solid var(--gold);
+      position: relative;
+    }
+    .memoir-hero::before {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 0 auto 1.5rem;
+    }
+    .memoir-main-title {
+      font-size: 3.5rem;
+      color: var(--crimson);
+      letter-spacing: .3em;
+      margin-bottom: .75rem;
+    }
+    .memoir-subtitle {
+      font-size: 1rem;
+      color: var(--text-mid);
+      letter-spacing: .2em;
+      font-style: italic;
+    }
+
+    /* ─── 章 ─── */
+    .chapter {
+      margin-bottom: 4.5rem;
+      scroll-margin-top: 100px;
+    }
+    .chapter-title {
+      font-size: 1.5rem;
+      color: var(--crimson);
+      letter-spacing: .1em;
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid rgba(212,175,55,.4);
+      position: relative;
+    }
+    .chapter-title::before {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 60px;
+      height: 1px;
+      background: var(--crimson);
+    }
+    .chapter-body p {
+      font-size: 1.08rem;
+      line-height: 2;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      text-align: justify;
+    }
+    .chapter-body p:last-child { margin-bottom: 0; }
+
+    /* ─── スクロールトップ ─── */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--crimson);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: .6rem 1rem;
+      font-size: .85rem;
+      font-family: inherit;
+      letter-spacing: .1em;
+      cursor: pointer;
+      border-radius: 3px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      z-index: 200;
+    }
+    .scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .scroll-top:hover { background: var(--crimson-mid); }
+
+    /* ─── モバイル目次ドロワー ─── */
+    .toc-toggle {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      background: var(--crimson);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: .6rem 1rem;
+      font-size: .85rem;
+      font-family: inherit;
+      letter-spacing: .1em;
+      cursor: pointer;
+      border-radius: 3px;
+      z-index: 200;
+    }
+    .toc-drawer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+    }
+    .toc-drawer.open { display: block; }
+    .toc-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+    }
+    .toc-panel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: min(320px, 85vw);
+      background: var(--cream);
+      overflow-y: auto;
+      padding: 2rem 1.25rem;
+    }
+
+    /* ─── レスポンシブ ─── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .toc-toggle { display: block; }
+      .main-content { padding: 2rem 1.5rem 5rem; max-width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .page-header { padding: 1rem 1.25rem; flex-wrap: wrap; gap: .5rem; }
+      .header-title { font-size: 1.1rem; order: -1; width: 100%; text-align: left; }
+      .memoir-main-title { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="page-header">
+    <a href={`/${lang}/`} class="back-link">{t.backToGallery}</a>
+    <span class="header-title">{t.memoirTitle}</span>
+    <nav class="lang-nav">
+      <a href="/ja/about" class:list={['lang-link', { active: lang === 'ja' }]}>日本語</a>
+      <a href="/en/about" class:list={['lang-link', { active: lang === 'en' }]}>English</a>
+      <a href="/sp/about" class:list={['lang-link', { active: lang === 'sp' }]}>Español</a>
+    </nav>
+  </header>
+
+  <!-- デスクトップ目次 -->
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <p class="toc-heading">{t.tableOfContents}</p>
+      <ul class="toc-list">
+        {currentChapters.map(ch => (
+          <li class="toc-item">
+            <a href={`#${ch.id}`} data-target={ch.id}>{ch.title}</a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+
+    <!-- 本文 -->
+    <main class="main-content">
+      <div class="memoir-hero">
+        <h1 class="memoir-main-title">{t.memoirTitle}</h1>
+        <p class="memoir-subtitle">{t.memoirSubtitle}</p>
+      </div>
+
+      {currentChapters.map(ch => (
+        <article class="chapter" id={ch.id}>
+          <h2 class="chapter-title">{ch.title}</h2>
+          <div class="chapter-body" data-content={ch.content}></div>
+        </article>
+      ))}
+    </main>
+  </div>
+
+  <!-- モバイル目次ドロワー -->
+  <button class="toc-toggle" id="tocToggle">{t.tableOfContents}</button>
+  <div class="toc-drawer" id="tocDrawer">
+    <div class="toc-overlay" id="tocOverlay"></div>
+    <div class="toc-panel">
+      <p class="toc-heading">{t.tableOfContents}</p>
+      <ul class="toc-list">
+        {currentChapters.map(ch => (
+          <li class="toc-item">
+            <a href={`#${ch.id}`} data-target={ch.id} class="mobile-toc-link">{ch.title}</a>
+          </li>
+        ))}
+      </ul>
     </div>
-  </body>
+  </div>
+
+  <!-- スクロールトップ -->
+  <button class="scroll-top" id="scrollTop">{t.scrollTop}</button>
+
+  <script>
+    // ─── 本文レンダリング ───
+    document.querySelectorAll('.chapter-body').forEach(el => {
+      const raw = el.getAttribute('data-content') || '';
+      el.innerHTML = raw
+        .split('\n\n')
+        .filter(p => p.trim())
+        .map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`)
+        .join('');
+    });
+
+    // ─── スクロールスパイ ───
+    const tocLinks = document.querySelectorAll('[data-target]');
+    const chapters = document.querySelectorAll('.chapter');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          document.querySelectorAll(`[data-target="${entry.target.id}"]`)
+            .forEach(l => l.classList.add('active'));
+        }
+      });
+    }, { rootMargin: '-10% 0px -80% 0px' });
+
+    chapters.forEach(ch => observer.observe(ch));
+
+    // ─── モバイルドロワー ───
+    const toggle = document.getElementById('tocToggle');
+    const drawer = document.getElementById('tocDrawer');
+    const overlay = document.getElementById('tocOverlay');
+
+    toggle?.addEventListener('click', () => drawer?.classList.add('open'));
+    overlay?.addEventListener('click', () => drawer?.classList.remove('open'));
+    document.querySelectorAll('.mobile-toc-link').forEach(link => {
+      link.addEventListener('click', () => drawer?.classList.remove('open'));
+    });
+
+    // ─── スクロールトップ ───
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollBtn?.classList.toggle('visible', window.scrollY > 600);
+    });
+    scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+
+</body>
 </html>
