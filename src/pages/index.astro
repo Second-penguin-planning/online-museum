@@ -6,12 +6,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <head>
     <meta charset="UTF-8">
     <title>Redirecting...</title>
-    <!-- 即座に /ja/ にリダイレクト -->
     <meta http-equiv="refresh" content={`0;url=${base}/ja/`} />
   </head>
   <body>
-    <script>
-      const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
+    <script define:vars={{ base }}>
+      // JavaScriptでのリダイレクト（即時実行）
       window.location.replace(`${base}/ja/`);
     </script>
   </body>
