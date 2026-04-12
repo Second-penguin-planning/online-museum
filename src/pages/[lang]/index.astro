@@ -1,0 +1,802 @@
+---
+import artworks from '../../data/artworks.json';
+
+// ▼ 動的ルーティングのパスを生成 (Astroに ja, en, sp のページを作らせる)
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } }
+  ];
+}
+
+const { lang } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// ▼ UIテキストの多言語辞書
+const uiDict = {
+  ja: {
+    title: "德永デジタル美術館",
+    headerTitle: "德永卓磨と幸子の絵画をご覧ください",
+    navTop: "TOP",
+    navAbout: "概要",
+    navExhibition: "展示室",
+    navShop: "商品販売",
+    subTitle: "TOKUNAGA ART MUSEUM",
+    enterBtn: "― 入　館 ―",
+    selectRoom: "展示室を選択",
+    backToTop: "← TOPへ戻る",
+    scrollHint: "← 左右にスクロール →",
+    works: "WORKS",
+    modalTitle: "タイトル",
+    modalArtist: "作者",
+    modalYear: "制作年",
+    modalSize: "サイズ",
+    alertAbout: "概要ページは準備中です。",
+    alertShop: "商品販売ページは準備中です。",
+    alertPreparing: "現在整理中です。"
+  },
+  en: {
+    title: "Tokunaga Digital Museum",
+    headerTitle: "Paintings by Takuma and Sachiko Tokunaga",
+    navTop: "HOME",
+    navAbout: "About",
+    navExhibition: "Exhibition",
+    navShop: "Shop",
+    subTitle: "TOKUNAGA ART MUSEUM",
+    enterBtn: "― ENTER ―",
+    selectRoom: "Select a Room",
+    backToTop: "← Back to Home",
+    scrollHint: "← Scroll Left / Right →",
+    works: "WORKS",
+    modalTitle: "Title",
+    modalArtist: "Artist",
+    modalYear: "Year",
+    modalSize: "Size",
+    alertAbout: "The About page is currently under construction.",
+    alertShop: "The Shop page is currently under construction.",
+    alertPreparing: "Currently arranging this room."
+  },
+  sp: {
+    title: "Museo Digital Tokunaga",
+    headerTitle: "Pinturas de Takuma y Sachiko Tokunaga",
+    navTop: "INICIO",
+    navAbout: "Acerca de",
+    navExhibition: "Exposición",
+    navShop: "Tienda",
+    subTitle: "MUSEO DE ARTE TOKUNAGA",
+    enterBtn: "― ENTRAR ―",
+    selectRoom: "Seleccione una Sala",
+    backToTop: "← Volver al Inicio",
+    scrollHint: "← Desplazar Izquierda / Derecha →",
+    works: "OBRAS",
+    modalTitle: "Título",
+    modalArtist: "Artista",
+    modalYear: "Año",
+    modalSize: "Tamaño",
+    alertAbout: "La página de Acerca de está en construcción.",
+    alertShop: "La página de Tienda está en construcción.",
+    alertPreparing: "Actualmente arreglando esta sala."
+  }
+};
+const t = uiDict[lang];
+
+// ▼ 展示室のリスト定義 (多言語対応)
+const roomNames = [
+  { id: 1, prefix: { ja: '１）', en: '1) ', sp: '1) ' }, name: { ja: '異人館', en: 'Ijinkan', sp: 'Casas de Extranjeros' } },
+  { id: 2, prefix: { ja: '２）', en: '2) ', sp: '2) ' }, name: { ja: 'ラ・マンチャ', en: 'La Mancha', sp: 'La Mancha' } },
+  { id: 3, prefix: { ja: '３）', en: '3) ', sp: '3) ' }, name: { ja: '神戸風景', en: 'Kobe Scenery', sp: 'Paisaje de Kobe' } },
+  { id: 4, prefix: { ja: '４）', en: '4) ', sp: '4) ' }, name: { ja: '静物', en: 'Still Life', sp: 'Naturaleza Muerta' } },
+  { id: 5, prefix: { ja: '５）', en: '5) ', sp: '5) ' }, name: { ja: '人物', en: 'Portraits', sp: 'Retratos' } },
+  { id: 6, prefix: { ja: '６）', en: '6) ', sp: '6) ' }, name: { ja: '記憶', en: 'Memories', sp: 'Recuerdos' } },
+  { id: 7, prefix: { ja: '７）', en: '7) ', sp: '7) ' }, name: { ja: 'その他', en: 'Others', sp: 'Otros' } }
+].map(room => ({
+  id: room.id,
+  prefix: room.prefix[lang],
+  name: room.name[lang]
+}));
+
+// ▼ ファイル名から展示室を振り分け＆額縁のランダムカラーを生成＆言語ごとのテキストを抽出
+const categorizedArtworks = artworks.map((info, i) => {
+  let category = 0;
+  const match = info.file?.match(/(\d+)/);
+  if (match) {
+    const num = parseInt(match[1], 10);
+    if (num >= 1 && num <= 6) category = 1;       // 001〜006 は 1)異人館
+    else if (num >= 7 && num <= 12) category = 2; // 007〜012 は 2)ラ・マンチャ
+  }
+  
+  const hue = 30 + ((i * 7) % 16);
+  const sat = 40 + ((i * 11) % 26);
+  const lit = 25 + ((i * 13) % 16);
+  const frameLight = `hsl(${hue}, ${sat}%, ${lit + 15}%)`;
+  const frameDark = `hsl(${hue}, ${sat}%, ${lit - 12}%)`;
+
+  return { 
+    ...info, 
+    category, 
+    frameLight, 
+    frameDark,
+    // JSONのオブジェクトから現在の言語のテキストを抽出
+    title: info.title[lang],
+    artist: info.artist[lang],
+    year: info.year[lang],
+    size: info.size[lang],
+    description: info.description[lang],
+    // 額縁の幅計算ロジック用に「日本語のサイズ（〇〇号）」を保持させる
+    rawSizeJa: info.size.ja
+  };
+});
+
+// ▼ サイズデータから倍率を計算し、カードの横幅(px)を決定する関数
+function getCardWidth(sizeStr) {
+  const defaultWidth = 280; 
+  if (!sizeStr) return defaultWidth;
+  const match = sizeStr.match(/(\d+(?:\.\d+)?)/);
+  if (!match) return defaultWidth;
+  const num = parseFloat(match[1]);
+  let scale = 1;
+
+  if (sizeStr.includes('号') || num < 100) {
+    scale = num / 30; // 30号を 1.0倍 とする
+  } else {
+    scale = num / 90;
+  }
+  const clampedScale = Math.max(0.5, Math.min(scale, 2.5));
+  return Math.round(defaultWidth * clampedScale);
+}
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="base-url" content={base} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{t.title}</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: "Helvetica Neue", Arial, sans-serif; background: #111; color: #fff; overflow-x: hidden; }
+
+      /* ========== ヘッダー ========== */
+      .site-header {
+        position: fixed;
+        top: 0; left: 0; width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 50px;
+        z-index: 1000;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+      }
+      .header-logo {
+        font-size: 1.2rem;
+        letter-spacing: 0.2em;
+        font-weight: 300;
+        color: #fff;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      }
+      .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+      .header-nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.9rem;
+        letter-spacing: 0.1em;
+        opacity: 0.7;
+        transition: opacity 0.3s, transform 0.3s;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      }
+      .header-nav a:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+
+      /* 言語スイッチャー */
+      .lang-switcher {
+        display: flex;
+        gap: 15px;
+        border-left: 1px solid rgba(255,255,255,0.3);
+        padding-left: 20px;
+        margin-left: 10px;
+      }
+      .lang-switcher a {
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+      }
+      .lang-switcher a.active {
+        opacity: 1;
+        font-weight: bold;
+        color: #f1c40f; /* 選択中の言語を少し目立たせる */
+      }
+
+      @media (max-width: 900px) {
+        .site-header {
+          flex-direction: column;
+          padding: 15px 20px;
+          gap: 15px;
+          background: rgba(0,0,0,0.5);
+        }
+        .header-nav { flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .header-nav a { font-size: 0.8rem; }
+        .lang-switcher { border-left: none; padding-left: 0; margin-left: 0; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; width: 100%; justify-content: center; }
+      }
+
+      /* ========== エントランス ========== */
+      .entrance {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: 
+          linear-gradient(rgba(17, 17, 17, 0.5), rgba(17, 17, 17, 0.85)),
+          url('https://images.unsplash.com/photo-1577083165239-0bd9f19fc08f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        transition: opacity 1.2s ease, visibility 1.2s ease;
+      }
+      .entrance.hidden { opacity: 0; visibility: hidden; }
+      
+      .entrance h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        letter-spacing: 0.3em;
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: 300;
+        color: #fff;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      }
+      .entrance p {
+        font-size: 0.9rem;
+        letter-spacing: 0.25em;
+        color: rgba(255,255,255,0.8);
+        margin-bottom: 60px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      }
+      .enter-btn {
+        padding: 16px 50px;
+        border: 1px solid rgba(255,255,255,0.6);
+        background: rgba(0,0,0,0.4);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        font-size: 0.9rem;
+        letter-spacing: 0.3em;
+        cursor: pointer;
+        transition: all 0.4s;
+        border-radius: 2px;
+      }
+      .enter-btn:hover {
+        background: rgba(255,255,255,0.2);
+        border-color: #fff;
+        transform: scale(1.05);
+      }
+
+      /* ========== 展示室選択画面 ========== */
+      .room-selector {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: 
+          linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.95)),
+          url('https://images.unsplash.com/photo-1577083165239-0bd9f19fc08f?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        transition: opacity 1.2s ease, visibility 1.2s ease;
+      }
+      .room-selector.hidden { opacity: 0; visibility: hidden; }
+      .room-selector h2 {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        letter-spacing: 0.3em;
+        font-weight: 300;
+        color: #fff;
+        margin-bottom: 50px;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      }
+      .room-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        max-width: 900px;
+        padding: 0 20px;
+      }
+      .room-btn {
+        padding: 15px 30px;
+        border: 1px solid rgba(255,255,255,0.4);
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 220px;
+        border-radius: 2px;
+        text-align: center;
+      }
+      .room-btn:hover {
+        background: rgba(255,255,255,0.2);
+        border-color: #fff;
+        transform: translateY(-2px);
+      }
+      .back-btn {
+        margin-top: 50px;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.6);
+        cursor: pointer;
+        letter-spacing: 0.2em;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+      .back-btn:hover { color: #fff; }
+
+      @media (max-width: 768px) {
+        .room-btn { min-width: 140px; padding: 12px 15px; font-size: 0.9rem; }
+      }
+
+      /* ========== メインギャラリー ========== */
+      .museum {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 1.2s ease, visibility 1.2s ease;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .museum.visible { 
+        opacity: 1; 
+        visibility: visible;
+      }
+
+      .museum-header {
+        text-align: center;
+        padding: 100px 20px 10px;
+      }
+      .museum-header h2 {
+        font-size: 1.2rem;
+        letter-spacing: 0.4em;
+        font-weight: 300;
+        color: rgba(255,255,255,0.7);
+      }
+      .museum-header .count {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.3);
+        margin-top: 8px;
+        letter-spacing: 0.2em;
+      }
+
+      .scroll-hint {
+        text-align: center;
+        padding: 10px;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.25);
+        letter-spacing: 0.2em;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+      }
+
+      /* ========== 横スクロールエリア ========== */
+      .gallery-track-wrapper {
+        position: relative;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+      }
+      .gallery-track {
+        display: flex;
+        gap: 80px;
+        padding: 40px 100px 120px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        cursor: grab;
+        align-items: center; 
+        width: 100%;
+      }
+      .gallery-track:active { cursor: grabbing; }
+      .gallery-track::-webkit-scrollbar { display: none; }
+
+      .scroll-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .scroll-arrow:hover { background: rgba(255,255,255,0.25); }
+      .scroll-arrow.left { left: 15px; }
+      .scroll-arrow.right { right: 15px; }
+
+      /* 絵カード */
+      .artwork-card {
+        flex: 0 0 auto;
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.3s;
+      }
+      .artwork-card:hover { transform: scale(1.02); }
+
+      /* 立体感のある額縁 */
+      .artwork-frame {
+        background: #1a110a;
+        border-style: solid;
+        border-width: 18px; 
+        border-color: var(--frame-light) var(--frame-dark) var(--frame-dark) var(--frame-light);
+        border-radius: 12px;
+        box-shadow:
+          0 0 0 1px rgba(0,0,0,0.8),
+          inset 0 0 5px rgba(255,255,255,0.25),
+          inset 0 0 16px rgba(0,0,0,0.9),
+          inset 0 0 0 2px rgba(0,0,0,0.7),
+          10px 15px 35px rgba(0,0,0,0.7);
+        position: relative;
+        width: 100%;
+        display: flex;
+      }
+      .artwork-frame::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 3px;
+        border: 2px solid rgba(255, 215, 0, 0.25);
+        box-shadow: inset 0 0 6px rgba(255, 215, 0, 0.1);
+        z-index: 2;
+        pointer-events: none;
+      }
+      .artwork-frame::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 2px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 45%);
+        z-index: 3;
+        pointer-events: none;
+      }
+      .artwork-frame img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 2px;
+      }
+
+      /* タイトルラベル */
+      .artwork-label {
+        position: absolute;
+        top: calc(100% + 25px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150%;
+        text-align: center;
+        pointer-events: none;
+      }
+      .artwork-label .artwork-title {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.8);
+        letter-spacing: 0.05em;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      }
+      .artwork-label .artwork-artist {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.4);
+        margin-top: 4px;
+      }
+
+      /* ========== モーダル ========== */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-overlay.active { display: flex; }
+      
+      .modal {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 4px;
+        max-width: 720px;
+        width: 92%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 35px;
+        position: relative;
+        color: #fff;
+      }
+      .modal-close {
+        position: absolute;
+        top: 15px; right: 20px;
+        font-size: 1.3rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.5);
+        transition: color 0.2s;
+      }
+      .modal-close:hover { color: #fff; }
+
+      .modal-img-wrap {
+        text-align: center;
+        margin-bottom: 25px;
+        background: #1a1a1a;
+        border-radius: 2px;
+      }
+      .modal-img-wrap img {
+        width: auto;
+        max-width: 100%;
+        max-height: 500px;
+        object-fit: contain;
+        display: inline-block;
+      }
+
+      .modal-info table { width: 100%; border-collapse: collapse; }
+      .modal-info th {
+        text-align: left;
+        padding: 9px 12px;
+        color: rgba(255,255,255,0.35);
+        font-size: 0.8rem;
+        width: 100px;
+        border-bottom: 1px solid #2a2a2a;
+        font-weight: normal;
+        letter-spacing: 0.1em;
+      }
+      .modal-info td {
+        padding: 9px 12px;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #2a2a2a;
+        color: rgba(255,255,255,0.8);
+      }
+      .modal-description {
+        margin-top: 20px;
+        padding: 18px;
+        background: #222;
+        border-radius: 4px;
+        font-size: 0.88rem;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.6);
+      }
+    </style>
+  </head>
+  <body>
+
+    <header class="site-header">
+      <div class="header-logo">{t.headerTitle}</div>
+      <nav class="header-nav">
+        <a href="#" id="navTop">{t.navTop}</a>
+        <a href="#" onclick={`alert('${t.alertAbout}'); return false;`}>{t.navAbout}</a>
+        <a href="#" id="navExhibition">{t.navExhibition}</a>
+        <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>{t.navShop}</a>
+        
+        <!-- 言語スイッチャー -->
+        <div class="lang-switcher">
+          <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
+          <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
+          <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+        </div>
+      </nav>
+    </header>
+
+    <div class="entrance" id="entrance">
+      <h1>{t.title}</h1>
+      <p>{t.subTitle}</p>
+      <button class="enter-btn" id="enterBtn">{t.enterBtn}</button>
+    </div>
+
+    <div class="room-selector hidden" id="roomSelector">
+      <h2>{t.selectRoom}</h2>
+      <div class="room-list">
+        {roomNames.map(room => (
+          <button class="room-btn" data-room={room.id} data-name={room.name}>
+            {room.prefix}{room.name}
+          </button>
+        ))}
+      </div>
+      <button class="back-btn" id="backToTopFromSelector">{t.backToTop}</button>
+    </div>
+
+    <div class="museum" id="museum">
+      <div class="museum-header">
+        <h2 id="museumTitle">{t.title}</h2>
+        <div class="count" id="museumCount">{categorizedArtworks.length} {t.works}</div>
+      </div>
+      <div class="scroll-hint">{t.scrollHint}</div>
+
+      <div class="gallery-track-wrapper">
+        <button class="scroll-arrow left" id="arrowLeft">‹</button>
+        <div class="gallery-track" id="galleryTrack">
+          {categorizedArtworks.map((info) => (
+            <div
+              class="artwork-card"
+              style={`
+                width: ${getCardWidth(info.rawSizeJa)}px; 
+                --frame-light: ${info.frameLight}; 
+                --frame-dark: ${info.frameDark};
+              `}
+              data-category={info.category}
+              data-file={info.file}
+              data-title={info.title}
+              data-artist={info.artist}
+              data-year={info.year}
+              data-size={info.size}
+              data-description={info.description}
+            >
+              <div class="artwork-frame">
+                <img src={`${base}/gallery/${info.file}`} alt={info.title} loading="lazy" />
+              </div>
+              <div class="artwork-label">
+                <div class="artwork-title">{info.title}</div>
+                <div class="artwork-artist">{info.artist}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button class="scroll-arrow right" id="arrowRight">›</button>
+      </div>
+    </div>
+
+    <!-- 作品詳細モーダル -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <button class="modal-close" id="modalClose">✕</button>
+        <div class="modal-img-wrap">
+          <img id="modalImg" src="" alt="" />
+        </div>
+        <div class="modal-info">
+          <table>
+            <tr><th>{t.modalTitle}</th><td id="modalTitle"></td></tr>
+            <tr><th>{t.modalArtist}</th><td id="modalArtist"></td></tr>
+            <tr><th>{t.modalYear}</th><td id="modalYear"></td></tr>
+            <tr><th>{t.modalSize}</th><td id="modalSize"></td></tr>
+          </table>
+          <div class="modal-description" id="modalDescription"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- define:vars を使用して JS にサーバー側の多言語テキストを渡す -->
+    <script define:vars={{ alertPreparing: t.alertPreparing, worksText: t.works }}>
+      const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
+
+      const entrance = document.getElementById('entrance');
+      const roomSelector = document.getElementById('roomSelector');
+      const museum = document.getElementById('museum');
+      const galleryTrack = document.getElementById('galleryTrack');
+
+      function openRoomSelector() {
+        entrance.classList.add('hidden');
+        museum.classList.remove('visible');
+        roomSelector.classList.remove('hidden');
+      }
+
+      function closeRoomSelector() {
+        roomSelector.classList.add('hidden');
+        entrance.classList.remove('hidden');
+      }
+
+      function goToTop() {
+        roomSelector.classList.add('hidden');
+        museum.classList.remove('visible');
+        entrance.classList.remove('hidden');
+      }
+
+      document.getElementById('enterBtn').addEventListener('click', openRoomSelector);
+      document.getElementById('navExhibition').addEventListener('click', (e) => {
+        e.preventDefault();
+        openRoomSelector();
+      });
+      document.getElementById('navTop').addEventListener('click', (e) => {
+        e.preventDefault();
+        goToTop();
+      });
+      document.getElementById('backToTopFromSelector').addEventListener('click', closeRoomSelector);
+
+      document.querySelectorAll('.room-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const roomId = parseInt(btn.dataset.room, 10);
+          const roomName = btn.dataset.name;
+          
+          if (roomId >= 3 && roomId <= 7) {
+            alert(alertPreparing); // 多言語化されたアラート文
+            return;
+          }
+          
+          const cards = document.querySelectorAll('.artwork-card');
+          let count = 0;
+          cards.forEach(card => {
+            if (card.dataset.category === String(roomId)) {
+              card.style.display = ''; 
+              count++;
+            } else {
+              card.style.display = 'none'; 
+            }
+          });
+
+          // 作品数を多言語で表示
+          document.getElementById('museumTitle').textContent = roomName;
+          document.getElementById('museumCount').textContent = `${count} ${worksText}`;
+
+          galleryTrack.style.scrollBehavior = 'auto';
+          galleryTrack.scrollLeft = 0;
+          setTimeout(() => {
+            galleryTrack.style.scrollBehavior = 'smooth';
+          }, 50);
+
+          roomSelector.classList.add('hidden');
+          museum.classList.add('visible');
+        });
+      });
+
+      const track = document.getElementById('galleryTrack');
+      document.getElementById('arrowLeft').addEventListener('click', () => {
+        track.scrollBy({ left: -320, behavior: 'smooth' });
+      });
+      document.getElementById('arrowRight').addEventListener('click', () => {
+        track.scrollBy({ left: 320, behavior: 'smooth' });
+      });
+
+      let isDragging = false;
+      let startX = 0;
+      let scrollLeft = 0;
+      track.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+      document.addEventListener('mouseup', () => { isDragging = false; });
+      track.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        track.scrollLeft = scrollLeft - (x - startX);
+      });
+
+      document.querySelectorAll('.artwork-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.getElementById('modalImg').src = base + '/gallery/' + card.dataset.file;
+          document.getElementById('modalImg').alt = card.dataset.title;
+          document.getElementById('modalTitle').textContent = card.dataset.title;
+          document.getElementById('modalArtist').textContent = card.dataset.artist;
+          document.getElementById('modalYear').textContent = card.dataset.year;
+          document.getElementById('modalSize').textContent = card.dataset.size;
+          document.getElementById('modalDescription').textContent = card.dataset.description;
+          document.getElementById('modalOverlay').classList.add('active');
+        });
+      });
+
+      document.getElementById('modalOverlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('modalOverlay')) {
+          document.getElementById('modalOverlay').classList.remove('active');
+        }
+      });
+      document.getElementById('modalClose').addEventListener('click', () => {
+        document.getElementById('modalOverlay').classList.remove('active');
+      });
+    </script>
+  </body>
+</html>
