@@ -1,0 +1,93 @@
+---
+import aboutData from '../../data/about.json';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } }
+  ];
+}
+
+const { lang } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const t = aboutData[lang]; // 言語ごとのデータを取得
+
+// ナビゲーション用の辞書（index.astroと共通）
+const navDict = {
+  ja: { back: "← 美術館へ戻る" },
+  en: { back: "← Back to Museum" },
+  sp: { back: "← Volver al Museo" }
+};
+const nav = navDict[lang];
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{t.title}</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        background: #111;
+        color: #fff;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 50px 20px;
+      }
+      header {
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+      }
+      .back-link {
+        color: rgba(255,255,255,0.6);
+        text-decoration: none;
+        font-size: 0.9rem;
+        letter-spacing: 0.1em;
+        transition: color 0.3s;
+      }
+      .back-link:hover {
+        color: #fff;
+      }
+      h1 {
+        font-size: 2rem;
+        letter-spacing: 0.2em;
+        font-weight: 300;
+        margin-top: 20px;
+      }
+      h2 {
+        font-size: 1.3rem;
+        letter-spacing: 0.1em;
+        font-weight: 300;
+        margin-top: 40px;
+        color: #f1c40f;
+      }
+      p {
+        color: rgba(255,255,255,0.8);
+        margin-bottom: 20px;
+        white-space: pre-wrap; /* \n で改行されるようにする */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href={`${base}/${lang}/`} class="back-link">{nav.back}</a>
+        <h1>{t.heading}</h1>
+      </header>
+
+      <main>
+        <p>{t.description}</p>
+        
+        <h2>{t.profileTitle}</h2>
+        <p>{t.profileText}</p>
+      </main>
+    </div>
+  </body>
+</html>

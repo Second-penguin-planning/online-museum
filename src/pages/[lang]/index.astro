@@ -118,7 +118,7 @@ function getCardWidth(sizeStr) {
       <div class="header-logo">{t.headerTitle}</div>
       <nav class="header-nav">
         <a href="#" id="navTop">{t.backTop}</a>
-        <a href="#" onclick={`alert('${t.alertSummary}'); return false;`}>About</a>
+        <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <a href="#" id="navExhibition">{t.roomSelect}</a>
         <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>Shop</a>
         

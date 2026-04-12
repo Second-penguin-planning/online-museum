@@ -1,0 +1,23 @@
+{
+  "ja": {
+    "title": "概要 - 德永デジタル美術館",
+    "heading": "德永デジタル美術館について",
+    "description": "本美術館は、德永卓磨と幸子の作品をデジタル空間で展示・保存することを目的として設立されました。",
+    "profileTitle": "作家プロフィール",
+    "profileText": "德永卓磨（Takuma Tokunaga） / 德永幸子（Sachiko Tokunaga）\nここにプロフィールや経歴などの文章を追加していきます。"
+  },
+  "en": {
+    "title": "About - Tokunaga Digital Museum",
+    "heading": "About Tokunaga Digital Museum",
+    "description": "This museum was established to exhibit and preserve the works of Takuma and Sachiko Tokunaga in a digital space.",
+    "profileTitle": "Artist Profiles",
+    "profileText": "Takuma Tokunaga / Sachiko Tokunaga\nAdd profiles, history, and other information here."
+  },
+  "sp": {
+    "title": "Acerca de - Museo Digital Tokunaga",
+    "heading": "Acerca del Museo Digital Tokunaga",
+    "description": "Este museo fue establecido para exhibir y preservar las obras de Takuma y Sachiko Tokunaga en un espacio digital.",
+    "profileTitle": "Perfiles de los Artistas",
+    "profileText": "Takuma Tokunaga / Sachiko Tokunaga\nAgregue perfiles, historia y otra información aquí."
+  }
+}
