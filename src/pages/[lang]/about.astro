@@ -10,6 +10,7 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 // ============================================================
 // 多言語メタ情報
@@ -499,15 +500,16 @@ const t = ui[lang] ?? ui.ja;
 <body>
 
   <!-- ヘッダー -->
-  <header class="page-header">
-    <a href={`/${lang}/`} class="back-link">{t.backToGallery}</a>
-    <span class="header-title">{t.memoirTitle}</span>
-    <nav class="lang-nav">
-      <a href="/ja/about" class:list={['lang-link', { active: lang === 'ja' }]}>日本語</a>
-      <a href="/en/about" class:list={['lang-link', { active: lang === 'en' }]}>English</a>
-      <a href="/sp/about" class:list={['lang-link', { active: lang === 'sp' }]}>Español</a>
-    </nav>
-  </header>
+<header class="page-header">
+  <a href={`${base}/${lang}/`} class="back-link">{t.backToGallery}</a>
+  <span class="header-title">{t.memoirTitle}</span>
+  <nav class="lang-nav">
+    <a href={`${base}/ja/about`} class:list={['lang-link', { active: lang === 'ja' }]}>日本語</a>
+    <a href={`${base}/en/about`} class:list={['lang-link', { active: lang === 'en' }]}>English</a>
+    <a href={`${base}/sp/about`} class:list={['lang-link', { active: lang === 'sp' }]}>Español</a>
+  </nav>
+</header>
+
 
   <!-- デスクトップ目次 -->
   <div class="layout">
