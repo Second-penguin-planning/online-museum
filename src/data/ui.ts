@@ -1,3 +1,4 @@
+// ✨ ここに export をつけます
 export const ui = {
   ja: {
     title: "德永デジタル美術館",
@@ -6,6 +7,8 @@ export const ui = {
     roomSelect: "展示室を選択",
     backTop: "← TOPへ戻る",
     scrollHint: "← 左右にスクロール →",
+    navAbout: "About",
+    navShop: "Shop",
     alertSummary: "概要ページは準備中です。",
     alertShop: "商品販売ページは準備中です。",
     alertPreparing: "現在整理中です。"
@@ -17,6 +20,8 @@ export const ui = {
     roomSelect: "Select a Room",
     backTop: "← Back to TOP",
     scrollHint: "← Scroll Left/Right →",
+    navAbout: "About",
+    navShop: "Shop",
     alertSummary: "The overview page is under construction.",
     alertShop: "The shop page is under construction.",
     alertPreparing: "Currently under preparation."
@@ -28,13 +33,15 @@ export const ui = {
     roomSelect: "Seleccionar Sala",
     backTop: "← Volver al INICIO",
     scrollHint: "← Desplazar Izq/Der →",
+    navAbout: "Acerca de",
+    navShop: "Tienda",
     alertSummary: "La página de resumen está en construcción.",
     alertShop: "La tienda está en construcción.",
     alertPreparing: "Actualmente en preparación."
   }
 };
 
-// 展示室の名前も翻訳対応
+// 展示室の名前も翻訳対応（こちらはexportがついていて完璧です！）
 export const rooms = {
   ja: [
     { id: 1, prefix: '１）', name: '異人館' },

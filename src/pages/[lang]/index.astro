@@ -1,7 +1,7 @@
 ---
 import artworks from '../../data/artworks.json';
 // ui.ts から辞書データをインポート
-import { ui, rooms } from '../../data/ui';
+import { ui, rooms } from '../../data/ui.ts';
 
 export function getStaticPaths() {
   return [
@@ -77,8 +77,6 @@ function getCardWidth(sizeStr) {
     <title>{t.title}</title>
     <style>
       /* --- スタイルは変更なしのため省略（あなたの元のコードをそのまま使ってください） --- */
-      /* ... (元のCSSをここに貼り付け) ... */
-      /* （※以下、主要なCSSのみ抜粋して維持します） */
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font-family: "Helvetica Neue", Arial, sans-serif; background: #111; color: #fff; overflow-x: hidden; }
       .site-header { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 25px 50px; z-index: 1000; background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%); }
@@ -118,9 +116,11 @@ function getCardWidth(sizeStr) {
       <div class="header-logo">{t.headerTitle}</div>
       <nav class="header-nav">
         <a href="#" id="navTop">{t.backTop}</a>
+        <!-- ✨ Aboutページへのリンク -->
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <a href="#" id="navExhibition">{t.roomSelect}</a>
-        <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>Shop</a>
+        <!-- ✨ Shopも多言語対応に修正 -->
+        <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>{t.navShop}</a>
         
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
