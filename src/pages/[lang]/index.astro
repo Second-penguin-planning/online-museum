@@ -1019,17 +1019,21 @@ function getCardWidth(sizeStr) {
       <div class="header-logo">{t.headerTitle}</div>
 
       <!-- PC用ナビ -->
-      <nav class="header-nav">
-        <a href="#" id="navTop">{t.backTop}</a>
-        <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
-        <a href="#" id="navExhibition">{t.roomSelect}</a>
-        <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>{t.navShop}</a>
-        <div class="lang-switcher">
-          <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
-          <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
-          <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
-        </div>
-      </nav>
+    
+<nav class="header-nav">
+  <a href="#" id="navTop">{t.backTop}</a>
+  <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
+  <a href="#" id="navExhibition">{t.roomSelect}</a>
+  <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>{t.navShop}</a>
+  <a href={`${base}/${lang}/storage/`}>保管庫</a>  <!-- ← 追加 -->
+  <div class="lang-switcher">
+    <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
+    <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
+    <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+  </div>
+</nav>
+
+
 
       <!-- ハンバーガーボタン（スマホ用） -->
       <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
@@ -1044,12 +1048,14 @@ function getCardWidth(sizeStr) {
 
     <!-- モバイルドロワーメニュー -->
     <div class="mobile-menu" id="mobileMenu">
-      <nav class="mobile-menu-nav">
-        <a href="#" id="mNavTop">{t.backTop}</a>
-        <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
-        <button id="mNavExhibition">{t.roomSelect}</button>
-        <button onclick={`alert('${t.alertShop}')`}>{t.navShop}</button>
-      </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-menu-nav">
+    <a href="#" id="mNavTop">{t.backTop}</a>
+    <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
+    <button id="mNavExhibition">{t.roomSelect}</button>
+    <button onclick={`alert('${t.alertShop}')`}>{t.navShop}</button>
+    <a href={`${base}/${lang}/storage/`}>保管庫</a>  <!-- ← 追加 -->
+  </nav>
       <div class="mobile-lang-switcher">
         <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
         <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
