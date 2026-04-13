@@ -892,7 +892,8 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <a href="#" id="navExhibition">{t.roomSelect}</a>
         <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>{t.navShop}</a>
-        <a href={`${base}/${lang}/storage/`}>保管庫</a>
+        
+<a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
           <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
@@ -918,7 +919,8 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <button id="mNavExhibition">{t.roomSelect}</button>
         <button onclick={`alert('${t.alertShop}')`}>{t.navShop}</button>
-        <a href={`${base}/${lang}/storage/`}>保管庫</a>
+        
+<a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
       </nav>
       <div class="mobile-lang-switcher">
         <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>

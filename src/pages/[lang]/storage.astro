@@ -9,6 +9,73 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// 多言語テキスト
+const storageUI = {
+  ja: {
+    nav: { gallery: 'ギャラリー', about: 'アバウト', storage: '保管庫' },
+    page: { eyebrow: 'STORAGE COLLECTION', title: '保 管 庫' },
+    lock: {
+      eyebrow: 'RESTRICTED ACCESS',
+      title: '保 管 庫',
+      btn: '入 室 す る',
+      error: 'パスワードが違います',
+    },
+    artists: {
+      takuma: { ja: '徳永 卓磨', en: 'Takuma Tokunaga' },
+      sachiko: { ja: '德永 幸子', en: 'Sachiko Tokunaga' },
+    },
+    cats: {
+      takuma: ['異人館', '神戸', 'スペイン', '静物'],
+      sachiko: ['人物', '戦争の記憶', '風景', '静物 他'],
+    },
+    preparing: '— 準備中 —',
+  },
+  en: {
+    nav: { gallery: 'Gallery', about: 'About', storage: 'Storage' },
+    page: { eyebrow: 'STORAGE COLLECTION', title: 'Storage' },
+    lock: {
+      eyebrow: 'RESTRICTED ACCESS',
+      title: 'Storage',
+      btn: 'Enter',
+      error: 'Incorrect password',
+    },
+    artists: {
+      takuma: { ja: 'Takuma Tokunaga', en: 'Takuma Tokunaga' },
+      sachiko: { ja: 'Sachiko Tokunaga', en: 'Sachiko Tokunaga' },
+    },
+    cats: {
+      takuma: ['Ijinkan', 'Kobe', 'Spain', 'Still Life'],
+      sachiko: ['People', 'Memories of War', 'Landscape', 'Still Life & Others'],
+    },
+    preparing: '— Preparing —',
+  },
+  sp: {
+    nav: { gallery: 'Galería', about: 'Acerca', storage: 'Archivo' },
+    page: { eyebrow: 'COLECCIÓN DE ARCHIVO', title: 'Archivo' },
+    lock: {
+      eyebrow: 'ACCESO RESTRINGIDO',
+      title: 'Archivo',
+      btn: 'Entrar',
+      error: 'Contraseña incorrecta',
+    },
+    artists: {
+      takuma: { ja: 'Takuma Tokunaga', en: 'Takuma Tokunaga' },
+      sachiko: { ja: 'Sachiko Tokunaga', en: 'Sachiko Tokunaga' },
+    },
+    cats: {
+      takuma: ['Ijinkan', 'Kobe', 'España', 'Naturaleza muerta'],
+      sachiko: ['Personas', 'Memorias de guerra', 'Paisaje', 'Naturaleza muerta y otros'],
+    },
+    preparing: '— En preparación —',
+  },
+};
+
+const tS = storageUI[lang];
+
+// カテゴリキー（言語によらず固定）
+const takumaCatKeys = ['ijinkan', 'kobe', 'spain', 'seibutsu'];
+const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
 ---
 
 <!DOCTYPE html>
@@ -17,10 +84,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="base-url" content={base} />
-  <title>保管庫 | Tokunaga Art Museum</title>
+  <title>{tS.page.title} | Tokunaga Art Museum</title>
 
   <style>
-    /* ========== リセット & 基本 ========== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -156,7 +222,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-    /* ========== モバイルメニュー ========== */
+    /* ========== モバイルオーバーレイ ========== */
     .mobile-overlay {
       position: fixed;
       inset: 0;
@@ -174,6 +240,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       pointer-events: auto;
     }
 
+    /* ========== モバイルメニュー ========== */
     .mobile-menu {
       position: fixed;
       top: 0; right: 0;
@@ -186,13 +253,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       );
       border-left: 1px solid rgba(212, 175, 55, 0.2);
       z-index: 1050;
+      display: flex;
       flex-direction: column;
       padding: 80px 32px 40px;
-      gap: 0;
       transform: translateX(100%);
       transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
       box-shadow: -8px 0 30px rgba(0,0,0,0.6);
-      display: flex;
       pointer-events: none;
     }
 
@@ -204,7 +270,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .mobile-menu-nav {
       display: flex;
       flex-direction: column;
-      gap: 0;
     }
 
     .mobile-menu-nav a {
@@ -219,7 +284,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       transition: color 0.3s, padding-left 0.3s;
     }
 
-    .mobile-menu-nav a:first-child { border-top: 1px solid rgba(212, 175, 55, 0.12); }
+    .mobile-menu-nav a:first-child {
+      border-top: 1px solid rgba(212, 175, 55, 0.12);
+    }
+
     .mobile-menu-nav a:hover { color: var(--gold-light); padding-left: 8px; }
     .mobile-menu-nav a.current { color: var(--gold-bright); }
 
@@ -253,9 +321,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      gap: 1.8rem;
       padding: 20px;
-
       background:
         linear-gradient(
           160deg,
@@ -282,7 +348,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       gap: 1.6rem;
     }
 
-    /* 二重枠線 */
     .lock-frame::before {
       content: '';
       position: absolute;
@@ -386,7 +451,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       text-align: center;
     }
 
-    /* 入室ボタン（index.astroのenter-btnと同系） */
     .enter-btn {
       position: relative;
       padding: 13px 44px;
@@ -435,11 +499,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       margin: 0 auto;
     }
 
-    /* ページタイトル */
     .storage-page-header {
       text-align: center;
       margin-bottom: 60px;
-      position: relative;
     }
 
     .storage-page-eyebrow {
@@ -467,10 +529,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       margin: 0 auto;
     }
 
-    /* ===== アーティストセクション ===== */
-    .artist-section {
-      margin-bottom: 70px;
-    }
+    .artist-section { margin-bottom: 70px; }
 
     .artist-header {
       display: flex;
@@ -485,8 +544,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .artist-header::before {
       content: '';
       position: absolute;
-      left: 0;
-      bottom: -1px;
+      left: 0; bottom: -1px;
       width: 60px;
       height: 1px;
       background: var(--gold-bright);
@@ -505,7 +563,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       color: var(--text-muted);
     }
 
-    /* ===== カテゴリタブ ===== */
     .category-tabs {
       display: flex;
       flex-wrap: wrap;
@@ -513,7 +570,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       margin-bottom: 28px;
     }
 
-    /* room-btnと同系デザイン */
     .tab-btn {
       position: relative;
       padding: 10px 22px;
@@ -524,7 +580,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       letter-spacing: 0.18em;
       cursor: pointer;
       border: none;
-      text-align: left;
       transition: color 0.3s, background 0.3s;
       overflow: hidden;
       -webkit-tap-highlight-color: transparent;
@@ -535,8 +590,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       content: '';
       position: absolute;
       left: 0; top: 0;
-      width: 3px;
-      height: 100%;
+      width: 3px; height: 100%;
       background: var(--gold-dim);
       transform: scaleY(0);
       transform-origin: bottom;
@@ -557,30 +611,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       color: var(--gold-light);
     }
 
+    .tab-btn.active { color: var(--gold-bright); }
+
     .tab-btn:hover::before,
-    .tab-btn.active::before {
-      transform: scaleY(1);
-    }
+    .tab-btn.active::before { transform: scaleY(1); }
 
     .tab-btn:hover::after,
-    .tab-btn.active::after {
-      border-color: rgba(212, 175, 55, 0.55);
-    }
+    .tab-btn.active::after { border-color: rgba(212, 175, 55, 0.55); }
 
-    .tab-btn.active {
-      color: var(--gold-bright);
-    }
+    .category-panel { display: none; }
+    .category-panel.active { display: block; }
 
-    /* ===== カテゴリパネル ===== */
-    .category-panel {
-      display: none;
-    }
-
-    .category-panel.active {
-      display: block;
-    }
-
-    /* ===== ギャラリーグリッド ===== */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -593,11 +634,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       -webkit-tap-highlight-color: transparent;
     }
 
-    .gallery-item:hover {
-      transform: translateY(-5px);
-    }
+    .gallery-item:hover { transform: translateY(-5px); }
 
-    /* index.astroのartwork-frameと同系 */
     .gallery-frame {
       border-style: solid;
       border-width: 10px;
@@ -628,7 +666,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       letter-spacing: 0.06em;
     }
 
-    /* 空メッセージ */
     .empty-msg {
       text-align: center;
       padding: 50px 0;
@@ -637,7 +674,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       letter-spacing: 0.3em;
     }
 
-    /* ===== セクション区切り ===== */
     .section-divider {
       display: flex;
       align-items: center;
@@ -654,8 +690,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     }
 
     .section-divider-diamond {
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       background: var(--gold-dim);
       transform: rotate(45deg);
       flex-shrink: 0;
@@ -686,9 +721,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.8),
-        inset 0 1px 0 rgba(212, 175, 55, 0.1);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(212, 175, 55, 0.1);
       -webkit-overflow-scrolling: touch;
     }
 
@@ -699,8 +732,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       border: 1px solid rgba(212, 175, 55, 0.25);
       color: var(--text-sub);
       font-size: 1rem;
-      width: 34px;
-      height: 34px;
+      width: 34px; height: 34px;
       cursor: pointer;
       transition: border-color 0.3s, color 0.3s;
       display: flex;
@@ -730,15 +762,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       .header-logo { font-size: 0.82rem; letter-spacing: 0.15em; }
       .header-nav  { display: none; }
       .hamburger   { display: flex; }
-
       #storage-main { padding: 90px 20px 60px; }
-
       .lock-frame { padding: 44px 28px; }
-
-      .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 14px;
-      }
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
     }
 
     @media (max-width: 480px) {
@@ -756,10 +782,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- PC用ナビ -->
     <nav class="header-nav">
-      <a href={`${base}/${lang}/`}>ギャラリー</a>
-      <a href={`${base}/${lang}/about/`}>アバウト</a>
-      <a href={`${base}/${lang}/storage/`} class="current">保管庫</a>
+      <a href={`${base}/${lang}/`}>{tS.nav.gallery}</a>
+      <a href={`${base}/${lang}/about/`}>{tS.nav.about}</a>
+      <a href={`${base}/${lang}/storage/`} class="current">{tS.nav.storage}</a>
       <div class="lang-switcher">
+        <!-- ★ストレージページ内で言語切替 → storage/ を維持したまま言語だけ変更 -->
         <a href={`${base}/ja/storage/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
         <a href={`${base}/en/storage/`} class={lang === 'en' ? 'active' : ''}>EN</a>
         <a href={`${base}/sp/storage/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
@@ -778,11 +805,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <!-- モバイルメニュー -->
   <div class="mobile-menu" id="mobileMenu">
     <nav class="mobile-menu-nav">
-      <a href={`${base}/${lang}/`}>ギャラリー</a>
-      <a href={`${base}/${lang}/about/`}>アバウト</a>
-      <a href={`${base}/${lang}/storage/`} class="current">保管庫</a>
+      <a href={`${base}/${lang}/`}>{tS.nav.gallery}</a>
+      <a href={`${base}/${lang}/about/`}>{tS.nav.about}</a>
+      <a href={`${base}/${lang}/storage/`} class="current">{tS.nav.storage}</a>
     </nav>
     <div class="mobile-lang-switcher">
+      <!-- ★モバイルも同様に storage/ を維持 -->
       <a href={`${base}/ja/storage/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
       <a href={`${base}/en/storage/`} class={lang === 'en' ? 'active' : ''}>EN</a>
       <a href={`${base}/sp/storage/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
@@ -793,8 +821,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <div id="password-screen">
     <div class="lock-frame">
       <div class="lock-icon-wrap">🔒</div>
-      <p class="lock-eyebrow">RESTRICTED ACCESS</p>
-      <h1 class="lock-title">保 管 庫</h1>
+      <p class="lock-eyebrow">{tS.lock.eyebrow}</p>
+      <h1 class="lock-title">{tS.lock.title}</h1>
       <div class="lock-divider">
         <div class="lock-divider-diamond"></div>
       </div>
@@ -806,40 +834,36 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         autocomplete="off"
       />
       <p id="pw-error"></p>
-      <button class="enter-btn" id="enterBtn">入 室 す る</button>
+      <button class="enter-btn" id="enterBtn">{tS.lock.btn}</button>
     </div>
   </div>
 
   <!-- ========== 保管庫メイン ========== -->
   <div id="storage-main">
-
     <div class="storage-page-header">
-      <p class="storage-page-eyebrow">STORAGE COLLECTION</p>
-      <h2 class="storage-page-title">保 管 庫</h2>
+      <p class="storage-page-eyebrow">{tS.page.eyebrow}</p>
+      <h2 class="storage-page-title">{tS.page.title}</h2>
     </div>
 
     <!-- ===== 徳永 卓磨 ===== -->
     <section class="artist-section">
       <div class="artist-header">
-        <span class="artist-name-ja">徳永 卓磨</span>
-        <span class="artist-name-en">Takuma Tokunaga</span>
+        <span class="artist-name-ja">{tS.artists.takuma.ja}</span>
+        <span class="artist-name-en">{tS.artists.takuma.en}</span>
       </div>
 
       <div class="category-tabs" data-artist="takuma">
-        <button class="tab-btn active" data-cat="ijinkan">異人館</button>
-        <button class="tab-btn"        data-cat="kobe">神戸</button>
-        <button class="tab-btn"        data-cat="spain">スペイン</button>
-        <button class="tab-btn"        data-cat="seibutsu">静物</button>
+        {takumaCatKeys.map((key, i) => (
+          <button class={`tab-btn${i === 0 ? ' active' : ''}`} data-cat={key}>
+            {tS.cats.takuma[i]}
+          </button>
+        ))}
       </div>
 
       <!-- 異人館 -->
       <div class="category-panel active" id="takuma-ijinkan">
         <div class="gallery-grid">
-          <div
-            class="gallery-item"
-            data-src={`${base}/gallery/013.jpg`}
-            data-label="013"
-          >
+          <div class="gallery-item" data-src={`${base}/gallery/013.jpg`} data-label="013">
             <div class="gallery-frame">
               <img src={`${base}/gallery/013.jpg`} alt="013" loading="lazy" />
             </div>
@@ -848,23 +872,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
 
-      <!-- 神戸 -->
       <div class="category-panel" id="takuma-kobe">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
-
-      <!-- スペイン -->
       <div class="category-panel" id="takuma-spain">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
-
-      <!-- 静物 -->
       <div class="category-panel" id="takuma-seibutsu">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
     </section>
 
-    <!-- セクション区切り -->
     <div class="section-divider">
       <div class="section-divider-diamond"></div>
     </div>
@@ -872,39 +890,32 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <!-- ===== 德永 幸子 ===== -->
     <section class="artist-section">
       <div class="artist-header">
-        <span class="artist-name-ja">德永 幸子</span>
-        <span class="artist-name-en">Sachiko Tokunaga</span>
+        <span class="artist-name-ja">{tS.artists.sachiko.ja}</span>
+        <span class="artist-name-en">{tS.artists.sachiko.en}</span>
       </div>
 
       <div class="category-tabs" data-artist="sachiko">
-        <button class="tab-btn active" data-cat="jinbutsu">人物</button>
-        <button class="tab-btn"        data-cat="sensou">戦争の記憶</button>
-        <button class="tab-btn"        data-cat="fuukei">風景</button>
-        <button class="tab-btn"        data-cat="seibutsu">静物 他</button>
+        {sachikoCatKeys.map((key, i) => (
+          <button class={`tab-btn${i === 0 ? ' active' : ''}`} data-cat={key}>
+            {tS.cats.sachiko[i]}
+          </button>
+        ))}
       </div>
 
-      <!-- 人物 -->
       <div class="category-panel active" id="sachiko-jinbutsu">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
-
-      <!-- 戦争の記憶 -->
       <div class="category-panel" id="sachiko-sensou">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
-
-      <!-- 風景 -->
       <div class="category-panel" id="sachiko-fuukei">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
-
-      <!-- 静物 他 -->
       <div class="category-panel" id="sachiko-seibutsu">
-        <p class="empty-msg">— 準備中 —</p>
+        <p class="empty-msg">{tS.preparing}</p>
       </div>
     </section>
-
-  </div><!-- /storage-main -->
+  </div>
 
   <!-- ========== ライトボックス ========== -->
   <div class="modal-overlay" id="modalOverlay">
@@ -916,51 +927,48 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </div>
 
-  <script>
-    const base = document.querySelector('meta[name="base-url"]')
-                   ?.getAttribute('content') ?? '';
-
-    /* ===== パスワード ===== */
+  <script define:vars={{ pwError: tS.lock.error }}>
+    /* ===== パスワード認証 ===== */
     const CORRECT_PW = '0714';
 
+    function showStorage() {
+      document.getElementById('password-screen').style.display = 'none';
+      document.getElementById('storage-main').style.display    = 'block';
+      // ★ストレージ認証をキーに言語コードを含めない
+      //   → どの言語でも同じキーで認証を引き継ぐ
+      sessionStorage.setItem('storage_auth', '1');
+    }
+
     function checkPassword() {
-      const input   = document.getElementById('pw-input') as HTMLInputElement;
-      const errorEl = document.getElementById('pw-error')!;
+      const input   = document.getElementById('pw-input');
+      const errorEl = document.getElementById('pw-error');
 
       if (input.value === CORRECT_PW) {
-        document.getElementById('password-screen')!.style.display = 'none';
-        document.getElementById('storage-main')!.style.display    = 'block';
-        sessionStorage.setItem('storage_auth', '1');
+        showStorage();
       } else {
         input.classList.add('error');
-        errorEl.textContent = 'パスワードが違います';
-        setTimeout(() => {
-          input.classList.remove('error');
-        }, 400);
+        errorEl.textContent = pwError;
+        setTimeout(() => input.classList.remove('error'), 400);
         input.value = '';
         input.focus();
       }
     }
 
-    // Enter キーで送信
-    document.getElementById('pw-input')!
-      .addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') checkPassword();
-      });
-
-    document.getElementById('enterBtn')!
-      .addEventListener('click', checkPassword);
-
-    // セッション維持（同タブ内なら再入力不要）
+    // ★言語切替時も認証済みなら即表示
     if (sessionStorage.getItem('storage_auth') === '1') {
-      document.getElementById('password-screen')!.style.display = 'none';
-      document.getElementById('storage-main')!.style.display    = 'block';
+      showStorage();
     }
 
+    document.getElementById('pw-input')
+      .addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPassword(); });
+
+    document.getElementById('enterBtn')
+      .addEventListener('click', checkPassword);
+
     /* ===== ハンバーガーメニュー ===== */
-    const hamburgerBtn  = document.getElementById('hamburgerBtn')!;
-    const mobileMenu    = document.getElementById('mobileMenu')!;
-    const mobileOverlay = document.getElementById('mobileOverlay')!;
+    const hamburgerBtn  = document.getElementById('hamburgerBtn');
+    const mobileMenu    = document.getElementById('mobileMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
 
     function openMobileMenu() {
       hamburgerBtn.classList.add('open');
@@ -978,33 +986,28 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     hamburgerBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      mobileMenu.classList.contains('open')
-        ? closeMobileMenu()
-        : openMobileMenu();
+      mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
     });
 
     mobileOverlay.addEventListener('click', closeMobileMenu);
 
     /* ===== カテゴリタブ ===== */
     document.querySelectorAll('.category-tabs').forEach((tabGroup) => {
-      const artist = (tabGroup as HTMLElement).dataset.artist!;
+      const artist = tabGroup.dataset.artist;
 
       tabGroup.querySelectorAll('.tab-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
-          const cat = (btn as HTMLElement).dataset.cat!;
+          const cat = btn.dataset.cat;
 
-          // ボタン active 切替
           tabGroup.querySelectorAll('.tab-btn')
             .forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
 
-          // パネル切替
-          const section = tabGroup.closest('.artist-section')!;
+          const section = tabGroup.closest('.artist-section');
           section.querySelectorAll('.category-panel')
             .forEach(p => p.classList.remove('active'));
 
-          const panelId = `${artist}-${cat}`;
-          section.querySelector(`#${panelId}`)!.classList.add('active');
+          section.querySelector(`#${artist}-${cat}`).classList.add('active');
         });
       });
     });
@@ -1012,22 +1015,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     /* ===== ライトボックス ===== */
     document.querySelectorAll('.gallery-item').forEach((item) => {
       item.addEventListener('click', () => {
-        const src   = (item as HTMLElement).dataset.src   ?? '';
-        const label = (item as HTMLElement).dataset.label ?? '';
-        (document.getElementById('modalImg') as HTMLImageElement).src = src;
-        (document.getElementById('modalImg') as HTMLImageElement).alt = label;
-        document.getElementById('modalOverlay')!.classList.add('active');
+        document.getElementById('modalImg').src = item.dataset.src ?? '';
+        document.getElementById('modalImg').alt = item.dataset.label ?? '';
+        document.getElementById('modalOverlay').classList.add('active');
       });
     });
 
-    document.getElementById('modalClose')!.addEventListener('click', () => {
-      document.getElementById('modalOverlay')!.classList.remove('active');
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('modalOverlay').classList.remove('active');
     });
 
-    document.getElementById('modalOverlay')!.addEventListener('click', (e) => {
-      if ((e.target as Element).id === 'modalOverlay') {
-        (e.target as Element).classList.remove('active');
-      }
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modalOverlay') e.target.classList.remove('active');
     });
   </script>
 

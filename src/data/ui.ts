@@ -59,3 +59,19 @@ export const rooms = {
     // ...
   ]
 };
+// ui.ts の各言語オブジェクトに追加
+ja: {
+  // ...既存のキー...
+  navStorage: '保管庫',
+  storageTitle: '保管庫',
+},
+en: {
+  // ...既存のキー...
+  navStorage: 'Storage',
+  storageTitle: 'Storage',
+},
+sp: {
+  // ...既存のキー...
+  navStorage: 'Archivo',
+  storageTitle: 'Archivo',
+},
