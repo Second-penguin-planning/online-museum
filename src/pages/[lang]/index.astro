@@ -29,19 +29,19 @@ const categorizedArtworks = artworks.map((info, i) => {
   const sat = 40 + ((i * 11) % 26);
   const lit = 25 + ((i * 13) % 16);
   const frameLight = `hsl(${hue}, ${sat}%, ${lit + 15}%)`;
-  const frameDark = `hsl(${hue}, ${sat}%, ${lit - 12}%)`;
+  const frameDark  = `hsl(${hue}, ${sat}%, ${lit - 12}%)`;
 
   return { 
     ...info, 
     category, 
     frameLight, 
     frameDark,
-    title: info.title?.[lang] || info.title?.ja,
-    artist: info.artist?.[lang] || info.artist?.ja,
-    year: info.year?.[lang] || info.year?.ja,
-    size: info.size?.[lang] || info.size?.ja,
+    title:       info.title?.[lang]       || info.title?.ja,
+    artist:      info.artist?.[lang]      || info.artist?.ja,
+    year:        info.year?.[lang]        || info.year?.ja,
+    size:        info.size?.[lang]        || info.size?.ja,
     description: info.description?.[lang] || info.description?.ja,
-    rawSizeJa: info.size?.ja
+    rawSizeJa:   info.size?.ja
   };
 });
 
@@ -125,7 +125,8 @@ function getCardWidth(sizeStr) {
         gap: 28px;
       }
 
-      .header-nav a {
+      .header-nav a,
+      .header-nav button {
         color: var(--text-sub);
         text-decoration: none;
         font-size: 0.82rem;
@@ -134,9 +135,15 @@ function getCardWidth(sizeStr) {
         transition: opacity 0.3s, color 0.3s, transform 0.3s;
         text-shadow: 0 2px 8px rgba(0,0,0,0.9);
         white-space: nowrap;
+        background: none;
+        border: none;
+        font-family: inherit;
+        cursor: pointer;
+        padding: 0;
       }
 
-      .header-nav a:hover {
+      .header-nav a:hover,
+      .header-nav button:hover {
         opacity: 1;
         color: var(--gold-light);
         transform: translateY(-1px);
@@ -569,7 +576,7 @@ function getCardWidth(sizeStr) {
       }
 
       .room-btn:hover::before { transform: scaleY(1); }
-      .room-btn:hover::after { border-color: rgba(212, 175, 55, 0.55); }
+      .room-btn:hover::after  { border-color: rgba(212, 175, 55, 0.55); }
 
       .room-btn-number {
         display: block;
@@ -723,7 +730,7 @@ function getCardWidth(sizeStr) {
         border-color: var(--gold-bright);
       }
 
-      .scroll-arrow.left { left: 6px; }
+      .scroll-arrow.left  { left: 6px; }
       .scroll-arrow.right { right: 6px; }
 
       .artwork-card {
@@ -891,9 +898,8 @@ function getCardWidth(sizeStr) {
         <a href="#" id="navTop">{t.backTop}</a>
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <a href="#" id="navExhibition">{t.roomSelect}</a>
-        <a href="#" onclick={`alert('${t.alertShop}'); return false;`}>{t.navShop}</a>
-        
-<a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
+        <button id="navShop">{t.navShop}</button>
+        <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
           <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
@@ -901,7 +907,7 @@ function getCardWidth(sizeStr) {
         </div>
       </nav>
 
-      <!-- ハンバーガーボタン（スマホ用） -->
+      <!-- ハンバーガーボタン -->
       <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
         <span></span>
         <span></span>
@@ -909,18 +915,17 @@ function getCardWidth(sizeStr) {
       </button>
     </header>
 
-    <!-- モバイルメニュー背景オーバーレイ -->
+    <!-- モバイルオーバーレイ -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
 
-    <!-- ★修正: <div class="mobile-menu"> の二重タグを削除、閉じタグを正しく1つに -->
+    <!-- モバイルメニュー -->
     <div class="mobile-menu" id="mobileMenu">
       <nav class="mobile-menu-nav">
         <a href="#" id="mNavTop">{t.backTop}</a>
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <button id="mNavExhibition">{t.roomSelect}</button>
-        <button onclick={`alert('${t.alertShop}')`}>{t.navShop}</button>
-        
-<a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
+        <button id="mNavShop">{t.navShop}</button>
+        <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
       </nav>
       <div class="mobile-lang-switcher">
         <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
@@ -928,7 +933,6 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
       </div>
     </div>
-    <!-- ★ここまでが mobile-menu の正しい閉じ -->
 
     <!-- ヒーロー / 入口 -->
     <div class="entrance" id="entrance">
@@ -1005,14 +1009,16 @@ function getCardWidth(sizeStr) {
         <h3 class="modal-title" id="modalTitle"></h3>
         <p class="modal-meta">
           <span id="modalArtist"></span>
-          <span class="sep">&ensp;/&ensp;</span><span id="modalYear"></span>
-          <span class="sep">&ensp;/&ensp;</span><span id="modalSize"></span>
+          <span class="sep">&ensp;/&ensp;</span>
+          <span id="modalYear"></span>
+          <span class="sep">&ensp;/&ensp;</span>
+          <span id="modalSize"></span>
         </p>
         <div class="modal-description" id="modalDescription"></div>
       </div>
     </div>
 
-    <script define:vars={{ alertPreparing: t.alertPreparing }}>
+    <script define:vars={{ alertPreparing: t.alertPreparing, alertShop: t.alertShop }}>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
       const entrance     = document.getElementById('entrance');
       const roomSelector = document.getElementById('roomSelector');
@@ -1023,6 +1029,15 @@ function getCardWidth(sizeStr) {
       const mobileMenu    = document.getElementById('mobileMenu');
       const mobileOverlay = document.getElementById('mobileOverlay');
 
+      // ショップアラート
+      document.getElementById('navShop').addEventListener('click', () => {
+        alert(alertShop);
+      });
+      document.getElementById('mNavShop').addEventListener('click', () => {
+        alert(alertShop);
+      });
+
+      // モバイルメニュー開閉
       function openMobileMenu() {
         hamburgerBtn.classList.add('open');
         mobileMenu.classList.add('open');
@@ -1048,6 +1063,7 @@ function getCardWidth(sizeStr) {
 
       mobileOverlay.addEventListener('click', closeMobileMenu);
 
+      // 画面遷移
       function showEntrance() {
         entrance.classList.remove('hidden');
         roomSelector.classList.add('hidden');
@@ -1071,13 +1087,10 @@ function getCardWidth(sizeStr) {
         showEntrance();
       });
       document.getElementById('backToTopFromSelector').addEventListener('click', showEntrance);
-
-      const enterBtn = document.getElementById('enterBtn');
-      enterBtn.addEventListener('click', (e) => {
+      document.getElementById('enterBtn').addEventListener('click', (e) => {
         e.preventDefault();
         showSelector();
       });
-
       document.getElementById('mNavTop').addEventListener('click', (e) => {
         e.preventDefault();
         showEntrance();
@@ -1087,6 +1100,7 @@ function getCardWidth(sizeStr) {
         showSelector();
       });
 
+      // 展示室選択
       document.querySelectorAll('.room-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const roomId   = btn.dataset.room;
@@ -1116,6 +1130,7 @@ function getCardWidth(sizeStr) {
         });
       });
 
+      // スクロール矢印
       document.getElementById('arrowLeft').addEventListener('click', () => {
         galleryTrack.scrollBy({ left: -360, behavior: 'smooth' });
       });
@@ -1123,6 +1138,7 @@ function getCardWidth(sizeStr) {
         galleryTrack.scrollBy({ left: 360, behavior: 'smooth' });
       });
 
+      // アートワークモーダル
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.addEventListener('click', () => {
           document.getElementById('modalImg').src                 = `${base}/gallery/${card.dataset.file}`;

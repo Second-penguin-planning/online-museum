@@ -1,77 +1,61 @@
-// ✨ ここに export をつけます
 export const ui = {
   ja: {
-    title: "德永デジタル美術館",
-    headerTitle: "德永卓磨と幸子の絵画をご覧ください",
-    enter: "― 入　館 ―",
-    roomSelect: "展示室を選択",
-    backTop: "← TOPへ戻る",
-    scrollHint: "← 左右にスクロール →",
-    navAbout: "About",
-    navShop: "Shop",
-    alertSummary: "概要ページは準備中です。",
-    alertShop: "商品販売ページは準備中です。",
-    alertPreparing: "現在整理中です。"
+    title:          '德永美術館',
+    headerTitle:    'TOKUNAGA ART MUSEUM',
+    enter:          '入　館　す　る',
+    roomSelect:     '展示室を選ぶ',
+    backTop:        'トップへ戻る',
+    scrollHint:     'SCROLL TO EXPLORE',
+    navAbout:       'アバウト',
+    navShop:        'ショップ',
+    navStorage:     '保管庫',
+    alertShop:      'ショップは準備中です',
+    alertPreparing: 'この展示室は準備中です',
   },
   en: {
-    title: "Tokunaga Digital Museum",
-    headerTitle: "Enjoy the paintings by Takuma and Sachiko Tokunaga",
-    enter: "― ENTER ―",
-    roomSelect: "Select a Room",
-    backTop: "← Back to TOP",
-    scrollHint: "← Scroll Left/Right →",
-    navAbout: "About",
-    navShop: "Shop",
-    alertSummary: "The overview page is under construction.",
-    alertShop: "The shop page is under construction.",
-    alertPreparing: "Currently under preparation."
+    title:          'Tokunaga Art Museum',
+    headerTitle:    'TOKUNAGA ART MUSEUM',
+    enter:          'Enter the Museum',
+    roomSelect:     'Select a Room',
+    backTop:        'Back to Top',
+    scrollHint:     'SCROLL TO EXPLORE',
+    navAbout:       'About',
+    navShop:        'Shop',
+    navStorage:     'Storage',
+    alertShop:      'The shop is coming soon.',
+    alertPreparing: 'This room is under preparation.',
   },
   sp: {
-    title: "Museo Digital Tokunaga",
-    headerTitle: "Disfruta de las pinturas de Takuma y Sachiko Tokunaga",
-    enter: "― ENTRAR ―",
-    roomSelect: "Seleccionar Sala",
-    backTop: "← Volver al INICIO",
-    scrollHint: "← Desplazar Izq/Der →",
-    navAbout: "Acerca de",
-    navShop: "Tienda",
-    alertSummary: "La página de resumen está en construcción.",
-    alertShop: "La tienda está en construcción.",
-    alertPreparing: "Actualmente en preparación."
-  }
-};
+    title:          'Museo de Arte Tokunaga',
+    headerTitle:    'TOKUNAGA ART MUSEUM',
+    enter:          'Entrar al Museo',
+    roomSelect:     'Seleccionar sala',
+    backTop:        'Volver al inicio',
+    scrollHint:     'DESPLÁZATE PARA EXPLORAR',
+    navAbout:       'Acerca',
+    navShop:        'Tienda',
+    navStorage:     'Archivo',
+    alertShop:      'La tienda está en preparación.',
+    alertPreparing: 'Esta sala está en preparación.',
+  },
+} as const;
 
-// 展示室の名前も翻訳対応（こちらはexportがついていて完璧です！）
+export type Lang = keyof typeof ui;
+
 export const rooms = {
   ja: [
-    { id: 1, prefix: '１）', name: '異人館' },
-    { id: 2, prefix: '２）', name: 'ラ・マンチャ' },
-    // ...
+    { id: '1', name: '徳永 卓磨',   prefix: '' },
+    { id: '2', name: '德永 幸子',   prefix: '' },
+    { id: '3', name: '準備中',      prefix: '' },
   ],
   en: [
-    { id: 1, prefix: '1) ', name: 'Ijinkan' },
-    { id: 2, prefix: '2) ', name: 'La Mancha' },
-    // ...
+    { id: '1', name: 'Takuma Tokunaga', prefix: '' },
+    { id: '2', name: 'Yukiiko Tokunaga', prefix: '' },
+    { id: '3', name: 'Coming Soon',     prefix: '' },
   ],
   sp: [
-    { id: 1, prefix: '1) ', name: 'Casa Extranjera' },
-    { id: 2, prefix: '2) ', name: 'La Mancha' },
-    // ...
-  ]
-};
-// ui.ts の各言語オブジェクトに追加
-ja: {
-  // ...既存のキー...
-  navStorage: '保管庫',
-  storageTitle: '保管庫',
-},
-en: {
-  // ...既存のキー...
-  navStorage: 'Storage',
-  storageTitle: 'Storage',
-},
-sp: {
-  // ...既存のキー...
-  navStorage: 'Archivo',
-  storageTitle: 'Archivo',
-},
+    { id: '1', name: 'Takuma Tokunaga', prefix: '' },
+    { id: '2', name: 'Yukiko Tokunaga', prefix: '' },
+    { id: '3', name: 'Próximamente',    prefix: '' },
+  ],
+} as const;
