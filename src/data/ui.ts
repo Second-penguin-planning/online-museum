@@ -1,16 +1,16 @@
 export const ui = {
   ja: {
-    title:          '德永美術館',
+    title:          '德永アートミュージアム',
     headerTitle:    'TOKUNAGA ART MUSEUM',
     enter:          '入　館　す　る',
-    roomSelect:     '展示室を選ぶ',
+    roomSelect:     'ギャラリーを選ぶ',
     backTop:        'トップへ戻る',
     scrollHint:     'SCROLL TO EXPLORE',
     navAbout:       'アバウト',
     navShop:        'ショップ',
-    navStorage:     '保管庫',
+    navStorage:     '所蔵庫',
     alertShop:      'ショップは準備中です',
-    alertPreparing: 'この展示室は準備中です',
+    alertPreparing: 'このギャラリーは準備中です',
   },
   en: {
     title:          'Tokunaga Art Museum',
