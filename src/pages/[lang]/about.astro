@@ -26,13 +26,15 @@ const currentMeta = meta[lang] ?? meta.ja;
 // 章データ（全29章）
 // ============================================================
 const chapters = [
-  {
+   {
     id: 'ch01',
     ja: {
       title: '第一章　生い立ち',
-      content: `昭和十四年（一九三九）、父は神戸に生まれた。その後、戦時中の混乱の中で家族とともに岡山へ疎開し、終戦を迎えてから再び神戸へ戻った。私はその神戸で育ち、幼少期の記憶の底には港町の潮風と、六甲の山並みが沈んでいる。父は小学校の図画教師であり、休日には水彩道具を抱えて海辺や山へ出かけた。その背中を追うように、私も紙と鉛筆を手に外へ向かった。
+      content: `昭和十四年（一九三九）、父は神戸に生まれた。その後、戦時中の混乱の中で家族とともに岡山へ疎開し、終戦を迎えてから再び神戸へ戻った。私はその神戸で育った。しかし父は戦争で帰らぬ人となり、私は幼くして父を失った。幼少期の記憶の底には、港町の潮風と、六甲の山並みと、そして父のいない静かな家の空気が沈んでいる。
 
 描くことが先にあった。記すことはその後についてきた。昔の母親は子供に何かを説明するとき、小さな紙切れに鉛筆で下手な絵を描いて見せた。言葉よりも先に、線があった。そういう環境の中で、私の「描く」という行為は始まった。
+
+家の近くを流れる都賀川は、私にとって最初の「現場」だった。小さな川だが、季節ごとに水の色が変わり、石の上を走る光の形が一日のうちに何度も変わった。じっとそれを見ていることが好きだった。何かを描こうとしてそこに行くのではなく、ただ見るためにそこへ行った。今思えば、その習慣が私の目を育てたのだと思う。
 
 小学生の頃、持っていないのに誰かが使っている椅子付きの勉強机（私はお膳を使っていた）を正確に図面として描き、田中先生という女性の先生に頭上に掲げて褒めていただいた。図面は製図であって本来の絵ではないが、人から認められるという体験が、描くことへの自信を育てた。
 
@@ -40,9 +42,11 @@ const chapters = [
     },
     en: {
       title: 'Chapter 1  Origins',
-      content: `My father was born in Kobe in 1939. During the wartime turmoil, the family evacuated to Okayama, and after the war ended they returned to Kobe. I grew up in that Kobe, and at the bottom of my childhood memories lie the salt breeze of a port town and the ridge of the Rokko mountains. My father was an elementary school art teacher who would head to the seaside or mountains on holidays carrying his watercolor kit. Following in his footsteps, I too would make my way outside with paper and pencil in hand.
+      content: `My father was born in Kobe in 1939. During the wartime turmoil, the family evacuated to Okayama, and after the war ended they returned to Kobe. I grew up in that city. But my father did not come home from the war—I lost him while I was still very young. At the bottom of my childhood memories lie the salt breeze of a port town, the ridge of the Rokko mountains, and the quiet air of a house without a father.
 
 Drawing came first. Recording came after. In the old days, mothers would sketch rough pictures on small scraps of paper to explain things to their children. Before words, there were lines. It was in that environment that my act of "drawing" began.
+
+The Toga River, which flowed near our home, was for me the first "site." It was a small river, but the color of the water changed with the seasons, and the shapes of light running across the stones shifted many times throughout a single day. I loved to stand still and watch. I did not go there to draw anything in particular—I went simply to see. Looking back now, I believe that habit was what trained my eye.
 
 In elementary school, I once drew a precise diagram of a desk chair with attached study surface—something I didn't own but had observed others using (I used a low dining table). My female teacher, Ms. Tanaka, held it up over her head and praised it before the class. A diagram is drafting, not painting in the true sense, but the experience of being recognized planted confidence in me.
 
@@ -50,15 +54,18 @@ During the postwar chaos, materials were scarce, and I drew pictures in newspape
     },
     sp: {
       title: 'Capítulo 1  Orígenes',
-      content: `Mi padre nació en Kobe en 1939. Durante los turbulentos tiempos de guerra, la familia se evacuó a Okayama, y tras el fin de la guerra regresaron a Kobe. Yo crecí en esa ciudad, y en el fondo de mis recuerdos de infancia yacen la brisa salada de una ciudad portuaria y la silueta de las montañas Rokko. Mi padre era maestro de arte en una escuela primaria y los días festivos salía hacia la orilla del mar o las montañas cargando sus útiles de acuarela. Siguiendo sus pasos, yo también me dirigía al exterior con papel y lápiz en mano.
+      content: `Mi padre nació en Kobe en 1939. Durante los turbulentos tiempos de guerra, la familia se evacuó a Okayama, y tras el fin de la guerra regresaron a Kobe. Yo crecí en esa ciudad. Pero mi padre no regresó de la guerra: lo perdí siendo aún muy pequeño. En el fondo de mis recuerdos de infancia yacen la brisa salada de una ciudad portuaria, la silueta de las montañas Rokko y el aire silencioso de una casa sin padre.
 
 Dibujar venía primero. Registrar venía después. Antiguamente, las madres dibujaban bocetos toscos en pequeños trozos de papel para explicarles cosas a sus hijos. Antes que las palabras, estaban las líneas. Fue en ese entorno donde comenzó mi acto de "dibujar".
+
+El río Toga, que fluía cerca de nuestra casa, fue para mí el primer "lugar". Era un río pequeño, pero el color del agua cambiaba con las estaciones, y las formas de la luz que corría sobre las piedras se transformaban muchas veces a lo largo de un solo día. Me encantaba quedarme quieto y observar. No iba allí con la intención de dibujar nada en particular: iba simplemente para ver. Mirando atrás ahora, creo que ese hábito fue lo que entrenó mi ojo.
 
 En la escuela primaria, una vez dibujé un diagrama preciso de un escritorio con silla incorporada —algo que yo no poseía pero había observado que otros usaban (yo usaba una mesa baja de comedor)—. Mi maestra, la señorita Tanaka, lo sostuvo en alto ante la clase y me elogió. Un diagrama es dibujo técnico, no pintura en el verdadero sentido, pero la experiencia de ser reconocido sembró en mí la confianza en el dibujo.
 
 Durante el caos de la posguerra, los materiales escaseaban y dibujaba en los márgenes de los periódicos en lugar de en papel de dibujo. Solo tenía tres lápices de colores —rojo, azul y negro— y aprendí a expresar el mundo con tres colores. No dibujaba más que acorazados y vaqueros a caballo de las películas del oeste. Con el tiempo, tanto yo como quienes me rodeaban aceptamos esto como prueba de que yo sabía "dibujar bien". Quizás desde niño ya estaba aprendiendo con el cuerpo que la restricción es la madre de la creatividad.`,
     },
   },
+
   {
     id: 'ch02',
     ja: {
