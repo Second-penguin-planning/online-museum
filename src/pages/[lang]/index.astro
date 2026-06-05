@@ -25,11 +25,11 @@ const categorizedArtworks = artworks.map((info, i) => {
     else if (num >= 7 && num <= 12) category = 2;
   }
   
-  const hue = 30 + ((i * 7) % 16);
-  const sat = 40 + ((i * 11) % 26);
-  const lit = 25 + ((i * 13) % 16);
-  const frameLight = `hsl(${hue}, ${sat}%, ${lit + 15}%)`;
-  const frameDark  = `hsl(${hue}, ${sat}%, ${lit - 12}%)`;
+  const hue = (i * 47) % 360;
+  const sat = 18 + ((i * 7) % 14);
+  const lit = 28 + ((i * 11) % 12);
+  const frameLight = `hsl(${hue}, ${sat}%, ${lit + 12}%)`;
+  const frameDark  = `hsl(${hue}, ${sat}%, ${lit - 10}%)`;
 
   return { 
     ...info, 
@@ -993,6 +993,8 @@ function getCardWidth(sizeStr) {
               data-year={info.year}
               data-size={info.size}
               data-description={info.description}
+              data-frame-light={info.frameLight}
+              data-frame-dark={info.frameDark}
             >
               <div class="artwork-frame">
                 <img src={`${base}/gallery/${info.file}`} alt={info.title} loading="lazy" />
@@ -1013,7 +1015,9 @@ function getCardWidth(sizeStr) {
       <div class="modal">
         <button class="modal-close" id="modalClose">✕</button>
         <div style="text-align: center; margin-bottom: 20px;">
-          <img id="modalImg" src="" style="max-width: 100%; max-height: 50vh; object-fit: contain;" />
+          <div id="modalFrame" style="display: inline-block; border-style: solid; border-width: 18px; border-radius: 6px; box-shadow: 8px 12px 32px rgba(0,0,0,0.85), 0 0 0 1px rgba(0,0,0,0.4), inset 0 0 20px rgba(0,0,0,0.3);">
+            <img id="modalImg" src="" style="max-width: 100%; max-height: 48vh; object-fit: contain; display: block;" />
+          </div>
         </div>
         <h3 class="modal-title" id="modalTitle"></h3>
         <p class="modal-meta">
@@ -1156,6 +1160,10 @@ function getCardWidth(sizeStr) {
           document.getElementById('modalYear').textContent        = card.dataset.year;
           document.getElementById('modalSize').textContent        = card.dataset.size;
           document.getElementById('modalDescription').textContent = card.dataset.description;
+          const frameLight = card.dataset.frameLight;
+          const frameDark  = card.dataset.frameDark;
+          const modalFrame = document.getElementById('modalFrame');
+          modalFrame.style.borderColor = `${frameLight} ${frameDark} ${frameDark} ${frameLight}`;
           document.getElementById('modalOverlay').classList.add('active');
         });
       });
