@@ -756,6 +756,248 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       object-fit: contain;
     }
 
+    /* ========== 管理者ボタン ========== */
+    .admin-btn-wrap {
+      text-align: right;
+      margin-bottom: 40px;
+    }
+
+    .admin-open-btn {
+      background: none;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      padding: 8px 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .admin-open-btn:hover {
+      color: var(--gold-dim);
+      border-color: rgba(212, 175, 55, 0.45);
+    }
+
+    /* ========== 管理者モーダル共通 ========== */
+    .admin-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 1, 1, 0.96);
+      z-index: 3000;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-y: auto;
+      padding: 40px 16px 60px;
+      backdrop-filter: blur(6px);
+    }
+
+    .admin-modal-overlay.active { display: flex; }
+
+    .admin-modal {
+      background: linear-gradient(160deg, #1e0606 0%, #120303 100%);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      padding: 40px 32px 48px;
+      width: 100%;
+      max-width: 680px;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(212, 175, 55, 0.12);
+      margin: auto;
+    }
+
+    .admin-modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: none;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      color: var(--text-sub);
+      font-size: 1rem;
+      width: 34px; height: 34px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .admin-modal-close:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+    .admin-modal-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .admin-modal-title {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      color: var(--text-main);
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    /* ========== 管理者パスワード ========== */
+    #admin-pw-screen { text-align: center; }
+
+    #admin-pw-input {
+      background: rgba(74, 10, 10, 0.4);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 1.6rem;
+      letter-spacing: 0.5em;
+      padding: 0.6rem 1.2rem;
+      text-align: center;
+      width: 200px;
+      outline: none;
+      margin: 0 auto 12px;
+      display: block;
+      transition: border-color 0.3s;
+    }
+
+    #admin-pw-input:focus { border-color: var(--gold-bright); }
+    #admin-pw-input.error { border-color: #c04040; animation: shake 0.35s ease; }
+
+    #admin-pw-error {
+      color: #c06060;
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      min-height: 1.2em;
+      margin-bottom: 16px;
+    }
+
+    /* ========== 作品登録フォーム ========== */
+    .form-section {
+      margin-bottom: 28px;
+    }
+
+    .form-section-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.4em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+    .form-row.one   { grid-template-columns: 1fr; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(74, 10, 10, 0.35);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 72px;
+      line-height: 1.6;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--gold-bright); }
+
+    .form-group select option { background: #2a0808; }
+
+    .github-token-note {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .github-token-note a {
+      color: var(--gold-dim);
+    }
+
+    .form-submit-btn {
+      position: relative;
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      color: var(--gold-bright);
+      font-family: inherit;
+      font-size: 0.82rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      overflow: hidden;
+      transition: color 0.45s ease;
+      margin-top: 10px;
+    }
+
+    .form-submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--gold-dim);
+      transition: border-color 0.45s;
+    }
+
+    .form-submit-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-bright);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+      z-index: -1;
+    }
+
+    .form-submit-btn:hover { color: var(--crimson-deep); }
+    .form-submit-btn:hover::before { border-color: var(--gold-bright); }
+    .form-submit-btn:hover::after { transform: scaleX(1); }
+    .form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #form-status {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      min-height: 1.4em;
+    }
+
+    #form-status.success { color: #70c080; }
+    #form-status.error   { color: #c06060; }
+    #form-status.loading { color: var(--gold-dim); }
+
     /* ========== レスポンシブ ========== */
     @media (max-width: 768px) {
       .site-header { padding: 12px 18px; }
@@ -765,6 +1007,9 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       #storage-main { padding: 90px 20px 60px; }
       .lock-frame { padding: 44px 28px; }
       .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+      .admin-modal { padding: 32px 20px 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-row.three { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -845,6 +1090,11 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       <h2 class="storage-page-title">{tS.page.title}</h2>
     </div>
 
+    <!-- 管理者ボタン -->
+    <div class="admin-btn-wrap">
+      <button class="admin-open-btn" id="adminOpenBtn">⚙ ADMIN</button>
+    </div>
+
     <!-- ===== 徳永 卓磨 ===== -->
     <section class="artist-section">
       <div class="artist-header">
@@ -915,6 +1165,135 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
         <p class="empty-msg">{tS.preparing}</p>
       </div>
     </section>
+  </div>
+
+  <!-- ========== 管理者パスワードモーダル ========== -->
+  <div class="admin-modal-overlay" id="adminPwOverlay">
+    <div class="admin-modal" style="max-width:420px;">
+      <button class="admin-modal-close" id="adminPwClose">✕</button>
+      <p class="admin-modal-eyebrow">ADMIN ACCESS</p>
+      <h2 class="admin-modal-title">管 理 者 認 証</h2>
+      <div id="admin-pw-screen">
+        <input id="admin-pw-input" type="password" maxlength="20" placeholder="· · · · · ·" autocomplete="off" />
+        <p id="admin-pw-error"></p>
+        <button class="enter-btn" id="adminPwEnterBtn" style="margin:0 auto; display:block;">認 証 す る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 作品登録モーダル ========== -->
+  <div class="admin-modal-overlay" id="adminFormOverlay">
+    <div class="admin-modal">
+      <button class="admin-modal-close" id="adminFormClose">✕</button>
+      <p class="admin-modal-eyebrow">ARTWORK REGISTRATION</p>
+      <h2 class="admin-modal-title">作 品 情 報 登 録</h2>
+
+      <form id="artworkForm" autocomplete="off">
+
+        <!-- 基本情報 -->
+        <div class="form-section">
+          <p class="form-section-title">基本情報</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ファイル名（例: 01011.jpg）</label>
+              <input type="text" id="f-file" placeholder="01011.jpg" required />
+            </div>
+            <div class="form-group">
+              <label>作者</label>
+              <select id="f-artist">
+                <option value="takuma">徳永 卓磨</option>
+                <option value="sachiko">徳永 幸子</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- タイトル -->
+        <div class="form-section">
+          <p class="form-section-title">タイトル</p>
+          <div class="form-row three">
+            <div class="form-group">
+              <label>日本語</label>
+              <input type="text" id="f-title-ja" placeholder="作品名" required />
+            </div>
+            <div class="form-group">
+              <label>英語</label>
+              <input type="text" id="f-title-en" placeholder="Title" required />
+            </div>
+            <div class="form-group">
+              <label>スペイン語</label>
+              <input type="text" id="f-title-sp" placeholder="Título" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- 年・サイズ -->
+        <div class="form-section">
+          <p class="form-section-title">年・サイズ</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>制作年（日本語）例: 2024年</label>
+              <input type="text" id="f-year-ja" placeholder="2024年" required />
+            </div>
+            <div class="form-group">
+              <label>制作年（英語）例: 2024</label>
+              <input type="text" id="f-year-en" placeholder="2024" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>サイズ（日本語）例: 40号</label>
+              <input type="text" id="f-size-ja" placeholder="40号" required />
+            </div>
+            <div class="form-group">
+              <label>サイズ（英語）例: No. 40</label>
+              <input type="text" id="f-size-en" placeholder="No. 40" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- 説明 -->
+        <div class="form-section">
+          <p class="form-section-title">説明文</p>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>日本語</label>
+              <textarea id="f-desc-ja" placeholder="作品の説明（日本語）" required></textarea>
+            </div>
+          </div>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>英語</label>
+              <textarea id="f-desc-en" placeholder="Description in English" required></textarea>
+            </div>
+          </div>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>スペイン語</label>
+              <textarea id="f-desc-sp" placeholder="Descripción en español" required></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- GitHub トークン -->
+        <div class="form-section">
+          <p class="form-section-title">GitHub 認証</p>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>Personal Access Token</label>
+              <input type="password" id="f-token" placeholder="ghp_xxxxxxxxxxxx" required />
+              <p class="github-token-note">
+                GitHubの Settings → Developer settings → Personal access tokens で発行。<br>
+                「Contents: Read and Write」権限が必要です。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit-btn" id="formSubmitBtn">登 録 す る</button>
+        <p id="form-status"></p>
+      </form>
+    </div>
   </div>
 
   <!-- ========== ライトボックス ========== -->
@@ -1027,6 +1406,139 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
 
     document.getElementById('modalOverlay').addEventListener('click', (e) => {
       if (e.target.id === 'modalOverlay') e.target.classList.remove('active');
+    });
+
+    /* ===== 管理者パネル ===== */
+    const ADMIN_PW = 'art2024admin';
+
+    const adminOpenBtn    = document.getElementById('adminOpenBtn');
+    const adminPwOverlay  = document.getElementById('adminPwOverlay');
+    const adminPwClose    = document.getElementById('adminPwClose');
+    const adminPwInput    = document.getElementById('admin-pw-input');
+    const adminPwError    = document.getElementById('admin-pw-error');
+    const adminPwEnterBtn = document.getElementById('adminPwEnterBtn');
+    const adminFormOverlay = document.getElementById('adminFormOverlay');
+    const adminFormClose  = document.getElementById('adminFormClose');
+
+    adminOpenBtn.addEventListener('click', () => {
+      if (sessionStorage.getItem('admin_auth') === '1') {
+        adminFormOverlay.classList.add('active');
+      } else {
+        adminPwOverlay.classList.add('active');
+        adminPwInput.focus();
+      }
+    });
+
+    adminPwClose.addEventListener('click', () => adminPwOverlay.classList.remove('active'));
+    adminFormClose.addEventListener('click', () => adminFormOverlay.classList.remove('active'));
+
+    adminPwOverlay.addEventListener('click', (e) => {
+      if (e.target === adminPwOverlay) adminPwOverlay.classList.remove('active');
+    });
+    adminFormOverlay.addEventListener('click', (e) => {
+      if (e.target === adminFormOverlay) adminFormOverlay.classList.remove('active');
+    });
+
+    function checkAdminPw() {
+      if (adminPwInput.value === ADMIN_PW) {
+        sessionStorage.setItem('admin_auth', '1');
+        adminPwOverlay.classList.remove('active');
+        adminPwInput.value = '';
+        adminPwError.textContent = '';
+        adminFormOverlay.classList.add('active');
+      } else {
+        adminPwInput.classList.add('error');
+        adminPwError.textContent = 'パスワードが違います';
+        setTimeout(() => adminPwInput.classList.remove('error'), 400);
+        adminPwInput.value = '';
+        adminPwInput.focus();
+      }
+    }
+
+    adminPwEnterBtn.addEventListener('click', checkAdminPw);
+    adminPwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkAdminPw(); });
+
+    /* ===== 作品登録フォーム ===== */
+    const ARTIST_MAP = {
+      takuma:  { ja: '徳永卓磨', en: 'Takuma Tokunaga',  sp: 'Takuma Tokunaga' },
+      sachiko: { ja: '徳永幸子', en: 'Sachiko Tokunaga', sp: 'Sachiko Tokunaga' },
+    };
+
+    const GITHUB_API = 'https://api.github.com/repos/Second-penguin-planning/online-museum/contents/src/data/artworks.json';
+
+    document.getElementById('artworkForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const statusEl  = document.getElementById('form-status');
+      const submitBtn = document.getElementById('formSubmitBtn');
+      const token     = document.getElementById('f-token').value.trim();
+      const artistKey = document.getElementById('f-artist').value;
+      const artist    = ARTIST_MAP[artistKey];
+
+      const sizeJa = document.getElementById('f-size-ja').value.trim();
+      const sizeEn = document.getElementById('f-size-en').value.trim();
+      const spSize = sizeEn.replace('No.', 'Nº');
+
+      const yearJa = document.getElementById('f-year-ja').value.trim();
+      const yearEn = document.getElementById('f-year-en').value.trim();
+
+      const newEntry = {
+        file:        document.getElementById('f-file').value.trim(),
+        title:       { ja: document.getElementById('f-title-ja').value.trim(), en: document.getElementById('f-title-en').value.trim(), sp: document.getElementById('f-title-sp').value.trim() },
+        artist:      { ja: artist.ja, en: artist.en, sp: artist.sp },
+        year:        { ja: yearJa, en: yearEn, sp: yearEn },
+        size:        { ja: sizeJa, en: sizeEn, sp: spSize },
+        description: { ja: document.getElementById('f-desc-ja').value.trim(), en: document.getElementById('f-desc-en').value.trim(), sp: document.getElementById('f-desc-sp').value.trim() },
+      };
+
+      statusEl.textContent  = '送信中...';
+      statusEl.className    = 'loading';
+      submitBtn.disabled    = true;
+
+      try {
+        // 現在のartworks.jsonを取得
+        const getRes = await fetch(GITHUB_API, {
+          headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+
+        if (!getRes.ok) throw new Error(`ファイル取得エラー (${getRes.status})`);
+
+        const fileData = await getRes.json();
+        const current  = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
+        current.push(newEntry);
+
+        const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+
+        // 更新コミット
+        const putRes = await fetch(GITHUB_API, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `作品情報追加: ${newEntry.file}`,
+            content: newContent,
+            sha: fileData.sha,
+          }),
+        });
+
+        if (!putRes.ok) {
+          const err = await putRes.json();
+          throw new Error(err.message || `保存エラー (${putRes.status})`);
+        }
+
+        statusEl.textContent = '✓ 登録が完了しました。サイトに反映されるまで数分かかります。';
+        statusEl.className   = 'success';
+        document.getElementById('artworkForm').reset();
+
+      } catch (err) {
+        statusEl.textContent = `エラー: ${err.message}`;
+        statusEl.className   = 'error';
+      } finally {
+        submitBtn.disabled = false;
+      }
     });
   </script>
 
