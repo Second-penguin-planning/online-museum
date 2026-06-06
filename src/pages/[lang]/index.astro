@@ -329,7 +329,7 @@ function getCardWidth(sizeStr) {
 
       .hero-inner {
         position: absolute;
-        bottom: 22%;
+        bottom: 28%;
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
@@ -398,42 +398,18 @@ function getCardWidth(sizeStr) {
         position: relative;
         padding: 14px 48px;
         background: transparent;
-        color: var(--gold-bright);
+        color: transparent;
         font-family: inherit;
         font-size: clamp(0.68rem, 2.5vw, 0.82rem);
         letter-spacing: 0.4em;
         text-transform: uppercase;
         cursor: pointer;
         border: none;
-        overflow: hidden;
-        transition: color 0.45s ease;
+        width: 220px;
+        min-height: 52px;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
-        min-height: 44px;
       }
-
-      .enter-btn::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border: 1px solid var(--gold-dim);
-        transition: border-color 0.45s ease;
-      }
-
-      .enter-btn::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: var(--gold-bright);
-        transform: scaleX(0);
-        transform-origin: left center;
-        transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
-        z-index: -1;
-      }
-
-      .enter-btn:hover { color: var(--crimson-deep); }
-      .enter-btn:hover::before { border-color: var(--gold-bright); }
-      .enter-btn:hover::after { transform: scaleX(1); }
 
       .room-selector {
         position: fixed;
