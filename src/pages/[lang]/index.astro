@@ -862,7 +862,7 @@ function getCardWidth(sizeStr) {
         <a href="#" id="navTop">{t.backTop}</a>
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <a href="#" id="navExhibition">{t.roomSelect}</a>
-        <button id="navShop">{t.navShop}</button>
+        <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
         <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
@@ -888,7 +888,7 @@ function getCardWidth(sizeStr) {
         <a href="#" id="mNavTop">{t.backTop}</a>
         <a href={`${base}/${lang}/about/`}>{t.navAbout}</a>
         <button id="mNavExhibition">{t.roomSelect}</button>
-        <button id="mNavShop">{t.navShop}</button>
+        <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
         <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
       </nav>
       <div class="mobile-lang-switcher">
@@ -992,14 +992,6 @@ function getCardWidth(sizeStr) {
       const hamburgerBtn  = document.getElementById('hamburgerBtn');
       const mobileMenu    = document.getElementById('mobileMenu');
       const mobileOverlay = document.getElementById('mobileOverlay');
-
-      // ショップアラート
-      document.getElementById('navShop').addEventListener('click', () => {
-        alert(alertShop);
-      });
-      document.getElementById('mNavShop').addEventListener('click', () => {
-        alert(alertShop);
-      });
 
       // モバイルメニュー開閉
       function openMobileMenu() {

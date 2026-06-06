@@ -1,0 +1,1243 @@
+---
+import shopData from '../../data/shop.json';
+import { ui } from '../../data/ui.ts';
+import { readdirSync } from 'fs';
+import { join } from 'path';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const t = ui[lang];
+
+// galleryフォルダの99xxx.jpg を自動スキャン
+const galleryDir = join(process.cwd(), 'public/gallery');
+const allShopFiles = readdirSync(galleryDir)
+  .filter(f => /^99\d+\.(jpg|jpeg|png|webp)$/i.test(f))
+  .sort();
+
+const registeredFiles = new Set(shopData.map((s: any) => s.file));
+
+const unregistered = allShopFiles
+  .filter(f => !registeredFiles.has(f))
+  .map(f => ({ file: f }));
+
+const allItems = [...shopData, ...unregistered];
+
+const shopItems = allItems.map((item: any) => ({
+  ...item,
+  title:       item.title?.[lang]       || item.title?.ja       || '—',
+  price:       item.price ?? null,
+  description: item.description?.[lang] || item.description?.ja || '',
+}));
+
+const shopUI = {
+  ja: {
+    eyebrow: 'MUSEUM SHOP',
+    title:   'ミュージアムショップ',
+    nav:     { gallery: 'ギャラリー', about: 'アバウト', storage: '所蔵庫' },
+    soldOut: '売切れ',
+    inquiry: 'お問い合わせ',
+    noPrice: '価格未登録',
+    noTitle: '— タイトル未登録 —',
+    adminEyebrow: 'SHOP ADMIN',
+    adminTitle:  '商 品 情 報 登 録',
+    adminBtn:    '⚙ ADMIN',
+    adminAuth:   '管 理 者 認 証',
+    adminEnter:  '認 証 す る',
+    adminPwErr:  'パスワードが違います',
+    submitBtn:   '登 録 す る',
+    formSections: {
+      basic: '基本情報',
+      title: 'タイトル',
+      price: '価格・在庫',
+      desc:  '商品説明',
+      github: 'GitHub 認証',
+    },
+    labels: {
+      file:      'ファイル名（例: 99002.jpg）',
+      titleJa:   'タイトル（日本語）',
+      titleEn:   'タイトル（英語）',
+      titleSp:   'タイトル（スペイン語）',
+      price:     '価格（円）例: 50000',
+      soldOut:   '売切れ',
+      descJa:    '説明（日本語）',
+      descEn:    '説明（英語）',
+      descSp:    '説明（スペイン語）',
+      token:     'Personal Access Token',
+      tokenNote: 'GitHub Settings → Developer settings → Personal access tokens で発行。Contents: Read and Write 権限が必要です。',
+    },
+    status: {
+      loading: '送信中...',
+      success: '✓ 登録が完了しました。数分後に反映されます。',
+    },
+  },
+  en: {
+    eyebrow: 'MUSEUM SHOP',
+    title:   'Museum Shop',
+    nav:     { gallery: 'Gallery', about: 'About', storage: 'Storage' },
+    soldOut: 'Sold Out',
+    inquiry: 'Inquire',
+    noPrice: 'Price not set',
+    noTitle: '— Title not registered —',
+    adminEyebrow: 'SHOP ADMIN',
+    adminTitle:  'Register Product',
+    adminBtn:    '⚙ ADMIN',
+    adminAuth:   'Admin Authentication',
+    adminEnter:  'Authenticate',
+    adminPwErr:  'Incorrect password',
+    submitBtn:   'Register',
+    formSections: {
+      basic: 'Basic Info',
+      title: 'Title',
+      price: 'Price & Stock',
+      desc:  'Description',
+      github: 'GitHub Auth',
+    },
+    labels: {
+      file:      'File name (e.g. 99002.jpg)',
+      titleJa:   'Title (Japanese)',
+      titleEn:   'Title (English)',
+      titleSp:   'Title (Spanish)',
+      price:     'Price (JPY) e.g. 50000',
+      soldOut:   'Sold out',
+      descJa:    'Description (Japanese)',
+      descEn:    'Description (English)',
+      descSp:    'Description (Spanish)',
+      token:     'Personal Access Token',
+      tokenNote: 'Generate at GitHub Settings → Developer settings → Personal access tokens. Requires Contents: Read and Write.',
+    },
+    status: {
+      loading: 'Submitting...',
+      success: '✓ Registered successfully. Changes will appear in a few minutes.',
+    },
+  },
+  sp: {
+    eyebrow: 'TIENDA DEL MUSEO',
+    title:   'Tienda del Museo',
+    nav:     { gallery: 'Galería', about: 'Acerca', storage: 'Archivo' },
+    soldOut: 'Agotado',
+    inquiry: 'Consultar',
+    noPrice: 'Precio no registrado',
+    noTitle: '— Título no registrado —',
+    adminEyebrow: 'ADMIN TIENDA',
+    adminTitle:  'Registrar Producto',
+    adminBtn:    '⚙ ADMIN',
+    adminAuth:   'Autenticación de Admin',
+    adminEnter:  'Autenticar',
+    adminPwErr:  'Contraseña incorrecta',
+    submitBtn:   'Registrar',
+    formSections: {
+      basic: 'Información básica',
+      title: 'Título',
+      price: 'Precio y stock',
+      desc:  'Descripción',
+      github: 'Auth GitHub',
+    },
+    labels: {
+      file:      'Nombre de archivo (ej: 99002.jpg)',
+      titleJa:   'Título (japonés)',
+      titleEn:   'Título (inglés)',
+      titleSp:   'Título (español)',
+      price:     'Precio (JPY) ej: 50000',
+      soldOut:   'Agotado',
+      descJa:    'Descripción (japonés)',
+      descEn:    'Descripción (inglés)',
+      descSp:    'Descripción (español)',
+      token:     'Personal Access Token',
+      tokenNote: 'Generar en GitHub Settings → Developer settings → Personal access tokens. Requiere Contents: Read and Write.',
+    },
+    status: {
+      loading: 'Enviando...',
+      success: '✓ Registrado correctamente. Los cambios aparecerán en unos minutos.',
+    },
+  },
+};
+
+const ts = shopUI[lang];
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="base-url" content={base} />
+  <title>{ts.title} | Tokunaga Art Museum</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --crimson-deep:  #4a0a0a;
+      --crimson-mid:   #6b1212;
+      --crimson-rich:  #8b1a1a;
+      --gold-dim:      #b8960c;
+      --gold-bright:   #d4af37;
+      --gold-light:    #e8cc6a;
+      --text-main:     #f0e6d3;
+      --text-sub:      #c4a882;
+      --text-muted:    #7a6452;
+    }
+
+    body {
+      font-family: "Garamond", "Times New Roman", "游明朝", serif;
+      background: var(--crimson-deep);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== ヘッダー ===== */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 50px;
+      z-index: 1000;
+      background: linear-gradient(to bottom, rgba(20,4,4,0.95) 0%, rgba(20,4,4,0) 100%);
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+
+    .header-logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      font-weight: 400;
+      color: var(--gold-bright);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+      flex-shrink: 0;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .header-nav a {
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      opacity: 0.85;
+      transition: opacity 0.3s, color 0.3s, transform 0.3s;
+      white-space: nowrap;
+    }
+
+    .header-nav a:hover { opacity: 1; color: var(--gold-light); transform: translateY(-1px); }
+    .header-nav a.current { opacity: 1; color: var(--gold-bright); }
+
+    .lang-switcher {
+      display: flex;
+      gap: 12px;
+      border-left: 1px solid rgba(212,175,55,0.3);
+      padding-left: 18px;
+      margin-left: 8px;
+    }
+
+    .lang-switcher a {
+      font-size: 0.75rem;
+      text-decoration: none;
+      color: var(--text-sub);
+      opacity: 0.55;
+      letter-spacing: 0.1em;
+      transition: opacity 0.3s, color 0.3s;
+    }
+
+    .lang-switcher a.active { opacity: 1; font-weight: bold; color: var(--gold-bright); }
+
+    /* ===== ハンバーガー ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px; height: 40px;
+      background: none;
+      border: 1px solid rgba(212,175,55,0.3);
+      cursor: pointer;
+      padding: 8px;
+      flex-shrink: 0;
+      transition: border-color 0.3s;
+      z-index: 1100;
+      position: relative;
+    }
+
+    .hamburger:hover { border-color: var(--gold-bright); }
+
+    .hamburger span {
+      display: block;
+      width: 22px; height: 1.5px;
+      background: var(--gold-bright);
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1040;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      pointer-events: none;
+    }
+
+    .mobile-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(280px, 80vw); height: 100%;
+      background: linear-gradient(160deg, rgba(20,4,4,0.98) 0%, rgba(50,8,8,0.98) 100%);
+      border-left: 1px solid rgba(212,175,55,0.2);
+      z-index: 1050;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 32px 40px;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.76,0,0.24,1);
+      pointer-events: none;
+    }
+
+    .mobile-menu.open { transform: translateX(0); pointer-events: auto; }
+
+    .mobile-menu-nav { display: flex; flex-direction: column; }
+
+    .mobile-menu-nav a {
+      display: block;
+      border-bottom: 1px solid rgba(212,175,55,0.12);
+      color: var(--text-sub);
+      font-size: 0.88rem;
+      letter-spacing: 0.2em;
+      padding: 18px 0;
+      text-decoration: none;
+      transition: color 0.3s, padding-left 0.3s;
+    }
+
+    .mobile-menu-nav a:first-child { border-top: 1px solid rgba(212,175,55,0.12); }
+    .mobile-menu-nav a:hover { color: var(--gold-light); padding-left: 8px; }
+    .mobile-menu-nav a.current { color: var(--gold-bright); }
+
+    .mobile-lang-switcher {
+      display: flex;
+      gap: 16px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(212,175,55,0.2);
+    }
+
+    .mobile-lang-switcher a {
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: var(--text-sub);
+      opacity: 0.55;
+      letter-spacing: 0.12em;
+      transition: opacity 0.3s, color 0.3s;
+    }
+
+    .mobile-lang-switcher a.active { opacity: 1; font-weight: bold; color: var(--gold-bright); }
+
+    /* ===== メインコンテンツ ===== */
+    .shop-main {
+      padding: 120px 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .shop-page-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .shop-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .shop-title {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+
+    .shop-page-header::after {
+      content: '';
+      display: block;
+      width: 80px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+      margin: 0 auto;
+    }
+
+    /* ===== 管理者ボタン ===== */
+    .admin-btn-wrap {
+      text-align: right;
+      margin: 24px 0 40px;
+    }
+
+    .admin-open-btn {
+      background: none;
+      border: 1px solid rgba(212,175,55,0.2);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      padding: 8px 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .admin-open-btn:hover { color: var(--gold-dim); border-color: rgba(212,175,55,0.45); }
+
+    /* ===== 商品グリッド ===== */
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 36px;
+    }
+
+    .shop-card {
+      cursor: pointer;
+      transition: transform 0.35s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .shop-card:hover { transform: translateY(-6px); }
+
+    .shop-frame {
+      border-style: solid;
+      border-width: 12px;
+      border-color:
+        hsl(40, 30%, 38%)
+        hsl(40, 30%, 22%)
+        hsl(40, 30%, 22%)
+        hsl(40, 30%, 38%);
+      border-radius: 4px;
+      box-shadow: 6px 10px 24px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,0,0,0.4), inset 0 0 14px rgba(0,0,0,0.3);
+    }
+
+    .shop-frame img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+    }
+
+    .shop-card-info {
+      padding: 16px 4px 0;
+    }
+
+    .shop-card-title {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .shop-card-price {
+      font-size: 1rem;
+      color: var(--gold-bright);
+      letter-spacing: 0.05em;
+    }
+
+    .shop-card-price.no-price { color: var(--text-muted); font-size: 0.75rem; }
+    .shop-card-price.sold-out { color: #c06060; font-size: 0.78rem; letter-spacing: 0.15em; }
+
+    /* ===== モーダル ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,1,1,0.94);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      padding: 16px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: linear-gradient(160deg, #1e0808 0%, #120303 100%);
+      border: 1px solid rgba(212,175,55,0.2);
+      padding: 36px 28px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.85), inset 0 1px 0 rgba(212,175,55,0.1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px; right: 14px;
+      background: none;
+      border: 1px solid rgba(212,175,55,0.25);
+      color: var(--text-sub);
+      font-size: 1rem;
+      width: 34px; height: 34px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .modal-close:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+    .modal-img-wrap {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-frame {
+      display: inline-block;
+      border-style: solid;
+      border-width: 16px;
+      border-color:
+        hsl(40, 30%, 38%)
+        hsl(40, 30%, 22%)
+        hsl(40, 30%, 22%)
+        hsl(40, 30%, 38%);
+      border-radius: 4px;
+      box-shadow: 6px 10px 28px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,0,0,0.4), inset 0 0 16px rgba(0,0,0,0.3);
+    }
+
+    .modal-frame img {
+      display: block;
+      max-width: 100%;
+      max-height: 45vh;
+      object-fit: contain;
+    }
+
+    .modal-title {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      padding-right: 40px;
+    }
+
+    .modal-price {
+      font-size: 1.3rem;
+      color: var(--gold-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .modal-price.no-price { color: var(--text-muted); font-size: 0.82rem; }
+    .modal-price.sold-out { color: #c06060; font-size: 0.88rem; letter-spacing: 0.2em; }
+
+    .modal-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent);
+      margin-bottom: 20px;
+    }
+
+    .modal-description {
+      font-size: 0.85rem;
+      line-height: 1.85;
+      color: var(--text-sub);
+      background: rgba(255,255,255,0.03);
+      border-left: 2px solid var(--gold-dim);
+      padding: 14px 16px;
+    }
+
+    .modal-inquiry {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .inquiry-btn {
+      position: relative;
+      padding: 12px 40px;
+      background: transparent;
+      color: var(--gold-bright);
+      font-family: inherit;
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      overflow: hidden;
+      transition: color 0.45s ease;
+    }
+
+    .inquiry-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--gold-dim);
+      transition: border-color 0.45s;
+    }
+
+    .inquiry-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-bright);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.45s cubic-bezier(0.76,0,0.24,1);
+      z-index: -1;
+    }
+
+    .inquiry-btn:hover { color: var(--crimson-deep); }
+    .inquiry-btn:hover::before { border-color: var(--gold-bright); }
+    .inquiry-btn:hover::after { transform: scaleX(1); }
+
+    /* ===== 管理者モーダル共通 ===== */
+    .admin-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,1,1,0.96);
+      z-index: 3000;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-y: auto;
+      padding: 40px 16px 60px;
+      backdrop-filter: blur(6px);
+    }
+
+    .admin-modal-overlay.active { display: flex; }
+
+    .admin-modal {
+      background: linear-gradient(160deg, #1e0606 0%, #120303 100%);
+      border: 1px solid rgba(212,175,55,0.25);
+      padding: 40px 32px 48px;
+      width: 100%; max-width: 680px;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(212,175,55,0.12);
+      margin: auto;
+    }
+
+    .admin-modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: none;
+      border: 1px solid rgba(212,175,55,0.2);
+      color: var(--text-sub);
+      font-size: 1rem;
+      width: 34px; height: 34px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .admin-modal-close:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+    .admin-modal-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .admin-modal-title {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      color: var(--text-main);
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+
+    /* ===== 管理者パスワード ===== */
+    #admin-pw-screen { text-align: center; }
+
+    #admin-pw-input {
+      background: rgba(74,10,10,0.4);
+      border: 1px solid rgba(212,175,55,0.3);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 1.6rem;
+      letter-spacing: 0.5em;
+      padding: 0.6rem 1.2rem;
+      text-align: center;
+      width: 200px;
+      outline: none;
+      margin: 0 auto 12px;
+      display: block;
+      transition: border-color 0.3s;
+    }
+
+    #admin-pw-input:focus { border-color: var(--gold-bright); }
+    #admin-pw-input.error { border-color: #c04040; animation: shake 0.35s ease; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-10px); }
+      75%      { transform: translateX(10px); }
+    }
+
+    #admin-pw-error {
+      color: #c06060;
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      min-height: 1.2em;
+      margin-bottom: 16px;
+    }
+
+    .enter-btn {
+      position: relative;
+      padding: 13px 44px;
+      background: transparent;
+      color: var(--gold-bright);
+      font-family: inherit;
+      font-size: 0.8rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      overflow: hidden;
+      transition: color 0.45s ease;
+      min-height: 44px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .enter-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--gold-dim);
+      transition: border-color 0.45s;
+    }
+
+    .enter-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-bright);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.45s cubic-bezier(0.76,0,0.24,1);
+      z-index: -1;
+    }
+
+    .enter-btn:hover { color: var(--crimson-deep); }
+    .enter-btn:hover::before { border-color: var(--gold-bright); }
+    .enter-btn:hover::after { transform: scaleX(1); }
+
+    /* ===== 登録フォーム ===== */
+    .form-section { margin-bottom: 28px; }
+
+    .form-section-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.4em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(212,175,55,0.12);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+    .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+    .form-row.one   { grid-template-columns: 1fr; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+    .form-group label {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: rgba(74,10,10,0.35);
+      border: 1px solid rgba(212,175,55,0.2);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    .form-group input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .form-group textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold-bright); }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .github-token-note {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .form-submit-btn {
+      position: relative;
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      color: var(--gold-bright);
+      font-family: inherit;
+      font-size: 0.82rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      overflow: hidden;
+      transition: color 0.45s ease;
+      margin-top: 10px;
+    }
+
+    .form-submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--gold-dim);
+      transition: border-color 0.45s;
+    }
+
+    .form-submit-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-bright);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.45s cubic-bezier(0.76,0,0.24,1);
+      z-index: -1;
+    }
+
+    .form-submit-btn:hover { color: var(--crimson-deep); }
+    .form-submit-btn:hover::before { border-color: var(--gold-bright); }
+    .form-submit-btn:hover::after { transform: scaleX(1); }
+    .form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #form-status {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      min-height: 1.4em;
+    }
+
+    #form-status.success { color: #70c080; }
+    #form-status.error   { color: #c06060; }
+    #form-status.loading { color: var(--gold-dim); }
+
+    /* ===== レスポンシブ ===== */
+    @media (max-width: 768px) {
+      .site-header { padding: 12px 18px; }
+      .header-logo { font-size: 0.82rem; letter-spacing: 0.15em; }
+      .header-nav  { display: none; }
+      .hamburger   { display: flex; }
+      .shop-main   { padding: 90px 20px 60px; }
+      .shop-grid   { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; }
+      .admin-modal { padding: 32px 20px 40px; }
+      .form-row, .form-row.three { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="site-header">
+    <div class="header-logo">TOKUNAGA ART MUSEUM</div>
+    <nav class="header-nav">
+      <a href={`${base}/${lang}/`}>{ts.nav.gallery}</a>
+      <a href={`${base}/${lang}/about/`}>{ts.nav.about}</a>
+      <a href={`${base}/${lang}/shop/`} class="current">SHOP</a>
+      <a href={`${base}/${lang}/storage/`}>{ts.nav.storage}</a>
+      <div class="lang-switcher">
+        <a href={`${base}/ja/shop/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
+        <a href={`${base}/en/shop/`} class={lang === 'en' ? 'active' : ''}>EN</a>
+        <a href={`${base}/sp/shop/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+      </div>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-menu-nav">
+      <a href={`${base}/${lang}/`}>{ts.nav.gallery}</a>
+      <a href={`${base}/${lang}/about/`}>{ts.nav.about}</a>
+      <a href={`${base}/${lang}/shop/`} class="current">SHOP</a>
+      <a href={`${base}/${lang}/storage/`}>{ts.nav.storage}</a>
+    </nav>
+    <div class="mobile-lang-switcher">
+      <a href={`${base}/ja/shop/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
+      <a href={`${base}/en/shop/`} class={lang === 'en' ? 'active' : ''}>EN</a>
+      <a href={`${base}/sp/shop/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+    </div>
+  </div>
+
+  <!-- ===== メイン ===== -->
+  <main class="shop-main">
+    <div class="shop-page-header">
+      <p class="shop-eyebrow">{ts.eyebrow}</p>
+      <h1 class="shop-title">{ts.title}</h1>
+    </div>
+
+    <div class="admin-btn-wrap">
+      <button class="admin-open-btn" id="adminOpenBtn">{ts.adminBtn}</button>
+    </div>
+
+    <div class="shop-grid">
+      {shopItems.map((item) => (
+        <div
+          class="shop-card"
+          data-file={item.file}
+          data-title={item.title}
+          data-price={item.price}
+          data-sold-out={item.soldOut ? 'true' : 'false'}
+          data-description={item.description}
+        >
+          <div class="shop-frame">
+            <img src={`${base}/gallery/${item.file}`} alt={item.title} loading="lazy" />
+          </div>
+          <div class="shop-card-info">
+            <div class="shop-card-title">
+              {item.title === '—' ? <em style="color: var(--text-muted); font-style: normal;">{ts.noTitle}</em> : item.title}
+            </div>
+            {item.soldOut
+              ? <div class="shop-card-price sold-out">{ts.soldOut}</div>
+              : item.price !== null && item.price !== undefined
+                ? <div class="shop-card-price">¥{Number(item.price).toLocaleString()}</div>
+                : <div class="shop-card-price no-price">{ts.noPrice}</div>
+            }
+          </div>
+        </div>
+      ))}
+    </div>
+  </main>
+
+  <!-- ===== 商品詳細モーダル ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-img-wrap">
+        <div class="modal-frame">
+          <img id="modalImg" src="" alt="" />
+        </div>
+      </div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-description" id="modalDesc"></div>
+      <div class="modal-inquiry">
+        <button class="inquiry-btn" id="inquiryBtn">{ts.inquiry}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 管理者パスワードモーダル ===== -->
+  <div class="admin-modal-overlay" id="adminPwOverlay">
+    <div class="admin-modal" style="max-width:420px;">
+      <button class="admin-modal-close" id="adminPwClose">✕</button>
+      <p class="admin-modal-eyebrow">{ts.adminEyebrow}</p>
+      <h2 class="admin-modal-title">{ts.adminAuth}</h2>
+      <div id="admin-pw-screen">
+        <input id="admin-pw-input" type="password" maxlength="20" placeholder="· · · · · ·" autocomplete="off" />
+        <p id="admin-pw-error"></p>
+        <button class="enter-btn" id="adminPwEnterBtn">{ts.adminEnter}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 商品登録モーダル ===== -->
+  <div class="admin-modal-overlay" id="adminFormOverlay">
+    <div class="admin-modal">
+      <button class="admin-modal-close" id="adminFormClose">✕</button>
+      <p class="admin-modal-eyebrow">{ts.adminEyebrow}</p>
+      <h2 class="admin-modal-title">{ts.adminTitle}</h2>
+
+      <form id="shopForm" autocomplete="off">
+
+        <div class="form-section">
+          <p class="form-section-title">{ts.formSections.basic}</p>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>{ts.labels.file}</label>
+              <input type="text" id="f-file" placeholder="99002.jpg" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-title">{ts.formSections.title}</p>
+          <div class="form-row three">
+            <div class="form-group">
+              <label>{ts.labels.titleJa}</label>
+              <input type="text" id="f-title-ja" required />
+            </div>
+            <div class="form-group">
+              <label>{ts.labels.titleEn}</label>
+              <input type="text" id="f-title-en" required />
+            </div>
+            <div class="form-group">
+              <label>{ts.labels.titleSp}</label>
+              <input type="text" id="f-title-sp" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-title">{ts.formSections.price}</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>{ts.labels.price}</label>
+              <input type="number" id="f-price" placeholder="50000" min="0" />
+            </div>
+            <div class="form-group" style="justify-content: flex-end;">
+              <label class="checkbox-label">
+                <input type="checkbox" id="f-sold-out" />
+                {ts.labels.soldOut}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-title">{ts.formSections.desc}</p>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>{ts.labels.descJa}</label>
+              <textarea id="f-desc-ja" required></textarea>
+            </div>
+          </div>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>{ts.labels.descEn}</label>
+              <textarea id="f-desc-en" required></textarea>
+            </div>
+          </div>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>{ts.labels.descSp}</label>
+              <textarea id="f-desc-sp" required></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-title">{ts.formSections.github}</p>
+          <div class="form-row one">
+            <div class="form-group">
+              <label>{ts.labels.token}</label>
+              <input type="password" id="f-token" placeholder="ghp_xxxxxxxxxxxx" required />
+              <p class="github-token-note">{ts.labels.tokenNote}</p>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit-btn" id="formSubmitBtn">{ts.submitBtn}</button>
+        <p id="form-status"></p>
+      </form>
+    </div>
+  </div>
+
+  <script define:vars={{ noPrice: ts.noPrice, soldOutLabel: ts.soldOut, inquiryLabel: ts.inquiry, adminPwErr: ts.adminPwErr, loadingLabel: ts.status.loading, successLabel: ts.status.success }}>
+    const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
+    const ADMIN_PW = 'art2024admin';
+    const GITHUB_API = 'https://api.github.com/repos/Second-penguin-planning/online-museum/contents/src/data/shop.json';
+
+    /* ===== ハンバーガー ===== */
+    const hamburgerBtn  = document.getElementById('hamburgerBtn');
+    const mobileMenu    = document.getElementById('mobileMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = mobileMenu.classList.contains('open');
+      hamburgerBtn.classList.toggle('open', !open);
+      mobileMenu.classList.toggle('open', !open);
+      mobileOverlay.classList.toggle('open', !open);
+      document.body.style.overflow = open ? '' : 'hidden';
+    });
+
+    mobileOverlay.addEventListener('click', () => {
+      hamburgerBtn.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      mobileOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+
+    /* ===== 商品カードクリック → モーダル ===== */
+    document.querySelectorAll('.shop-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const title    = card.dataset.title;
+        const price    = card.dataset.price;
+        const soldOut  = card.dataset.soldOut === 'true';
+        const desc     = card.dataset.description;
+        const file     = card.dataset.file;
+
+        document.getElementById('modalImg').src = `${base}/gallery/${file}`;
+        document.getElementById('modalImg').alt = title;
+        document.getElementById('modalTitle').textContent = title === '—' ? '' : title;
+
+        const priceEl = document.getElementById('modalPrice');
+        if (soldOut) {
+          priceEl.textContent  = soldOutLabel;
+          priceEl.className    = 'modal-price sold-out';
+        } else if (price && price !== 'null') {
+          priceEl.textContent  = `¥${Number(price).toLocaleString()}`;
+          priceEl.className    = 'modal-price';
+        } else {
+          priceEl.textContent  = noPrice;
+          priceEl.className    = 'modal-price no-price';
+        }
+
+        document.getElementById('modalDesc').textContent = desc || '';
+        document.getElementById('modalOverlay').classList.add('active');
+      });
+    });
+
+    document.getElementById('modalClose').addEventListener('click', () =>
+      document.getElementById('modalOverlay').classList.remove('active'));
+
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modalOverlay') e.target.classList.remove('active');
+    });
+
+    document.getElementById('inquiryBtn').addEventListener('click', () => {
+      window.location.href = `mailto:info@second-penguin.com?subject=ショップお問い合わせ`;
+    });
+
+    /* ===== 管理者認証 ===== */
+    const adminOpenBtn     = document.getElementById('adminOpenBtn');
+    const adminPwOverlay   = document.getElementById('adminPwOverlay');
+    const adminPwClose     = document.getElementById('adminPwClose');
+    const adminPwInput     = document.getElementById('admin-pw-input');
+    const adminPwError     = document.getElementById('admin-pw-error');
+    const adminPwEnterBtn  = document.getElementById('adminPwEnterBtn');
+    const adminFormOverlay = document.getElementById('adminFormOverlay');
+    const adminFormClose   = document.getElementById('adminFormClose');
+
+    adminOpenBtn.addEventListener('click', () => {
+      if (sessionStorage.getItem('shop_admin_auth') === '1') {
+        adminFormOverlay.classList.add('active');
+      } else {
+        adminPwOverlay.classList.add('active');
+        adminPwInput.focus();
+      }
+    });
+
+    adminPwClose.addEventListener('click', () => adminPwOverlay.classList.remove('active'));
+    adminFormClose.addEventListener('click', () => adminFormOverlay.classList.remove('active'));
+    adminPwOverlay.addEventListener('click', (e) => { if (e.target === adminPwOverlay) adminPwOverlay.classList.remove('active'); });
+    adminFormOverlay.addEventListener('click', (e) => { if (e.target === adminFormOverlay) adminFormOverlay.classList.remove('active'); });
+
+    function checkAdminPw() {
+      if (adminPwInput.value === ADMIN_PW) {
+        sessionStorage.setItem('shop_admin_auth', '1');
+        adminPwOverlay.classList.remove('active');
+        adminPwInput.value = '';
+        adminPwError.textContent = '';
+        adminFormOverlay.classList.add('active');
+      } else {
+        adminPwInput.classList.add('error');
+        adminPwError.textContent = adminPwErr;
+        setTimeout(() => adminPwInput.classList.remove('error'), 400);
+        adminPwInput.value = '';
+        adminPwInput.focus();
+      }
+    }
+
+    adminPwEnterBtn.addEventListener('click', checkAdminPw);
+    adminPwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkAdminPw(); });
+
+    /* ===== 商品登録フォーム → GitHub API ===== */
+    document.getElementById('shopForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const statusEl  = document.getElementById('form-status');
+      const submitBtn = document.getElementById('formSubmitBtn');
+      const token     = document.getElementById('f-token').value.trim();
+
+      const newItem = {
+        file:        document.getElementById('f-file').value.trim(),
+        title:       { ja: document.getElementById('f-title-ja').value.trim(), en: document.getElementById('f-title-en').value.trim(), sp: document.getElementById('f-title-sp').value.trim() },
+        price:       document.getElementById('f-price').value ? Number(document.getElementById('f-price').value) : null,
+        soldOut:     document.getElementById('f-sold-out').checked,
+        description: { ja: document.getElementById('f-desc-ja').value.trim(), en: document.getElementById('f-desc-en').value.trim(), sp: document.getElementById('f-desc-sp').value.trim() },
+      };
+
+      statusEl.textContent = loadingLabel;
+      statusEl.className   = 'loading';
+      submitBtn.disabled   = true;
+
+      try {
+        const getRes = await fetch(GITHUB_API, {
+          headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!getRes.ok) throw new Error(`ファイル取得エラー (${getRes.status})`);
+
+        const fileData   = await getRes.json();
+        const current    = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
+        current.push(newItem);
+
+        const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+
+        const putRes = await fetch(GITHUB_API, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: `商品情報追加: ${newItem.file}`, content: newContent, sha: fileData.sha }),
+        });
+
+        if (!putRes.ok) { const err = await putRes.json(); throw new Error(err.message || `保存エラー (${putRes.status})`); }
+
+        statusEl.textContent = successLabel;
+        statusEl.className   = 'success';
+        document.getElementById('shopForm').reset();
+      } catch (err) {
+        statusEl.textContent = `エラー: ${err.message}`;
+        statusEl.className   = 'error';
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
