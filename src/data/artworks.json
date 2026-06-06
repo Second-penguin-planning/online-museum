@@ -1,7 +1,6 @@
 [
   {
-    "file": "001.jpg",
-    "category": 2,
+    "file": "01001.jpg",
     "title": { "ja": "ラマンチャ荒野 1", "en": "La Mancha Wilderness 1", "sp": "Páramo de La Mancha 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1995年", "en": "1995", "sp": "1995" },
@@ -9,17 +8,7 @@
     "description": { "ja": "一面、麦畑", "en": "A wheat field extending as far as the eye can see.", "sp": "Un campo de trigo que se extiende hasta donde alcanza la vista." }
   },
   {
-    "file": "002.jpg",
-    "category": 2,
-    "title": { "ja": "マリカルメン 1", "en": "Maricarmen 1", "sp": "Maricarmen 1" },
-    "artist": { "ja": "徳永幸子", "en": "Sachiko Tokunaga", "sp": "Sachiko Tokunaga" },
-    "year": { "ja": "1994年", "en": "1994", "sp": "1994" },
-    "size": { "ja": "20号", "en": "No. 20", "sp": "Nº 20" },
-    "description": { "ja": "仲良しの気さくで器量のよいカンポ・デ・クリプターナの娘", "en": "A friendly, easygoing, and beautiful girl from Campo de Criptana.", "sp": "Una chica amable, sencilla y hermosa de Campo de Criptana." }
-  },
-  {
-    "file": "003.jpg",
-    "category": 2,
+    "file": "01002.jpg",
     "title": { "ja": "壺 1", "en": "Pot 1", "sp": "Vasija 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "2010年", "en": "2010", "sp": "2010" },
@@ -27,8 +16,7 @@
     "description": { "ja": "納屋で見つけた古い壺", "en": "An old pot found in a barn.", "sp": "Una vieja vasija encontrada en un granero." }
   },
   {
-    "file": "004.jpg",
-    "category": 2,
+    "file": "01003.jpg",
     "title": { "ja": "いわし 1", "en": "Sardines 1", "sp": "Sardinas 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "2015年", "en": "2015", "sp": "2015" },
@@ -36,8 +24,7 @@
     "description": { "ja": "様々な顔を持つ干物", "en": "Dried fish, each with a distinct expression.", "sp": "Pescados secos, cada uno con una expresión diferente." }
   },
   {
-    "file": "005.jpg",
-    "category": 1,
+    "file": "01004.jpg",
     "title": { "ja": "黄色い家 1", "en": "Yellow House 1", "sp": "Casa Amarilla 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1970年", "en": "1970", "sp": "1970" },
@@ -45,8 +32,7 @@
     "description": { "ja": "北野異人館シリーズ", "en": "Kitano Ijinkan (Foreigners' Residences) Series.", "sp": "Serie de las Casas de Extranjeros de Kitano." }
   },
   {
-    "file": "006.jpg",
-    "category": 1,
+    "file": "01005.jpg",
     "title": { "ja": "ハッサム邸 1", "en": "Hassam House 1", "sp": "Casa Hassam 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1975年", "en": "1975", "sp": "1975" },
@@ -54,8 +40,7 @@
     "description": { "ja": "北野異人館シリーズ。今はもう解体された。", "en": "Kitano Ijinkan Series. It has now been dismantled.", "sp": "Serie de las Casas de Extranjeros de Kitano. Ahora ha sido desmantelada." }
   },
   {
-    "file": "007.jpg",
-    "category": 1,
+    "file": "01006.jpg",
     "title": { "ja": "黒い家 1", "en": "Black House 1", "sp": "Casa Negra 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1960年", "en": "1960", "sp": "1960" },
@@ -63,8 +48,7 @@
     "description": { "ja": "北野異人館シリーズ。とても古い家。", "en": "Kitano Ijinkan Series. A very old house.", "sp": "Serie de las Casas de Extranjeros de Kitano. Una casa muy antigua." }
   },
   {
-    "file": "008.jpg",
-    "category": 2,
+    "file": "01007.jpg",
     "title": { "ja": "カンポ　家のドア 1", "en": "Campo, House Door 1", "sp": "Campo, Puerta de la Casa 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1994年", "en": "1994", "sp": "1994" },
@@ -72,8 +56,7 @@
     "description": { "ja": "一軒一軒異なる顔を持つ家。", "en": "Houses, each with its own distinct character.", "sp": "Casas, cada una con un carácter distinto." }
   },
   {
-    "file": "009.jpg",
-    "category": 2,
+    "file": "01008.jpg",
     "title": { "ja": "カンポ　坂の街並み 1", "en": "Campo, Sloping Street 1", "sp": "Campo, Calle en Pendiente 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1980年", "en": "1980", "sp": "1980" },
@@ -81,17 +64,7 @@
     "description": { "ja": "風車の丘に向かう街並み", "en": "The townscape leading up to the windmill hill.", "sp": "El paisaje urbano que conduce a la colina de los molinos de viento." }
   },
   {
-    "file": "010.jpg",
-    "category": 2,
-    "title": { "ja": "宿のおばさん 1", "en": "Innkeeper Aunt 1", "sp": "La Señora de la Posada 1" },
-    "artist": { "ja": "徳永幸子", "en": "Sachiko Tokunaga", "sp": "Sachiko Tokunaga" },
-    "year": { "ja": "2005年", "en": "2005", "sp": "2005" },
-    "size": { "ja": "30号", "en": "No. 30", "sp": "Nº 30" },
-    "description": { "ja": "いつも矍鑠とした立ち振る舞いでした。", "en": "She was always full of energy and carried herself with grace.", "sp": "Siempre estaba llena de energía y se movía con agilidad." }
-  },
-  {
-    "file": "011.jpg",
-    "category": 1,
+    "file": "01009.jpg",
     "title": { "ja": "神戸港 ドッグ 1", "en": "Kobe Port Dock 1", "sp": "Dique del Puerto de Kobe 1" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "2012年", "en": "2012", "sp": "2012" },
@@ -99,12 +72,27 @@
     "description": { "ja": "川崎造船のドッグ", "en": "Kawasaki Shipbuilding Dock.", "sp": "Dique de construcción naval de Kawasaki." }
   },
   {
-    "file": "012.jpg",
-    "category": 2,
+    "file": "01010.jpg",
     "title": { "ja": "ラマンチャ荒野 2", "en": "La Mancha Wilderness 2", "sp": "Páramo de La Mancha 2" },
     "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
     "year": { "ja": "1995年", "en": "1995", "sp": "1995" },
     "size": { "ja": "40号", "en": "No. 40", "sp": "Nº 40" },
     "description": { "ja": "モザイク模様の荒野", "en": "A mosaic-patterned wilderness.", "sp": "Un páramo with a mosaic pattern." }
+  },
+  {
+    "file": "02001.jpg",
+    "title": { "ja": "マリカルメン 1", "en": "Maricarmen 1", "sp": "Maricarmen 1" },
+    "artist": { "ja": "徳永幸子", "en": "Sachiko Tokunaga", "sp": "Sachiko Tokunaga" },
+    "year": { "ja": "1994年", "en": "1994", "sp": "1994" },
+    "size": { "ja": "20号", "en": "No. 20", "sp": "Nº 20" },
+    "description": { "ja": "仲良しの気さくで器量のよいカンポ・デ・クリプターナの娘", "en": "A friendly, easygoing, and beautiful girl from Campo de Criptana.", "sp": "Una chica amable, sencilla y hermosa de Campo de Criptana." }
+  },
+  {
+    "file": "02002.jpg",
+    "title": { "ja": "宿のおばさん 1", "en": "Innkeeper Aunt 1", "sp": "La Señora de la Posada 1" },
+    "artist": { "ja": "徳永幸子", "en": "Sachiko Tokunaga", "sp": "Sachiko Tokunaga" },
+    "year": { "ja": "2005年", "en": "2005", "sp": "2005" },
+    "size": { "ja": "30号", "en": "No. 30", "sp": "Nº 30" },
+    "description": { "ja": "いつも矍鑠とした立ち振る舞いでした。", "en": "She was always full of energy and carried herself with grace.", "sp": "Siempre estaba llena de energía y se movía con agilidad." }
   }
 ]
