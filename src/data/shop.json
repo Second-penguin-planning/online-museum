@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "file": "99001.jpeg",
+    "title": {
+      "ja": "松本邸",
+      "en": "-",
+      "sp": "ｰ"
+    },
+    "price": 8000,
+    "soldOut": false,
+    "description": {
+      "ja": "複製、F3、サイン・一部AI補正",
+      "en": "-",
+      "sp": "-"
+    }
+  }
+]
