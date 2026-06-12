@@ -360,13 +360,22 @@
     <div class="card">
       <h3>レンタル（借入）/ Loan Received</h3>
       <div class="field">
-        <label>レンタル金額 <span class="lbl-en">/ Loan Amount</span></label>
+        <label>レンタル①金額 <span class="lbl-en">/ Loan ① Amount</span></label>
         <input type="number" id="loanAmount" value="75000">
         <div class="unit">円 / JPY</div>
       </div>
       <div class="field">
-        <label>レンタル日付 <span class="lbl-en">/ Loan Date</span></label>
+        <label>レンタル①日付 <span class="lbl-en">/ Loan ① Date</span></label>
         <input type="date" id="loanDate" value="2026-06-16">
+      </div>
+      <div class="field">
+        <label>レンタル②金額 <span class="lbl-en">/ Loan ② Amount</span></label>
+        <input type="number" id="loanAmount2" value="0">
+        <div class="unit">円 / JPY</div>
+      </div>
+      <div class="field">
+        <label>レンタル②日付 <span class="lbl-en">/ Loan ② Date</span></label>
+        <input type="date" id="loanDate2" value="">
       </div>
     </div>
 
@@ -558,6 +567,9 @@ function calculate() {
   const loanAmount = v('loanAmount');
   const loanDateStr = document.getElementById('loanDate').value;
   const loanDate = loanDateStr ? new Date(loanDateStr) : null;
+  const loanAmount2 = v('loanAmount2');
+  const loanDateStr2 = document.getElementById('loanDate2').value;
+  const loanDate2 = loanDateStr2 ? new Date(loanDateStr2) : null;
   const weekdayExp = v('weekdayExp');
   const weekendExp = v('weekendExp');
 
@@ -594,10 +606,15 @@ function calculate() {
     let income = 0;
     const incomeNotes = [];
 
-    // Loan
+    // Loan ①
     if (loanDate && d.toDateString() === loanDate.toDateString()) {
       income += loanAmount;
-      incomeNotes.push(`レンタル / Loan ¥${loanAmount.toLocaleString()}`);
+      incomeNotes.push(`レンタル① / Loan① ¥${loanAmount.toLocaleString()}`);
+    }
+    // Loan ②
+    if (loanDate2 && loanAmount2 > 0 && d.toDateString() === loanDate2.toDateString()) {
+      income += loanAmount2;
+      incomeNotes.push(`レンタル② / Loan② ¥${loanAmount2.toLocaleString()}`);
     }
 
     // Salary
@@ -614,7 +631,8 @@ function calculate() {
     if (balance < minBalance) { minBalance = balance; minBalanceDate = dateLabel; }
 
     const isSalaryDay = !!salaryMap[dateKey];
-    const isLoanDay = loanDate && d.toDateString() === loanDate.toDateString();
+    const isLoanDay = (loanDate && d.toDateString() === loanDate.toDateString()) ||
+                     (loanDate2 && loanAmount2 > 0 && d.toDateString() === loanDate2.toDateString());
     const isNeg = balance < 0;
 
     // Month divider
