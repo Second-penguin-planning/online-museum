@@ -240,95 +240,40 @@
   }
   table {
     width: 100%;
-    min-width: 480px;
+    min-width: 420px;
     border-collapse: collapse;
     font-size: 0.85rem;
   }
   thead th {
     background: #f8f9fb;
-    padding: 10px 14px;
+    padding: 10px 12px;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: #6b7280;
     border-bottom: 2px solid #e5e7eb;
     white-space: nowrap;
   }
   tbody td {
-    padding: 10px 14px;
+    padding: 9px 12px;
     border-bottom: 1px solid #f3f4f6;
-    vertical-align: top;
+    vertical-align: middle;
     white-space: nowrap;
   }
 
-  /* スマホ：カード形式に切り替え */
   @media (max-width: 600px) {
-    .table-scroll { overflow-x: visible; }
-    table, thead, tbody, tr, th, td { display: block; width: 100%; }
-    thead { display: none; }
-    tbody tr {
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      padding: 10px 14px;
-      background: white;
-      position: relative;
-    }
-    tbody tr.weekend { background: #fffbeb !important; }
-    tbody tr.salary-day { background: #eff6ff !important; }
-    tbody tr.loan-day { background: #f0fdf4 !important; }
-    tbody tr.negative-balance { background: #fff1f2 !important; }
-    tbody td {
-      padding: 3px 0;
-      border: none;
-      white-space: normal;
-      font-size: 0.88rem;
-    }
-    tbody td::before {
-      content: attr(data-label);
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #9ca3af;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 1px;
-    }
-    tbody td[data-label=""] { display: none; }
-    /* 日付＋曜日を横並びにして目立たせる */
-    tbody td.date-col {
-      font-size: 1rem;
-      font-weight: 700;
-      display: inline-block;
-      margin-right: 8px;
-    }
-    tbody td.day-cell {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    tbody td.day-cell::before { display: none; }
-    /* 残高を大きく右上に表示 */
-    tbody td.balance-cell {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      font-size: 1rem;
-      font-weight: 800;
-      text-align: right;
-      padding: 0;
-    }
-    tbody td.balance-cell::before { display: none; }
-    .month-divider td {
-      border-radius: 8px;
-      margin-bottom: 6px;
-    }
     .table-header-bar {
       flex-direction: column;
       align-items: flex-start;
-      gap: 10px;
+      gap: 8px;
     }
-    .legend { flex-wrap: wrap; gap: 8px; }
+    .legend { flex-wrap: wrap; gap: 6px; }
+    table { font-size: 0.8rem; min-width: 360px; }
+    thead th { padding: 8px 8px; font-size: 0.65rem; }
+    tbody td { padding: 8px 8px; }
+    .note-text { display: none; }
   }
   tbody tr:hover { background: #f9fafb; }
   tbody tr.weekend { background: #fffbeb; }
