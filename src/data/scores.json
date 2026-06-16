@@ -1,0 +1,22 @@
+[
+  {
+    "id": "sample01",
+    "musicxml": "scores/sample01.musicxml",
+    "mp3": "scores/sample01.mp3",
+    "title": {
+      "ja": "サンプル曲 第1番",
+      "en": "Sample Piece No. 1",
+      "sp": "Pieza de muestra n.º 1"
+    },
+    "composer": {
+      "ja": "作曲者名",
+      "en": "Composer Name",
+      "sp": "Nombre del compositor"
+    },
+    "description": {
+      "ja": "ここに曲の説明を入力してください。",
+      "en": "Enter a description of the piece here.",
+      "sp": "Ingrese aquí una descripción de la pieza."
+    }
+  }
+]

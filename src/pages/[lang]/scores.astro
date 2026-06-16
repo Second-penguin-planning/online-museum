@@ -1,0 +1,465 @@
+---
+import scores from '../../data/scores.json';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'ja' | 'en' | 'sp' };
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const meta = {
+  ja: { title: '楽譜 — 德永アートミュージアム', description: '徳永卓磨の楽譜コレクション' },
+  en: { title: 'Scores — Tokunaga Art Museum', description: 'Musical scores by Takuma Tokunaga' },
+  sp: { title: 'Partituras — Museo de Arte Tokunaga', description: 'Partituras musicales de Takuma Tokunaga' },
+};
+const currentMeta = meta[lang] ?? meta.ja;
+
+const ui = {
+  ja: {
+    heading: '楽　譜',
+    subheading: 'Musical Scores',
+    playBtn: '再生',
+    pauseBtn: '一時停止',
+    stopBtn: '停止',
+    noMp3: '音声ファイルなし',
+    noXml: '楽譜ファイルなし',
+    back: 'トップへ戻る',
+    selectScore: '曲を選んでください',
+    loading: '楽譜を読み込み中...',
+  },
+  en: {
+    heading: 'Scores',
+    subheading: 'Musical Scores',
+    playBtn: 'Play',
+    pauseBtn: 'Pause',
+    stopBtn: 'Stop',
+    noMp3: 'No audio file',
+    noXml: 'No score file',
+    back: 'Back to Top',
+    selectScore: 'Select a piece',
+    loading: 'Loading score...',
+  },
+  sp: {
+    heading: 'Partituras',
+    subheading: 'Musical Scores',
+    playBtn: 'Reproducir',
+    pauseBtn: 'Pausar',
+    stopBtn: 'Detener',
+    noMp3: 'Sin archivo de audio',
+    noXml: 'Sin archivo de partitura',
+    back: 'Volver al inicio',
+    selectScore: 'Seleccione una pieza',
+    loading: 'Cargando partitura...',
+  },
+};
+const t = ui[lang] ?? ui.ja;
+
+const scoresData = scores.map(s => ({
+  ...s,
+  title: s.title[lang] ?? s.title.ja,
+  composer: s.composer[lang] ?? s.composer.ja,
+  description: s.description[lang] ?? s.description.ja,
+}));
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{currentMeta.title}</title>
+  <meta name="description" content={currentMeta.description} />
+  <!-- OpenSheetMusicDisplay -->
+  <script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.8.9/build/opensheetmusicdisplay.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0e0e0e;
+      color: #e8e0d0;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      background: rgba(14,14,14,0.92);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .site-header a {
+      color: #e8e0d0;
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .site-header a:hover { opacity: 1; }
+    .header-title {
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      opacity: 0.9;
+    }
+
+    /* ── Layout ── */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 96px 2rem 4rem;
+    }
+
+    /* ── Page heading ── */
+    .page-heading {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .page-heading h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: 0.3em;
+      font-weight: 400;
+    }
+    .page-heading p {
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      opacity: 0.5;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Score list ── */
+    .score-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+    .score-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.02);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .score-item:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .score-item.active {
+      background: rgba(200,180,140,0.1);
+      border-color: rgba(200,180,140,0.4);
+    }
+    .score-num {
+      font-size: 1.1rem;
+      opacity: 0.35;
+      min-width: 2rem;
+      font-style: italic;
+    }
+    .score-info { flex: 1; }
+    .score-title { font-size: 1rem; letter-spacing: 0.05em; }
+    .score-composer { font-size: 0.78rem; opacity: 0.55; margin-top: 0.2rem; letter-spacing: 0.08em; }
+
+    /* ── Viewer panel ── */
+    .viewer-panel {
+      display: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+    }
+    .viewer-panel.visible { display: block; }
+
+    .viewer-info {
+      padding: 1.5rem 2rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .viewer-title { font-size: 1.3rem; letter-spacing: 0.08em; font-weight: 400; }
+    .viewer-composer { font-size: 0.82rem; opacity: 0.55; margin-top: 0.3rem; letter-spacing: 0.1em; }
+    .viewer-desc { font-size: 0.85rem; opacity: 0.65; margin-top: 0.8rem; line-height: 1.7; }
+
+    /* ── Audio controls ── */
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-wrap: wrap;
+    }
+    .ctrl-btn {
+      padding: 0.4rem 1.4rem;
+      border: 1px solid rgba(200,180,140,0.5);
+      border-radius: 2px;
+      background: transparent;
+      color: #e8e0d0;
+      font-family: inherit;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .ctrl-btn:hover { background: rgba(200,180,140,0.15); }
+    .ctrl-btn:disabled { opacity: 0.3; cursor: default; }
+    .ctrl-btn.play-btn { border-color: rgba(200,180,140,0.8); }
+
+    .time-display {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      letter-spacing: 0.08em;
+      font-family: monospace;
+    }
+    .progress-bar {
+      flex: 1;
+      min-width: 120px;
+      height: 3px;
+      appearance: none;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .progress-bar::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #c8b48c;
+    }
+    .no-audio-msg {
+      font-size: 0.78rem;
+      opacity: 0.4;
+      letter-spacing: 0.1em;
+      padding: 1rem 2rem;
+    }
+
+    /* ── Score canvas ── */
+    .score-loading {
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.45;
+      letter-spacing: 0.15em;
+    }
+    #osmd-container {
+      background: #fff;
+      padding: 2rem 1rem;
+      min-height: 200px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .page-wrap { padding: 80px 1rem 3rem; }
+      .score-item { padding: 0.8rem 1rem; }
+      .audio-controls { padding: 0.8rem 1rem; }
+      .viewer-info { padding: 1rem; }
+      .progress-bar { min-width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href={`${base}/${lang}/`}>{t.back}</a>
+    <span class="header-title">TOKUNAGA ART MUSEUM</span>
+    <span style="width:6rem"></span>
+  </header>
+
+  <main class="page-wrap">
+    <div class="page-heading">
+      <h1>{t.heading}</h1>
+      <p>{t.subheading}</p>
+    </div>
+
+    <!-- Score list -->
+    <div class="score-list" id="scoreList">
+      {scoresData.map((s, i) => (
+        <div
+          class="score-item"
+          data-id={s.id}
+          data-xml={s.musicxml ? `${base}/${s.musicxml}` : ''}
+          data-mp3={s.mp3 ? `${base}/${s.mp3}` : ''}
+          data-title={s.title}
+          data-composer={s.composer}
+          data-desc={s.description}
+        >
+          <span class="score-num">{String(i + 1).padStart(2, '0')}</span>
+          <div class="score-info">
+            <div class="score-title">{s.title}</div>
+            <div class="score-composer">{s.composer}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Viewer -->
+    <div class="viewer-panel" id="viewerPanel">
+      <div class="viewer-info">
+        <div class="viewer-title" id="viewerTitle"></div>
+        <div class="viewer-composer" id="viewerComposer"></div>
+        <div class="viewer-desc" id="viewerDesc"></div>
+      </div>
+
+      <!-- Audio controls (shown when MP3 exists) -->
+      <div class="audio-controls" id="audioControls" style="display:none">
+        <button class="ctrl-btn play-btn" id="playBtn">{t.playBtn}</button>
+        <button class="ctrl-btn" id="pauseBtn" disabled>{t.pauseBtn}</button>
+        <button class="ctrl-btn" id="stopBtn" disabled>{t.stopBtn}</button>
+        <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0" step="0.1" />
+        <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+      </div>
+      <div class="no-audio-msg" id="noAudioMsg" style="display:none">{t.noMp3}</div>
+
+      <!-- OSMD render target -->
+      <div class="score-loading" id="scoreLoading">{t.loading}</div>
+      <div id="osmd-container"></div>
+    </div>
+  </main>
+
+  <script define:vars={{ baseUrl: base, labelPlay: t.playBtn, labelPause: t.pauseBtn, noXmlMsg: t.noXml }}>
+    let osmd = null;
+    let audio = null;
+
+    const panel     = document.getElementById('viewerPanel');
+    const container = document.getElementById('osmd-container');
+    const loading   = document.getElementById('scoreLoading');
+
+    const playBtn      = document.getElementById('playBtn');
+    const pauseBtn     = document.getElementById('pauseBtn');
+    const stopBtn      = document.getElementById('stopBtn');
+    const progressBar  = document.getElementById('progressBar');
+    const timeDisplay  = document.getElementById('timeDisplay');
+    const audioCtrl    = document.getElementById('audioControls');
+    const noAudioMsg   = document.getElementById('noAudioMsg');
+
+    function fmt(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    // ── Audio setup ──────────────────────────────────────────
+    function setupAudio(mp3Url) {
+      if (audio) { audio.pause(); audio.src = ''; }
+
+      if (!mp3Url) {
+        audioCtrl.style.display = 'none';
+        noAudioMsg.style.display = 'block';
+        return;
+      }
+
+      audioCtrl.style.display = 'flex';
+      noAudioMsg.style.display = 'none';
+
+      audio = new Audio(mp3Url);
+
+      audio.addEventListener('loadedmetadata', () => {
+        progressBar.max = audio.duration;
+        timeDisplay.textContent = `0:00 / ${fmt(audio.duration)}`;
+      });
+      audio.addEventListener('timeupdate', () => {
+        progressBar.value = audio.currentTime;
+        timeDisplay.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+      });
+      audio.addEventListener('ended', () => {
+        playBtn.textContent = labelPlay;
+        playBtn.disabled = false;
+        pauseBtn.disabled = true;
+        stopBtn.disabled = true;
+        progressBar.value = 0;
+      });
+
+      playBtn.disabled = false;
+      pauseBtn.disabled = true;
+      stopBtn.disabled = true;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!audio) return;
+      audio.play();
+      playBtn.disabled = true;
+      pauseBtn.disabled = false;
+      stopBtn.disabled = false;
+    });
+    pauseBtn.addEventListener('click', () => {
+      if (!audio) return;
+      audio.pause();
+      playBtn.disabled = false;
+      pauseBtn.disabled = true;
+    });
+    stopBtn.addEventListener('click', () => {
+      if (!audio) return;
+      audio.pause();
+      audio.currentTime = 0;
+      progressBar.value = 0;
+      playBtn.disabled = false;
+      pauseBtn.disabled = true;
+      stopBtn.disabled = true;
+    });
+    progressBar.addEventListener('input', () => {
+      if (audio) audio.currentTime = progressBar.value;
+    });
+
+    // ── OSMD render ──────────────────────────────────────────
+    async function loadScore(xmlUrl) {
+      container.innerHTML = '';
+      loading.style.display = 'block';
+
+      if (!xmlUrl) {
+        loading.textContent = noXmlMsg;
+        return;
+      }
+
+      if (!osmd) {
+        osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(container, {
+          autoResize: true,
+          drawTitle: true,
+          drawComposer: true,
+          drawPartNames: true,
+          followCursor: false,
+          pageFormat: 'Endless',
+        });
+      }
+
+      try {
+        await osmd.load(xmlUrl);
+        osmd.render();
+        loading.style.display = 'none';
+      } catch (e) {
+        loading.textContent = '読み込みエラー: ' + e.message;
+      }
+    }
+
+    // ── Score item click ──────────────────────────────────────
+    document.querySelectorAll('.score-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.score-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+
+        document.getElementById('viewerTitle').textContent   = item.dataset.title;
+        document.getElementById('viewerComposer').textContent = item.dataset.composer;
+        document.getElementById('viewerDesc').textContent    = item.dataset.desc;
+
+        panel.classList.add('visible');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        setupAudio(item.dataset.mp3 || '');
+        loadScore(item.dataset.xml || '');
+      });
+    });
+  </script>
+</body>
+</html>
