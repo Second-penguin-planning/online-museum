@@ -332,70 +332,14 @@ function getCardWidth(sizeStr) {
         align-items: center;
         z-index: 990;
         transition: opacity 1.4s ease, visibility 1.4s ease;
-        background: linear-gradient(
-          150deg,
-          #1a0d04 0%,
-          #3a2008 35%,
-          #4e3015 65%,
-          #231208 100%
-        );
-        overflow: hidden;
+        background:
+          url('/hero.png') center / cover no-repeat;
       }
 
       .entrance.hidden {
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-      }
-
-      .hero-gallery {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: clamp(12px, 2vw, 28px);
-        padding: 80px clamp(16px, 5vw, 60px) 60px;
-      }
-
-      .hero-painting {
-        flex: 1 1 0;
-        max-width: clamp(88px, 15vw, 210px);
-        border: 8px solid;
-        border-color: #c89020 #7a4e1a #7a4e1a #c89020;
-        box-shadow:
-          6px 10px 26px rgba(0,0,0,0.8),
-          0 0 0 1px rgba(0,0,0,0.45),
-          inset 0 0 10px rgba(0,0,0,0.35);
-      }
-
-      .hero-painting img {
-        width: 100%;
-        height: clamp(68px, 12vw, 160px);
-        object-fit: cover;
-        display: block;
-      }
-
-      .hero-painting:nth-child(1) { transform: translateY(-32px); }
-      .hero-painting:nth-child(2) { transform: translateY(20px); }
-      .hero-painting:nth-child(3) { transform: translateY(-18px); }
-      .hero-painting:nth-child(4) { transform: translateY(26px); }
-      .hero-painting:nth-child(5) { transform: translateY(-24px); }
-      .hero-painting:nth-child(6) { transform: translateY(12px); }
-
-      .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(ellipse 85% 85% at 50% 50%, rgba(26, 13, 4, 0.42) 0%, rgba(26, 13, 4, 0.88) 100%),
-          linear-gradient(to bottom, rgba(26, 13, 4, 0.72) 0%, transparent 22%, transparent 72%, rgba(26, 13, 4, 0.72) 100%);
-        pointer-events: none;
-      }
-
-      @media (max-width: 640px) {
-        .hero-painting { border-width: 6px; }
-        .hero-painting:nth-child(5),
-        .hero-painting:nth-child(6) { display: none; }
       }
 
       .hero-inner {
@@ -956,15 +900,6 @@ function getCardWidth(sizeStr) {
 
     <!-- ヒーロー / 入口 -->
     <div class="entrance" id="entrance">
-      <div class="hero-gallery">
-        <div class="hero-painting"><img src={`${base}/gallery/01001.jpg`} alt="" /></div>
-        <div class="hero-painting"><img src={`${base}/gallery/01004.jpg`} alt="" /></div>
-        <div class="hero-painting"><img src={`${base}/gallery/02001.jpg`} alt="" /></div>
-        <div class="hero-painting"><img src={`${base}/gallery/01008.jpg`} alt="" /></div>
-        <div class="hero-painting"><img src={`${base}/gallery/02002.jpg`} alt="" /></div>
-        <div class="hero-painting"><img src={`${base}/gallery/01009.jpg`} alt="" /></div>
-      </div>
-      <div class="hero-overlay"></div>
       <div class="hero-inner">
         <button class="enter-btn" id="enterBtn">{t.enter}</button>
       </div>
