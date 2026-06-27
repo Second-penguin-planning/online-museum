@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>神戸コミュニティガイド | Kobe Community Guide</title>
+  <meta name="description" content="バングラデシュ人・ネパール人向け神戸（東灘〜元町）ハラル・コミュニティガイド" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; }
+    .lang-btn.active { background: #1e40af; color: white; }
+    .cat-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
+    .card { transition: box-shadow 0.2s; }
+    .card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+    .halal-badge { background: #16a34a; }
+    .hidden { display: none; }
+    @media (max-width: 640px) {
+      .grid-cols-auto { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- Header -->
+<header class="bg-gradient-to-r from-green-700 to-emerald-600 text-white shadow-lg">
+  <div class="max-w-4xl mx-auto px-4 py-5">
+    <div class="flex items-start justify-between flex-wrap gap-3">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-3xl">🕌</span>
+          <h1 class="text-2xl font-bold leading-tight" id="header-title">神戸コミュニティガイド</h1>
+        </div>
+        <p class="text-green-100 text-sm" id="header-sub">東灘区〜元町 ハラル・コミュニティ情報</p>
+        <p class="text-green-200 text-xs mt-1">🇧🇩 বাংলাদেশি ও 🇳🇵 নেপালি সম্প্রদায়ের জন্য</p>
+      </div>
+      <!-- Language switcher -->
+      <div class="flex gap-1 flex-wrap">
+        <button class="lang-btn active px-3 py-1.5 rounded-full text-xs font-semibold border border-white/40 bg-white/10 hover:bg-white/20 transition" data-lang="ja">日本語</button>
+        <button class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-white/40 bg-white/10 hover:bg-white/20 transition" data-lang="en">English</button>
+        <button class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-white/40 bg-white/10 hover:bg-white/20 transition" data-lang="bn">বাংলা</button>
+        <button class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-white/40 bg-white/10 hover:bg-white/20 transition" data-lang="ne">नेपाली</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Area filter -->
+<div class="bg-white border-b sticky top-0 z-10 shadow-sm">
+  <div class="max-w-4xl mx-auto px-4 py-2 overflow-x-auto">
+    <div class="flex gap-2 min-w-max">
+      <button class="area-btn active px-3 py-1 rounded-full text-xs font-medium border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition" data-area="all" id="area-all">📍 全エリア</button>
+      <button class="area-btn px-3 py-1 rounded-full text-xs font-medium border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100 transition" data-area="higashinada">東灘区</button>
+      <button class="area-btn px-3 py-1 rounded-full text-xs font-medium border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100 transition" data-area="nada">灘区</button>
+      <button class="area-btn px-3 py-1 rounded-full text-xs font-medium border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100 transition" data-area="chuo">中央区（三宮）</button>
+      <button class="area-btn px-3 py-1 rounded-full text-xs font-medium border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100 transition" data-area="hyogo">兵庫区</button>
+    </div>
+  </div>
+</div>
+
+<!-- Category tabs -->
+<div class="bg-white border-b">
+  <div class="max-w-4xl mx-auto px-4 py-3 overflow-x-auto">
+    <div class="flex gap-2 min-w-max">
+      <button class="cat-btn active px-4 py-2 rounded-full text-sm font-medium border border-blue-800 text-blue-800 hover:bg-blue-50 transition" data-cat="all" id="cat-all">🗂️ <span data-i18n="cat_all">すべて</span></button>
+      <button class="cat-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition" data-cat="halal">🍛 <span data-i18n="cat_halal">ハラルフード</span></button>
+      <button class="cat-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition" data-cat="grocery">🛒 <span data-i18n="cat_grocery">アジア食材</span></button>
+      <button class="cat-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition" data-cat="mosque">🕌 <span data-i18n="cat_mosque">モスク・礼拝</span></button>
+      <button class="cat-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition" data-cat="tourist">🗺️ <span data-i18n="cat_tourist">観光</span></button>
+      <button class="cat-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition" data-cat="remittance">💸 <span data-i18n="cat_remittance">送金・銀行</span></button>
+      <button class="cat-btn px-4 py-2 rounded-full text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition" data-cat="hospital">🏥 <span data-i18n="cat_hospital">病院</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Main content -->
+<main class="max-w-4xl mx-auto px-4 py-6">
+  <div id="results-count" class="text-sm text-gray-500 mb-4"></div>
+  <div id="cards-container" class="grid gap-4 sm:grid-cols-2"></div>
+  <div id="empty-state" class="hidden text-center py-16 text-gray-400">
+    <div class="text-5xl mb-3">🔍</div>
+    <p data-i18n="no_results">該当する場所が見つかりません</p>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-gray-300 text-center text-xs py-6 mt-12">
+  <p>🕌 神戸コミュニティガイド | Kobe Community Guide for Bangladeshi & Nepali Community</p>
+  <p class="mt-1 text-gray-500">情報は変更される場合があります。ご来店前にご確認ください。</p>
+</footer>
+
+<script>
+// ===== DATA =====
+const places = [
+  // ===== MOSQUES =====
+  {
+    id: 'kobe-mosque',
+    cat: 'mosque',
+    area: 'chuo',
+    halal: true,
+    minor: false,
+    name: {
+      ja: '神戸モスク（神戸ムスリムモスク）',
+      en: 'Kobe Mosque (Kobe Muslim Mosque)',
+      bn: 'কোবে মসজিদ',
+      ne: 'कोबे मस्जिद',
+    },
+    address: {
+      ja: '神戸市中央区中山手通2-25-14',
+      en: '2-25-14 Nakayamatedori, Chuo-ku, Kobe',
+      bn: '২-২৫-১৪ নাকায়ামাতে-দোরি, চুও-কু, কোবে',
+      ne: '२-२५-१४ नाकायामातेदोरी, च्युओ-कु, कोबे',
+    },
+    hours: { ja: '礼拝時間（アザーン毎）', en: 'Open for prayer times', bn: 'নামাযের সময় খোলা', ne: 'नमाज समयमा खुल्ला' },
+    note: {
+      ja: '日本最古のモスク（1935年建立）。金曜礼拝・断食月行事あり。バングラデシュ人・パキスタン人コミュニティが多く集まる。',
+      en: "Japan's oldest mosque (est. 1935). Friday prayer & Ramadan events. Large Bangladeshi & Pakistani community.",
+      bn: 'জাপানের প্রাচীনতম মসজিদ (১৯৩৫ সালে প্রতিষ্ঠিত)। জুমার নামায ও রমজানের অনুষ্ঠান আছে।',
+      ne: 'जापानको सबैभन्दा पुरानो मस्जिद (सन् १९३५)। जुम्मा नमाज र रमजानको कार्यक्रम हुन्छ।',
+    },
+    mapUrl: 'https://maps.google.com/?q=神戸モスク+神戸市中央区中山手通2-25-14',
+    phone: '078-231-6060',
+    tags: ['friday-prayer', 'community', 'historic'],
+    icon: '🕌',
+    color: 'bg-teal-50 border-teal-200',
+    badgeColor: 'bg-teal-100 text-teal-800',
+  },
+  {
+    id: 'masjid-sannomiya',
+    cat: 'mosque',
+    area: 'chuo',
+    halal: true,
+    minor: true,
+    name: {
+      ja: 'マスジド・アル＝ファルーク（三宮礼拝所）',
+      en: 'Masjid Al-Farouq Sannomiya Prayer Room',
+      bn: 'মসজিদ আল-ফারুক সান্নোমিয়া',
+      ne: 'मस्जिद अल-फारुक सान्नोमिया',
+    },
+    address: {
+      ja: '神戸市中央区三宮町付近（詳細はコミュニティへ確認）',
+      en: 'Near Sannomiya, Chuo-ku, Kobe (confirm with community)',
+      bn: 'সান্নোমিয়া এলাকা, চুও-কু, কোবে',
+      ne: 'सान्नोमिया क्षेत्र, च्युओ-कु, कোবे',
+    },
+    hours: { ja: '礼拝時間', en: 'Prayer times', bn: 'নামাযের সময়', ne: 'नमाज समय' },
+    note: {
+      ja: '三宮エリアの礼拝所。詳細は神戸モスクのコミュニティへお問い合わせください。',
+      en: 'Prayer room in Sannomiya area. Contact Kobe Mosque community for details.',
+      bn: 'সান্নোমিয়া এলাকার নামাযের জায়গা। বিস্তারিত কোবে মসজিদে জিজ্ঞেস করুন।',
+      ne: 'सान्नोमिया क्षेत्रको नमाज कोठा। विस्तारको लागि कोबे मस्जिदमा सोध्नुहोस्।',
+    },
+    mapUrl: 'https://maps.google.com/?q=三宮+モスク+神戸',
+    tags: ['prayer'],
+    icon: '🕌',
+    color: 'bg-teal-50 border-teal-200',
+    badgeColor: 'bg-teal-100 text-teal-800',
+  },
+  {
+    id: 'masjid-hyogo',
+    cat: 'mosque',
+    area: 'hyogo',
+    halal: true,
+    minor: true,
+    name: {
+      ja: 'マスジドゥル・ハムドゥリッラー（兵庫礼拝所）',
+      en: 'Masjidu\'l Hamdulillah (Hyogo Prayer Room)',
+      bn: 'মসজিদুল হামদুলিল্লাহ (হিওগো)',
+      ne: 'मस्जिदुल हम्दुलिल्लाह (ह्योगो)',
+    },
+    address: {
+      ja: '神戸市兵庫区（詳細はコミュニティへ確認）',
+      en: 'Hyogo-ku, Kobe (confirm with community)',
+      bn: 'হিওগো-কু, কোবে',
+      ne: 'ह्योगो-कु, कोबे',
+    },
+    hours: { ja: '礼拝時間', en: 'Prayer times', bn: 'নামাযের সময়', ne: 'नमाज समय' },
+    note: {
+      ja: '兵庫区のムスリムコミュニティの礼拝所。南アジア系の方が多い。',
+      en: 'Prayer room for Hyogo-ku Muslim community. Many South Asian worshippers.',
+      bn: 'হিওগো-কুর মুসলিম কমিউনিটির নামাযের জায়গা। দক্ষিণ এশিয়ার মানুষ বেশি।',
+      ne: 'ह्योगो-कुको मुस्लिम समुदायको नमाज कोठा। दक्षिण एसियाली मान्छे धेरै।',
+    },
+    mapUrl: 'https://maps.google.com/?q=神戸市兵庫区+モスク',
+    tags: ['prayer', 'south-asian'],
+    icon: '🕌',
+    color: 'bg-teal-50 border-teal-200',
+    badgeColor: 'bg-teal-100 text-teal-800',
+  },
+
+  // ===== HALAL RESTAURANTS =====
+  {
+    id: 'spice-magic',
+    cat: 'halal',
+    area: 'chuo',
+    halal: true,
+    minor: false,
+    name: {
+      ja: 'スパイスマジック カルカッタ（三宮）',
+      en: 'Spice Magic Calcutta (Sannomiya)',
+      bn: 'স্পাইস ম্যাজিক কলকাতা',
+      ne: 'स्पाइस म्यागिक कलकत्ता',
+    },
+    address: {
+      ja: '神戸市中央区北長狭通1丁目付近',
+      en: 'Near Kita-nagasa-dori 1-chome, Chuo-ku, Kobe',
+      bn: 'কিতা-নাগাসা-দোরি, চুও-কু, কোবে',
+      ne: 'किता-नागासा-दोरी, च्युओ-कु, कोबे',
+    },
+    hours: { ja: '11:30〜14:30, 17:00〜22:00', en: '11:30–14:30, 17:00–22:00', bn: '১১:৩০–১৪:৩০, ১৭:০০–২২:০০', ne: '११:३०–१४:३०, १७:००–२२:००' },
+    note: {
+      ja: 'インド・バングラデシュ料理。ハラル認証あり。カレー・ビリヤニが人気。バングラデシュ人スタッフあり。',
+      en: 'Indian & Bangladeshi cuisine. Halal certified. Curry & biryani popular. Bangladeshi staff.',
+      bn: 'ভারতীয় ও বাংলাদেশি খাবার। হালাল সার্টিফাইড। কারি ও বিরিয়ানি জনপ্রিয়। বাংলাদেশি স্টাফ আছে।',
+      ne: 'भारतीय र बङ्गलादेशी खाना। हलाल सर्टिफाइड। करी र बिरियानी लोकप्रिय।',
+    },
+    price: '¥¥',
+    mapUrl: 'https://maps.google.com/?q=スパイスマジックカルカッタ+神戸',
+    tags: ['indian', 'bangladeshi', 'biryani', 'curry'],
+    icon: '🍛',
+    color: 'bg-orange-50 border-orange-200',
+    badgeColor: 'bg-orange-100 text-orange-800',
+  },
+  {
+    id: 'nepal-kitchen',
+    cat: 'halal',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: 'ネパール料理 ヒマラヤ（三宮）',
+      en: 'Nepal Kitchen Himalaya (Sannomiya)',
+      bn: 'নেপাল কিচেন হিমালয়',
+      ne: 'नेपाल किचन हिमालय',
+    },
+    address: {
+      ja: '神戸市中央区三宮町付近',
+      en: 'Near Sannomiya-cho, Chuo-ku, Kobe',
+      bn: 'সান্নোমিয়া-চো, চুও-কু, কোবে',
+      ne: 'सान्नोमिया-चो, च्युओ-कु, कोबे',
+    },
+    hours: { ja: '11:00〜22:00', en: '11:00–22:00', bn: '১১:০০–২২:০০', ne: '११:००–२२:००' },
+    note: {
+      ja: 'ネパール人シェフによる本格ネパール料理。モモ・ダルバート・チキンカレーが人気。菜食メニューあり。',
+      en: 'Authentic Nepali cuisine by Nepali chef. Momo, Dal Bhat, Chicken curry popular. Vegetarian options.',
+      bn: 'নেপালি শেফের হাতের খাঁটি নেপালি খাবার। মোমো, ডাল ভাত, চিকেন কারি জনপ্রিয়।',
+      ne: 'नेपाली शेफद्वारा प्रामाणिक नेपाली खाना। मोमो, दाल भात, चिकेन करी लोकप्रिय। शाकाहारी विकल्प छ।',
+    },
+    price: '¥¥',
+    mapUrl: 'https://maps.google.com/?q=ネパール料理+神戸+三宮',
+    tags: ['nepali', 'momo', 'dalbhat', 'vegetarian'],
+    icon: '🍽️',
+    color: 'bg-orange-50 border-orange-200',
+    badgeColor: 'bg-orange-100 text-orange-800',
+    vegNote: true,
+  },
+  {
+    id: 'al-baik-kobe',
+    cat: 'halal',
+    area: 'chuo',
+    halal: true,
+    minor: true,
+    name: {
+      ja: 'アル・ベイク（ハラルチキン）',
+      en: 'Al-Baik Halal Fried Chicken',
+      bn: 'আল-বাইক হালাল চিকেন',
+      ne: 'अल-बाइक हलाल चिकेन',
+    },
+    address: {
+      ja: '神戸市中央区元町周辺',
+      en: 'Near Motomachi, Chuo-ku, Kobe',
+      bn: 'মোতোমাচি, চুও-কু, কোবে',
+      ne: 'मोतोमाची, च्युओ-कु, कोবे',
+    },
+    hours: { ja: '11:00〜21:00', en: '11:00–21:00', bn: '১১:০০–২১:০০', ne: '११:००–२१:००' },
+    note: {
+      ja: '中東・南アジア系ハラルファストフード。フライドチキン・シャワルマが人気。手頃な値段。',
+      en: 'Middle Eastern & South Asian halal fast food. Fried chicken & shawarma popular. Affordable.',
+      bn: 'মধ্যপ্রাচ্য ও দক্ষিণ এশিয়ার হালাল ফাস্টফুড। ফ্রাইড চিকেন ও শাওয়ারমা জনপ্রিয়।',
+      ne: 'मध्यपूर्व र दक्षिण एसियाको हलाल फास्टफुड। फ्राइड चिकेन र शावरमा लोकप्रिয়।',
+    },
+    price: '¥',
+    mapUrl: 'https://maps.google.com/?q=ハラル+フード+元町+神戸',
+    tags: ['fastfood', 'chicken', 'shawarma', 'affordable'],
+    icon: '🍗',
+    color: 'bg-orange-50 border-orange-200',
+    badgeColor: 'bg-orange-100 text-orange-800',
+  },
+  {
+    id: 'bangla-kitchen',
+    cat: 'halal',
+    area: 'chuo',
+    halal: true,
+    minor: true,
+    name: {
+      ja: 'バングラデシュ料理・ダッカキッチン',
+      en: 'Dhaka Kitchen (Bangladeshi Restaurant)',
+      bn: 'ঢাকা কিচেন (বাংলাদেশি রেস্টুরেন্ট)',
+      ne: 'ढाका किचन (बङ्गलादेशी रेस्टुरेन्ट)',
+    },
+    address: {
+      ja: '神戸市中央区三宮・元町エリア',
+      en: 'Sannomiya / Motomachi area, Kobe',
+      bn: 'সান্নোমিয়া / মোতোমাচি এলাকা, কোবে',
+      ne: 'सान्नोमिया / मोतोमाची क्षेत्र, कोबे',
+    },
+    hours: { ja: '12:00〜22:00', en: '12:00–22:00', bn: '১২:০০–২২:০০', ne: '१२:००–२२:००' },
+    note: {
+      ja: 'バングラデシュ人が経営する本場の味。マトンカレー・ヒリシャ（イリシュ）魚料理・ビリヤニ。ハラル厳守。',
+      en: 'Bangladeshi-owned. Authentic mutton curry, Hilsha fish, biryani. Strictly halal.',
+      bn: 'বাংলাদেশি মালিকানার রেস্টুরেন্ট। মটন কারি, ইলিশ মাছ, বিরিয়ানি। সম্পূর্ণ হালাল।',
+      ne: 'बङ्गलादेशी स्वामित्वको। खासी मासु करी, इलिश माछा, बिरियानी। कडा हलाल।',
+    },
+    price: '¥¥',
+    mapUrl: 'https://maps.google.com/?q=バングラデシュ料理+神戸',
+    tags: ['bangladeshi', 'mutton', 'fish', 'biryani'],
+    icon: '🍛',
+    color: 'bg-orange-50 border-orange-200',
+    badgeColor: 'bg-orange-100 text-orange-800',
+  },
+  {
+    id: 'pak-india-chuo',
+    cat: 'halal',
+    area: 'chuo',
+    halal: true,
+    minor: false,
+    name: {
+      ja: 'パキスタン・インド料理 シャヒマハル',
+      en: 'Pakistani & Indian Restaurant Shahi Mahal',
+      bn: 'পাকিস্তানি ও ভারতীয় রেস্টুরেন্ট শাহী মহল',
+      ne: 'पाकिस्तानी र भारतीय रेस्टुरेन्ट शाही महल',
+    },
+    address: {
+      ja: '神戸市中央区元町通付近',
+      en: 'Near Motomachi-dori, Chuo-ku, Kobe',
+      bn: 'মোতোমাচি-দোরি, চুও-কু, কোবে',
+      ne: 'मोतोमाची-दोरी, च्युओ-कु, कोबे',
+    },
+    hours: { ja: '11:30〜22:00', en: '11:30–22:00', bn: '১১:৩০–২২:০০', ne: '११:३०–२२:००' },
+    note: {
+      ja: 'パキスタン人経営。タンドールチキン・ナン・羊肉料理。ハラル食材使用。ウルドゥー語・英語対応。',
+      en: 'Pakistani-owned. Tandoori chicken, naan, lamb dishes. Halal ingredients. Urdu & English spoken.',
+      bn: 'পাকিস্তানি পরিচালিত। তন্দুরি চিকেন, নান, ভেড়ার মাংস। হালাল উপাদান। উর্দু ও ইংরেজি বলা হয়।',
+      ne: 'पाकिस्तानी सञ्चालित। तन्दुरी चिकेन, नान, भेडाको मासु। हलाल सामग्री। उर्दु र अङ्ग्रेजी बोलिन्छ।',
+    },
+    price: '¥¥',
+    mapUrl: 'https://maps.google.com/?q=パキスタン+インド料理+神戸+元町',
+    tags: ['pakistani', 'indian', 'tandoori', 'lamb'],
+    icon: '🍛',
+    color: 'bg-orange-50 border-orange-200',
+    badgeColor: 'bg-orange-100 text-orange-800',
+  },
+  {
+    id: 'momo-house',
+    cat: 'halal',
+    area: 'chuo',
+    halal: false,
+    minor: true,
+    name: {
+      ja: 'モモハウス（ネパール料理・三宮）',
+      en: 'Momo House (Nepali Dumplings)',
+      bn: 'মোমো হাউস (নেপালি ডাম্পলিং)',
+      ne: 'मोमो हाउस (नेपाली मोमो)',
+    },
+    address: {
+      ja: '神戸市中央区三宮周辺',
+      en: 'Sannomiya area, Kobe',
+      bn: 'সান্নোমিয়া এলাকা, কোবে',
+      ne: 'सान्नोमिया क्षेत्र, कोबे',
+    },
+    hours: { ja: '11:00〜21:00', en: '11:00–21:00', bn: '১১:০০–২১:০০', ne: '११:००–२१:००' },
+    note: {
+      ja: 'ネパール人経営の小さなモモ専門店。蒸しモモ・揚げモモ・スープモモが揃う。テイクアウト可。',
+      en: 'Small Nepali-owned momo shop. Steamed, fried, and soup momo. Takeaway available.',
+      bn: 'নেপালি পরিচালিত ছোট মোমোর দোকান। স্টিমড, ফ্রাইড, স্যুপ মোমো। টেকঅ্যাওয়ে সম্ভব।',
+      ne: 'नेपाली सञ्चालित साना मोमो पसल। स्टिम, फ्राइड, सूप मोमो। टेकअवे उपलब्ध।',
+    },
+    price: '¥',
+    mapUrl: 'https://maps.google.com/?q=ネパール料理+モモ+神戸+三宮',
+    tags: ['nepali', 'momo', 'takeaway', 'cheap'],
+    icon: '🥟',
+    color: 'bg-orange-50 border-orange-200',
+    badgeColor: 'bg-orange-100 text-orange-800',
+  },
+
+  // ===== GROCERY / SUPERMARKETS =====
+  {
+    id: 'halal-market-sannomiya',
+    cat: 'grocery',
+    area: 'chuo',
+    halal: true,
+    minor: false,
+    name: {
+      ja: 'ハラルフードマーケット 三宮',
+      en: 'Halal Food Market Sannomiya',
+      bn: 'হালাল ফুড মার্কেট সান্নোমিয়া',
+      ne: 'हलाल फुड मार्केट सान्नोमिया',
+    },
+    address: {
+      ja: '神戸市中央区三宮町付近',
+      en: 'Near Sannomiya-cho, Chuo-ku, Kobe',
+      bn: 'সান্নোমিয়া-চো, চুও-কু, কোবে',
+      ne: 'सान्नोমिया-चो, च्युओ-कु, कोবे',
+    },
+    hours: { ja: '10:00〜21:00', en: '10:00–21:00', bn: '১০:০০–২১:০০', ne: '१०:००–२१:००' },
+    note: {
+      ja: 'ハラル認証肉（牛・鶏・羊）、バスマティライス、レンズ豆、スパイス類を販売。バングラデシュ・インド輸入食品あり。',
+      en: 'Halal-certified meat (beef, chicken, lamb), basmati rice, lentils, spices. Bangladesh & India imported foods.',
+      bn: 'হালাল সার্টিফাইড মাংস (গরু, মুরগি, ভেড়া), বাসমতি চাল, ডাল, মশলা। বাংলাদেশ ও ভারত থেকে আমদানি করা খাবার।',
+      ne: 'हलाल सर्टिफाइड मासु (गाई, कुखुरा, भेडा), बासमती चामल, दाल, मसला। बङ्गलादेश र भारतबाट आयातित खाना।',
+    },
+    mapUrl: 'https://maps.google.com/?q=ハラル+食材+スーパー+神戸+三宮',
+    tags: ['halal-meat', 'spices', 'rice', 'lentils', 'import'],
+    icon: '🛒',
+    color: 'bg-green-50 border-green-200',
+    badgeColor: 'bg-green-100 text-green-800',
+  },
+  {
+    id: 'asia-market-motomachi',
+    cat: 'grocery',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: 'アジアン食材スーパー 元町',
+      en: 'Asian Grocery Store Motomachi',
+      bn: 'এশিয়ান গ্রোসারি স্টোর মোতোমাচি',
+      ne: 'एसियन किराना पसल मोतोमाची',
+    },
+    address: {
+      ja: '神戸市中央区元町通・南京町周辺',
+      en: 'Near Motomachi-dori & Nankin-machi, Kobe',
+      bn: 'মোতোমাচি-দোরি ও নানকিন-মাচি, কোবে',
+      ne: 'मोतोमाची-दोरी र नान्किन-माची, कोबे',
+    },
+    hours: { ja: '9:00〜20:00', en: '9:00–20:00', bn: '৯:০০–২০:০০', ne: '९:००–२०:००' },
+    note: {
+      ja: '東南アジア・南アジア食材を幅広く取り扱い。米粉・ナンプラー・ターメリック・コリアンダー・ベンガルスパイスあり。',
+      en: 'Wide range of Southeast & South Asian ingredients. Rice flour, fish sauce, turmeric, coriander, Bengali spices.',
+      bn: 'দক্ষিণ-পূর্ব ও দক্ষিণ এশিয়ার খাবারের বিস্তৃত সংগ্রহ। চালের আটা, হলুদ, ধনেপাতা, বাংলা মশলা আছে।',
+      ne: 'दक्षिणपूर्व र दक्षिण एसियाका खाद्य सामग्रीको विस्तृत संग्रह। चामलको पिठो, हलदी, धनिया, बंगाली मसला।',
+    },
+    mapUrl: 'https://maps.google.com/?q=アジア食材+神戸+元町',
+    tags: ['spices', 'southeast-asian', 'south-asian', 'rice'],
+    icon: '🌶️',
+    color: 'bg-green-50 border-green-200',
+    badgeColor: 'bg-green-100 text-green-800',
+  },
+  {
+    id: 'india-pak-store',
+    cat: 'grocery',
+    area: 'chuo',
+    halal: true,
+    minor: true,
+    name: {
+      ja: 'インド・パキスタン食材店 KIBEショップ',
+      en: 'India-Pakistan Grocery KIBE Shop',
+      bn: 'ইন্ডিয়া-পাকিস্তান গ্রোসারি কিবে শপ',
+      ne: 'भारत-पाकिस्तान किराना किबे शप',
+    },
+    address: {
+      ja: '神戸市中央区北野・三宮エリア',
+      en: 'Kitano / Sannomiya area, Kobe',
+      bn: 'কিতানো / সান্নোমিয়া এলাকা, কোবে',
+      ne: 'किटानो / सान्नोমिয়া क्षेत्र, कोबे',
+    },
+    hours: { ja: '10:00〜19:00（日曜不定）', en: '10:00–19:00 (Sun irregular)', bn: '১০:০০–১৯:০০ (রবিবার অনিয়মিত)', ne: '१०:००–१९:०० (आइतवार अनियमित)' },
+    note: {
+      ja: 'パキスタン・インド人経営の食材店。アッタ（全粒粉）・チャナダル・マスタードオイル・アチャール（漬け物）など豊富。',
+      en: 'Pakistan/India-run grocery. Atta (whole wheat), chana dal, mustard oil, achar (pickle) and more.',
+      bn: 'পাকিস্তানি/ভারতীয় পরিচালিত দোকান। আটা, ছোলার ডাল, সরিষার তেল, আচার ইত্যাদি পাওয়া যায়।',
+      ne: 'पाकिस्तानी/भारतीय सञ्चालित पसल। आटा, चना दाल, सर्सोको तेल, अचार आदि पाइन्छ।',
+    },
+    mapUrl: 'https://maps.google.com/?q=インド食材+神戸+三宮+北野',
+    tags: ['atta', 'dal', 'mustard-oil', 'pickle', 'halal-meat'],
+    icon: '🛒',
+    color: 'bg-green-50 border-green-200',
+    badgeColor: 'bg-green-100 text-green-800',
+  },
+  {
+    id: 'business-super',
+    cat: 'grocery',
+    area: 'nada',
+    halal: false,
+    minor: false,
+    name: {
+      ja: 'ビッグ・エー 灘店（格安スーパー）',
+      en: "Big-A Nada (Discount Supermarket)",
+      bn: 'বিগ-এ নাদা (ডিসকাউন্ট সুপার)',
+      ne: 'बिग-ए नाडा (सस्तो सुपरमार्केट)',
+    },
+    address: {
+      ja: '神戸市灘区周辺',
+      en: 'Nada-ku area, Kobe',
+      bn: 'নাদা-কু এলাকা, কোবে',
+      ne: 'नाडा-कु क्षेत्र, कोबे',
+    },
+    hours: { ja: '9:00〜21:00', en: '9:00–21:00', bn: '৯:০০–২১:০০', ne: '९:००–२१:००' },
+    note: {
+      ja: '日常の食品・生活用品が格安で揃う。野菜・果物・卵・調味料が安い。節約に便利。',
+      en: 'Affordable everyday food and household items. Cheap vegetables, eggs, and condiments. Great for budget.',
+      bn: 'সাশ্রয়ী দামে প্রতিদিনের খাবার ও গৃহস্থালি সামগ্রী। সবজি, ডিম, মশলা সস্তা।',
+      ne: 'सस्तो दैनिक खाना र घरायसी सामान। सब्जी, अण्डा, मसला सस्तो। बजेटका लागि उपयुक्त।',
+    },
+    mapUrl: 'https://maps.google.com/?q=ビッグエー+神戸+灘',
+    tags: ['budget', 'vegetables', 'daily-goods'],
+    icon: '🛒',
+    color: 'bg-green-50 border-green-200',
+    badgeColor: 'bg-green-100 text-green-800',
+  },
+
+  // ===== TOURIST SPOTS =====
+  {
+    id: 'kitano-ijinkan',
+    cat: 'tourist',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: '北野異人館街',
+      en: 'Kitano Ijinkan (Foreign Residences District)',
+      bn: 'কিতানো ইজিনকান (বিদেশিদের বাসস্থান এলাকা)',
+      ne: 'किटानो इजिनकान (विदेशी निवास क्षेत्र)',
+    },
+    address: {
+      ja: '神戸市中央区北野町',
+      en: 'Kitano-cho, Chuo-ku, Kobe',
+      bn: 'কিতানো-চো, চুও-কু, কোবে',
+      ne: 'किटानो-चो, च्युओ-कु, कोबे',
+    },
+    hours: { ja: '施設により異なる（9:00〜18:00目安）', en: 'Varies by facility (approx. 9:00–18:00)', bn: 'স্থানভেদে ভিন্ন', ne: 'स्थान अनुसार फरक' },
+    note: {
+      ja: '明治時代の洋館が並ぶ観光地。異文化に興味のある方に人気。入場無料の館あり。神戸モスクへも徒歩圏。',
+      en: 'Historic Western-style mansions from Meiji era. Free entry to some houses. Walking distance to Kobe Mosque.',
+      bn: 'মেইজি যুগের পশ্চিমা স্টাইলের ম্যানশন। কিছু বাড়িতে বিনামূল্যে প্রবেশ। কোবে মসজিদ হেঁটে যাওয়া যায়।',
+      ne: 'मेइजी युगका पश्चिमी शैलीका हवेली। केही घरमा निःशुल्क प्रवेश। कोबे मस्जिद हिंडेर जान सकिन्छ।',
+    },
+    mapUrl: 'https://maps.google.com/?q=北野異人館+神戸',
+    tags: ['historic', 'free', 'walking'],
+    icon: '🏛️',
+    color: 'bg-indigo-50 border-indigo-200',
+    badgeColor: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    id: 'nankinmachi',
+    cat: 'tourist',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: '南京町（神戸チャイナタウン）',
+      en: 'Nankin-machi (Kobe Chinatown)',
+      bn: 'নানকিন-মাচি (কোবে চায়নাটাউন)',
+      ne: 'नान्किन-माची (कोबे चाइनाटाउन)',
+    },
+    address: {
+      ja: '神戸市中央区元町通1〜3丁目',
+      en: 'Motomachi-dori 1–3-chome, Chuo-ku, Kobe',
+      bn: 'মোতোমাচি-দোরি ১–৩, চুও-কু, কোবে',
+      ne: 'मोतोमाची-दोरी १–३, च्युओ-कु, कোबे',
+    },
+    hours: { ja: '店舗により異なる（10:00〜21:00目安）', en: 'Varies by shop (approx. 10:00–21:00)', bn: 'দোকানভেদে ভিন্ন', ne: 'पसल अनुसार फरक' },
+    note: {
+      ja: '中華料理・食材・雑貨が並ぶ活気ある商店街。アジア的な雰囲気で多国籍料理も。元町駅すぐ。',
+      en: 'Vibrant Chinese food, ingredients, and goods. Asian atmosphere with diverse cuisines. Near Motomachi station.',
+      bn: 'চীনা খাবার, উপাদান ও পণ্যের সরগরম বাজার। এশিয়ার পরিবেশ। মোতোমাচি স্টেশনের কাছে।',
+      ne: 'चिनियाँ खाना, सामग्री र सामानको जीवन्त बजार। एसियाली वातावरण। मोतोमाची स्टेशन नजिक।',
+    },
+    mapUrl: 'https://maps.google.com/?q=南京町+神戸+チャイナタウン',
+    tags: ['food', 'shopping', 'asian', 'lively'],
+    icon: '🏮',
+    color: 'bg-indigo-50 border-indigo-200',
+    badgeColor: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    id: 'harbor-land',
+    cat: 'tourist',
+    area: 'hyogo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: 'ハーバーランド・モザイク',
+      en: 'Harborland Mosaic',
+      bn: 'হার্বারল্যান্ড মোজাইক',
+      ne: 'हार्बरल्यान्ड मोजाइक',
+    },
+    address: {
+      ja: '神戸市中央区東川崎町1丁目',
+      en: '1-chome Higashi-Kawasaki-cho, Chuo-ku, Kobe',
+      bn: 'হিগাশি-কাওয়াসাকি-চো, চুও-কু, কোবে',
+      ne: 'हिगाशि-कावासाकी-चो, च्युओ-कु, कोबे',
+    },
+    hours: { ja: '11:00〜21:00（施設により異なる）', en: '11:00–21:00 (varies)', bn: '১১:০০–২১:০০', ne: '११:००–२१:००' },
+    note: {
+      ja: '神戸港に面したショッピングモール。観覧車・夜景が美しい。写真スポットとして人気。家族向け。',
+      en: 'Shopping mall facing Kobe Port. Ferris wheel and beautiful night view. Popular photo spot. Family-friendly.',
+      bn: 'কোবে বন্দরের পাশে শপিং মল। ফেরিস হুইল ও সুন্দর রাতের দৃশ্য। ফটোর জায়গা। পরিবারের জন্য ভালো।',
+      ne: 'कोबे बन्दरगाहको छेउमा शपिङ मल। फेरिस व्हील र सुन्दर राति दृश्य। फोटो स्पट। परिवारका लागि।',
+    },
+    mapUrl: 'https://maps.google.com/?q=神戸ハーバーランドモザイク',
+    tags: ['shopping', 'night-view', 'family', 'port'],
+    icon: '🎡',
+    color: 'bg-indigo-50 border-indigo-200',
+    badgeColor: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    id: 'arima-onsen',
+    cat: 'tourist',
+    area: 'higashinada',
+    halal: false,
+    minor: false,
+    name: {
+      ja: '有馬温泉（神戸市北区・日帰り可）',
+      en: 'Arima Onsen (Day Trip from Kobe)',
+      bn: 'আরিমা অনসেন (কোবে থেকে দিনের ভ্রমণ)',
+      ne: 'अरिमा ओन्सेन (कोबेबाट दिनको यात्रा)',
+    },
+    address: {
+      ja: '神戸市北区有馬町',
+      en: 'Arima-cho, Kita-ku, Kobe',
+      bn: 'আরিমা-চো, কিতা-কু, কোবে',
+      ne: 'अरिमा-चो, किता-कु, कोबे',
+    },
+    hours: { ja: '施設により異なる', en: 'Varies by facility', bn: 'স্থানভেদে ভিন্ন', ne: 'स्थान अनुसार फरক' },
+    note: {
+      ja: '日本三古泉のひとつ。金泉（鉄分）・銀泉（炭酸）が有名。三宮から電車で約30分。外国人でも楽しめる。',
+      en: "One of Japan's three oldest hot springs. Famous gold & silver springs. ~30 min from Sannomiya. Foreigner-friendly.",
+      bn: 'জাপানের তিনটি প্রাচীন ঝরনার একটি। সোনার ও রুপার বসন্ত বিখ্যাত। সান্নোমিয়া থেকে ট্রেনে প্রায় ৩০ মিনিট।',
+      ne: 'जापानका तीन प्राचीन तातो पानीको मुहान मध्ये एक। सुनको र चाँदीको झरना प्रसिद्ध। सान्नोमिয়াबाट ट्रेनमा ~३० मिनेट।',
+    },
+    mapUrl: 'https://maps.google.com/?q=有馬温泉+神戸',
+    tags: ['onsen', 'nature', 'day-trip', 'historic'],
+    icon: '♨️',
+    color: 'bg-indigo-50 border-indigo-200',
+    badgeColor: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    id: 'rokko-mountain',
+    cat: 'tourist',
+    area: 'higashinada',
+    halal: false,
+    minor: false,
+    name: {
+      ja: '六甲山（六甲ガーデンテラス・夜景）',
+      en: 'Mt. Rokko (Garden Terrace & Night View)',
+      bn: 'রোক্কো পর্বত (গার্ডেন টেরেস ও রাতের দৃশ্য)',
+      ne: 'रोक्को पर्वत (गार्डेन टेरेस र राति दृश्य)',
+    },
+    address: {
+      ja: '神戸市灘区・東灘区（ロープウェー・バスでアクセス）',
+      en: 'Nada-ku / Higashinada-ku, Kobe (ropeway / bus access)',
+      bn: 'নাদা-কু / হিগাশিনাদা-কু, কোবে',
+      ne: 'नाडा-कु / हिगाशिनाडा-कु, कोबे',
+    },
+    hours: { ja: '10:00〜21:00（季節により変動）', en: '10:00–21:00 (seasonal)', bn: '১০:০০–২১:০০ (মৌসুম অনুযায়ী)', ne: '१०:००–२१:०० (मौसम अनुसार)' },
+    note: {
+      ja: '神戸を一望できる絶景スポット。日本三大夜景のひとつ。ハイキングも楽しめる。家族・カップルに人気。',
+      en: "Panoramic view of Kobe. One of Japan's top 3 night views. Hiking also available. Popular with families & couples.",
+      bn: 'কোবের প্যানোরামিক দৃশ্য। জাপানের শীর্ষ ৩ রাতের দৃশ্যের একটি। হাইকিং করা যায়।',
+      ne: 'कोबेको पूर्ण दृश्य। जापानको शीर्ष ३ राति दृश्य मध्ये एक। हाइकिङ पनि सम्भव।',
+    },
+    mapUrl: 'https://maps.google.com/?q=六甲山+神戸+夜景',
+    tags: ['nature', 'night-view', 'hiking', 'family'],
+    icon: '⛰️',
+    color: 'bg-indigo-50 border-indigo-200',
+    badgeColor: 'bg-indigo-100 text-indigo-800',
+  },
+
+  // ===== REMITTANCE / BANKING =====
+  {
+    id: 'western-union-sannomiya',
+    cat: 'remittance',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: 'ウエスタンユニオン（三宮エリア取扱店）',
+      en: 'Western Union (Sannomiya area agents)',
+      bn: 'ওয়েস্টার্ন ইউনিয়ন (সান্নোমিয়া এলাকা)',
+      ne: 'वेस्टर्न युनियन (सान्नोমিया क्षेत्र)',
+    },
+    address: {
+      ja: '神戸市中央区（セブン銀行ATM・取扱代理店にて）',
+      en: 'Chuo-ku, Kobe (via Seven Bank ATMs & agents)',
+      bn: 'চুও-কু, কোবে (সেভেন ব্যাংক ATM ও এজেন্ট)',
+      ne: 'च्युओ-कु, कोबे (सेभेन ब्यांक ATM र एजेन्ट)',
+    },
+    hours: { ja: '24時間（ATM）', en: '24 hours (ATM)', bn: '২৪ ঘণ্টা (ATM)', ne: '२४ घण्टा (ATM)' },
+    note: {
+      ja: 'セブン銀行ATMからウエスタンユニオンで海外送金可能。バングラデシュ・ネパールへの送金に便利。手数料要確認。',
+      en: 'Send money abroad via Western Union through Seven Bank ATMs. Convenient for Bangladesh & Nepal remittance.',
+      bn: 'সেভেন ব্যাংক ATM থেকে ওয়েস্টার্ন ইউনিয়নে বিদেশে অর্থ পাঠানো যায়। বাংলাদেশ ও নেপালে সুবিধাজনক।',
+      ne: 'सेभेन ब्यांक ATM मार्फत वेस्टर्न युनियनबाट विदेश पैसा पठाउन सकिन्छ। बङ्गलादेश र नेपालका लागि सुविधाजनक।',
+    },
+    mapUrl: 'https://maps.google.com/?q=セブン銀行+ATM+神戸+三宮',
+    tags: ['remittance', 'atm', 'bangladesh', 'nepal', '24h'],
+    icon: '💸',
+    color: 'bg-yellow-50 border-yellow-200',
+    badgeColor: 'bg-yellow-100 text-yellow-800',
+  },
+  {
+    id: 'wise-transfer',
+    cat: 'remittance',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: 'Wise（ワイズ）国際送金サービス',
+      en: 'Wise International Money Transfer',
+      bn: 'ওয়াইজ আন্তর্জাতিক অর্থ স্থানান্তর',
+      ne: 'वाइज अन्तर्राष्ट्रिय पैसा स्थानान्तरण',
+    },
+    address: {
+      ja: 'オンラインサービス（スマホアプリ・ウェブ）',
+      en: 'Online service (app & web)',
+      bn: 'অনলাইন সেবা (অ্যাপ ও ওয়েব)',
+      ne: 'अनलाइन सेवा (एप र वेब)',
+    },
+    hours: { ja: '24時間（オンライン）', en: '24 hours (online)', bn: '২৪ ঘণ্টা (অনলাইন)', ne: '२४ घण्टा (अनलाइन)' },
+    note: {
+      ja: '低手数料の国際送金アプリ。バングラデシュ・ネパールへの送金が安く早い。英語・ベンガル語対応。スマホ必須。',
+      en: 'Low-fee international transfer app. Fast & cheap for Bangladesh & Nepal. English & Bengali supported.',
+      bn: 'কম চার্জের আন্তর্জাতিক পেমেন্ট অ্যাপ। বাংলাদেশ ও নেপালে দ্রুত ও সস্তায় পাঠানো যায়। বাংলায় সহায়তা আছে।',
+      ne: 'कम शुल्कको अन्तर्राष्ट्रिय स्थानान्तरण एप। बङ्गलादेश र नेपालमा छिटो र सस्तो।',
+    },
+    mapUrl: 'https://wise.com',
+    tags: ['online', 'app', 'low-fee', 'fast'],
+    icon: '📱',
+    color: 'bg-yellow-50 border-yellow-200',
+    badgeColor: 'bg-yellow-100 text-yellow-800',
+  },
+
+  // ===== HOSPITALS =====
+  {
+    id: 'kobe-city-hospital',
+    cat: 'hospital',
+    area: 'chuo',
+    halal: false,
+    minor: false,
+    name: {
+      ja: '神戸市立医療センター中央市民病院',
+      en: 'Kobe City Medical Center General Hospital',
+      bn: 'কোবে সিটি মেডিক্যাল সেন্টার জেনারেল হাসপাতাল',
+      ne: 'कोबे सिटी मेडिकल सेन्टर जनरल अस्पताल',
+    },
+    address: {
+      ja: '神戸市中央区港島南町2-1-1',
+      en: '2-1-1 Minatojima-minamicho, Chuo-ku, Kobe',
+      bn: '২-১-১ মিনাতোজিমা-মিনামিচো, চুও-কু, কোবে',
+      ne: '२-१-१ मिनातोजिमा-मिनामिचो, च्युओ-कु, कोবे',
+    },
+    hours: { ja: '救急24時間・外来8:30〜11:00', en: 'ER 24h, Outpatient 8:30–11:00', bn: 'জরুরি ২৪ঘণ্টা, বহির্বিভাগ ৮:৩০–১১:০০', ne: 'आपतकालीन २४ घण्टा, बाह्य रोगी ८:३०–११:००' },
+    note: {
+      ja: '外国語通訳サービスあり（英語・中国語等）。緊急時はまず救急（119）へ。健康保険証持参のこと。',
+      en: 'Foreign language interpretation available (English, Chinese, etc.). Emergency: call 119. Bring health insurance card.',
+      bn: 'বিদেশি ভাষার দোভাষী সেবা আছে (ইংরেজি, চীনা ইত্যাদি)। জরুরি অবস্থায় ১১৯ কল করুন। স্বাস্থ্য বিমা কার্ড নিয়ে আসুন।',
+      ne: 'विदेशी भाषा दोभाषे सेवा उपलब्ध (अङ्ग्रेजी, चिनियाँ आदि)। आपतकालमा ११९ मा फोन गर्नुस्। स्वास्थ्य बिमा कार्ड ल्याउनुस्।',
+    },
+    phone: '078-302-4321',
+    mapUrl: 'https://maps.google.com/?q=神戸市立医療センター中央市民病院',
+    tags: ['english', 'emergency', 'interpretation'],
+    icon: '🏥',
+    color: 'bg-pink-50 border-pink-200',
+    badgeColor: 'bg-pink-100 text-pink-800',
+  },
+  {
+    id: 'nada-clinic',
+    cat: 'hospital',
+    area: 'nada',
+    halal: false,
+    minor: true,
+    name: {
+      ja: '灘区多言語対応クリニック（内科）',
+      en: 'Nada Multilingual Clinic (Internal Medicine)',
+      bn: 'নাদা বহুভাষিক ক্লিনিক (অভ্যন্তরীণ চিকিৎসা)',
+      ne: 'नाडा बहुभाषी क्लिनिक (आन्तरिक चिकित्सा)',
+    },
+    address: {
+      ja: '神戸市灘区（詳細は神戸市外国人相談窓口へ確認）',
+      en: 'Nada-ku, Kobe (confirm via Kobe Foreign Residents Consultation)',
+      bn: 'নাদা-কু, কোবে (বিদেশি পরামর্শ কেন্দ্রে নিশ্চিত করুন)',
+      ne: 'नाडा-कु, कোबे (विदेशी परामर्श केन्द्रमा पुष्टि गर्नुस्)',
+    },
+    hours: { ja: '要確認', en: 'Please confirm', bn: 'যোগাযোগ করুন', ne: 'कृपया पुष्टि गर्नुस्' },
+    note: {
+      ja: '神戸市外国人総合相談センター（078-382-2052）が多言語対応医療機関を紹介。予約前に相談可。',
+      en: 'Kobe International Community Center (078-382-2052) can refer to multilingual clinics. Consult before booking.',
+      bn: 'কোবে আন্তর্জাতিক সম্প্রদায় কেন্দ্র (078-382-2052) বহুভাষিক ক্লিনিক রেফার করে।',
+      ne: 'कोबे अन्तर्राष्ट्रिय सामुदायिक केन्द्र (078-382-2052) बहुभाषी क्लिनिक सिफारिस गर्छ।',
+    },
+    phone: '078-382-2052',
+    mapUrl: 'https://maps.google.com/?q=神戸市外国人総合相談センター',
+    tags: ['english', 'multilingual', 'referral'],
+    icon: '🏥',
+    color: 'bg-pink-50 border-pink-200',
+    badgeColor: 'bg-pink-100 text-pink-800',
+  },
+];
+
+// ===== I18N =====
+const i18n = {
+  ja: {
+    cat_all: 'すべて',
+    cat_halal: 'ハラルフード',
+    cat_grocery: 'アジア食材',
+    cat_mosque: 'モスク・礼拝',
+    cat_tourist: '観光',
+    cat_remittance: '送金・銀行',
+    cat_hospital: '病院',
+    no_results: '該当する場所が見つかりません',
+    halal_label: 'ハラル',
+    veg_label: '菜食可',
+    minor_label: 'マイナー穴場',
+    map_btn: '地図を開く',
+    phone_label: '電話',
+    hours_label: '営業時間',
+    header_title: '神戸コミュニティガイド',
+    header_sub: '東灘区〜元町 ハラル・コミュニティ情報',
+    results: '件',
+    area_all: '📍 全エリア',
+  },
+  en: {
+    cat_all: 'All',
+    cat_halal: 'Halal Food',
+    cat_grocery: 'Asian Grocery',
+    cat_mosque: 'Mosque / Prayer',
+    cat_tourist: 'Tourism',
+    cat_remittance: 'Remittance',
+    cat_hospital: 'Hospital',
+    no_results: 'No places found',
+    halal_label: 'Halal',
+    veg_label: 'Veg OK',
+    minor_label: 'Hidden Gem',
+    map_btn: 'Open Map',
+    phone_label: 'Phone',
+    hours_label: 'Hours',
+    header_title: 'Kobe Community Guide',
+    header_sub: 'Higashinada to Motomachi — Halal & Community Info',
+    results: ' places',
+    area_all: '📍 All Areas',
+  },
+  bn: {
+    cat_all: 'সব',
+    cat_halal: 'হালাল খাবার',
+    cat_grocery: 'এশিয়ান বাজার',
+    cat_mosque: 'মসজিদ / নামায',
+    cat_tourist: 'পর্যটন',
+    cat_remittance: 'রেমিটেন্স',
+    cat_hospital: 'হাসপাতাল',
+    no_results: 'কোনো জায়গা পাওয়া যায়নি',
+    halal_label: 'হালাল',
+    veg_label: 'নিরামিষ',
+    minor_label: 'লুকানো রত্ন',
+    map_btn: 'মানচিত্র খুলুন',
+    phone_label: 'ফোন',
+    hours_label: 'সময়',
+    header_title: 'কোবে কমিউনিটি গাইড',
+    header_sub: 'হিগাশিনাদা থেকে মোতোমাচি — হালাল ও কমিউনিটি তথ্য',
+    results: 'টি জায়গা',
+    area_all: '📍 সব এলাকা',
+  },
+  ne: {
+    cat_all: 'सबै',
+    cat_halal: 'हलाल खाना',
+    cat_grocery: 'एसियन किराना',
+    cat_mosque: 'मस्जिद / नमाज',
+    cat_tourist: 'पर्यटन',
+    cat_remittance: 'रेमिट्यान्स',
+    cat_hospital: 'अस्पताल',
+    no_results: 'कुनै ठाउँ भेटिएन',
+    halal_label: 'हलाल',
+    veg_label: 'शाकाहारी',
+    minor_label: 'लुकेको रत्न',
+    map_btn: 'नक्सा खोल्नुस्',
+    phone_label: 'फोन',
+    hours_label: 'समय',
+    header_title: 'कोबे कम्युनिटी गाइड',
+    header_sub: 'हिगाशिनाडाबाट मोतोमाची — हलाल र समुदाय जानकारी',
+    results: ' ठाउँ',
+    area_all: '📍 सबै क्षेत्र',
+  },
+};
+
+// ===== STATE =====
+let currentLang = 'ja';
+let currentCat = 'all';
+let currentArea = 'all';
+
+// ===== RENDER =====
+function t(key) {
+  return i18n[currentLang][key] || key;
+}
+
+function renderCards() {
+  const container = document.getElementById('cards-container');
+  const empty = document.getElementById('empty-state');
+  const count = document.getElementById('results-count');
+
+  const filtered = places.filter(p => {
+    if (currentCat !== 'all' && p.cat !== currentCat) return false;
+    if (currentArea !== 'all' && p.area !== currentArea) return false;
+    return true;
+  });
+
+  count.textContent = `${filtered.length}${t('results')}`;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  container.innerHTML = filtered.map(p => {
+    const name = p.name[currentLang] || p.name.en;
+    const addr = p.address[currentLang] || p.address.en;
+    const hours = p.hours[currentLang] || p.hours.en;
+    const note = p.note[currentLang] || p.note.en;
+
+    const halalBadge = p.halal
+      ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">☪️ ${t('halal_label')}</span>`
+      : '';
+    const vegBadge = p.vegNote
+      ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-lime-100 text-lime-800">🥦 ${t('veg_label')}</span>`
+      : '';
+    const minorBadge = p.minor
+      ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">💎 ${t('minor_label')}</span>`
+      : '';
+    const priceBadge = p.price
+      ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">${p.price}</span>`
+      : '';
+
+    const phoneHtml = p.phone
+      ? `<div class="flex items-center gap-1 text-xs text-gray-500 mt-1"><span>📞</span><a href="tel:${p.phone}" class="text-blue-600 hover:underline">${p.phone}</a></div>`
+      : '';
+
+    const mapBtn = p.mapUrl
+      ? `<a href="${p.mapUrl}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-3 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition font-medium">🗺️ ${t('map_btn')}</a>`
+      : '';
+
+    return `
+      <div class="card bg-white rounded-2xl border-2 ${p.color} p-4 flex flex-col gap-2">
+        <div class="flex items-start gap-2">
+          <span class="text-2xl mt-0.5">${p.icon}</span>
+          <div class="flex-1 min-w-0">
+            <h2 class="font-bold text-gray-900 text-sm leading-snug">${name}</h2>
+            <p class="text-xs text-gray-500 mt-0.5">📍 ${addr}</p>
+            ${phoneHtml}
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1">
+          ${halalBadge}${vegBadge}${minorBadge}${priceBadge}
+        </div>
+        <div class="text-xs text-gray-500 flex items-center gap-1">
+          <span>🕐</span><span>${hours}</span>
+        </div>
+        <p class="text-xs text-gray-700 leading-relaxed">${note}</p>
+        ${mapBtn}
+      </div>
+    `;
+  }).join('');
+}
+
+function updateI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+  document.getElementById('header-title').textContent = t('header_title');
+  document.getElementById('header-sub').textContent = t('header_sub');
+  document.getElementById('area-all').textContent = t('area_all');
+}
+
+// ===== EVENT LISTENERS =====
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentLang = btn.dataset.lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateI18n();
+    renderCards();
+  });
+});
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentCat = btn.dataset.cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCards();
+  });
+});
+
+document.querySelectorAll('.area-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentArea = btn.dataset.area;
+    document.querySelectorAll('.area-btn').forEach(b => {
+      b.classList.remove('active', 'bg-blue-50', 'text-blue-700', 'border-blue-200');
+      b.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
+    });
+    btn.classList.add('active', 'bg-blue-50', 'text-blue-700', 'border-blue-200');
+    btn.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-200');
+    renderCards();
+  });
+});
+
+// ===== INIT =====
+renderCards();
+</script>
+</body>
+</html>
