@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KobeGuide | 神戸インバウンドガイド</title>
+  <meta name="description" content="神戸在住の外国人・観光客のための緊急情報＆観光ガイド">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #e53e3e;
+      --green: #276749;
+      --bg: #f7fafc;
+      --card-bg: #ffffff;
+      --text: #1a202c;
+      --text-muted: #718096;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.10);
+      --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ─── Header ─── */
+    header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-lg); }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 8px; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { font-size: 28px; }
+    .logo-text { font-size: 20px; font-weight: 800; }
+    .logo-sub { font-size: 10px; opacity: 0.75; letter-spacing: 0.5px; }
+    .lang-selector { display: flex; gap: 4px; }
+    .lang-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; transition: background 0.2s; }
+    .lang-btn:hover, .lang-btn.active { background: rgba(255,255,255,0.35); }
+    .sos-banner { background: var(--accent); padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .sos-banner span { font-size: 13px; font-weight: 600; color: white; }
+    .sos-btn { background: white; color: var(--accent); border: none; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .search-wrap { padding: 10px 16px 12px; display: flex; gap: 8px; }
+    .search-input { flex: 1; padding: 9px 14px; border-radius: 24px; border: none; font-size: 14px; outline: none; background: rgba(255,255,255,0.95); }
+    .location-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 9px 12px; border-radius: 24px; font-size: 14px; cursor: pointer; white-space: nowrap; }
+    .travel-toggle { display: flex; gap: 4px; padding: 6px 16px 8px; }
+    .travel-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+    .travel-btn.active { background: rgba(255,255,255,0.35); color: white; font-weight: 600; border-color: rgba(255,255,255,0.5); }
+    /* ─── Location Modal ─── */
+    .loc-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .loc-modal-overlay.open { display: flex; }
+    .loc-modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; }
+    .loc-modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+    .loc-modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+    .area-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .area-btn { background: #f7fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; font-size: 13px; cursor: pointer; text-align: center; transition: all 0.15s; }
+    .area-btn:hover { background: #ebf8ff; border-color: var(--primary-light); color: var(--primary); }
+    .area-btn.selected { background: #ebf8ff; border-color: var(--primary-light); color: var(--primary); font-weight: 600; }
+    .loc-divider { text-align: center; font-size: 11px; color: var(--text-muted); margin: 10px 0; }
+    .loc-gps-btn { width: 100%; background: var(--primary-light); color: white; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 8px; }
+    .loc-cancel-btn { width: 100%; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 9px; font-size: 13px; cursor: pointer; }
+
+    /* ─── Tabs ─── */
+    .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px; scrollbar-width: none; }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; min-width: 72px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+    .cat-tab.active { border-color: var(--primary-light); background: #ebf8ff; }
+    .cat-tab.emergency { border-color: #fc8181; }
+    .cat-tab.emergency.active { background: #fff5f5; border-color: var(--accent); }
+    .cat-tab .icon { font-size: 22px; }
+    .cat-tab .label { font-size: 10px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+    .cat-tab.active .label { color: var(--primary); }
+    .cat-tab.emergency.active .label { color: var(--accent); }
+
+    /* ─── Main ─── */
+    main { padding: 0 16px 100px; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 10px; flex-wrap: wrap; gap: 8px; }
+    .section-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .count-badge { background: var(--primary-light); color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+    .cache-info { font-size: 11px; color: var(--text-muted); }
+
+    /* ─── Cards ─── */
+    .facilities-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 600px) { .facilities-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .facilities-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .facility-card { background: var(--card-bg); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: box-shadow 0.2s, transform 0.1s; position: relative; }
+    .facility-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+    .facility-card.emergency { border-left: 4px solid var(--accent); }
+    .facility-card.sponsor { border-left: 4px solid #d69e2e; }
+    .sponsor-badge { position: absolute; top: 10px; right: 10px; background: #d69e2e; color: white; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 8px; }
+    .card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .card-cat-icon { font-size: 26px; flex-shrink: 0; }
+    .card-info { flex: 1; min-width: 0; }
+    .card-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .card-name-en { font-size: 11px; color: var(--text-muted); }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+    .tag { font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 600; }
+    .tag-lang { background: #ebf8ff; color: #2c5282; }
+    .tag-open { background: #f0fff4; color: #22543d; }
+    .tag-feature { background: #faf5ff; color: #44337a; }
+    .card-address { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .card-phone { font-size: 12px; color: var(--primary-light); margin-bottom: 10px; font-weight: 600; }
+    .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-map { flex: 1; background: var(--primary-light); color: white; border: none; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none; min-width: 100px; }
+    .btn-map:hover { background: var(--primary); }
+    .btn-map.emergency-map { background: var(--accent); }
+    .btn-call { background: #f0fff4; border: 1px solid #9ae6b4; color: var(--green); padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; }
+    .btn-website { background: #fffff0; border: 1px solid #f6e05e; color: #744210; padding: 9px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+
+    /* ─── Loading & Error ─── */
+    .loading-wrap { grid-column: 1/-1; text-align: center; padding: 60px 20px; }
+    .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary-light); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: var(--text-muted); }
+    .loading-progress { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .no-results { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--text-muted); }
+
+    /* ─── Setup Screen ─── */
+    .setup-screen { max-width: 560px; margin: 40px auto; background: white; border-radius: 16px; padding: 32px; box-shadow: var(--shadow-lg); }
+    .setup-screen h2 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    .setup-screen .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+    .setup-steps { counter-reset: steps; list-style: none; margin-bottom: 24px; }
+    .setup-steps li { counter-increment: steps; display: flex; gap: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+    .setup-steps li::before { content: counter(steps); background: var(--primary-light); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .setup-steps a { color: var(--primary-light); }
+    .setup-form { display: flex; flex-direction: column; gap: 12px; }
+    .setup-form label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 3px; display: block; }
+    .setup-form input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; outline: none; }
+    .setup-form input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); }
+    .btn-setup { background: var(--primary-light); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+    .btn-setup:hover { background: var(--primary); }
+    .setup-note { font-size: 11px; color: var(--text-muted); line-height: 1.6; margin-top: 12px; padding: 10px; background: #f7fafc; border-radius: 6px; }
+    .schema-box { background: #f7fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 20px; }
+    .schema-box h4 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .schema-table { width: 100%; font-size: 11px; border-collapse: collapse; }
+    .schema-table th { text-align: left; color: var(--text-muted); padding: 3px 6px; font-weight: 600; }
+    .schema-table td { padding: 4px 6px; border-top: 1px solid var(--border); font-family: monospace; font-size: 11px; }
+    .field-type { color: var(--primary-light); }
+
+    /* ─── Config Bar ─── */
+    .config-bar { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+    .btn-reset-cache { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+    .btn-reconfig { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+
+    /* ─── Sponsor ─── */
+    .sponsor-section { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 20px; margin: 20px 0; color: white; text-align: center; }
+    .sponsor-section h3 { font-size: 15px; margin-bottom: 6px; }
+    .sponsor-names { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .sponsor-contact { font-size: 11px; opacity: 0.7; }
+    .btn-sponsor-join { background: white; color: var(--primary); border: none; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 10px; text-decoration: none; display: inline-block; }
+
+    /* ─── SOS Modal ─── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; width: 100%; max-width: 600px; border-radius: 20px 20px 0 0; padding: 24px 20px 40px; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle { width: 36px; height: 4px; background: #e2e8f0; border-radius: 2px; margin: 0 auto 16px; }
+    .modal-title { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 16px; text-align: center; }
+    .emergency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .emergency-card { background: #fff5f5; border: 2px solid #fed7d7; border-radius: 10px; padding: 14px; text-align: center; cursor: pointer; text-decoration: none; color: var(--text); display: block; transition: background 0.2s; }
+    .emergency-card:hover { background: #fed7d7; }
+    .emergency-card .e-icon { font-size: 30px; margin-bottom: 6px; }
+    .emergency-card .e-title { font-size: 13px; font-weight: 700; }
+    .emergency-card .e-num { font-size: 18px; font-weight: 800; color: var(--accent); margin: 4px 0; }
+    .emergency-card .e-desc { font-size: 10px; color: var(--text-muted); }
+    .modal-close { width: 100%; margin-top: 14px; padding: 10px; background: var(--border); border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">🌏</div>
+      <div>
+        <div class="logo-text">KobeGuide</div>
+        <div class="logo-sub" data-i18n="tagline">神戸インバウンド＆生活支援ガイド</div>
+      </div>
+    </div>
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+    </div>
+  </div>
+  <div class="sos-banner">
+    <span>🆘 <span data-i18n="sos_text">緊急時・困ったとき</span></span>
+    <button class="sos-btn" onclick="openSOS()" data-i18n="sos_btn">緊急番号を見る</button>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" type="search" id="searchInput" placeholder="施設・地名を検索 / Search..." oninput="handleSearch(this.value)">
+    <button class="location-btn" id="locBtn" onclick="openLocModal()">📍 <span id="locLabel">取得中...</span></button>
+  </div>
+  <div class="travel-toggle">
+    <button class="travel-btn active" id="travel-walking"   onclick="setTravel('walking')">🚶 徒歩</button>
+    <button class="travel-btn"        id="travel-transit"  onclick="setTravel('transit')">🚃 電車</button>
+    <button class="travel-btn"        id="travel-driving"  onclick="setTravel('driving')">🚗 車</button>
+    <button class="travel-btn"        id="travel-bicycling" onclick="setTravel('bicycling')">🚲 自転車</button>
+  </div>
+</header>
+
+<!-- ─── CATEGORY TABS ─── -->
+<div class="cat-tabs" id="catTabs">
+  <div class="cat-tab active" data-cat="all" onclick="setCategory('all')"><div class="icon">🗺️</div><div class="label" data-i18n="cat_all">すべて</div></div>
+  <div class="cat-tab emergency" data-cat="hospital" onclick="setCategory('hospital')"><div class="icon">🏥</div><div class="label" data-i18n="cat_hospital">病院</div></div>
+  <div class="cat-tab emergency" data-cat="pharmacy" onclick="setCategory('pharmacy')"><div class="icon">💊</div><div class="label" data-i18n="cat_pharmacy">薬局</div></div>
+  <div class="cat-tab emergency" data-cat="atm" onclick="setCategory('atm')"><div class="icon">🏧</div><div class="label" data-i18n="cat_atm">ATM</div></div>
+  <div class="cat-tab emergency" data-cat="evacuation" onclick="setCategory('evacuation')"><div class="icon">🆘</div><div class="label" data-i18n="cat_evacuation">避難場所</div></div>
+  <div class="cat-tab" data-cat="tourism" onclick="setCategory('tourism')"><div class="icon">🗼</div><div class="label" data-i18n="cat_tourism">観光</div></div>
+  <div class="cat-tab" data-cat="restaurant" onclick="setCategory('restaurant')"><div class="icon">🍜</div><div class="label" data-i18n="cat_restaurant">飲食</div></div>
+  <div class="cat-tab" data-cat="transport" onclick="setCategory('transport')"><div class="icon">🚃</div><div class="label" data-i18n="cat_transport">交通</div></div>
+  <div class="cat-tab" data-cat="admin" onclick="setCategory('admin')"><div class="icon">🏛️</div><div class="label" data-i18n="cat_admin">行政</div></div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<main id="mainContent">
+  <!-- Setup or grid is injected here -->
+</main>
+
+<!-- ─── LOCATION MODAL ─── -->
+<div class="loc-modal-overlay" id="locModal" onclick="if(event.target===this)closeLocModal()">
+  <div class="loc-modal">
+    <h3>📍 現在地を選択</h3>
+    <p>PCではGPSが使えないため、お近くのエリアを選んでください。スマートフォンでは自動取得も使えます。</p>
+    <div class="area-grid">
+      <button class="area-btn" onclick="setArea('三宮・中央区',34.6942,135.1956)">三宮・中央区</button>
+      <button class="area-btn" onclick="setArea('元町・南京町',34.6891,135.1840)">元町・南京町</button>
+      <button class="area-btn" onclick="setArea('北野・異人館',34.7008,135.1853)">北野・異人館</button>
+      <button class="area-btn" onclick="setArea('ハーバーランド',34.6760,135.1840)">ハーバーランド</button>
+      <button class="area-btn" onclick="setArea('新神戸',34.7035,135.1930)">新神戸</button>
+      <button class="area-btn" onclick="setArea('灘・六甲',34.7180,135.2300)">灘・六甲</button>
+      <button class="area-btn" onclick="setArea('東灘・住吉',34.7230,135.2620)">東灘・住吉</button>
+      <button class="area-btn" onclick="setArea('兵庫・長田',34.6820,135.1550)">兵庫・長田</button>
+      <button class="area-btn" onclick="setArea('須磨',34.6470,135.1220)">須磨</button>
+      <button class="area-btn" onclick="setArea('垂水',34.6340,134.9820)">垂水</button>
+      <button class="area-btn" onclick="setArea('西区',34.7140,135.0900)">西区</button>
+      <button class="area-btn" onclick="setArea('有馬温泉',34.7982,135.2489)">有馬温泉</button>
+      <button class="area-btn" onclick="setArea('ポートアイランド',34.6650,135.2050)">ポートアイランド</button>
+      <button class="area-btn" onclick="setArea('神戸空港',34.6328,135.2238)">神戸空港</button>
+    </div>
+    <div class="loc-divider">── または ──</div>
+    <button class="loc-gps-btn" onclick="locateByGPS()">🛰 GPSで自動取得（スマートフォン推奨）</button>
+    <button class="loc-cancel-btn" onclick="closeLocModal()">キャンセル</button>
+  </div>
+</div>
+
+<!-- ─── SOS MODAL ─── -->
+<div class="modal-overlay" id="sosModal" onclick="if(event.target===this)closeSOS()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🆘 緊急連絡先 / Emergency Contacts</div>
+    <div class="emergency-grid">
+      <a class="emergency-card" href="tel:110"><div class="e-icon">👮</div><div class="e-title">警察 / Police</div><div class="e-num">110</div><div class="e-desc">Police / 警察 / 경찰</div></a>
+      <a class="emergency-card" href="tel:119"><div class="e-icon">🚒</div><div class="e-title">消防・救急 / Fire</div><div class="e-num">119</div><div class="e-desc">Fire/Ambulance / 消防救护</div></a>
+      <a class="emergency-card" href="tel:#9110"><div class="e-icon">📞</div><div class="e-title">警察相談</div><div class="e-num">#9110</div><div class="e-desc">Non-urgent police</div></a>
+      <a class="emergency-card" href="tel:0570-783-281"><div class="e-icon">🌐</div><div class="e-title">外国人相談</div><div class="e-num">0570-783-281</div><div class="e-desc">兵庫県 多言語支援</div></a>
+      <a class="emergency-card" href="tel:078-321-9500"><div class="e-icon">🏥</div><div class="e-title">救急病院案内</div><div class="e-num">078-321-9500</div><div class="e-desc">神戸市 24h</div></a>
+      <a class="emergency-card" href="tel:#7119"><div class="e-icon">🚑</div><div class="e-title">救急相談</div><div class="e-num">#7119</div><div class="e-desc">救急安心センター</div></a>
+    </div>
+    <button class="modal-close" onclick="closeSOS()">閉じる / Close</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  ★ AIRTABLE 設定
+//  Airtable の Personal Access Token と Base ID をここに入れるか、
+//  初回アクセス時にブラウザ上の設定画面から入力してください。
+// ══════════════════════════════════════════════════════════════
+const AIRTABLE_CONFIG = {
+  apiKey:    '',        // pat... (Personal Access Token)
+  baseId:    '',        // app... (Base ID)
+  tableName: '施設',   // Airtable のテーブル名
+  cacheMinutes: 10,    // ローカルキャッシュ保持時間（分）
+};
+
+// ─── Airtable フィールド名マッピング ────────────────────────
+// Airtableのフィールド名をここで定義（日本語フィールド名に対応）
+const FIELD = {
+  name:      '施設名',
+  nameEn:    '英語名',
+  cat:       'カテゴリ',
+  address:   '住所',
+  addressEn: '英語住所',
+  phone:     '電話番号',
+  lat:       '緯度',
+  lng:       '経度',
+  langs:     '対応言語',       // Multiple select
+  features:  '特徴',          // Multiple select
+  open24:    '24時間営業',     // Checkbox
+  emergency: '緊急施設',      // Checkbox
+  sponsor:   'スポンサー',    // Checkbox
+  website:   'ウェブサイト',
+  active:    '公開中',        // Checkbox
+};
+
+// ─── i18n ────────────────────────────────────────────────────
+const i18n = {
+  ja: { tagline:'神戸インバウンド＆生活支援ガイド', sos_text:'緊急時・困ったとき', sos_btn:'緊急番号を見る', near_me:'近く', cat_all:'すべて', cat_hospital:'病院', cat_pharmacy:'薬局', cat_atm:'ATM', cat_evacuation:'避難場所', cat_tourism:'観光', cat_restaurant:'飲食', cat_transport:'交通', cat_admin:'行政', btn_directions:'経路案内', btn_call:'電話する', btn_website:'ウェブサイト', open_now:'24時間', loading:'施設データを読込中...', loaded_from:'キャッシュから読込', records:'件', all_facilities:'すべての施設' },
+  en: { tagline:'Kobe Inbound & Life Support Guide', sos_text:'Emergency / Need Help', sos_btn:'Emergency Numbers', near_me:'Near Me', cat_all:'All', cat_hospital:'Hospital', cat_pharmacy:'Pharmacy', cat_atm:'ATM', cat_evacuation:'Shelter', cat_tourism:'Tourism', cat_restaurant:'Food', cat_transport:'Transit', cat_admin:'Admin', btn_directions:'Directions', btn_call:'Call', btn_website:'Website', open_now:'24h', loading:'Loading facilities...', loaded_from:'Loaded from cache', records:' results', all_facilities:'All Facilities' },
+  zh: { tagline:'神户入境游客与生活指南', sos_text:'紧急情况 / 需要帮助', sos_btn:'紧急电话', near_me:'附近', cat_all:'全部', cat_hospital:'医院', cat_pharmacy:'药局', cat_atm:'ATM', cat_evacuation:'避难所', cat_tourism:'观光', cat_restaurant:'餐饮', cat_transport:'交通', cat_admin:'行政', btn_directions:'路线导航', btn_call:'拨打电话', btn_website:'网站', open_now:'24小时', loading:'加载中...', loaded_from:'来自缓存', records:'件', all_facilities:'所有设施' },
+  ko: { tagline:'고베 인바운드 & 생활 지원 가이드', sos_text:'긴급 상황 / 도움이 필요할 때', sos_btn:'긴급 번호 보기', near_me:'내 주변', cat_all:'전체', cat_hospital:'병원', cat_pharmacy:'약국', cat_atm:'ATM', cat_evacuation:'대피소', cat_tourism:'관광', cat_restaurant:'음식', cat_transport:'교통', cat_admin:'행정', btn_directions:'경로 안내', btn_call:'전화', btn_website:'웹사이트', open_now:'24시간', loading:'불러오는 중...', loaded_from:'캐시에서 로드', records:'건', all_facilities:'전체 시설' },
+};
+
+// ─── State ───────────────────────────────────────────────────
+let currentLang  = 'ja';
+let currentCat   = 'all';
+let searchQuery  = '';
+// デフォルトを神戸市中心（三宮）に設定 → Google Mapsの出発点が常に神戸になる
+let userLat = 34.6942, userLng = 135.1956;
+let allFacilities = [];
+let fromCache = false;
+let travelMode = 'walking';
+
+// 神戸市のおおよその範囲
+const KOBE_BOUNDS = { latMin:34.55, latMax:34.86, lngMin:134.88, lngMax:135.35 };
+function isInKobe(lat, lng) {
+  return lat >= KOBE_BOUNDS.latMin && lat <= KOBE_BOUNDS.latMax &&
+         lng >= KOBE_BOUNDS.lngMin && lng <= KOBE_BOUNDS.lngMax;
+}
+
+function setTravel(mode) {
+  travelMode = mode;
+  document.querySelectorAll('.travel-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`travel-${mode}`).classList.add('active');
+  renderCards();
+}
+
+function setLocLabel(text) {
+  const el = document.getElementById('locLabel');
+  if (el) el.textContent = text;
+}
+
+const t = k => (i18n[currentLang]?.[k]) ?? (i18n.ja[k]) ?? k;
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.getElementById('searchInput').placeholder =
+    lang === 'ja' ? '施設・地名を検索...' :
+    lang === 'en' ? 'Search facilities...' :
+    lang === 'zh' ? '搜索设施...' : '시설 검색...';
+  renderCards();
+}
+
+// ─── Airtable: 全件取得（ページネーション対応）───────────────
+async function fetchAllFromAirtable(cfg) {
+  const records = [];
+  let offset = null;
+  let page = 0;
+
+  while (true) {
+    page++;
+    updateLoadingProgress(records.length);
+
+    const params = new URLSearchParams({
+      pageSize: '100',
+      filterByFormula: `{${FIELD.active}} = TRUE()`,
+    });
+    if (offset) params.set('offset', offset);
+
+    const url = `https://api.airtable.com/v0/${cfg.baseId}/${encodeURIComponent(cfg.tableName)}?${params}`;
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${cfg.apiKey}` }
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    records.push(...data.records);
+    offset = data.offset;
+    if (!offset) break;
+  }
+  return records;
+}
+
+// Airtable レコード → アプリ形式に変換
+function mapRecord(rec) {
+  const f = rec.fields;
+  return {
+    id:        rec.id,
+    name:      f[FIELD.name]      ?? '(名称未設定)',
+    nameEn:    f[FIELD.nameEn]    ?? '',
+    cat:       (f[FIELD.cat]      ?? 'other').toLowerCase(),
+    address:   f[FIELD.address]   ?? '',
+    addressEn: f[FIELD.addressEn] ?? '',
+    phone:     f[FIELD.phone]     ?? null,
+    lat:       parseFloat(f[FIELD.lat])  || 34.6901,
+    lng:       parseFloat(f[FIELD.lng])  || 135.1956,
+    langs:     f[FIELD.langs]     ?? [],
+    features:  f[FIELD.features]  ?? [],
+    open24:    f[FIELD.open24]    ?? false,
+    emergency: f[FIELD.emergency] ?? false,
+    sponsor:   f[FIELD.sponsor]   ?? false,
+    website:   f[FIELD.website]   ?? null,
+  };
+}
+
+// ─── Cache ───────────────────────────────────────────────────
+const CACHE_KEY = 'kobeguide_facilities_v1';
+
+function saveCache(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+  } catch(e) { /* ストレージ容量オーバー時は無視 */ }
+}
+
+function loadCache(minutes) {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts > minutes * 60 * 1000) return null;
+    return data;
+  } catch { return null; }
+}
+
+function clearCache() {
+  localStorage.removeItem(CACHE_KEY);
+  alert('キャッシュを削除しました。再読み込みします。');
+  location.reload();
+}
+
+// ─── Config storage ──────────────────────────────────────────
+const CONF_KEY = 'kobeguide_airtable_config';
+
+function getConfig() {
+  // まず埋め込み設定を確認
+  if (AIRTABLE_CONFIG.apiKey && AIRTABLE_CONFIG.baseId) return AIRTABLE_CONFIG;
+  // ローカルストレージから取得
+  try {
+    const saved = localStorage.getItem(CONF_KEY);
+    if (saved) return { ...AIRTABLE_CONFIG, ...JSON.parse(saved) };
+  } catch {}
+  return null;
+}
+
+function saveConfig(apiKey, baseId, tableName) {
+  localStorage.setItem(CONF_KEY, JSON.stringify({ apiKey, baseId, tableName }));
+}
+
+function reconfigure() {
+  localStorage.removeItem(CONF_KEY);
+  localStorage.removeItem(CACHE_KEY);
+  init();
+}
+
+// ─── Loading UI ──────────────────────────────────────────────
+function showLoading(msg) {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="facilities-grid">
+      <div class="loading-wrap">
+        <div class="spinner"></div>
+        <div class="loading-text">${msg}</div>
+        <div class="loading-progress" id="loadProgress"></div>
+      </div>
+    </div>`;
+}
+
+function updateLoadingProgress(count) {
+  const el = document.getElementById('loadProgress');
+  if (el) el.textContent = `${count} 件読込済み...`;
+}
+
+function showError(msg) {
+  document.getElementById('mainContent').innerHTML = `
+    <div style="max-width:480px;margin:40px auto;background:white;border-radius:12px;padding:24px;text-align:center;box-shadow:var(--shadow);">
+      <div style="font-size:36px;margin-bottom:12px;">⚠️</div>
+      <h3 style="color:var(--accent);margin-bottom:8px;">データ取得エラー</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">${msg}</p>
+      <button onclick="reconfigure()" style="background:var(--primary-light);color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;">設定をやり直す</button>
+    </div>`;
+}
+
+// ─── Setup Screen ────────────────────────────────────────────
+function showSetupScreen() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="setup-screen">
+      <h2>🔧 Airtable 接続設定</h2>
+      <p class="subtitle">施設データをAirtableで管理します。下記の手順で接続してください。<br>設定はこのブラウザに保存されます（他の端末には共有されません）。</p>
+
+      <ol class="setup-steps">
+        <li><strong><a href="https://airtable.com" target="_blank">airtable.com</a></strong> にログインし、新しいベースを作成します。</li>
+        <li>テーブル名を <code><strong>施設</strong></code> に変更し、下記のフィールドを追加します。</li>
+        <li><a href="https://airtable.com/create/tokens" target="_blank">Personal Access Token</a> を作成します（スコープ: <code>data.records:read</code>、対象ベースを選択）。</li>
+        <li>ベースのURLから Base ID（<code>app...</code>）をコピーします。</li>
+      </ol>
+
+      <div class="schema-box">
+        <h4>📋 Airtable テーブル「施設」のフィールド定義</h4>
+        <table class="schema-table">
+          <tr><th>フィールド名</th><th>種類</th><th>説明</th></tr>
+          <tr><td>施設名</td><td class="field-type">Single line text</td><td>日本語名称（必須）</td></tr>
+          <tr><td>英語名</td><td class="field-type">Single line text</td><td>英語名称</td></tr>
+          <tr><td>カテゴリ</td><td class="field-type">Single select</td><td>hospital / pharmacy / atm / evacuation / tourism / restaurant / transport / admin</td></tr>
+          <tr><td>住所</td><td class="field-type">Single line text</td><td>日本語住所</td></tr>
+          <tr><td>英語住所</td><td class="field-type">Single line text</td><td>英語住所</td></tr>
+          <tr><td>電話番号</td><td class="field-type">Phone number</td><td>電話番号</td></tr>
+          <tr><td>緯度</td><td class="field-type">Number</td><td>例: 34.6901</td></tr>
+          <tr><td>経度</td><td class="field-type">Number</td><td>例: 135.1956</td></tr>
+          <tr><td>対応言語</td><td class="field-type">Multiple select</td><td>en / zh / ko / ar / hi / bn / ne</td></tr>
+          <tr><td>特徴</td><td class="field-type">Multiple select</td><td>英語対応・24時間・ハラール 等</td></tr>
+          <tr><td>24時間営業</td><td class="field-type">Checkbox</td><td>✓ で24h表示</td></tr>
+          <tr><td>緊急施設</td><td class="field-type">Checkbox</td><td>✓ で赤枠表示</td></tr>
+          <tr><td>スポンサー</td><td class="field-type">Checkbox</td><td>✓ で優先・金枠表示</td></tr>
+          <tr><td>ウェブサイト</td><td class="field-type">URL</td><td>公式サイトURL</td></tr>
+          <tr><td>公開中</td><td class="field-type">Checkbox</td><td>✓ のみ表示（未チェックは非表示）</td></tr>
+        </table>
+      </div>
+
+      <div class="setup-form">
+        <div>
+          <label>Personal Access Token（pat... で始まる文字列）</label>
+          <input type="password" id="inputApiKey" placeholder="patXXXXXXXXXXXXXX.XXXX...">
+        </div>
+        <div>
+          <label>Base ID（app... で始まる文字列）</label>
+          <input type="text" id="inputBaseId" placeholder="appXXXXXXXXXXXXXX">
+        </div>
+        <div>
+          <label>テーブル名（デフォルト: 施設）</label>
+          <input type="text" id="inputTableName" value="施設" placeholder="施設">
+        </div>
+        <button class="btn-setup" onclick="submitSetup()">接続して施設データを読み込む →</button>
+      </div>
+
+      <div class="setup-note">
+        💡 <strong>セキュリティについて：</strong>このサービスの施設情報は公開データです。
+        Airtable の Personal Access Token を <code>data.records:read</code> スコープのみに制限することで、
+        外部からの書き込みを防止できます。APIキーはブラウザのローカルストレージに保存されます。
+      </div>
+    </div>`;
+}
+
+async function submitSetup() {
+  const apiKey    = document.getElementById('inputApiKey').value.trim();
+  const baseId    = document.getElementById('inputBaseId').value.trim();
+  const tableName = document.getElementById('inputTableName').value.trim() || '施設';
+  if (!apiKey || !baseId) { alert('APIキーとBase IDを入力してください。'); return; }
+  saveConfig(apiKey, baseId, tableName);
+  await loadAndRender({ apiKey, baseId, tableName, cacheMinutes: 10 });
+}
+
+// ─── Main Data Load ──────────────────────────────────────────
+async function loadAndRender(cfg) {
+  // キャッシュ確認
+  const cached = loadCache(cfg.cacheMinutes);
+  if (cached) {
+    allFacilities = cached;
+    fromCache = true;
+    renderMain();
+    return;
+  }
+
+  fromCache = false;
+  showLoading('Airtableから施設データを読み込んでいます...');
+
+  try {
+    const records = await fetchAllFromAirtable(cfg);
+    allFacilities = records.map(mapRecord);
+    saveCache(allFacilities);
+    renderMain();
+  } catch (err) {
+    showError(`${err.message}<br><small>APIキーまたはBase IDを確認してください。</small>`);
+  }
+}
+
+// ─── Main Layout ─────────────────────────────────────────────
+function renderMain() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-header">
+      <div class="section-title">
+        <span id="sectionIcon">🗺️</span>
+        <span data-i18n="all_facilities">${t('all_facilities')}</span>
+        <span class="count-badge" id="countBadge">0</span>
+      </div>
+      <div class="config-bar">
+        ${fromCache ? `<span class="cache-info">📦 ${t('loaded_from')}</span>` : ''}
+        <button class="btn-reset-cache" onclick="clearCache()">🔄 更新</button>
+        <button class="btn-reconfig" onclick="reconfigure()">⚙️ 設定</button>
+      </div>
+    </div>
+    <div class="facilities-grid" id="facilitiesGrid"></div>
+    <div class="sponsor-section">
+      <h3>運営スポンサー</h3>
+      <div class="sponsor-names">セコンドペンギン企画　／　德永良雄行政書士事務所</div>
+      <div class="sponsor-contact">info@second-penguin.com</div>
+      <p style="margin-top:10px;font-size:12px;opacity:0.85;">年10万円のスポンサープランで貴社サービスを掲載できます。</p>
+      <a href="mailto:info@second-penguin.com?subject=KobeGuide スポンサー申込" class="btn-sponsor-join">スポンサー申込みはこちら</a>
+    </div>`;
+  renderCards();
+}
+
+// ─── Card Rendering ──────────────────────────────────────────
+function setCategory(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.cat-tab[data-cat="${cat}"]`).classList.add('active');
+  renderCards();
+}
+
+function handleSearch(q) {
+  searchQuery = q.toLowerCase();
+  renderCards();
+}
+
+function getDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function renderCards() {
+  const grid = document.getElementById('facilitiesGrid');
+  const badge = document.getElementById('countBadge');
+  if (!grid) return;
+
+  let items = [...allFacilities];
+  if (currentCat !== 'all') items = items.filter(f => f.cat === currentCat);
+  if (searchQuery) {
+    items = items.filter(f =>
+      f.name.toLowerCase().includes(searchQuery) ||
+      f.nameEn.toLowerCase().includes(searchQuery) ||
+      f.address.toLowerCase().includes(searchQuery) ||
+      f.features.some(x => x.toLowerCase().includes(searchQuery))
+    );
+  }
+  // Sort: sponsor → 距離順
+  items.sort((a, b) => {
+    if (a.sponsor && !b.sponsor) return -1;
+    if (!a.sponsor && b.sponsor) return 1;
+    if (userLat !== null) {
+      return getDistance(userLat, userLng, a.lat, a.lng) - getDistance(userLat, userLng, b.lat, b.lng);
+    }
+    return 0;
+  });
+
+  if (badge) badge.textContent = items.length + t('records');
+
+  if (items.length === 0) {
+    grid.innerHTML = `<div class="no-results" style="grid-column:1/-1"><div style="font-size:36px;margin-bottom:10px;">🔍</div><div>該当する施設が見つかりませんでした</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map(f => renderCard(f)).join('');
+}
+
+function getCatIcon(cat) {
+  return { hospital:'🏥', pharmacy:'💊', atm:'🏧', evacuation:'🆘', tourism:'🗼', restaurant:'🍜', transport:'🚃', admin:'🏛️' }[cat] || '📌';
+}
+
+function renderCard(f) {
+  const origin = (userLat !== null) ? `&origin=${userLat},${userLng}` : '';
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1${origin}&destination=${f.lat},${f.lng}&travelmode=${travelMode}`;
+  const distText = userLat !== null ? (() => {
+    const d = getDistance(userLat, userLng, f.lat, f.lng);
+    return d < 1000 ? `📍 ${Math.round(d)}m` : `📍 ${(d/1000).toFixed(1)}km`;
+  })() : '';
+
+  const langNames = {en:'English',zh:'中文',ko:'한국어',ar:'العربية',hi:'हिंदी',bn:'বাংলা',ne:'नेपाली'};
+  const langTags = (f.langs||[]).map(l => `<span class="tag tag-lang">${langNames[l]||l}</span>`).join('');
+  const featureTags = (f.features||[]).slice(0,3).map(x => `<span class="tag tag-feature">${x}</span>`).join('');
+  const openTag = f.open24 ? `<span class="tag tag-open">${t('open_now')}</span>` : '';
+  const sponsorBadge = f.sponsor ? `<div class="sponsor-badge">★ スポンサー</div>` : '';
+
+  const displayName = currentLang === 'ja' ? f.name : (f.nameEn || f.name);
+  const displayAddr = currentLang === 'ja' ? f.address : (f.addressEn || f.address);
+  const subName = currentLang === 'ja' && f.nameEn ? `<div class="card-name-en">${f.nameEn}</div>` : '';
+
+  const phoneBtn = f.phone ? `<a class="btn-call" href="tel:${f.phone}">📞 ${t('btn_call')}</a>` : '';
+  const webBtn   = f.website ? `<a class="btn-website" href="${f.website}" target="_blank" rel="noopener">🔗 ${t('btn_website')}</a>` : '';
+
+  return `
+  <div class="facility-card ${f.emergency?'emergency':''} ${f.sponsor?'sponsor':''}">
+    ${sponsorBadge}
+    <div class="card-top">
+      <div class="card-cat-icon">${getCatIcon(f.cat)}</div>
+      <div class="card-info">
+        <div class="card-name">${displayName}</div>
+        ${subName}
+        <div class="card-tags">${openTag}${langTags}${featureTags}</div>
+      </div>
+    </div>
+    <div class="card-address">📍 ${displayAddr}${distText?' <strong>'+distText+'</strong>':''}</div>
+    ${f.phone ? `<div class="card-phone">☎ ${f.phone}</div>` : ''}
+    <div class="card-actions">
+      <a class="btn-map ${f.emergency?'emergency-map':''}" href="${mapsUrl}" target="_blank" rel="noopener">🗺 ${t('btn_directions')}</a>
+      ${phoneBtn}${webBtn}
+    </div>
+  </div>`;
+}
+
+// ─── Geolocation ─────────────────────────────────────────────
+let currentAreaName = null;
+
+function openLocModal() {
+  document.getElementById('locModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLocModal() {
+  document.getElementById('locModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function setArea(name, lat, lng) {
+  userLat = lat; userLng = lng; currentAreaName = name;
+  document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  closeLocModal();
+  setLocLabel(name);
+  renderCards();
+}
+
+function locateByGPS() {
+  if (!navigator.geolocation) { alert('このブラウザはGPSに対応していません。'); return; }
+  setLocLabel('取得中...');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+      currentAreaName = null;
+      closeLocModal();
+      setLocLabel(isInKobe(userLat, userLng) ? '現在地' : `${userLat.toFixed(3)},${userLng.toFixed(3)}`);
+      renderCards();
+    },
+    () => { alert('GPS取得できませんでした。エリアを手動で選択してください。'); setLocLabel('エリア選択'); },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+}
+
+function locateMe() { openLocModal(); }
+
+// ─── SOS Modal ───────────────────────────────────────────────
+function openSOS() { document.getElementById('sosModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeSOS() { document.getElementById('sosModal').classList.remove('open'); document.body.style.overflow=''; }
+
+// ─── Init ────────────────────────────────────────────────────
+function autoDetectLocation() {
+  // デフォルトは三宮と表示
+  setLocLabel('三宮（変更▼）');
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      if (isInKobe(lat, lng)) {
+        // 神戸範囲内なら現在地に更新
+        userLat = lat; userLng = lng;
+        setLocLabel('現在地 ▼');
+        renderCards();
+      }
+      // 神戸範囲外（IP誤検知）はデフォルト三宮のまま何もしない
+    },
+    () => { /* GPS失敗時もデフォルト三宮のまま */ },
+    { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
+  );
+}
+
+async function init() {
+  const cfg = getConfig();
+  if (!cfg || !cfg.apiKey || !cfg.baseId) {
+    showSetupScreen();
+    return;
+  }
+  // データ読み込みと位置取得を並行実行
+  autoDetectLocation();
+  await loadAndRender(cfg);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
