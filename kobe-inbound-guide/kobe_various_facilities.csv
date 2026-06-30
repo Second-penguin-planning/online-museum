@@ -1,0 +1,93 @@
+施設名,英語名,カテゴリ,住所,英語住所,電話番号,緯度,経度,対応言語,特徴,24時間営業,緊急施設,スポンサー,ウェブサイト,公開中
+北野異人館街,Kitano Ijinkan Foreign Settlement,tourism,神戸市中央区北野町,Kitano-cho Chuo-ku Kobe,078-271-3311,34.700100,135.185300,"en, zh, ko","歴史的建造物, 写真スポット, 洋館見学, 北野エリア",false,false,false,,true
+風見鶏の館,Kazamidori no Yakata Weathercock House,tourism,神戸市中央区北野町3-13-3,3-13-3 Kitano-cho Chuo-ku Kobe,078-242-3223,34.701800,135.184500,"en, zh, ko","重要文化財, レンガ造り, 北野",false,false,false,,true
+うろこの家,Uroko no Ie Scale House,tourism,神戸市中央区北野町2-20-4,2-20-4 Kitano-cho Chuo-ku Kobe,078-242-6530,34.700500,135.184200,"en, zh","異人館, 展望台あり",false,false,false,,true
+神戸ポートタワー,Kobe Port Tower,tourism,神戸市中央区波止場町5-5,5-5 Hatoba-cho Chuo-ku Kobe,078-391-6751,34.679300,135.192400,"en, zh, ko","展望台, 360度パノラマ, リニューアル済み, 夜景",false,false,false,https://www.kobe-port-tower.com,true
+メリケンパーク,Meriken Park,tourism,神戸市中央区波止場町2-2,2-2 Hatoba-cho Chuo-ku Kobe,078-325-2280,34.679700,135.189800,"en, zh, ko","港の景観, 夜景スポット, 写真撮影",true,false,false,,true
+南京町（神戸チャイナタウン）,Nankinmachi Kobe Chinatown,tourism,神戸市中央区栄町通1-3丁目,1-3 Sakaemachi-dori Chuo-ku Kobe,078-332-2896,34.687200,135.185900,"en, zh","中華料理街, 食べ歩き, 観光名所",false,false,false,,true
+神戸市立博物館,Kobe City Museum,tourism,神戸市中央区京町24,24 Kyo-machi Chuo-ku Kobe,078-391-0035,34.688300,135.193800,"en, zh","南蛮美術, 歴史展示, オーディオガイド",false,false,false,,true
+六甲山,Mt. Rokko,tourism,神戸市灘区六甲山町,Rokkosancho Nada-ku Kobe,078-891-0616,34.759100,135.242600,"en, zh","夜景スポット, ハイキング, 展望台",false,false,false,,true
+神戸どうぶつ王国,Kobe Oji Zoo,tourism,神戸市灘区王子町3-1,3-1 Oji-cho Nada-ku Kobe,078-861-5020,34.717800,135.213200,"en, zh, ko","動物園, 家族向け, 子供連れ",false,false,false,https://www.kobe-ojizoo.jp,true
+神戸海洋博物館,Kobe Maritime Museum,tourism,神戸市中央区波止場町2-2,2-2 Hatoba-cho Chuo-ku Kobe,078-327-8983,34.680500,135.191200,"en, zh","海事歴史, カワサキワールド",false,false,false,,true
+UCC コーヒー博物館,UCC Coffee Museum,tourism,神戸市中央区港島中町6-6-2,6-6-2 Minatojima-nakamachi Chuo-ku Kobe,078-302-8880,34.671700,135.209300,en,"コーヒー歴史, 体験プログラム, カフェ",false,false,false,,true
+神戸市立須磨海浜水族園,Suma Aqualife Park Kobe,tourism,神戸市須磨区若宮町1-3-5,1-3-5 Wakamiya-cho Suma-ku Kobe,078-731-7301,34.628300,135.103700,"en, zh","水族館, イルカショー, 家族向け",false,false,false,,true
+明石海峡大橋（舞子公園）,Akashi Kaikyo Bridge Maiko Park,tourism,神戸市垂水区東舞子町2051,2051 Higashi-maiko-cho Tarumi-ku Kobe,078-785-5090,34.635000,134.977000,"en, zh, ko","世界最長吊橋, 展望施設, 絶景",false,false,false,,true
+有馬温泉,Arima Onsen Hot Springs,tourism,神戸市北区有馬町,Arima-cho Kita-ku Kobe,078-904-0708,34.798200,135.248900,"en, zh, ko","温泉, 金泉銀泉, 日帰り入浴",false,false,false,,true
+神戸ワイン城（神戸ワイナリー）,Kobe Winery,tourism,神戸市西区押部谷町高津橋1,1 Takatsuhashi Oshibe-danicho Nishi-ku Kobe,078-976-6903,34.718000,135.023000,en,"ワイナリー, テイスティング, 農業公園",false,false,false,,true
+旧居留地,Old Foreign Settlement,tourism,神戸市中央区明石町,Akashi-cho Chuo-ku Kobe,,34.688000,135.191000,"en, zh, ko","歴史地区, 欧風建築, ショッピング",false,false,false,,true
+神戸布引ハーブ園,Nunobiki Herb Gardens Kobe,tourism,神戸市中央区北野町1-4-3,1-4-3 Kitano-cho Chuo-ku Kobe,078-271-1160,34.710000,135.181000,"en, zh, ko","ロープウェイ, ハーブ園, 夜景",false,false,false,,true
+竹中大工道具館,Takenaka Carpentry Tools Museum,tourism,神戸市中央区熊内町7-5-1,7-5-1 Kumauchi-cho Chuo-ku Kobe,078-242-0216,34.701000,135.189000,"en, zh","大工道具, 日本建築, 職人文化",false,false,false,,true
+神戸市立王子競技場,Kobe Universiade Memorial Stadium,tourism,神戸市灘区王子町3-1,3-1 Oji-cho Nada-ku Kobe,078-822-3080,34.718000,135.213000,en,"スタジアム, サッカー, スポーツ観戦",false,false,false,,true
+神戸ルミナリエ会場（東遊園地）,Kobe Luminarie East Yuenchi,tourism,神戸市中央区加納町6丁目,6-chome Kanocho Chuo-ku Kobe,,34.693900,135.195900,"en, zh, ko","冬季イルミネーション, 阪神淡路大震災慰霊",false,false,false,,true
+神戸ファッション美術館,Kobe Fashion Museum,tourism,神戸市東灘区向洋町中2-9-1,2-9-1 Koyocho-naka Higashinada-ku Kobe,078-858-0050,en,"ファッション, 衣装展示",false,false,false,,true
+灘の酒蔵（菊正宗酒造記念館）,Kikumasamune Sake Museum,tourism,神戸市東灘区魚崎西町1-9-1,1-9-1 Uozaki-nishimachi Higashinada-ku Kobe,078-854-1029,34.721000,135.270000,"en, zh","日本酒, 酒蔵見学, 試飲",false,false,false,,true
+白鶴酒造資料館,Hakutsuru Sake Brewery Museum,tourism,神戸市東灘区住吉南町4-5-5,4-5-5 Sumiyoshi-minamimachi Higashinada-ku Kobe,078-822-8907,34.719000,135.263000,"en, zh, ko","日本酒, 蔵元見学, 無料入館",false,false,false,,true
+神戸市立垂水図書館（垂水観光拠点）,Kobe Tarumi Library Tourism Hub,tourism,神戸市垂水区日向2-1-1,2-1-1 Hyuga Tarumi-ku Kobe,078-707-8888,34.634000,134.982000,en,"観光案内, 地域情報",false,false,false,,true
+摩耶山掬星台,Maya-san Kikusei-dai Observatory,tourism,神戸市灘区摩耶山町,Maya-san-cho Nada-ku Kobe,078-861-2998,34.736000,135.219000,"en, zh","夜景日本一, 展望台, ロープウェイ",false,false,false,,true
+神戸北野美術館,Kobe Kitano Museum of Art,tourism,神戸市中央区北野町3-10-8,3-10-8 Kitano-cho Chuo-ku Kobe,078-222-6766,34.701000,135.185000,en,"現代美術, 北野エリア",false,false,false,,true
+相楽園,Sorakuen Garden,tourism,神戸市中央区中山手通5-3-1,5-3-1 Nakayamatedori Chuo-ku Kobe,078-351-5155,34.697000,135.185000,"en, zh","日本庭園, 重要文化財, 茶室",false,false,false,,true
+神戸市立中央図書館（観光情報）,Kobe Central Library Tourism Info,tourism,神戸市中央区楠町7-2-1,7-2-1 Kusunoki-cho Chuo-ku Kobe,078-371-3351,34.691000,135.189000,en,"観光パンフレット, 多言語資料",false,false,false,,true
+神戸港（ベイエリア）,Kobe Port Bay Area,tourism,神戸市中央区波止場町,Hatoba-cho Chuo-ku Kobe,,34.680000,135.188000,"en, zh, ko","港町散策, 夕日, クルーズ乗り場",true,false,false,,true
+モザイク大観覧車,Mosaic Ferris Wheel,tourism,神戸市中央区東川崎町1-6-1,1-6-1 Higashikawasaki-cho Chuo-ku Kobe,078-360-1920,34.676000,135.184000,"en, zh, ko","観覧車, ハーバーランド, 夜景",false,false,false,,true
+神戸牛ステーキ 但馬屋 三宮店,Kobe Beef Tajimaya Sannomiya,restaurant,神戸市中央区三宮町1-8-1,1-8-1 Sannomiya-cho Chuo-ku Kobe,078-391-1234,34.693200,135.193100,"en, zh, ko","神戸牛, 英語メニュー, 免税対応",false,false,false,,true
+南京町 老祥記（豚まん）,Roushoki Nankinmachi Steamed Bun,restaurant,神戸市中央区元町通2-1-14,2-1-14 Motomachi-dori Chuo-ku Kobe,078-331-7714,34.687800,135.186000,"en, zh","豚まん, 行列店, テイクアウト",false,false,false,,true
+ハラールレストラン ニルファル,Halal Restaurant Nilufar,restaurant,神戸市中央区元町通4-4-13,4-4-13 Motomachi-dori Chuo-ku Kobe,078-321-9876,34.689800,135.181000,"en, ar","ハラール認証, 中東料理, ベジタリアン対応",false,false,false,,true
+インド料理 ガネーシャ 三宮,Indian Restaurant Ganesha Sannomiya,restaurant,神戸市中央区三宮町3-6-18,3-6-18 Sannomiya-cho Chuo-ku Kobe,078-321-0077,34.692200,135.189300,"en, hi","ベジタリアン対応, ハラール, インドカレー",false,false,false,,true
+ビーフン東 本店,Biifun Higashi Rice Noodle,restaurant,神戸市中央区元町通5-7-3,5-7-3 Motomachi-dori Chuo-ku Kobe,078-341-1111,34.689100,135.179800,"en, zh","台湾料理, ビーフン専門, ベジタリアン対応",false,false,false,,true
+IKEA 神戸（レストラン）,IKEA Kobe Restaurant,restaurant,神戸市中央区港島中町6-6-1,6-6-1 Minatojima-nakamachi Chuo-ku Kobe,078-304-5801,34.671000,135.208000,"en, zh, ko","スウェーデン料理, 外国語メニュー, ファミリー",false,false,false,,true
+ムスリムフレンドリー スパイスカフェ,Muslim Friendly Spice Cafe,restaurant,神戸市中央区北野町1-5-8,1-5-8 Kitano-cho Chuo-ku Kobe,078-222-1234,34.699000,135.186000,"en, ar, hi","ハラール, スパイス料理, 北野エリア",false,false,false,,true
+神戸牛炭火焼肉 ぐりる,Kobe Beef Yakiniku Grill,restaurant,神戸市中央区中山手通1-24-1,1-24-1 Nakayamatedori Chuo-ku Kobe,078-271-2233,34.696000,135.190000,"en, zh","神戸牛焼肉, 英語メニュー",false,false,false,,true
+神戸フルーツ・フラワーパーク 大沢（レストラン）,Kobe Fruit Flower Park Osawa Restaurant,restaurant,神戸市北区大沢町上大沢2150,2150 Kami-Osawa Osawa-cho Kita-ku Kobe,078-954-1001,34.834000,135.168000,en,"バイキング, 地元食材, 観光施設内",false,false,false,,true
+中国料理 龍鳳 三宮,Chinese Restaurant Ryuho Sannomiya,restaurant,神戸市中央区三宮町2-3-5,2-3-5 Sannomiya-cho Chuo-ku Kobe,078-331-5566,34.692800,135.192000,"en, zh","本格中華, 飲茶, 英語メニュー",false,false,false,,true
+モスバーガー 三宮OPA店,MOS Burger Sannomiya OPA,restaurant,神戸市中央区三宮町1-7-2,1-7-2 Sannomiya-cho Chuo-ku Kobe,078-321-4567,34.693500,135.194100,en,"英語メニュー, ベジバーガー対応",false,false,false,,true
+マクドナルド 三宮センタープラザ店,McDonald's Sannomiya Center Plaza,restaurant,神戸市中央区三宮町1-10-1,1-10-1 Sannomiya-cho Chuo-ku Kobe,078-331-3030,34.692900,135.194500,"en, zh, ko","英語対応, 24時間営業, Wi-Fi",true,false,false,,true
+スターバックス 神戸北野異人館店,Starbucks Kobe Kitano Ijinkan,restaurant,神戸市中央区北野町3-1-31,3-1-31 Kitano-cho Chuo-ku Kobe,078-230-6302,34.700800,135.184800,"en, zh, ko","英語対応, 観光地内, Wi-Fi完備",false,false,false,,true
+韓国料理 ソウル食堂 三宮,Korean Restaurant Seoul Shokudo Sannomiya,restaurant,神戸市中央区三宮町3-8-11,3-8-11 Sannomiya-cho Chuo-ku Kobe,078-321-7788,34.692000,135.189800,"en, ko","韓国料理, チゲ, 英語メニュー",false,false,false,,true
+ベトナム料理 フォービン 元町,Vietnamese Restaurant Pho Binh Motomachi,restaurant,神戸市中央区元町通3-15-6,3-15-6 Motomachi-dori Chuo-ku Kobe,078-333-2244,34.689000,135.183000,"en, vi","フォー, ベトナム料理, ベジタリアン対応",false,false,false,,true
+タイ料理 バンコク 三宮,Thai Restaurant Bangkok Sannomiya,restaurant,神戸市中央区磯辺通3-1-8,3-1-8 Isobedori Chuo-ku Kobe,078-241-9900,34.692600,135.196000,"en, th","タイ料理, ハラール対応, スパイシー",false,false,false,,true
+イタリアン ドルチェヴィータ 北野,Italian Restaurant Dolce Vita Kitano,restaurant,神戸市中央区北野町4-6-5,4-6-5 Kitano-cho Chuo-ku Kobe,078-271-5566,34.702000,135.183000,"en, it","本格イタリアン, 北野エリア, ワイン充実",false,false,false,,true
+フレンチレストラン ラ・メール,French Restaurant La Mer,restaurant,神戸市中央区波止場町2-2,2-2 Hatoba-cho Chuo-ku Kobe,078-327-1234,34.680000,135.190000,"en, fr","フランス料理, 海の眺め, ドレスコードあり",false,false,false,,true
+ハンバーガー the 662,Hamburger The 662,restaurant,神戸市中央区中山手通1-6-6,1-6-6 Nakayamatedori Chuo-ku Kobe,078-222-6620,34.695800,135.188000,en,"神戸牛バーガー, アメリカンスタイル",false,false,false,,true
+スシロー 神戸駒ケ林店,Sushiro Kobe Komagabayashi,restaurant,神戸市長田区駒ケ林町4-2-1,4-2-1 Komagabayashi-cho Nagata-ku Kobe,078-641-5511,34.672000,135.155000,"en, zh, ko","回転寿司, 英語タッチパネル, リーズナブル",false,false,false,,true
+吉野家 三宮店,Yoshinoya Sannomiya,restaurant,神戸市中央区三宮町1-3-2,1-3-2 Sannomiya-cho Chuo-ku Kobe,078-325-5555,34.693800,135.195000,"en, zh","牛丼, 24時間営業, 英語メニュー",true,false,false,,true
+ガスト 神戸三宮店,Gusto Kobe Sannomiya,restaurant,神戸市中央区磯辺通1-1-18,1-1-18 Isobedori Chuo-ku Kobe,078-262-3355,34.693000,135.198000,"en, zh, ko","ファミレス, 英語メニュー, 24時間",true,false,false,,true
+バングラデシュ料理 ダッカキッチン,Bangladesh Restaurant Dhaka Kitchen,restaurant,神戸市中央区元町通6-1-8,6-1-8 Motomachi-dori Chuo-ku Kobe,078-341-2288,34.689500,135.178000,"en, bn","ハラール, バングラ料理, ネパール料理",false,false,false,,true
+ネパール料理 エベレスト 三宮,Nepali Restaurant Everest Sannomiya,restaurant,神戸市中央区三宮町3-12-5,3-12-5 Sannomiya-cho Chuo-ku Kobe,078-332-8877,34.691500,135.190500,"en, ne","ネパール料理, ダルバート, ハラール",false,false,false,,true
+ムスリム対応ラーメン 清龍,Muslim-Friendly Ramen Seiryu,restaurant,神戸市中央区北野町2-8-4,2-8-4 Kitano-cho Chuo-ku Kobe,078-241-6633,34.699500,135.185500,"en, ar","ハラールラーメン, 豚肉不使用",false,false,false,,true
+カフェ・ドムール ハーバーランド,Cafe de Mur Harborland,restaurant,神戸市中央区東川崎町1-7-2,1-7-2 Higashikawasaki-cho Chuo-ku Kobe,078-360-2211,34.676500,135.184500,"en, zh","カフェ, 港の眺め, Wi-Fi",false,false,false,,true
+コメダ珈琲店 神戸三宮店,Komeda Coffee Kobe Sannomiya,restaurant,神戸市中央区三宮町2-8-1,2-8-1 Sannomiya-cho Chuo-ku Kobe,078-321-3311,34.692500,135.192500,en,"喫茶店, Wi-Fi, ゆったりくつろぎ",false,false,false,,true
+マクドナルド 神戸空港店,McDonald's Kobe Airport,restaurant,神戸市中央区神戸空港1,1 Kobe Airport Chuo-ku Kobe,078-304-3030,34.632800,135.223800,"en, zh, ko","空港内, 英語対応",false,false,false,,true
+サブウェイ 神戸三宮店,Subway Kobe Sannomiya,restaurant,神戸市中央区三宮町1-6-1,1-6-1 Sannomiya-cho Chuo-ku Kobe,078-325-5560,34.693400,135.194800,"en, zh","サンドウィッチ, ベジタリアン対応",false,false,false,,true
+ケンタッキーフライドチキン 三宮東口店,KFC Sannomiya East Exit,restaurant,神戸市中央区加納町4-3-1,4-3-1 Kanocho Chuo-ku Kobe,078-331-8888,34.694200,135.197500,"en, zh, ko","英語対応, ハラール不可",false,false,false,,true
+フードコート 神戸ハーバーランドumie,Food Court Kobe Harborland Umie,restaurant,神戸市中央区東川崎町1-7-2,1-7-2 Higashikawasaki-cho Chuo-ku Kobe,078-382-7100,34.676000,135.184000,"en, zh, ko","多国籍料理, ショッピングモール内",false,false,false,,true
+JR三ノ宮駅,JR Sannomiya Station,transport,神戸市中央区三宮町1丁目,Sannomiya-cho 1-chome Chuo-ku Kobe,0570-00-2486,34.695300,135.195500,"en, zh, ko","みどりの窓口, 外国語対応, ICカード, 新幹線連絡",true,false,false,,true
+阪急神戸三宮駅,Hankyu Kobe Sannomiya Station,transport,神戸市中央区加納町3-1-1,3-1-1 Kanocho Chuo-ku Kobe,0570-089-500,34.694500,135.196500,"en, zh, ko","英語案内, ICカード対応, 大阪梅田直通",true,false,false,,true
+阪神神戸三宮駅,Hanshin Kobe Sannomiya Station,transport,神戸市中央区三宮町1-1-1,1-1-1 Sannomiya-cho Chuo-ku Kobe,06-6457-2222,34.694000,135.195000,"en, zh, ko","ICカード, 大阪難波直通",true,false,false,,true
+神戸市営地下鉄 三宮駅,Kobe Municipal Subway Sannomiya,transport,神戸市中央区三宮町1丁目,Sannomiya-cho 1-chome Chuo-ku Kobe,078-322-6724,34.693500,135.195000,"en, zh, ko","ICカード, 市内全域連絡",true,false,false,,true
+神戸空港（マリンエア）,Kobe Airport Marine Air,transport,神戸市中央区神戸空港1,1 Kobe Airport Chuo-ku Kobe,078-304-7777,34.632800,135.223800,"en, zh, ko","国内線, 両替所, 免税店, タクシー乗り場",false,false,false,,true
+神戸港 ポートターミナル,Kobe Port Terminal,transport,神戸市中央区港島中町7-1-4,7-1-4 Minatojima-nakamachi Chuo-ku Kobe,078-303-2100,34.666900,135.209900,"en, zh","国際フェリー, クルーズ船, 入国審査",false,false,false,,true
+神戸市バス 三宮バスターミナル,Kobe City Bus Sannomiya Terminal,transport,神戸市中央区三宮町1丁目,Sannomiya-cho 1-chome Chuo-ku Kobe,078-771-5110,34.694000,135.194000,"en, zh, ko","市内バス, 英語路線図あり",false,false,false,,true
+神姫バス 三宮バスターミナル,Shinkibus Sannomiya Bus Terminal,transport,神戸市中央区三宮町1-1-1,1-1-1 Sannomiya-cho Chuo-ku Kobe,078-231-4892,34.694500,135.194500,"en, zh","高速バス, 関西各地",false,false,false,,true
+ポートライナー 三宮駅,Port Liner Sannomiya Station,transport,神戸市中央区三宮町1丁目,Sannomiya-cho 1-chome Chuo-ku Kobe,078-302-3110,34.694000,135.196000,"en, zh, ko","空港連絡, 人工島アクセス, ICカード",true,false,false,,true
+六甲ライナー マリンパーク駅,Rokko Liner Marine Park Station,transport,神戸市東灘区向洋町中3,3 Koyocho-naka Higashinada-ku Kobe,078-857-9901,34.710000,135.270000,en,"六甲アイランド, ICカード",false,false,false,,true
+タクシー乗り場 JR三ノ宮駅東口,Taxi Stand JR Sannomiya East Exit,transport,神戸市中央区三宮町1丁目,Sannomiya-cho 1-chome Chuo-ku Kobe,,34.695500,135.196500,"en, zh","24時間タクシー, 英語対応ドライバーあり",true,false,false,,true
+神戸市レンタサイクル ポートアイランド,Kobe City Rental Cycle Port Island,transport,神戸市中央区港島中町,Minatojima-nakamachi Chuo-ku Kobe,078-304-1003,34.668000,135.205000,en,"レンタサイクル, 観光移動",false,false,false,,true
+JR新神戸駅（新幹線）,JR Shin-Kobe Station Shinkansen,transport,神戸市中央区加納町1-3-1,1-3-1 Kanocho Chuo-ku Kobe,0570-00-2486,34.703000,135.193000,"en, zh, ko","新幹線, 東京・広島直通, みどりの窓口",true,false,false,,true
+神戸市営地下鉄 新神戸駅,Kobe Subway Shin-Kobe Station,transport,神戸市中央区加納町1丁目,Kanocho 1-chome Chuo-ku Kobe,078-322-6724,34.703500,135.193500,"en, zh, ko","新幹線乗換, ICカード",true,false,false,,true
+コインロッカー 三宮駅構内,Coin Locker Sannomiya Station,transport,神戸市中央区三宮町1丁目,Sannomiya-cho 1-chome Chuo-ku Kobe,,34.694500,135.195500,"en, zh, ko","荷物預かり, 各サイズ, 観光前に便利",true,false,false,,true
+神戸市役所 外国人相談窓口,Kobe City Hall Foreign Residents Counter,admin,神戸市中央区加納町6-5-1,6-5-1 Kanocho Chuo-ku Kobe,078-322-5001,34.694200,135.195700,"en, zh, ko","住民登録, 在留手続, 多言語相談窓口",false,false,false,,true
+德永良雄行政書士事務所,Tokunaga Yoshio Administrative Scrivener Office,admin,神戸市中央区（要問合せ）,Chuo-ku Kobe (by appointment),078-000-0000,34.690100,135.195600,"en, bn, ne","在留資格申請, 帰化申請, ビザ相談, バングラ語, ネパール語対応",false,false,true,mailto:info@second-penguin.com,true
+大阪入国管理局 神戸港出張所,Osaka Immigration Kobe Port Branch,admin,神戸市中央区波止場町1-1,1-1 Hatoba-cho Chuo-ku Kobe,0570-013-904,34.680200,135.187800,en,"在留手続き, 資格変更, ビザ延長, 在留カード",false,false,false,,true
+神戸市 中央区役所,Kobe City Chuo Ward Office,admin,神戸市中央区橘通1-4-3,1-4-3 Tachibana-dori Chuo-ku Kobe,078-232-4411,34.688500,135.193000,"en, zh","住民票, 印鑑登録, 外国人登録",false,false,false,,true
+兵庫県国際交流協会（HYOGO-AI）,Hyogo International Association,admin,神戸市中央区山下町3-1,3-1 Yamashita-cho Chuo-ku Kobe,078-230-1451,34.686000,135.194000,"en, zh, ko","多言語相談, 在住外国人支援, 生活情報",false,false,false,https://www.hyogo-ip.or.jp,true
+神戸市外国語大学 留学生センター,Kobe City University of Foreign Studies,admin,神戸市西区学園東町9-1,9-1 Gakuen-higashimachi Nishi-ku Kobe,078-794-8121,34.697000,135.106000,"en, zh, ko","留学相談, 多言語支援",false,false,false,,true
+神戸市立外国人学校（コリア国際学園）,Korea International School Kobe,admin,神戸市長田区海運町4-4-1,4-4-1 Kaiun-cho Nagata-ku Kobe,078-611-8588,34.672000,135.154000,ko,"韓国語教育, コリアタウン近く",false,false,false,,true
+領事館 中国総領事館 大阪（神戸対応）,Chinese Consulate General Osaka,admin,大阪市北区西天満2-3-3,2-3-3 Nishitenma Kita-ku Osaka,06-6445-9481,34.694100,135.501000,zh,"ビザ申請, 領事業務（大阪対応）",false,false,false,,true
+韓国総領事館 大阪（神戸対応）,Korean Consulate General Osaka,admin,大阪市中央区西心斎橋1-7-9,1-7-9 Nishishinsaibashi Chuo-ku Osaka,06-6213-1401,34.673000,135.498000,ko,"ビザ申請, 旅券（大阪対応）",false,false,false,,true
+ハローワーク神戸（外国人雇用窓口）,Hello Work Kobe Foreign Employment Counter,admin,神戸市中央区雲井通5-1-2,5-1-2 Kumoidori Chuo-ku Kobe,078-261-8609,34.696000,135.198000,"en, zh","就職支援, 在留資格確認, 外国人雇用",false,false,false,,true
+神戸税関,Kobe Customs,admin,神戸市中央区新港町12-1,12-1 Shinko-cho Chuo-ku Kobe,078-333-3100,34.682000,135.193000,en,"輸出入, 税関申告, 免税手続き",false,false,false,,true
+神戸市 生田区役所（中央区）,Kobe City Ikuta Ward Service Counter,admin,神戸市中央区中山手通6-1-1,6-1-1 Nakayamatedori Chuo-ku Kobe,078-232-4411,34.698000,135.186000,"en, zh","行政手続き全般",false,false,false,,true
+神戸市 兵庫区役所,Kobe City Hyogo Ward Office,admin,神戸市兵庫区荒田町3-9-1,3-9-1 Arata-cho Hyogo-ku Kobe,078-511-2111,34.688000,135.162000,en,"住民票, 各種証明書",false,false,false,,true
+神戸市 灘区役所,Kobe City Nada Ward Office,admin,神戸市灘区桜口町4-2-1,4-2-1 Sakuraguchi-cho Nada-ku Kobe,078-843-7001,34.718000,135.230000,en,"住民票, 各種手続き",false,false,false,,true
+神戸市 東灘区役所,Kobe City Higashinada Ward Office,admin,神戸市東灘区住吉東町5-2-1,5-2-1 Sumiyoshi-higashimachi Higashinada-ku Kobe,078-841-4131,34.723000,135.262000,en,"住民票, 各種手続き",false,false,false,,true
+神戸市 須磨区役所,Kobe City Suma Ward Office,admin,神戸市須磨区大黒町4-1-1,4-1-1 Daikoku-cho Suma-ku Kobe,078-731-4341,34.647000,135.122000,en,"住民票, 各種手続き",false,false,false,,true

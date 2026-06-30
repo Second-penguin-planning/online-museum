@@ -1,0 +1,51 @@
+施設名,英語名,カテゴリ,住所,英語住所,電話番号,緯度,経度,対応言語,特徴,24時間営業,緊急施設,スポンサー,ウェブサイト,公開中
+神戸大学医学部附属病院,Kobe University Hospital,hospital,神戸市中央区楠町7-5-2,7-5-2 Kusunoki-cho Chuo-ku Kobe,078-382-5111,34.689600,135.189600,"en, zh","救急指定, 国際診療室, 外国語対応",true,true,false,,true
+神戸市立医療センター中央市民病院,Kobe City Medical Center General Hospital,hospital,神戸市中央区港島南町2-1-1,2-1-1 Minatojima-minamimachi Chuo-ku Kobe,078-302-4321,34.661800,135.204400,"en, zh, ko","救急指定, 24時間対応, 高度救命救急",true,true,false,https://www.kcho.jp,true
+兵庫県立こども病院,Hyogo Prefectural Kobe Children's Hospital,hospital,神戸市中央区港島南町1-6-7,1-6-7 Minatojima-minamimachi Chuo-ku Kobe,078-945-7300,34.662500,135.205400,en,"小児専門, 24時間救急",true,true,false,,true
+神戸赤十字病院,Kobe Red Cross Hospital,hospital,神戸市中央区港島中町1-3-1,1-3-1 Minatojima-nakamachi Chuo-ku Kobe,078-231-5981,34.671000,135.200600,"en, zh","救急指定, 輸血センター, 災害拠点病院",true,true,false,,true
+神戸掖済会病院,Kobe Ekisaikai Hospital,hospital,神戸市中央区橘通3-3-10,3-3-10 Tachibana-dori Chuo-ku Kobe,078-341-1321,34.692200,135.186800,en,"救急指定, 海外旅行者対応",false,true,false,,true
+神戸市立西市民病院,Kobe City Nishi Citizen Hospital,hospital,神戸市長田区細田町3-3-1,3-3-1 Hosodacho Nagata-ku Kobe,078-576-5251,34.682000,135.148000,en,"救急指定, 総合診療",false,true,false,,true
+甲南病院,Konan Hospital,hospital,神戸市東灘区岡本8-6-1,8-6-1 Okamoto Higashinada-ku Kobe,078-431-4101,34.723800,135.268400,en,"救急対応, 内科外科",false,true,false,,true
+神戸百年記念病院,Kobe Centennial Memorial Hospital,hospital,神戸市須磨区須磨浦通4-1-1,4-1-1 Sumaura-dori Suma-ku Kobe,078-735-3000,34.628500,135.123700,en,"内科, 外科, 整形外科",false,true,false,,true
+神戸市立西神戸医療センター,Kobe City Nishi-Kobe Medical Center,hospital,神戸市西区糀台6-1-1,6-1-1 Kojidai Nishi-ku Kobe,078-929-1500,34.714200,135.090500,en,"救急指定, 総合病院",false,true,false,,true
+神戸海星病院,Kobe Kaisei Hospital,hospital,神戸市灘区岩屋北町3-11-15,3-11-15 Iwaya-kitamachi Nada-ku Kobe,078-871-5201,34.717300,135.218100,en,"内科, 外科, 産婦人科",false,true,false,,true
+神戸協同病院,Kobe Kyodo Hospital,hospital,神戸市長田区大谷町2-3-1,2-3-1 Otanicho Nagata-ku Kobe,078-611-3984,34.672000,135.148000,en,"救急対応, 内科",false,true,false,,true
+垂水病院,Tarumi Hospital,hospital,神戸市垂水区日向2-5-1,2-5-1 Hyuga Tarumi-ku Kobe,078-754-2233,34.633700,134.981800,en,"内科, 外科",false,true,false,,true
+神戸労災病院,Kobe Rosai Hospital,hospital,神戸市中央区港島南町1-4-7,1-4-7 Minatojima-minamimachi Chuo-ku Kobe,078-302-2131,34.663000,135.203000,en,"救急指定, 整形外科, 外傷",false,true,false,,true
+兵庫県立加古川医療センター分院（神戸西）,Hyogo Medical University Kobe West Hospital,hospital,神戸市西区伊川谷町有瀬322,322 Ause Ikawadanicho Nishi-ku Kobe,078-997-2200,34.698000,135.063000,en,"救急指定, 総合診療",false,true,false,,true
+神戸低侵襲がん医療センター,Kobe Minimally Invasive Cancer Center,hospital,神戸市中央区港島南町2-2-2,2-2-2 Minatojima-minamimachi Chuo-ku Kobe,078-302-7000,34.661000,135.204000,en,"がん専門, 最先端治療",false,false,false,,true
+マツモトキヨシ 三宮センタープラザ店,Matsumoto Kiyoshi Sannomiya Center Plaza,pharmacy,神戸市中央区三宮町1-10-1,1-10-1 Sannomiya-cho Chuo-ku Kobe,078-331-1772,34.692900,135.194500,"en, zh, ko","免税対応, 英語対応, 外国語スタッフ, 化粧品充実",false,true,false,https://www.matsumotokiyoshi.com,true
+ウエルシア薬局 神戸元町店,Welcia Pharmacy Kobe Motomachi,pharmacy,神戸市中央区元町通1-7-1,1-7-1 Motomachi-dori Chuo-ku Kobe,078-391-2111,34.689700,135.185100,en,"処方箋調剤, 英語対応",false,true,false,,true
+ツルハドラッグ 神戸北野坂店,Tsuruha Drug Kobe Kitanozaka,pharmacy,神戸市中央区山本通3-1-5,3-1-5 Yamamoto-dori Chuo-ku Kobe,078-241-1882,34.697900,135.187800,en,"観光地近く, 免税手続き",false,false,false,,true
+スギ薬局 三宮店,Sugi Pharmacy Sannomiya,pharmacy,神戸市中央区磯辺通2-1-8,2-1-8 Isobedori Chuo-ku Kobe,078-271-3300,34.693500,135.197000,en,"調剤薬局, 処方箋対応",false,true,false,,true
+ドラッグセイムス 神戸兵庫店,Drug Seims Kobe Hyogo,pharmacy,神戸市兵庫区駅前通1-3-4,1-3-4 Ekimae-dori Hyogo-ku Kobe,078-681-2200,34.682000,135.162000,,"調剤, 日用品",false,true,false,,true
+マツモトキヨシ 神戸元町駅前店,Matsumoto Kiyoshi Kobe Motomachi Station,pharmacy,神戸市中央区元町通2-3-1,2-3-1 Motomachi-dori Chuo-ku Kobe,078-321-4455,34.689300,135.183100,"en, zh","免税対応, 化粧品",false,true,false,,true
+ウエルシア 神戸灘店,Welcia Kobe Nada,pharmacy,神戸市灘区大石東町1-1-1,1-1-1 Oishi-higashimachi Nada-ku Kobe,078-843-2200,34.713500,135.228800,,"調剤薬局, 処方箋",false,true,false,,true
+トモズ 三宮店,Tomod's Sannomiya,pharmacy,神戸市中央区三宮町1-5-3,1-5-3 Sannomiya-cho Chuo-ku Kobe,078-321-5500,34.694000,135.195000,"en, zh, ko","外国語対応, 免税, 英語スタッフ",false,true,false,,true
+コクミン薬局 三宮店,Kokumin Pharmacy Sannomiya,pharmacy,神戸市中央区三宮町2-11-1,2-11-1 Sannomiya-cho Chuo-ku Kobe,078-331-3300,34.693000,135.192000,en,"調剤, 市販薬充実",false,true,false,,true
+ドラッグストアコスモス 神戸垂水店,Cosmos Drug Kobe Tarumi,pharmacy,神戸市垂水区日向1-1-1,1-1-1 Hyuga Tarumi-ku Kobe,078-755-0021,34.633700,134.981800,,"大型店舗, 日用品充実",false,false,false,,true
+セブン銀行ATM（セブンイレブン三宮駅前店）,7-Eleven ATM Sannomiya Station Front,atm,神戸市中央区磯辺通3-2-16,3-2-16 Isobedori Chuo-ku Kobe,,34.692400,135.195200,"en, zh, ko","24時間, 国際カード, VISA/Master/JCB/Amex",true,true,false,,true
+セブン銀行ATM（三ノ宮駅構内）,7-Eleven ATM Sannomiya Station,atm,神戸市中央区三宮町1-1-1,1-1-1 Sannomiya-cho Chuo-ku Kobe,,34.695300,135.195500,"en, zh, ko","24時間, 国際カード対応",true,true,false,,true
+ゆうちょ銀行ATM 神戸中央郵便局,Japan Post Bank ATM Kobe Central Post Office,atm,神戸市中央区橘通1-4-2,1-4-2 Tachibana-dori Chuo-ku Kobe,0120-108-420,34.687300,135.193600,"en, zh","国際カード対応, Cirrus/PLUS",false,true,false,,true
+みずほ銀行ATM 三宮支店,Mizuho Bank ATM Sannomiya Branch,atm,神戸市中央区三宮町1-4-3,1-4-3 Sannomiya-cho Chuo-ku Kobe,,34.693000,135.192700,"en, zh, ko","VISA/PLUS/Cirrus/Maestro",false,true,false,,true
+三菱UFJ銀行ATM 神戸三宮支店,MUFG Bank ATM Kobe Sannomiya,atm,神戸市中央区三宮町1-6-3,1-6-3 Sannomiya-cho Chuo-ku Kobe,,34.692500,135.194000,"en, zh, ko","VISA/Plus/Cirrus, 国際送金",false,true,false,,true
+三井住友銀行ATM 神戸支店,SMBC ATM Kobe Branch,atm,神戸市中央区三宮町2-1-1,2-1-1 Sannomiya-cho Chuo-ku Kobe,,34.691800,135.192000,"en, zh","VISA/Plus/Cirrus",false,true,false,,true
+ローソン銀行ATM（ローソン神戸元町店）,Lawson Bank ATM Kobe Motomachi,atm,神戸市中央区元町通2-1-5,2-1-5 Motomachi-dori Chuo-ku Kobe,,34.689300,135.183100,"en, zh","24時間, 国際カード",true,true,false,,true
+セブン銀行ATM（セブンイレブン神戸メリケンパーク前店）,7-Eleven ATM Meriken Park,atm,神戸市中央区波止場町3-1,3-1 Hatoba-cho Chuo-ku Kobe,,34.680000,135.190000,"en, zh, ko","24時間, 国際カード",true,true,false,,true
+イオン銀行ATM イオン神戸南店,AEON Bank ATM Kobe South,atm,神戸市中央区港島中町6-1-1,6-1-1 Minatojima-nakamachi Chuo-ku Kobe,,34.667000,135.204000,"en, zh","VISA/Master, イオンモール内",false,true,false,,true
+ゆうちょ銀行ATM 神戸北野郵便局,Japan Post Bank ATM Kobe Kitano,atm,神戸市中央区山本通1-3-1,1-3-1 Yamamoto-dori Chuo-ku Kobe,,34.699000,135.187000,en,"異人館エリア近く, 国際カード",false,true,false,,true
+りそな銀行ATM 神戸支店,Resona Bank ATM Kobe Branch,atm,神戸市中央区三宮町2-4-1,2-4-1 Sannomiya-cho Chuo-ku Kobe,,34.691000,135.191000,"en, zh","VISA/Plus/Cirrus/Maestro",false,true,false,,true
+関西みらい銀行ATM 神戸三宮支店,Kansai Mirai Bank ATM Kobe Sannomiya,atm,神戸市中央区三宮町1-8-1,1-8-1 Sannomiya-cho Chuo-ku Kobe,,34.692000,135.193000,en,"地方銀行ATM, 国際カード",false,true,false,,true
+みずほ銀行ATM 元町支店,Mizuho Bank ATM Motomachi Branch,atm,神戸市中央区元町通3-1-1,3-1-1 Motomachi-dori Chuo-ku Kobe,,34.688500,135.184000,"en, zh","VISA/Plus/Cirrus",false,true,false,,true
+セブン銀行ATM 神戸空港,7-Eleven ATM Kobe Airport,atm,神戸市中央区神戸空港1,1 Kobe Airport Chuo-ku Kobe,,34.632800,135.223800,"en, zh, ko","24時間, 国際カード, 空港内",true,true,false,,true
+三菱UFJ銀行ATM 神戸元町支店,MUFG Bank ATM Kobe Motomachi,atm,神戸市中央区元町通4-1-1,4-1-1 Motomachi-dori Chuo-ku Kobe,,34.689000,135.181000,"en, zh","VISA/Plus/Cirrus",false,true,false,,true
+東遊園地（広域避難場所）,Higashi Yuenchi Park Evacuation Site,evacuation,神戸市中央区加納町6丁目,6-chome Kanocho Chuo-ku Kobe,,34.693900,135.195900,en,"広域避難場所, 中央区, 収容多数",true,true,false,,true
+兵庫県立総合体育館（避難場所）,Hyogo Prefectural Gymnasium Evacuation,evacuation,神戸市中央区中野通1-2-1,1-2-1 Nakanotori Chuo-ku Kobe,078-371-2300,34.693500,135.168100,en,"指定避難所, 屋内施設",true,true,false,,true
+神戸市立葺合高校（避難場所）,Kobe Fukiai High School Evacuation,evacuation,神戸市中央区二宮町4-1-1,4-1-1 Ninomiya-cho Chuo-ku Kobe,078-221-1222,34.695500,135.201100,,"地域避難所, 中央区指定",true,true,false,,true
+神戸市総合運動公園（広域避難場所）,Kobe City Sports Park Evacuation,evacuation,神戸市須磨区緑台,Midorigaoka Suma-ku Kobe,078-792-3900,34.652500,135.098100,en,"広域避難場所, 大規模",true,true,false,,true
+HAT神戸なぎさ公園（避難場所）,HAT Kobe Nagisa Park Evacuation,evacuation,神戸市中央区脇浜海岸通2丁目,2-chome Wakihama-kaigan-dori Chuo-ku Kobe,,34.693000,135.222000,,"広域避難場所, 海岸沿い",true,true,false,,true
+神戸市立兵庫高校（避難場所）,Kobe Hyogo High School Evacuation,evacuation,神戸市兵庫区神田町2-1-1,2-1-1 Kandacho Hyogo-ku Kobe,078-651-1331,34.682000,135.163000,,"地域避難所, 兵庫区指定",true,true,false,,true
+神戸市立須磨翔風高校（避難場所）,Kobe Suma Shofuu High School Evacuation,evacuation,神戸市須磨区中落合2-13-1,2-13-1 Nakaochiai Suma-ku Kobe,078-793-7111,34.680000,135.125000,,"地域避難所, 須磨区指定",true,true,false,,true
+神戸学院大学ポートアイランドキャンパス（避難場所）,Kobe Gakuin University Port Island Campus Evacuation,evacuation,神戸市中央区港島1-1-3,1-1-3 Minatojima Chuo-ku Kobe,078-974-1551,34.665000,135.207000,en,"広域避難所, 大学施設",true,true,false,,true
+神戸市立垂水中学校（避難場所）,Kobe Tarumi Junior High School Evacuation,evacuation,神戸市垂水区学が丘4-1,4-1 Manabigaoka Tarumi-ku Kobe,078-708-0085,34.636000,134.982000,,"地域避難所, 垂水区指定",true,true,false,,true
+メリケンパーク（広域避難場所）,Meriken Park Evacuation Site,evacuation,神戸市中央区波止場町2-2,2-2 Hatoba-cho Chuo-ku Kobe,078-325-2280,34.679700,135.189800,en,"広域避難場所, 港エリア",true,true,false,,true
