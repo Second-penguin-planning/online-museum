@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitashinchi Navi | 北新地・大阪駅 地域案内</title>
+<meta name="description" content="大阪駅・北新地・西天満・中之島エリアのQRコード地域案内サービス（MGナビ）">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #1a1a2e;
+    --primary-light: #4a3b6b;
+    --accent: #e53e3e;
+    --gold: #c9a24b;
+    --green: #276749;
+    --bg: #f7fafc;
+    --card-bg: #ffffff;
+    --text: #1a202c;
+    --text-muted: #718096;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.10);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ─── Header ─── */
+  header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-lg); }
+  .header-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 8px; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { font-size: 28px; }
+  .logo-text { font-size: 20px; font-weight: 800; }
+  .logo-text .accent { color: var(--gold); }
+  .logo-sub { font-size: 10px; opacity: 0.8; letter-spacing: 0.5px; }
+  .lang-selector { display: flex; gap: 4px; }
+  .lang-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; transition: background 0.2s; }
+  .lang-btn:hover, .lang-btn.active { background: rgba(201,162,75,0.55); }
+  .sos-banner { background: var(--accent); padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .sos-banner span { font-size: 13px; font-weight: 600; color: white; }
+  .sos-btn { background: white; color: var(--accent); border: none; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .search-wrap { padding: 10px 16px 12px; display: flex; gap: 8px; }
+  .search-input { flex: 1; padding: 9px 14px; border-radius: 24px; border: none; font-size: 14px; outline: none; background: rgba(255,255,255,0.95); }
+  .location-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 9px 12px; border-radius: 24px; font-size: 14px; cursor: pointer; white-space: nowrap; }
+  .travel-toggle { display: flex; gap: 4px; padding: 6px 16px 8px; overflow-x: auto; }
+  .travel-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .travel-btn.active { background: rgba(201,162,75,0.65); color: white; font-weight: 600; border-color: rgba(255,255,255,0.5); }
+
+  /* ─── Location Modal ─── */
+  .loc-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .loc-modal-overlay.open { display: flex; }
+  .loc-modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+  .loc-modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+  .loc-modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+  .area-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .area-btn { background: #f7fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; font-size: 13px; cursor: pointer; text-align: center; transition: all 0.15s; }
+  .area-btn:hover { background: #f3edf9; border-color: var(--primary-light); color: var(--primary-light); }
+  .area-btn.selected { background: #f3edf9; border-color: var(--primary-light); color: var(--primary-light); font-weight: 600; }
+  .loc-divider { text-align: center; font-size: 11px; color: var(--text-muted); margin: 10px 0; }
+  .loc-gps-btn { width: 100%; background: var(--primary-light); color: white; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 8px; }
+  .loc-cancel-btn { width: 100%; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 9px; font-size: 13px; cursor: pointer; }
+
+  /* ─── Tabs ─── */
+  .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px; scrollbar-width: none; }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; min-width: 72px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .cat-tab.active { border-color: var(--primary-light); background: #f3edf9; }
+  .cat-tab.emergency { border-color: #fc8181; }
+  .cat-tab.emergency.active { background: #fff5f5; border-color: var(--accent); }
+  .cat-tab.nightlife { border-color: var(--gold); }
+  .cat-tab.nightlife.active { background: #fdf8ee; border-color: var(--gold); }
+  .cat-tab .icon { font-size: 22px; }
+  .cat-tab .label { font-size: 10px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+  .cat-tab.active .label { color: var(--primary-light); }
+  .cat-tab.emergency.active .label { color: var(--accent); }
+  .cat-tab.nightlife.active .label { color: #8a6d1f; }
+
+  /* ─── Main ─── */
+  main { padding: 0 16px 100px; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 10px; flex-wrap: wrap; gap: 8px; }
+  .section-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .count-badge { background: var(--primary-light); color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+  .cache-info { font-size: 11px; color: var(--text-muted); }
+
+  .legal-notice { background: #fdf8ee; border: 1px solid #eddca4; color: #8a6d1f; font-size: 12px; padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; line-height: 1.6; }
+  .demo-banner { background: #ebf8ff; border: 1px solid #bee3f8; color: #2c5282; font-size: 12px; padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; line-height: 1.6; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .demo-banner button { background: var(--primary-light); color: white; border: none; padding: 6px 14px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+  /* ─── Cards ─── */
+  .facilities-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 600px) { .facilities-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 900px) { .facilities-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .facility-card { background: var(--card-bg); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: box-shadow 0.2s, transform 0.1s; position: relative; }
+  .facility-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+  .facility-card.emergency { border-left: 4px solid var(--accent); }
+  .facility-card.sponsor { border-left: 4px solid var(--gold); }
+  .sponsor-badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: white; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 8px; }
+  .card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .card-cat-icon { font-size: 26px; flex-shrink: 0; }
+  .card-info { flex: 1; min-width: 0; }
+  .card-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .card-name-en { font-size: 11px; color: var(--text-muted); }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+  .tag { font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 600; }
+  .tag-lang { background: #ebf8ff; color: #2c5282; }
+  .tag-open { background: #f0fff4; color: #22543d; }
+  .tag-feature { background: #f3edf9; color: #44337a; }
+  .tag-legal { background: #fdf8ee; color: #8a6d1f; }
+  .card-address { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+  .card-phone { font-size: 12px; color: var(--primary-light); margin-bottom: 10px; font-weight: 600; }
+  .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-map { flex: 1; background: var(--primary-light); color: white; border: none; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none; min-width: 100px; }
+  .btn-map:hover { background: var(--primary); }
+  .btn-map.emergency-map { background: var(--accent); }
+  .btn-call { background: #f0fff4; border: 1px solid #9ae6b4; color: var(--green); padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; }
+  .btn-website { background: #fffff0; border: 1px solid #f6e05e; color: #744210; padding: 9px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+
+  /* ─── Loading & Error ─── */
+  .loading-wrap { grid-column: 1/-1; text-align: center; padding: 60px 20px; }
+  .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary-light); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 14px; color: var(--text-muted); }
+  .loading-progress { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .no-results { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--text-muted); }
+
+  /* ─── Setup Screen ─── */
+  .setup-screen { max-width: 560px; margin: 40px auto; background: white; border-radius: 16px; padding: 32px; box-shadow: var(--shadow-lg); }
+  .setup-screen h2 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+  .setup-screen .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+  .setup-steps { counter-reset: steps; list-style: none; margin-bottom: 24px; }
+  .setup-steps li { counter-increment: steps; display: flex; gap: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+  .setup-steps li::before { content: counter(steps); background: var(--primary-light); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .setup-steps a { color: var(--primary-light); }
+  .setup-form { display: flex; flex-direction: column; gap: 12px; }
+  .setup-form label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 3px; display: block; }
+  .setup-form input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: monospace; outline: none; }
+  .setup-form input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(74,59,107,0.15); }
+  .btn-setup { background: var(--primary-light); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+  .btn-setup:hover { background: var(--primary); }
+  .btn-skip-demo { width: 100%; background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-top: 10px; }
+  .setup-note { font-size: 11px; color: var(--text-muted); line-height: 1.6; margin-top: 12px; padding: 10px; background: #f7fafc; border-radius: 6px; }
+  .schema-box { background: #f7fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 20px; }
+  .schema-box h4 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .schema-table { width: 100%; font-size: 11px; border-collapse: collapse; }
+  .schema-table th { text-align: left; color: var(--text-muted); padding: 3px 6px; font-weight: 600; }
+  .schema-table td { padding: 4px 6px; border-top: 1px solid var(--border); font-family: monospace; font-size: 11px; }
+  .field-type { color: var(--primary-light); }
+
+  /* ─── Config Bar ─── */
+  .config-bar { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .btn-reset-cache, .btn-reconfig { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+
+  /* ─── Sponsor / Pricing ─── */
+  .sponsor-section { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 20px; margin: 20px 0; color: white; text-align: center; }
+  .sponsor-section h3 { font-size: 15px; margin-bottom: 6px; }
+  .sponsor-names { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .sponsor-contact { font-size: 11px; opacity: 0.75; }
+  .btn-sponsor-join { background: var(--gold); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 10px; text-decoration: none; display: inline-block; }
+
+  .pricing-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin: 16px 0; }
+  .pricing-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
+  .pricing-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pricing-table th { text-align: left; color: var(--text-muted); padding: 6px 8px; font-weight: 600; border-bottom: 1px solid var(--border); }
+  .pricing-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .pricing-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; line-height: 1.6; }
+
+  /* ─── SOS Modal ─── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; width: 100%; max-width: 600px; border-radius: 20px 20px 0 0; padding: 24px 20px 40px; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 36px; height: 4px; background: #e2e8f0; border-radius: 2px; margin: 0 auto 16px; }
+  .modal-title { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 16px; text-align: center; }
+  .emergency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .emergency-card { background: #fff5f5; border: 2px solid #fed7d7; border-radius: 10px; padding: 14px; text-align: center; cursor: pointer; text-decoration: none; color: var(--text); display: block; transition: background 0.2s; }
+  .emergency-card:hover { background: #fed7d7; }
+  .emergency-card .e-icon { font-size: 30px; margin-bottom: 6px; }
+  .emergency-card .e-title { font-size: 13px; font-weight: 700; }
+  .emergency-card .e-num { font-size: 18px; font-weight: 800; color: var(--accent); margin: 4px 0; }
+  .emergency-card .e-desc { font-size: 10px; color: var(--text-muted); }
+  .modal-close { width: 100%; margin-top: 14px; padding: 10px; background: var(--border); border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">🏙️</div>
+      <div>
+        <div class="logo-text">Kitashinchi<span class="accent">Navi</span></div>
+        <div class="logo-sub" data-i18n="tagline">大阪駅・北新地・西天満・中之島 地域案内</div>
+      </div>
+    </div>
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <div class="sos-banner">
+    <span>🆘 <span data-i18n="sos_text">緊急時・困ったとき</span></span>
+    <button class="sos-btn" onclick="openSOS()" data-i18n="sos_btn">緊急番号を見る</button>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" type="search" id="searchInput" placeholder="施設・地名を検索 / Search..." oninput="handleSearch(this.value)">
+    <button class="location-btn" id="locBtn" onclick="openLocModal()">📍 <span id="locLabel">大阪駅（変更▼）</span></button>
+  </div>
+  <div class="travel-toggle">
+    <button class="travel-btn active" id="travel-walking"   onclick="setTravel('walking')">🚶 徒歩</button>
+    <button class="travel-btn"        id="travel-transit"  onclick="setTravel('transit')">🚃 電車</button>
+    <button class="travel-btn"        id="travel-driving"  onclick="setTravel('driving')">🚗 車</button>
+    <button class="travel-btn"        id="travel-bicycling" onclick="setTravel('bicycling')">🚲 自転車</button>
+  </div>
+</header>
+
+<!-- ─── CATEGORY TABS ─── -->
+<div class="cat-tabs" id="catTabs">
+  <div class="cat-tab active" data-cat="all" onclick="setCategory('all')"><div class="icon">🗺️</div><div class="label" data-i18n="cat_all">すべて</div></div>
+  <div class="cat-tab emergency" data-cat="evacuation" onclick="setCategory('evacuation')"><div class="icon">🆘</div><div class="label" data-i18n="cat_evacuation">避難場所</div></div>
+  <div class="cat-tab emergency" data-cat="hospital" onclick="setCategory('hospital')"><div class="icon">🏥</div><div class="label" data-i18n="cat_hospital">病院</div></div>
+  <div class="cat-tab emergency" data-cat="pharmacy" onclick="setCategory('pharmacy')"><div class="icon">💊</div><div class="label" data-i18n="cat_pharmacy">薬局</div></div>
+  <div class="cat-tab" data-cat="atm" onclick="setCategory('atm')"><div class="icon">🏧</div><div class="label" data-i18n="cat_atm">銀行/ATM</div></div>
+  <div class="cat-tab" data-cat="grocery" onclick="setCategory('grocery')"><div class="icon">🛒</div><div class="label" data-i18n="cat_grocery">スーパー</div></div>
+  <div class="cat-tab" data-cat="restaurant" onclick="setCategory('restaurant')"><div class="icon">🍜</div><div class="label" data-i18n="cat_restaurant">飲食</div></div>
+  <div class="cat-tab nightlife" data-cat="bar" onclick="setCategory('bar')"><div class="icon">🍸</div><div class="label" data-i18n="cat_bar">Bar</div></div>
+  <div class="cat-tab" data-cat="beauty" onclick="setCategory('beauty')"><div class="icon">💇</div><div class="label" data-i18n="cat_beauty">美容室</div></div>
+  <div class="cat-tab" data-cat="shopping" onclick="setCategory('shopping')"><div class="icon">🛍️</div><div class="label" data-i18n="cat_shopping">その他</div></div>
+  <div class="cat-tab" data-cat="transport" onclick="setCategory('transport')"><div class="icon">🚃</div><div class="label" data-i18n="cat_transport">交通</div></div>
+  <div class="cat-tab" data-cat="admin" onclick="setCategory('admin')"><div class="icon">🏛️</div><div class="label" data-i18n="cat_admin">行政</div></div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<main id="mainContent">
+  <!-- Setup / Loading / Grid はここに描画されます -->
+</main>
+
+<!-- ─── LOCATION MODAL ─── -->
+<div class="loc-modal-overlay" id="locModal" onclick="if(event.target===this)closeLocModal()">
+  <div class="loc-modal">
+    <h3>📍 現在地を選択</h3>
+    <p>PCではGPSが使えないため、お近くのエリアを選んでください。スマートフォンでは自動取得も使えます。</p>
+    <div class="area-grid">
+      <button class="area-btn selected" onclick="setArea('大阪駅・梅田',34.7025,135.4959)">大阪駅・梅田</button>
+      <button class="area-btn" onclick="setArea('北新地',34.6958,135.4979)">北新地</button>
+      <button class="area-btn" onclick="setArea('西天満',34.6928,135.4989)">西天満</button>
+      <button class="area-btn" onclick="setArea('中之島',34.6937,135.4988)">中之島</button>
+      <button class="area-btn" onclick="setArea('堂島',34.6969,135.4952)">堂島</button>
+      <button class="area-btn" onclick="setArea('曽根崎・お初天神',34.7008,135.4990)">曽根崎・お初天神</button>
+      <button class="area-btn" onclick="setArea('扇町・南森町',34.6989,135.5065)">扇町・南森町</button>
+    </div>
+    <div class="loc-divider">── または ──</div>
+    <button class="loc-gps-btn" onclick="locateByGPS()">🛰 GPSで自動取得（スマートフォン推奨）</button>
+    <button class="loc-cancel-btn" onclick="closeLocModal()">キャンセル</button>
+  </div>
+</div>
+
+<!-- ─── SOS MODAL ─── -->
+<div class="modal-overlay" id="sosModal" onclick="if(event.target===this)closeSOS()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🆘 緊急連絡先 / Emergency Contacts</div>
+    <div class="emergency-grid">
+      <a class="emergency-card" href="tel:110"><div class="e-icon">👮</div><div class="e-title">警察 / Police</div><div class="e-num">110</div><div class="e-desc">Police / 警察</div></a>
+      <a class="emergency-card" href="tel:119"><div class="e-icon">🚒</div><div class="e-title">消防・救急 / Fire</div><div class="e-num">119</div><div class="e-desc">Fire / Ambulance</div></a>
+      <a class="emergency-card" href="tel:#9110"><div class="e-icon">📞</div><div class="e-title">警察相談</div><div class="e-num">#9110</div><div class="e-desc">Non-urgent police</div></a>
+      <a class="emergency-card" href="tel:#7119"><div class="e-icon">🚑</div><div class="e-title">救急相談</div><div class="e-num">#7119</div><div class="e-desc">大阪府救急安心センター</div></a>
+      <a class="emergency-card" href="tel:06-6773-6533"><div class="e-icon">🌐</div><div class="e-title">外国人相談</div><div class="e-num">06-6773-6533</div><div class="e-desc">大阪市 多言語支援</div></a>
+      <a class="emergency-card" href="https://www.osaka-info.jp/" target="_blank"><div class="e-icon">🏢</div><div class="e-title">大阪駅前 一時滞在施設</div><div class="e-num">帰宅困難者対応</div><div class="e-desc">災害時開設情報</div></a>
+    </div>
+    <button class="modal-close" onclick="closeSOS()">閉じる / Close</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  Kitashinchi Navi - Airtable連携版
+//  実店舗データは Airtable で管理。未設定時はセットアップ画面 or デモデータ表示。
+//  ★ AIRTABLE 設定：Personal Access Token と Base ID をここに埋め込むか、
+//  初回アクセス時にブラウザ上の設定画面から入力してください。
+// ══════════════════════════════════════════════════════════════
+const AIRTABLE_CONFIG = {
+  apiKey:    '',        // pat... (Personal Access Token)
+  baseId:    '',        // app... (Base ID)
+  tableName: '施設',   // Airtable のテーブル名
+  cacheMinutes: 10,    // ローカルキャッシュ保持時間（分）
+};
+
+// ─── Airtable フィールド名マッピング ────────────────────────
+const FIELD = {
+  name:      '施設名',
+  nameEn:    '英語名',
+  cat:       'カテゴリ',
+  address:   '住所',
+  addressEn: '英語住所',
+  phone:     '電話番号',
+  lat:       '緯度',
+  lng:       '経度',
+  langs:     '対応言語',       // Multiple select
+  features:  '特徴',          // Multiple select
+  open24:    '24時間営業',     // Checkbox
+  emergency: '緊急施設',      // Checkbox
+  sponsor:   'スポンサー',    // Checkbox
+  website:   'ウェブサイト',
+  active:    '公開中',        // Checkbox
+};
+
+// ─── i18n ────────────────────────────────────────────────────
+const i18n = {
+  ja: {
+    tagline:'大阪駅・北新地・西天満・中之島 地域案内', sos_text:'緊急時・困ったとき', sos_btn:'緊急番号を見る',
+    cat_all:'すべて', cat_hospital:'病院', cat_pharmacy:'薬局', cat_atm:'銀行/ATM', cat_evacuation:'避難場所',
+    cat_grocery:'スーパー', cat_restaurant:'飲食', cat_bar:'Bar', cat_beauty:'美容室', cat_shopping:'その他',
+    cat_transport:'交通', cat_admin:'行政',
+    btn_directions:'経路案内', btn_call:'電話する', btn_website:'ウェブサイト', open_now:'24時間',
+    records:'件', all_facilities:'すべての施設', loading:'施設データを読込中...', loaded_from:'キャッシュから読込',
+    legal_bar:'🍸 北新地エリアでは風営法許可店（クラブ・キャバレー等）は掲載対象外です。ダイニングバー・ワインバー・ホテルバー等、風営法の許可を要しない業態のみを掲載しています。',
+  },
+  en: {
+    tagline:'Osaka Station / Kitashinchi / Nishitenma / Nakanoshima Area Guide', sos_text:'Emergency / Need Help', sos_btn:'Emergency Numbers',
+    cat_all:'All', cat_hospital:'Hospital', cat_pharmacy:'Pharmacy', cat_atm:'Bank/ATM', cat_evacuation:'Shelter',
+    cat_grocery:'Grocery', cat_restaurant:'Food', cat_bar:'Bar', cat_beauty:'Beauty', cat_shopping:'Other',
+    cat_transport:'Transit', cat_admin:'Admin',
+    btn_directions:'Directions', btn_call:'Call', btn_website:'Website', open_now:'24h',
+    records:' results', all_facilities:'All Facilities', loading:'Loading facilities...', loaded_from:'Loaded from cache',
+    legal_bar:'🍸 In the Kitashinchi area, venues requiring an entertainment business license (clubs, cabarets, etc.) are not listed here. Only dining bars, wine bars, and hotel bars that do not require such licensing are included.',
+  },
+};
+let currentLang = 'ja';
+const t = k => (i18n[currentLang]?.[k]) ?? (i18n.ja[k]) ?? k;
+
+// ─── State ───────────────────────────────────────────────────
+let currentCat = 'all';
+let searchQuery = '';
+let userLat = 34.7025, userLng = 135.4959; // デフォルト：大阪駅
+let travelMode = 'walking';
+let allFacilities = [];
+let fromCache = false;
+let isDemoMode = false;
+
+// 大阪駅・北新地周辺のおおよその範囲（GPS自動判定用）
+const AREA_BOUNDS = { latMin:34.66, latMax:34.74, lngMin:135.45, lngMax:135.55 };
+function isInArea(lat, lng) {
+  return lat >= AREA_BOUNDS.latMin && lat <= AREA_BOUNDS.latMax &&
+         lng >= AREA_BOUNDS.lngMin && lng <= AREA_BOUNDS.lngMax;
+}
+
+// ─── Demo Facility Data（Airtable未設定時のお試し表示用）───
+// 注：実在店舗の正確な情報ではなく、サービス紹介用のサンプルデータです。
+const DEMO_FACILITIES = [
+  { name:'西天満どんぐり公園（地震時避難場所）', nameEn:'Nishitenma Donguri Park (Earthquake Shelter)', cat:'evacuation', address:'大阪市北区西天満', lat:34.6913, lng:135.4999, emergency:true, sponsor:false, open24:false, features:['地震時避難場所'], langs:[] },
+  { name:'西天満小学校（洪水・津波時避難場所）', nameEn:'Nishitenma Elementary School (Flood/Tsunami Shelter)', cat:'evacuation', address:'大阪市北区西天満', lat:34.6910, lng:135.4970, emergency:true, sponsor:false, open24:false, features:['洪水・津波時避難場所'], langs:[] },
+  { name:'中之島公園（大規模火災時避難場所）', nameEn:'Nakanoshima Park (Major Fire Shelter)', cat:'evacuation', address:'大阪市北区中之島', lat:34.6937, lng:135.4988, emergency:true, sponsor:false, open24:false, features:['大規模火災時避難場所'], langs:[] },
+  { name:'大阪駅前 帰宅困難者一時滞在施設', nameEn:'Osaka Station Temporary Shelter for Stranded Commuters', cat:'evacuation', address:'大阪市北区梅田3丁目', lat:34.7025, lng:135.4959, emergency:true, sponsor:false, open24:false, features:['帰宅困難者対応'], langs:['en'] },
+  { name:'大阪市立総合医療センター', nameEn:'Osaka City General Hospital', cat:'hospital', address:'大阪市都島区都島本通', phone:'06-6929-1221', lat:34.7075, lng:135.5290, emergency:true, sponsor:false, open24:true, features:['救急24時間'], langs:['en'] },
+  { name:'北新地内科クリニック（サンプル）', nameEn:'Kitashinchi Internal Medicine Clinic (Sample)', cat:'hospital', address:'大阪市北区曽根崎新地', phone:'06-0000-0001', lat:34.6961, lng:135.4972, emergency:false, sponsor:true, open24:false, features:['英語対応'], langs:['en'], website:'#' },
+  { name:'梅田駅前歯科（サンプル）', nameEn:'Umeda Station Dental Clinic (Sample)', cat:'hospital', address:'大阪市北区梅田2丁目', phone:'06-0000-0002', lat:34.7031, lng:135.4952, emergency:false, sponsor:false, open24:false, features:['夜間診療'], langs:[] },
+  { name:'大阪駅前薬局（サンプル）', nameEn:'Osaka Station Pharmacy (Sample)', cat:'pharmacy', address:'大阪市北区梅田3丁目', phone:'06-0000-0010', lat:34.7020, lng:135.4965, emergency:false, sponsor:false, open24:false, features:['処方箋対応'], langs:[] },
+  { name:'北新地調剤薬局（サンプル）', nameEn:'Kitashinchi Dispensing Pharmacy (Sample)', cat:'pharmacy', address:'大阪市北区曽根崎新地', phone:'06-0000-0011', lat:34.6955, lng:135.4981, emergency:false, sponsor:true, open24:false, features:[], langs:[] },
+  { name:'三井住友銀行 梅田支店', nameEn:'SMBC Umeda Branch', cat:'atm', address:'大阪市北区梅田1丁目', lat:34.7016, lng:135.4948, emergency:false, sponsor:false, open24:false, features:['ATM'], langs:[] },
+  { name:'大阪駅前郵便局', nameEn:'Osaka Ekimae Post Office', cat:'atm', address:'大阪市北区梅田3丁目', lat:34.7008, lng:135.4970, emergency:false, sponsor:false, open24:false, features:['郵便','ATM'], langs:[] },
+  { name:'外貨両替 大阪駅前（サンプル）', nameEn:'Currency Exchange Osaka Station (Sample)', cat:'atm', address:'大阪市北区梅田3丁目', lat:34.7018, lng:135.4980, emergency:false, sponsor:true, open24:false, features:['外貨両替','英語対応'], langs:['en'] },
+  { name:'グランフロント大阪 地下スーパー（サンプル）', nameEn:'Grand Front Osaka Basement Supermarket (Sample)', cat:'grocery', address:'大阪市北区大深町', lat:34.7053, lng:135.4948, emergency:false, sponsor:true, open24:false, features:['24時間ではない'], langs:[] },
+  { name:'コンビニ 北新地店（サンプル）', nameEn:'Convenience Store Kitashinchi (Sample)', cat:'grocery', address:'大阪市北区曽根崎新地', lat:34.6960, lng:135.4986, emergency:false, sponsor:false, open24:true, features:[], langs:[] },
+  { name:'ラーメン 北新地本店（サンプル）', nameEn:'Ramen Kitashinchi Main (Sample)', cat:'restaurant', address:'大阪市北区曽根崎新地1丁目', lat:34.6957, lng:135.4975, emergency:false, sponsor:true, open24:false, features:['ラーメン'], langs:[] },
+  { name:'寿司 中之島（サンプル）', nameEn:'Sushi Nakanoshima (Sample)', cat:'restaurant', address:'大阪市北区中之島2丁目', lat:34.6940, lng:135.4995, emergency:false, sponsor:false, open24:false, features:['お寿司'], langs:['en'] },
+  { name:'焼肉 曽根崎苑（サンプル）', nameEn:'Yakiniku Sonezaki-en (Sample)', cat:'restaurant', address:'大阪市北区曽根崎2丁目', lat:34.7002, lng:135.4998, emergency:false, sponsor:false, open24:false, features:['焼肉'], langs:[] },
+  { name:'うどん・そば処 梅田（サンプル）', nameEn:'Udon & Soba Umeda (Sample)', cat:'restaurant', address:'大阪市北区梅田1丁目', lat:34.7015, lng:135.4960, emergency:false, sponsor:false, open24:false, features:['うどん','そば'], langs:[] },
+  { name:'イタリアン 堂島リバー（サンプル）', nameEn:'Italian Dojima River (Sample)', cat:'restaurant', address:'大阪市北区堂島浜1丁目', lat:34.6975, lng:135.4945, emergency:false, sponsor:false, open24:false, features:['イタリアン'], langs:['en'] },
+  { name:'ダイニングバー ノーザン（サンプル）', nameEn:'Dining Bar Northern (Sample)', cat:'bar', address:'大阪市北区曽根崎新地1丁目', lat:34.6959, lng:135.4977, emergency:false, sponsor:true, open24:false, features:['風営法対象外','ワイン'], langs:['en'] },
+  { name:'ホテルバー グランドテラス（サンプル）', nameEn:'Hotel Bar Grand Terrace (Sample)', cat:'bar', address:'大阪市北区堂島1丁目', lat:34.6968, lng:135.4955, emergency:false, sponsor:false, open24:false, features:['風営法対象外','夜景'], langs:['en'] },
+  { name:'美容室 北新地サロン（サンプル）', nameEn:'Beauty Salon Kitashinchi (Sample)', cat:'beauty', address:'大阪市北区曽根崎新地2丁目', lat:34.6952, lng:135.4983, emergency:false, sponsor:true, open24:false, features:[], langs:[] },
+  { name:'理容室 梅田（サンプル）', nameEn:'Barber Umeda (Sample)', cat:'beauty', address:'大阪市北区梅田2丁目', lat:34.7028, lng:135.4955, emergency:false, sponsor:false, open24:false, features:[], langs:[] },
+  { name:'セレクトショップ 大阪駅前（サンプル）', nameEn:'Select Shop Osaka Station (Sample)', cat:'shopping', address:'大阪市北区梅田3丁目', lat:34.7022, lng:135.4963, emergency:false, sponsor:false, open24:false, features:['洋服店'], langs:[] },
+  { name:'ペットショップ 扇町（サンプル）', nameEn:'Pet Shop Ogimachi (Sample)', cat:'shopping', address:'大阪市北区扇町', lat:34.6992, lng:135.5060, emergency:false, sponsor:false, open24:false, features:['ペットショップ'], langs:[] },
+  { name:'JR大阪駅', nameEn:'JR Osaka Station', cat:'transport', address:'大阪市北区梅田3丁目', lat:34.7025, lng:135.4959, emergency:false, sponsor:false, open24:false, features:['JR','新幹線接続'], langs:['en'] },
+  { name:'大阪メトロ 東梅田駅', nameEn:'Osaka Metro Higashi-Umeda Station', cat:'transport', address:'大阪市北区曽根崎2丁目', lat:34.7010, lng:135.5000, emergency:false, sponsor:false, open24:false, features:['谷町線'], langs:[] },
+  { name:'大阪メトロ 北新地駅（JR東西線）', nameEn:'Kitashinchi Station (JR Tozai Line)', cat:'transport', address:'大阪市北区曽根崎新地', lat:34.6960, lng:135.4972, emergency:false, sponsor:false, open24:false, features:['JR東西線'], langs:[] },
+  { name:'大阪市北区役所', nameEn:'Osaka City Kita Ward Office', cat:'admin', address:'大阪市北区扇町2丁目', phone:'06-6313-9963', lat:34.6989, lng:135.5063, emergency:false, sponsor:false, open24:false, features:['区役所'], langs:['en'] },
+  { name:'大阪市外国人総合相談センター', nameEn:'Osaka City International Community Consultation Center', cat:'admin', address:'大阪市北区', phone:'06-6773-6533', lat:34.6998, lng:135.4940, emergency:false, sponsor:false, open24:false, features:['多言語相談'], langs:['en'] },
+];
+
+// ─── Airtable: 全件取得（ページネーション対応）───────────────
+async function fetchAllFromAirtable(cfg) {
+  const records = [];
+  let offset = null;
+
+  while (true) {
+    updateLoadingProgress(records.length);
+    const params = new URLSearchParams({
+      pageSize: '100',
+      filterByFormula: `{${FIELD.active}} = TRUE()`,
+    });
+    if (offset) params.set('offset', offset);
+
+    const url = `https://api.airtable.com/v0/${cfg.baseId}/${encodeURIComponent(cfg.tableName)}?${params}`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${cfg.apiKey}` } });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    records.push(...data.records);
+    offset = data.offset;
+    if (!offset) break;
+  }
+  return records;
+}
+
+function mapRecord(rec) {
+  const f = rec.fields;
+  return {
+    id:        rec.id,
+    name:      f[FIELD.name]      ?? '(名称未設定)',
+    nameEn:    f[FIELD.nameEn]    ?? '',
+    cat:       (f[FIELD.cat]      ?? 'other').toLowerCase(),
+    address:   f[FIELD.address]   ?? '',
+    addressEn: f[FIELD.addressEn] ?? '',
+    phone:     f[FIELD.phone]     ?? null,
+    lat:       parseFloat(f[FIELD.lat])  || userLat,
+    lng:       parseFloat(f[FIELD.lng])  || userLng,
+    langs:     f[FIELD.langs]     ?? [],
+    features:  f[FIELD.features]  ?? [],
+    open24:    f[FIELD.open24]    ?? false,
+    emergency: f[FIELD.emergency] ?? false,
+    sponsor:   f[FIELD.sponsor]   ?? false,
+    website:   f[FIELD.website]   ?? null,
+  };
+}
+
+// ─── Cache ───────────────────────────────────────────────────
+const CACHE_KEY = 'kitashinchinavi_facilities_v1';
+function saveCache(data) { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch(e) {} }
+function loadCache(minutes) {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts > minutes * 60 * 1000) return null;
+    return data;
+  } catch { return null; }
+}
+function clearCache() { localStorage.removeItem(CACHE_KEY); alert('キャッシュを削除しました。再読み込みします。'); location.reload(); }
+
+// ─── Config storage ──────────────────────────────────────────
+const CONF_KEY = 'kitashinchinavi_airtable_config';
+function getConfig() {
+  if (AIRTABLE_CONFIG.apiKey && AIRTABLE_CONFIG.baseId) return AIRTABLE_CONFIG;
+  try {
+    const saved = localStorage.getItem(CONF_KEY);
+    if (saved) return { ...AIRTABLE_CONFIG, ...JSON.parse(saved) };
+  } catch {}
+  return null;
+}
+function saveConfig(apiKey, baseId, tableName) { localStorage.setItem(CONF_KEY, JSON.stringify({ apiKey, baseId, tableName })); }
+function reconfigure() { localStorage.removeItem(CONF_KEY); localStorage.removeItem(CACHE_KEY); isDemoMode = false; init(); }
+
+// ─── Loading / Error UI ───────────────────────────────────────
+function showLoading(msg) {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="facilities-grid">
+      <div class="loading-wrap">
+        <div class="spinner"></div>
+        <div class="loading-text">${msg}</div>
+        <div class="loading-progress" id="loadProgress"></div>
+      </div>
+    </div>`;
+}
+function updateLoadingProgress(count) {
+  const el = document.getElementById('loadProgress');
+  if (el) el.textContent = `${count} 件読込済み...`;
+}
+function showError(msg) {
+  document.getElementById('mainContent').innerHTML = `
+    <div style="max-width:480px;margin:40px auto;background:white;border-radius:12px;padding:24px;text-align:center;box-shadow:var(--shadow);">
+      <div style="font-size:36px;margin-bottom:12px;">⚠️</div>
+      <h3 style="color:var(--accent);margin-bottom:8px;">データ取得エラー</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">${msg}</p>
+      <button onclick="reconfigure()" style="background:var(--primary-light);color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;">設定をやり直す</button>
+    </div>`;
+}
+
+// ─── Setup Screen ────────────────────────────────────────────
+function showSetupScreen() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="setup-screen">
+      <h2>🔧 Airtable 接続設定</h2>
+      <p class="subtitle">掲載店舗データを Airtable で管理します。下記の手順で接続するか、まずはデモデータで画面をお試しください。<br>設定はこのブラウザに保存されます。</p>
+
+      <ol class="setup-steps">
+        <li><strong><a href="https://airtable.com" target="_blank">airtable.com</a></strong> にログインし、新しいベースを作成します。</li>
+        <li>テーブル名を <code><strong>施設</strong></code> に変更し、下記のフィールドを追加します。</li>
+        <li><a href="https://airtable.com/create/tokens" target="_blank">Personal Access Token</a> を作成します（スコープ: <code>data.records:read</code>、対象ベースを選択）。</li>
+        <li>ベースのURLから Base ID（<code>app...</code>）をコピーします。</li>
+      </ol>
+
+      <div class="schema-box">
+        <h4>📋 Airtable テーブル「施設」のフィールド定義</h4>
+        <table class="schema-table">
+          <tr><th>フィールド名</th><th>種類</th><th>説明</th></tr>
+          <tr><td>施設名</td><td class="field-type">Single line text</td><td>日本語名称（必須）</td></tr>
+          <tr><td>英語名</td><td class="field-type">Single line text</td><td>英語名称</td></tr>
+          <tr><td>カテゴリ</td><td class="field-type">Single select</td><td>hospital / pharmacy / atm / evacuation / grocery / restaurant / bar / beauty / shopping / transport / admin</td></tr>
+          <tr><td>住所</td><td class="field-type">Single line text</td><td>日本語住所</td></tr>
+          <tr><td>英語住所</td><td class="field-type">Single line text</td><td>英語住所</td></tr>
+          <tr><td>電話番号</td><td class="field-type">Phone number</td><td>電話番号</td></tr>
+          <tr><td>緯度</td><td class="field-type">Number</td><td>例: 34.7025</td></tr>
+          <tr><td>経度</td><td class="field-type">Number</td><td>例: 135.4959</td></tr>
+          <tr><td>対応言語</td><td class="field-type">Multiple select</td><td>en</td></tr>
+          <tr><td>特徴</td><td class="field-type">Multiple select</td><td>ラーメン・風営法対象外 等（Barカテゴリは必ず「風営法対象外」を明記）</td></tr>
+          <tr><td>24時間営業</td><td class="field-type">Checkbox</td><td>✓ で24h表示</td></tr>
+          <tr><td>緊急施設</td><td class="field-type">Checkbox</td><td>✓ で赤枠表示</td></tr>
+          <tr><td>スポンサー</td><td class="field-type">Checkbox</td><td>✓ で優先・金枠表示</td></tr>
+          <tr><td>ウェブサイト</td><td class="field-type">URL</td><td>公式サイトURL</td></tr>
+          <tr><td>公開中</td><td class="field-type">Checkbox</td><td>✓ のみ表示（未チェックは非表示）</td></tr>
+        </table>
+      </div>
+
+      <div class="setup-form">
+        <div>
+          <label>Personal Access Token（pat... で始まる文字列）</label>
+          <input type="password" id="inputApiKey" placeholder="patXXXXXXXXXXXXXX.XXXX...">
+        </div>
+        <div>
+          <label>Base ID（app... で始まる文字列）</label>
+          <input type="text" id="inputBaseId" placeholder="appXXXXXXXXXXXXXX">
+        </div>
+        <div>
+          <label>テーブル名（デフォルト: 施設）</label>
+          <input type="text" id="inputTableName" value="施設" placeholder="施設">
+        </div>
+        <button class="btn-setup" onclick="submitSetup()">接続して施設データを読み込む →</button>
+        <button class="btn-skip-demo" onclick="loadDemoData()">🧪 まずはデモデータで画面を見る</button>
+      </div>
+
+      <div class="setup-note">
+        💡 <strong>Bar掲載について：</strong>北新地エリアの運用ルールとして、風営法許可店（クラブ・キャバレー等）は掲載しないでください。ダイニングバー・ワインバー・ホテルバー等、風営法の許可を要しない業態のみを「特徴」欄に「風営法対象外」を付けて登録してください。<br><br>
+        🔒 <strong>セキュリティ：</strong>Personal Access Token は <code>data.records:read</code> スコープのみに制限してください。APIキーはブラウザのローカルストレージに保存されます。
+      </div>
+    </div>`;
+}
+
+async function submitSetup() {
+  const apiKey    = document.getElementById('inputApiKey').value.trim();
+  const baseId    = document.getElementById('inputBaseId').value.trim();
+  const tableName = document.getElementById('inputTableName').value.trim() || '施設';
+  if (!apiKey || !baseId) { alert('APIキーとBase IDを入力してください。'); return; }
+  saveConfig(apiKey, baseId, tableName);
+  isDemoMode = false;
+  await loadAndRender({ apiKey, baseId, tableName, cacheMinutes: 10 });
+}
+
+function loadDemoData() {
+  isDemoMode = true;
+  fromCache = false;
+  allFacilities = DEMO_FACILITIES;
+  renderMain();
+}
+
+// ─── Main Data Load ──────────────────────────────────────────
+async function loadAndRender(cfg) {
+  const cached = loadCache(cfg.cacheMinutes);
+  if (cached) {
+    allFacilities = cached;
+    fromCache = true;
+    renderMain();
+    return;
+  }
+  fromCache = false;
+  showLoading('Airtableから施設データを読み込んでいます...');
+  try {
+    const records = await fetchAllFromAirtable(cfg);
+    allFacilities = records.map(mapRecord);
+    saveCache(allFacilities);
+    renderMain();
+  } catch (err) {
+    showError(`${err.message}<br><small>APIキーまたはBase IDを確認してください。</small>`);
+  }
+}
+
+// ─── Layout ──────────────────────────────────────────────────
+function setTravel(mode) {
+  travelMode = mode;
+  document.querySelectorAll('.travel-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`travel-${mode}`).classList.add('active');
+  renderCards();
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.getElementById('searchInput').placeholder = lang === 'ja' ? '施設・地名を検索...' : 'Search facilities...';
+  renderMain();
+}
+
+function renderMain() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-header">
+      <div class="section-title">
+        <span id="sectionIcon">🗺️</span>
+        <span data-i18n="all_facilities">${t('all_facilities')}</span>
+        <span class="count-badge" id="countBadge">0</span>
+      </div>
+      <div class="config-bar">
+        ${isDemoMode
+          ? `<button class="btn-reconfig" onclick="reconfigure()">⚙️ Airtableに接続する</button>`
+          : `${fromCache ? `<span class="cache-info">📦 ${t('loaded_from')}</span>` : ''}
+             <button class="btn-reset-cache" onclick="clearCache()">🔄 更新</button>
+             <button class="btn-reconfig" onclick="reconfigure()">⚙️ 設定</button>`
+        }
+      </div>
+    </div>
+    <div id="legalNoticeWrap"></div>
+    <div class="facilities-grid" id="facilitiesGrid"></div>
+
+    <div class="pricing-section">
+      <h3>💴 掲載料金プラン（MGナビ方式）</h3>
+      <table class="pricing-table">
+        <tr><th>掲載カテゴリ</th><th>月額</th></tr>
+        <tr><td>①観光案内・避難場所・交通ナビ</td><td>区役所・市営施設は無料</td></tr>
+        <tr><td>②病院・クリニック・歯科・眼科（個人）</td><td>980円〜1,980円</td></tr>
+        <tr><td>③銀行・ATM・両替・郵便局</td><td>980円〜1,980円</td></tr>
+        <tr><td>④スーパー・コンビニ</td><td>980円〜1,980円</td></tr>
+        <tr><td>⑤飲食店（地域別）</td><td>500円〜2,980円</td></tr>
+        <tr><td>⑥Bar特集（風営法許可店の掲載は禁止）</td><td>500円〜2,980円</td></tr>
+        <tr><td>⑦美容室・理髪店</td><td>980円〜2,980円</td></tr>
+        <tr><td>⑧その他（洋服店・ペットショップ等）</td><td>980円〜2,980円</td></tr>
+      </table>
+      <p class="pricing-note">初回入会金は無料（本来3,300円・キャンペーン中）。毎月1回、会費と掲載料としてクレジットカードより引落。QRコードから所定フォームに入力しお申込みいただけます。</p>
+    </div>
+
+    <div class="sponsor-section">
+      <h3>運営スポンサー</h3>
+      <div class="sponsor-names">セコンドペンギン企画　／　德永良雄行政書士事務所</div>
+      <div class="sponsor-contact">info@second-penguin.com</div>
+      <p style="margin-top:10px;font-size:12px;opacity:0.85;">北新地・大阪駅エリアの掲載店舗を募集中です。</p>
+      <a href="mailto:info@second-penguin.com?subject=Kitashinchi Navi 掲載申込" class="btn-sponsor-join">掲載申込みはこちら</a>
+    </div>
+  `;
+  renderCards();
+}
+
+function setCategory(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-tab').forEach(tb => tb.classList.remove('active'));
+  document.querySelector(`.cat-tab[data-cat="${cat}"]`).classList.add('active');
+  renderCards();
+}
+
+function handleSearch(q) {
+  searchQuery = q.toLowerCase();
+  renderCards();
+}
+
+function getDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function getCatIcon(cat) {
+  return { hospital:'🏥', pharmacy:'💊', atm:'🏧', evacuation:'🆘', grocery:'🛒', restaurant:'🍜', bar:'🍸', beauty:'💇', shopping:'🛍️', transport:'🚃', admin:'🏛️' }[cat] || '📌';
+}
+
+function renderCards() {
+  const grid = document.getElementById('facilitiesGrid');
+  const badge = document.getElementById('countBadge');
+  const legalWrap = document.getElementById('legalNoticeWrap');
+  if (!grid) return;
+
+  if (legalWrap) {
+    let notice = '';
+    if (currentCat === 'bar') notice += `<div class="legal-notice">${t('legal_bar')}</div>`;
+    if (isDemoMode) notice += `<div class="demo-banner"><span>🧪 デモデータを表示中です。掲載店舗情報はサービス紹介用のサンプルであり、実在の店舗情報ではありません。</span><button onclick="reconfigure()">Airtableに接続</button></div>`;
+    legalWrap.innerHTML = notice;
+  }
+
+  let items = [...allFacilities];
+  if (currentCat !== 'all') items = items.filter(f => f.cat === currentCat);
+  if (searchQuery) {
+    items = items.filter(f =>
+      f.name.toLowerCase().includes(searchQuery) ||
+      (f.nameEn||'').toLowerCase().includes(searchQuery) ||
+      f.address.toLowerCase().includes(searchQuery) ||
+      (f.features||[]).some(x => x.toLowerCase().includes(searchQuery))
+    );
+  }
+  items.sort((a, b) => {
+    if (a.sponsor && !b.sponsor) return -1;
+    if (!a.sponsor && b.sponsor) return 1;
+    return getDistance(userLat, userLng, a.lat, a.lng) - getDistance(userLat, userLng, b.lat, b.lng);
+  });
+
+  if (badge) badge.textContent = items.length + t('records');
+
+  if (items.length === 0) {
+    grid.innerHTML = `<div class="no-results"><div style="font-size:36px;margin-bottom:10px;">🔍</div><div>該当する施設が見つかりませんでした</div></div>`;
+    return;
+  }
+  grid.innerHTML = items.map(f => renderCard(f)).join('');
+}
+
+function renderCard(f) {
+  const origin = `&origin=${userLat},${userLng}`;
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1${origin}&destination=${f.lat},${f.lng}&travelmode=${travelMode}`;
+  const d = getDistance(userLat, userLng, f.lat, f.lng);
+  const distText = d < 1000 ? `📍 ${Math.round(d)}m` : `📍 ${(d/1000).toFixed(1)}km`;
+
+  const langNames = { en:'English' };
+  const langTags = (f.langs||[]).map(l => `<span class="tag tag-lang">${langNames[l]||l}</span>`).join('');
+  const featureTags = (f.features||[]).slice(0,3).map(x => `<span class="tag ${f.cat==='bar'?'tag-legal':'tag-feature'}">${x}</span>`).join('');
+  const openTag = f.open24 ? `<span class="tag tag-open">${t('open_now')}</span>` : '';
+  const sponsorBadge = f.sponsor ? `<div class="sponsor-badge">★ スポンサー</div>` : '';
+
+  const displayName = currentLang === 'ja' ? f.name : (f.nameEn || f.name);
+  const displayAddr = currentLang === 'ja' ? f.address : (f.addressEn || f.address);
+  const subName = currentLang === 'ja' && f.nameEn ? `<div class="card-name-en">${f.nameEn}</div>` : '';
+
+  const phoneBtn = f.phone ? `<a class="btn-call" href="tel:${f.phone}">📞 ${t('btn_call')}</a>` : '';
+  const webBtn   = f.website ? `<a class="btn-website" href="${f.website}" target="_blank" rel="noopener">🔗 ${t('btn_website')}</a>` : '';
+
+  return `
+  <div class="facility-card ${f.emergency?'emergency':''} ${f.sponsor?'sponsor':''}">
+    ${sponsorBadge}
+    <div class="card-top">
+      <div class="card-cat-icon">${getCatIcon(f.cat)}</div>
+      <div class="card-info">
+        <div class="card-name">${displayName}</div>
+        ${subName}
+        <div class="card-tags">${openTag}${langTags}${featureTags}</div>
+      </div>
+    </div>
+    <div class="card-address">📍 ${displayAddr} <strong>${distText}</strong></div>
+    ${f.phone ? `<div class="card-phone">☎ ${f.phone}</div>` : ''}
+    <div class="card-actions">
+      <a class="btn-map ${f.emergency?'emergency-map':''}" href="${mapsUrl}" target="_blank" rel="noopener">🗺 ${t('btn_directions')}</a>
+      ${phoneBtn}${webBtn}
+    </div>
+  </div>`;
+}
+
+// ─── Location ────────────────────────────────────────────────
+function openLocModal() { document.getElementById('locModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeLocModal() { document.getElementById('locModal').classList.remove('open'); document.body.style.overflow = ''; }
+
+function setArea(name, lat, lng) {
+  userLat = lat; userLng = lng;
+  document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  closeLocModal();
+  document.getElementById('locLabel').textContent = `${name}（変更▼）`;
+  renderCards();
+}
+
+function locateByGPS() {
+  if (!navigator.geolocation) { alert('このブラウザはGPSに対応していません。'); return; }
+  document.getElementById('locLabel').textContent = '取得中...';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+      closeLocModal();
+      document.getElementById('locLabel').textContent = isInArea(userLat, userLng) ? '現在地（変更▼）' : `${userLat.toFixed(3)},${userLng.toFixed(3)}`;
+      renderCards();
+    },
+    () => { alert('GPS取得できませんでした。エリアを手動で選択してください。'); document.getElementById('locLabel').textContent = 'エリア選択'; },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+}
+
+function autoDetectLocation() {
+  document.getElementById('locLabel').textContent = '大阪駅（変更▼）';
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const lat = pos.coords.latitude, lng = pos.coords.longitude;
+      if (isInArea(lat, lng)) {
+        userLat = lat; userLng = lng;
+        document.getElementById('locLabel').textContent = '現在地（変更▼）';
+        renderCards();
+      }
+    },
+    () => {},
+    { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
+  );
+}
+
+// ─── SOS Modal ───────────────────────────────────────────────
+function openSOS() { document.getElementById('sosModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeSOS() { document.getElementById('sosModal').classList.remove('open'); document.body.style.overflow=''; }
+
+// ─── Init ────────────────────────────────────────────────────
+async function init() {
+  const cfg = getConfig();
+  if (!cfg || !cfg.apiKey || !cfg.baseId) {
+    showSetupScreen();
+    return;
+  }
+  autoDetectLocation();
+  await loadAndRender(cfg);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
