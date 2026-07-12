@@ -1,4 +1,6 @@
 ---
+import artworks from '../../data/artworks.json';
+
 export function getStaticPaths() {
   return [
     { params: { lang: 'ja' } },
@@ -26,10 +28,15 @@ const storageUI = {
       sachiko: { ja: '德永 幸子', en: 'Sachiko Tokunaga' },
     },
     cats: {
-      takuma: ['異人館', '神戸', 'スペイン', '静物'],
-      sachiko: ['人物', '戦争の記憶', '風景', '静物 他'],
+      takuma: ['異人館', '神戸', 'スペイン', '静物', '未分類'],
+      sachiko: ['人物', '戦争の記憶', '風景', '静物 他', '未分類'],
     },
+    unsorted: { title: '未整理', eyebrow: 'アーティスト未設定' },
     preparing: '— 準備中 —',
+    published: '公開中',
+    unpublished: '非公開',
+    genreLabel: 'ジャンル',
+    publishLabel: 'ギャラリーに公開',
   },
   en: {
     nav: { gallery: 'Gallery', about: 'About', storage: 'Storage' },
@@ -45,10 +52,15 @@ const storageUI = {
       sachiko: { ja: 'Sachiko Tokunaga', en: 'Sachiko Tokunaga' },
     },
     cats: {
-      takuma: ['Ijinkan', 'Kobe', 'Spain', 'Still Life'],
-      sachiko: ['People', 'Memories of War', 'Landscape', 'Still Life & Others'],
+      takuma: ['Ijinkan', 'Kobe', 'Spain', 'Still Life', 'Unclassified'],
+      sachiko: ['People', 'Memories of War', 'Landscape', 'Still Life & Others', 'Unclassified'],
     },
+    unsorted: { title: 'Unsorted', eyebrow: 'No artist assigned' },
     preparing: '— Preparing —',
+    published: 'Published',
+    unpublished: 'Unpublished',
+    genreLabel: 'Genre',
+    publishLabel: 'Show in gallery',
   },
   sp: {
     nav: { gallery: 'Galería', about: 'Acerca', storage: 'Archivo' },
@@ -64,18 +76,42 @@ const storageUI = {
       sachiko: { ja: 'Sachiko Tokunaga', en: 'Sachiko Tokunaga' },
     },
     cats: {
-      takuma: ['Ijinkan', 'Kobe', 'España', 'Naturaleza muerta'],
-      sachiko: ['Personas', 'Memorias de guerra', 'Paisaje', 'Naturaleza muerta y otros'],
+      takuma: ['Ijinkan', 'Kobe', 'España', 'Naturaleza muerta', 'Sin clasificar'],
+      sachiko: ['Personas', 'Memorias de guerra', 'Paisaje', 'Naturaleza muerta y otros', 'Sin clasificar'],
     },
+    unsorted: { title: 'Sin ordenar', eyebrow: 'Sin artista asignado' },
     preparing: '— En preparación —',
+    published: 'Publicado',
+    unpublished: 'No publicado',
+    genreLabel: 'Género',
+    publishLabel: 'Mostrar en la galería',
   },
 };
 
 const tS = storageUI[lang];
 
-// カテゴリキー（言語によらず固定）
-const takumaCatKeys = ['ijinkan', 'kobe', 'spain', 'seibutsu'];
-const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
+// カテゴリキー（言語によらず固定）。末尾の 'unclassified' はジャンル未設定の受け皿
+const takumaCatKeys = ['ijinkan', 'kobe', 'spain', 'seibutsu', 'unclassified'];
+const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu', 'unclassified'];
+
+// artworks.json を元に、アーティスト×ジャンルで作品をグルーピングする
+function localize(info) {
+  return {
+    file: info.file,
+    title: info.title?.[lang] || info.title?.ja || '—',
+    artistKey: info.artistKey ?? null,
+    genre: info.genre ?? 'unclassified',
+    published: !!info.published,
+  };
+}
+
+const localizedArtworks = artworks.map(localize);
+
+function artworksFor(artistKey, catKey) {
+  return localizedArtworks.filter(a => a.artistKey === artistKey && a.genre === catKey);
+}
+
+const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
 ---
 
 <!DOCTYPE html>
@@ -666,6 +702,46 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       letter-spacing: 0.06em;
     }
 
+    /* ========== 管理者モード用コントロール ========== */
+    .admin-controls {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    body.admin-mode .admin-controls { display: flex; }
+
+    .admin-genre-select {
+      width: 100%;
+      background: rgba(20, 4, 4, 0.8);
+      color: var(--text-main);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      font-family: inherit;
+      font-size: 0.72rem;
+      padding: 4px 6px;
+    }
+
+    .admin-publish-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.68rem;
+      color: var(--text-sub);
+      letter-spacing: 0.04em;
+      cursor: pointer;
+    }
+
+    .admin-save-status {
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--gold-bright);
+      min-height: 1em;
+    }
+
     .empty-msg {
       text-align: center;
       padding: 50px 0;
@@ -861,6 +937,26 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
 
     #admin-pw-input:focus { border-color: var(--gold-bright); }
     #admin-pw-input.error { border-color: #c04040; animation: shake 0.35s ease; }
+
+    #admin-token-input {
+      background: rgba(74, 10, 10, 0.4);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      padding: 0.55rem 0.9rem;
+      text-align: left;
+      width: 100%;
+      max-width: 340px;
+      outline: none;
+      display: block;
+      margin: 0 auto;
+      transition: border-color 0.3s;
+    }
+
+    #admin-token-input:focus { border-color: var(--gold-bright); }
+    #admin-token-input.error { border-color: #c04040; animation: shake 0.35s ease; }
 
     #admin-pw-error {
       color: #c06060;
@@ -1127,27 +1223,39 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
         ))}
       </div>
 
-      <!-- 異人館 -->
-      <div class="category-panel active" id="takuma-ijinkan">
-        <div class="gallery-grid">
-          <div class="gallery-item" data-src={`${base}/gallery/013.jpg`} data-label="013">
-            <div class="gallery-frame">
-              <img src={`${base}/gallery/013.jpg`} alt="013" loading="lazy" />
-            </div>
-            <div class="gallery-item-label">013</div>
+      {takumaCatKeys.map((key, i) => {
+        const items = artworksFor('takuma', key);
+        return (
+          <div class={`category-panel${i === 0 ? ' active' : ''}`} id={`takuma-${key}`}>
+            {items.length > 0 ? (
+              <div class="gallery-grid">
+                {items.map(art => (
+                  <div class="gallery-item" data-src={`${base}/gallery/${art.file}`} data-label={art.title}>
+                    <div class="gallery-frame">
+                      <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
+                    </div>
+                    <div class="gallery-item-label">{art.title}</div>
+                    <div class="admin-controls" data-file={art.file}>
+                      <select class="admin-genre-select">
+                        {takumaCatKeys.map((k2, j) => (
+                          <option value={k2} selected={k2 === art.genre}>{tS.cats.takuma[j]}</option>
+                        ))}
+                      </select>
+                      <label class="admin-publish-toggle">
+                        <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
+                        {tS.publishLabel}
+                      </label>
+                      <span class="admin-save-status"></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p class="empty-msg">{tS.preparing}</p>
+            )}
           </div>
-        </div>
-      </div>
-
-      <div class="category-panel" id="takuma-kobe">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
-      <div class="category-panel" id="takuma-spain">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
-      <div class="category-panel" id="takuma-seibutsu">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
+        );
+      })}
     </section>
 
     <div class="section-divider">
@@ -1169,19 +1277,74 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
         ))}
       </div>
 
-      <div class="category-panel active" id="sachiko-jinbutsu">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
-      <div class="category-panel" id="sachiko-sensou">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
-      <div class="category-panel" id="sachiko-fuukei">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
-      <div class="category-panel" id="sachiko-seibutsu">
-        <p class="empty-msg">{tS.preparing}</p>
-      </div>
+      {sachikoCatKeys.map((key, i) => {
+        const items = artworksFor('sachiko', key);
+        return (
+          <div class={`category-panel${i === 0 ? ' active' : ''}`} id={`sachiko-${key}`}>
+            {items.length > 0 ? (
+              <div class="gallery-grid">
+                {items.map(art => (
+                  <div class="gallery-item" data-src={`${base}/gallery/${art.file}`} data-label={art.title}>
+                    <div class="gallery-frame">
+                      <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
+                    </div>
+                    <div class="gallery-item-label">{art.title}</div>
+                    <div class="admin-controls" data-file={art.file}>
+                      <select class="admin-genre-select">
+                        {sachikoCatKeys.map((k2, j) => (
+                          <option value={k2} selected={k2 === art.genre}>{tS.cats.sachiko[j]}</option>
+                        ))}
+                      </select>
+                      <label class="admin-publish-toggle">
+                        <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
+                        {tS.publishLabel}
+                      </label>
+                      <span class="admin-save-status"></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p class="empty-msg">{tS.preparing}</p>
+            )}
+          </div>
+        );
+      })}
     </section>
+
+    {unsortedArtworks.length > 0 && (
+      <>
+        <div class="section-divider">
+          <div class="section-divider-diamond"></div>
+        </div>
+
+        <!-- ===== 未整理（アーティスト未設定） ===== -->
+        <section class="artist-section">
+          <div class="artist-header">
+            <span class="artist-name-ja">{tS.unsorted.title}</span>
+            <span class="artist-name-en">{tS.unsorted.eyebrow}</span>
+          </div>
+
+          <div class="gallery-grid">
+            {unsortedArtworks.map(art => (
+              <div class="gallery-item" data-src={`${base}/gallery/${art.file}`} data-label={art.title}>
+                <div class="gallery-frame">
+                  <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
+                </div>
+                <div class="gallery-item-label">{art.title}</div>
+                <div class="admin-controls" data-file={art.file}>
+                  <label class="admin-publish-toggle">
+                    <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
+                    {tS.publishLabel}
+                  </label>
+                  <span class="admin-save-status"></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
   </div>
 
   <!-- ========== 管理者パスワードモーダル ========== -->
@@ -1192,6 +1355,11 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       <h2 class="admin-modal-title">管 理 者 認 証</h2>
       <div id="admin-pw-screen">
         <input id="admin-pw-input" type="password" maxlength="20" placeholder="· · · · · ·" autocomplete="off" />
+        <input id="admin-token-input" type="password" placeholder="GitHub Personal Access Token" autocomplete="off" style="margin-top:10px;" />
+        <p class="github-token-note">
+          GitHubの Settings → Developer settings → Personal access tokens で発行。<br>
+          「Contents: Read and Write」権限が必要です。このページを開いている間だけ記憶されます。
+        </p>
         <p id="admin-pw-error"></p>
         <button class="enter-btn" id="adminPwEnterBtn" style="margin:0 auto; display:block;">認 証 す る</button>
       </div>
@@ -1221,6 +1389,18 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
                 <option value="takuma">徳永 卓磨</option>
                 <option value="sachiko">徳永 幸子</option>
               </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>{tS.genreLabel}</label>
+              <select id="f-genre"></select>
+            </div>
+            <div class="form-group">
+              <label class="admin-publish-toggle" style="margin-top:28px;">
+                <input type="checkbox" id="f-published" />
+                {tS.publishLabel}
+              </label>
             </div>
           </div>
         </div>
@@ -1292,21 +1472,6 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
           </div>
         </div>
 
-        <!-- GitHub トークン -->
-        <div class="form-section">
-          <p class="form-section-title">GitHub 認証</p>
-          <div class="form-row one">
-            <div class="form-group">
-              <label>Personal Access Token</label>
-              <input type="password" id="f-token" placeholder="ghp_xxxxxxxxxxxx" required />
-              <p class="github-token-note">
-                GitHubの Settings → Developer settings → Personal access tokens で発行。<br>
-                「Contents: Read and Write」権限が必要です。
-              </p>
-            </div>
-          </div>
-        </div>
-
         <button type="submit" class="form-submit-btn" id="formSubmitBtn">登 録 す る</button>
         <p id="form-status"></p>
       </form>
@@ -1323,7 +1488,12 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
     </div>
   </div>
 
-  <script define:vars={{ pwError: tS.lock.error }}>
+  <script define:vars={{
+    pwError: tS.lock.error,
+    takumaCatKeys,
+    sachikoCatKeys,
+    catLabels: { takuma: tS.cats.takuma, sachiko: tS.cats.sachiko },
+  }}>
     /* ===== パスワード認証 ===== */
     const CORRECT_PW = '2405';
 
@@ -1410,7 +1580,8 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
 
     /* ===== ライトボックス ===== */
     document.querySelectorAll('.gallery-item').forEach((item) => {
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        if (e.target.closest('.admin-controls')) return;
         document.getElementById('modalImg').src = item.dataset.src ?? '';
         document.getElementById('modalImg').alt = item.dataset.label ?? '';
         document.getElementById('modalOverlay').classList.add('active');
@@ -1428,17 +1599,21 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
     /* ===== 管理者パネル ===== */
     const ADMIN_PW = 'art2024admin';
 
-    const adminOpenBtn    = document.getElementById('adminOpenBtn');
-    const adminPwOverlay  = document.getElementById('adminPwOverlay');
-    const adminPwClose    = document.getElementById('adminPwClose');
-    const adminPwInput    = document.getElementById('admin-pw-input');
-    const adminPwError    = document.getElementById('admin-pw-error');
-    const adminPwEnterBtn = document.getElementById('adminPwEnterBtn');
+    // PATはページを開いている間だけメモリ上に保持する（sessionStorageには保存しない）
+    let adminToken = null;
+
+    const adminOpenBtn     = document.getElementById('adminOpenBtn');
+    const adminPwOverlay   = document.getElementById('adminPwOverlay');
+    const adminPwClose     = document.getElementById('adminPwClose');
+    const adminPwInput     = document.getElementById('admin-pw-input');
+    const adminTokenInput  = document.getElementById('admin-token-input');
+    const adminPwError     = document.getElementById('admin-pw-error');
+    const adminPwEnterBtn  = document.getElementById('adminPwEnterBtn');
     const adminFormOverlay = document.getElementById('adminFormOverlay');
-    const adminFormClose  = document.getElementById('adminFormClose');
+    const adminFormClose   = document.getElementById('adminFormClose');
 
     adminOpenBtn.addEventListener('click', () => {
-      if (sessionStorage.getItem('admin_auth') === '1') {
+      if (adminToken) {
         adminFormOverlay.classList.add('active');
       } else {
         adminPwOverlay.classList.add('active');
@@ -1457,15 +1632,19 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
     });
 
     function checkAdminPw() {
-      if (adminPwInput.value === ADMIN_PW) {
-        sessionStorage.setItem('admin_auth', '1');
+      const tokenVal = adminTokenInput.value.trim();
+
+      if (adminPwInput.value === ADMIN_PW && tokenVal) {
+        adminToken = tokenVal;
+        document.body.classList.add('admin-mode');
         adminPwOverlay.classList.remove('active');
         adminPwInput.value = '';
+        adminTokenInput.value = '';
         adminPwError.textContent = '';
         adminFormOverlay.classList.add('active');
       } else {
         adminPwInput.classList.add('error');
-        adminPwError.textContent = 'パスワードが違います';
+        adminPwError.textContent = tokenVal ? pwError : 'GitHub Personal Access Tokenを入力してください';
         setTimeout(() => adminPwInput.classList.remove('error'), 400);
         adminPwInput.value = '';
         adminPwInput.focus();
@@ -1474,6 +1653,7 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
 
     adminPwEnterBtn.addEventListener('click', checkAdminPw);
     adminPwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkAdminPw(); });
+    adminTokenInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkAdminPw(); });
 
     /* ===== 作品登録フォーム ===== */
     const ARTIST_MAP = {
@@ -1481,15 +1661,61 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       sachiko: { ja: '徳永幸子', en: 'Sachiko Tokunaga', sp: 'Sachiko Tokunaga' },
     };
 
+    const CAT_KEYS = { takuma: takumaCatKeys, sachiko: sachikoCatKeys };
+
     const GITHUB_API = 'https://api.github.com/repos/Second-penguin-planning/online-museum/contents/src/data/artworks.json';
+
+    // 現在のartworks.jsonを取得→コールバックで更新→コミット、を1本化
+    async function updateArtworksJson(mutate, commitMessage) {
+      const getRes = await fetch(GITHUB_API, {
+        headers: { 'Authorization': `Bearer ${adminToken}`, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (!getRes.ok) throw new Error(`ファイル取得エラー (${getRes.status})`);
+
+      const fileData = await getRes.json();
+      const current  = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
+
+      mutate(current);
+
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+
+      const putRes = await fetch(GITHUB_API, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${adminToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: commitMessage,
+          content: newContent,
+          sha: fileData.sha,
+        }),
+      });
+
+      if (!putRes.ok) {
+        const err = await putRes.json();
+        throw new Error(err.message || `保存エラー (${putRes.status})`);
+      }
+    }
+
+    function populateGenreSelect(artistKey) {
+      const genreSelect = document.getElementById('f-genre');
+      const keys   = CAT_KEYS[artistKey] || [];
+      const labels = catLabels[artistKey] || [];
+      genreSelect.innerHTML = keys.map((k, i) => `<option value="${k}">${labels[i]}</option>`).join('');
+    }
+
+    const fArtistSelect = document.getElementById('f-artist');
+    populateGenreSelect(fArtistSelect.value);
+    fArtistSelect.addEventListener('change', () => populateGenreSelect(fArtistSelect.value));
 
     document.getElementById('artworkForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const statusEl  = document.getElementById('form-status');
       const submitBtn = document.getElementById('formSubmitBtn');
-      const token     = document.getElementById('f-token').value.trim();
-      const artistKey = document.getElementById('f-artist').value;
+      const artistKey = fArtistSelect.value;
       const artist    = ARTIST_MAP[artistKey];
 
       const sizeJa = document.getElementById('f-size-ja').value.trim();
@@ -1506,6 +1732,9 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
         year:        { ja: yearJa, en: yearEn, sp: yearEn },
         size:        { ja: sizeJa, en: sizeEn, sp: spSize },
         description: { ja: document.getElementById('f-desc-ja').value.trim(), en: document.getElementById('f-desc-en').value.trim(), sp: document.getElementById('f-desc-sp').value.trim() },
+        artistKey,
+        genre:       document.getElementById('f-genre').value,
+        published:   document.getElementById('f-published').checked,
       };
 
       statusEl.textContent  = '送信中...';
@@ -1513,48 +1742,52 @@ const sachikoCatKeys = ['jinbutsu', 'sensou', 'fuukei', 'seibutsu'];
       submitBtn.disabled    = true;
 
       try {
-        // 現在のartworks.jsonを取得
-        const getRes = await fetch(GITHUB_API, {
-          headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-        });
-
-        if (!getRes.ok) throw new Error(`ファイル取得エラー (${getRes.status})`);
-
-        const fileData = await getRes.json();
-        const current  = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
-        current.push(newEntry);
-
-        const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
-
-        // 更新コミット
-        const putRes = await fetch(GITHUB_API, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: `作品情報追加: ${newEntry.file}`,
-            content: newContent,
-            sha: fileData.sha,
-          }),
-        });
-
-        if (!putRes.ok) {
-          const err = await putRes.json();
-          throw new Error(err.message || `保存エラー (${putRes.status})`);
-        }
+        await updateArtworksJson(
+          (current) => current.push(newEntry),
+          `作品情報追加: ${newEntry.file}`
+        );
 
         statusEl.textContent = '✓ 登録が完了しました。サイトに反映されるまで数分かかります。';
         statusEl.className   = 'success';
         document.getElementById('artworkForm').reset();
+        populateGenreSelect(fArtistSelect.value);
 
       } catch (err) {
         statusEl.textContent = `エラー: ${err.message}`;
         statusEl.className   = 'error';
       } finally {
         submitBtn.disabled = false;
+      }
+    });
+
+    /* ===== 各作品カードの公開/ジャンル切り替え（管理者モード） ===== */
+    document.querySelectorAll('.admin-controls').forEach((panel) => {
+      const file = panel.dataset.file;
+      const genreSelect = panel.querySelector('.admin-genre-select');
+      const publishCheckbox = panel.querySelector('.admin-publish-checkbox');
+      const statusEl = panel.querySelector('.admin-save-status');
+
+      async function saveField(patch, label) {
+        if (!adminToken) return;
+        statusEl.textContent = '保存中...';
+        try {
+          await updateArtworksJson((current) => {
+            const entry = current.find(a => a.file === file);
+            if (entry) Object.assign(entry, patch);
+          }, `作品情報更新 (${label}): ${file}`);
+          statusEl.textContent = '✓ 保存しました';
+        } catch (err) {
+          statusEl.textContent = `エラー: ${err.message}`;
+        }
+      }
+
+      if (genreSelect) {
+        genreSelect.addEventListener('click', (e) => e.stopPropagation());
+        genreSelect.addEventListener('change', () => saveField({ genre: genreSelect.value }, 'ジャンル'));
+      }
+      if (publishCheckbox) {
+        publishCheckbox.addEventListener('click', (e) => e.stopPropagation());
+        publishCheckbox.addEventListener('change', () => saveField({ published: publishCheckbox.checked }, '公開設定'));
       }
     });
   </script>

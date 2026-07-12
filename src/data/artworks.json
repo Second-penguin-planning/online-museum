@@ -1,139 +1,2234 @@
 [
   {
     "file": "01001.jpg",
-    "title": { "ja": "ラマンチャ荒野 1", "en": "La Mancha Wilderness 1", "sp": "Páramo de La Mancha 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1995年", "en": "1995", "sp": "1995" },
-    "size": { "ja": "40号", "en": "No. 40", "sp": "Nº 40" },
-    "description": { "ja": "一面、麦畑", "en": "A wheat field extending as far as the eye can see.", "sp": "Un campo de trigo que se extiende hasta donde alcanza la vista." }
+    "title": {
+      "ja": "ラマンチャ荒野 1",
+      "en": "La Mancha Wilderness 1",
+      "sp": "Páramo de La Mancha 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1995年",
+      "en": "1995",
+      "sp": "1995"
+    },
+    "size": {
+      "ja": "40号",
+      "en": "No. 40",
+      "sp": "Nº 40"
+    },
+    "description": {
+      "ja": "一面、麦畑",
+      "en": "A wheat field extending as far as the eye can see.",
+      "sp": "Un campo de trigo que se extiende hasta donde alcanza la vista."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01002.jpg",
-    "title": { "ja": "壺 1", "en": "Pot 1", "sp": "Vasija 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "2010年", "en": "2010", "sp": "2010" },
-    "size": { "ja": "20号", "en": "No. 20", "sp": "Nº 20" },
-    "description": { "ja": "納屋で見つけた古い壺", "en": "An old pot found in a barn.", "sp": "Una vieja vasija encontrada en un granero." }
+    "title": {
+      "ja": "壺 1",
+      "en": "Pot 1",
+      "sp": "Vasija 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "2010年",
+      "en": "2010",
+      "sp": "2010"
+    },
+    "size": {
+      "ja": "20号",
+      "en": "No. 20",
+      "sp": "Nº 20"
+    },
+    "description": {
+      "ja": "納屋で見つけた古い壺",
+      "en": "An old pot found in a barn.",
+      "sp": "Una vieja vasija encontrada en un granero."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01003.jpg",
-    "title": { "ja": "いわし 1", "en": "Sardines 1", "sp": "Sardinas 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "2015年", "en": "2015", "sp": "2015" },
-    "size": { "ja": "4号", "en": "No. 4", "sp": "Nº 4" },
-    "description": { "ja": "様々な顔を持つ干物", "en": "Dried fish, each with a distinct expression.", "sp": "Pescados secos, cada uno con una expresión diferente." }
+    "title": {
+      "ja": "いわし 1",
+      "en": "Sardines 1",
+      "sp": "Sardinas 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "2015年",
+      "en": "2015",
+      "sp": "2015"
+    },
+    "size": {
+      "ja": "4号",
+      "en": "No. 4",
+      "sp": "Nº 4"
+    },
+    "description": {
+      "ja": "様々な顔を持つ干物",
+      "en": "Dried fish, each with a distinct expression.",
+      "sp": "Pescados secos, cada uno con una expresión diferente."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01004.jpg",
-    "title": { "ja": "黄色い家 1", "en": "Yellow House 1", "sp": "Casa Amarilla 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1970年", "en": "1970", "sp": "1970" },
-    "size": { "ja": "40号", "en": "No. 40", "sp": "Nº 40" },
-    "description": { "ja": "北野異人館シリーズ", "en": "Kitano Ijinkan (Foreigners' Residences) Series.", "sp": "Serie de las Casas de Extranjeros de Kitano." }
+    "title": {
+      "ja": "黄色い家 1",
+      "en": "Yellow House 1",
+      "sp": "Casa Amarilla 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1970年",
+      "en": "1970",
+      "sp": "1970"
+    },
+    "size": {
+      "ja": "40号",
+      "en": "No. 40",
+      "sp": "Nº 40"
+    },
+    "description": {
+      "ja": "北野異人館シリーズ",
+      "en": "Kitano Ijinkan (Foreigners' Residences) Series.",
+      "sp": "Serie de las Casas de Extranjeros de Kitano."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01005.jpg",
-    "title": { "ja": "ハッサム邸 1", "en": "Hassam House 1", "sp": "Casa Hassam 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1975年", "en": "1975", "sp": "1975" },
-    "size": { "ja": "40号", "en": "No. 40", "sp": "Nº 40" },
-    "description": { "ja": "北野異人館シリーズ。今はもう解体された。", "en": "Kitano Ijinkan Series. It has now been dismantled.", "sp": "Serie de las Casas de Extranjeros de Kitano. Ahora ha sido desmantelada." }
+    "title": {
+      "ja": "ハッサム邸 1",
+      "en": "Hassam House 1",
+      "sp": "Casa Hassam 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1975年",
+      "en": "1975",
+      "sp": "1975"
+    },
+    "size": {
+      "ja": "40号",
+      "en": "No. 40",
+      "sp": "Nº 40"
+    },
+    "description": {
+      "ja": "北野異人館シリーズ。今はもう解体された。",
+      "en": "Kitano Ijinkan Series. It has now been dismantled.",
+      "sp": "Serie de las Casas de Extranjeros de Kitano. Ahora ha sido desmantelada."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01006.jpg",
-    "title": { "ja": "黒い家 1", "en": "Black House 1", "sp": "Casa Negra 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1960年", "en": "1960", "sp": "1960" },
-    "size": { "ja": "30号", "en": "No. 30", "sp": "Nº 30" },
-    "description": { "ja": "北野異人館シリーズ。とても古い家。", "en": "Kitano Ijinkan Series. A very old house.", "sp": "Serie de las Casas de Extranjeros de Kitano. Una casa muy antigua." }
+    "title": {
+      "ja": "黒い家 1",
+      "en": "Black House 1",
+      "sp": "Casa Negra 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1960年",
+      "en": "1960",
+      "sp": "1960"
+    },
+    "size": {
+      "ja": "30号",
+      "en": "No. 30",
+      "sp": "Nº 30"
+    },
+    "description": {
+      "ja": "北野異人館シリーズ。とても古い家。",
+      "en": "Kitano Ijinkan Series. A very old house.",
+      "sp": "Serie de las Casas de Extranjeros de Kitano. Una casa muy antigua."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01007.jpg",
-    "title": { "ja": "カンポ　家のドア 1", "en": "Campo, House Door 1", "sp": "Campo, Puerta de la Casa 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1994年", "en": "1994", "sp": "1994" },
-    "size": { "ja": "20号", "en": "No. 20", "sp": "Nº 20" },
-    "description": { "ja": "一軒一軒異なる顔を持つ家。", "en": "Houses, each with its own distinct character.", "sp": "Casas, cada una con un carácter distinto." }
+    "title": {
+      "ja": "カンポ　家のドア 1",
+      "en": "Campo, House Door 1",
+      "sp": "Campo, Puerta de la Casa 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1994年",
+      "en": "1994",
+      "sp": "1994"
+    },
+    "size": {
+      "ja": "20号",
+      "en": "No. 20",
+      "sp": "Nº 20"
+    },
+    "description": {
+      "ja": "一軒一軒異なる顔を持つ家。",
+      "en": "Houses, each with its own distinct character.",
+      "sp": "Casas, cada una con un carácter distinto."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01008.jpg",
-    "title": { "ja": "カンポ　坂の街並み 1", "en": "Campo, Sloping Street 1", "sp": "Campo, Calle en Pendiente 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1980年", "en": "1980", "sp": "1980" },
-    "size": { "ja": "30号", "en": "No. 30", "sp": "Nº 30" },
-    "description": { "ja": "風車の丘に向かう街並み", "en": "The townscape leading up to the windmill hill.", "sp": "El paisaje urbano que conduce a la colina de los molinos de viento." }
+    "title": {
+      "ja": "カンポ　坂の街並み 1",
+      "en": "Campo, Sloping Street 1",
+      "sp": "Campo, Calle en Pendiente 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1980年",
+      "en": "1980",
+      "sp": "1980"
+    },
+    "size": {
+      "ja": "30号",
+      "en": "No. 30",
+      "sp": "Nº 30"
+    },
+    "description": {
+      "ja": "風車の丘に向かう街並み",
+      "en": "The townscape leading up to the windmill hill.",
+      "sp": "El paisaje urbano que conduce a la colina de los molinos de viento."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01009.jpg",
-    "title": { "ja": "神戸港 ドッグ 1", "en": "Kobe Port Dock 1", "sp": "Dique del Puerto de Kobe 1" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "2012年", "en": "2012", "sp": "2012" },
-    "size": { "ja": "40号", "en": "No. 40", "sp": "Nº 40" },
-    "description": { "ja": "川崎造船のドッグ", "en": "Kawasaki Shipbuilding Dock.", "sp": "Dique de construcción naval de Kawasaki." }
+    "title": {
+      "ja": "神戸港 ドッグ 1",
+      "en": "Kobe Port Dock 1",
+      "sp": "Dique del Puerto de Kobe 1"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "2012年",
+      "en": "2012",
+      "sp": "2012"
+    },
+    "size": {
+      "ja": "40号",
+      "en": "No. 40",
+      "sp": "Nº 40"
+    },
+    "description": {
+      "ja": "川崎造船のドッグ",
+      "en": "Kawasaki Shipbuilding Dock.",
+      "sp": "Dique de construcción naval de Kawasaki."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
   {
     "file": "01010.jpg",
-    "title": { "ja": "ラマンチャ荒野 2", "en": "La Mancha Wilderness 2", "sp": "Páramo de La Mancha 2" },
-    "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" },
-    "year": { "ja": "1995年", "en": "1995", "sp": "1995" },
-    "size": { "ja": "40号", "en": "No. 40", "sp": "Nº 40" },
-    "description": { "ja": "モザイク模様の荒野", "en": "A mosaic-patterned wilderness.", "sp": "Un páramo with a mosaic pattern." }
+    "title": {
+      "ja": "ラマンチャ荒野 2",
+      "en": "La Mancha Wilderness 2",
+      "sp": "Páramo de La Mancha 2"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "1995年",
+      "en": "1995",
+      "sp": "1995"
+    },
+    "size": {
+      "ja": "40号",
+      "en": "No. 40",
+      "sp": "Nº 40"
+    },
+    "description": {
+      "ja": "モザイク模様の荒野",
+      "en": "A mosaic-patterned wilderness.",
+      "sp": "Un páramo with a mosaic pattern."
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
   },
-  { "file": "01011.jpg", "title": { "ja": "作品 11", "en": "Work 11", "sp": "Obra 11" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01012.jpg", "title": { "ja": "作品 12", "en": "Work 12", "sp": "Obra 12" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01013.jpg", "title": { "ja": "作品 13", "en": "Work 13", "sp": "Obra 13" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01014.jpg", "title": { "ja": "作品 14", "en": "Work 14", "sp": "Obra 14" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01015.jpg", "title": { "ja": "作品 15", "en": "Work 15", "sp": "Obra 15" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01016.jpg", "title": { "ja": "作品 16", "en": "Work 16", "sp": "Obra 16" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01017.jpg", "title": { "ja": "作品 17", "en": "Work 17", "sp": "Obra 17" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01018.jpg", "title": { "ja": "作品 18", "en": "Work 18", "sp": "Obra 18" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01019.jpg", "title": { "ja": "作品 19", "en": "Work 19", "sp": "Obra 19" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01020.jpg", "title": { "ja": "作品 20", "en": "Work 20", "sp": "Obra 20" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01021.jpg", "title": { "ja": "作品 21", "en": "Work 21", "sp": "Obra 21" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01022.jpg", "title": { "ja": "作品 22", "en": "Work 22", "sp": "Obra 22" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01023.jpg", "title": { "ja": "作品 23", "en": "Work 23", "sp": "Obra 23" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01024.jpg", "title": { "ja": "作品 24", "en": "Work 24", "sp": "Obra 24" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01025.jpg", "title": { "ja": "作品 25", "en": "Work 25", "sp": "Obra 25" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01026.jpg", "title": { "ja": "作品 26", "en": "Work 26", "sp": "Obra 26" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01027.jpg", "title": { "ja": "作品 27", "en": "Work 27", "sp": "Obra 27" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01028.jpg", "title": { "ja": "作品 28", "en": "Work 28", "sp": "Obra 28" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01029.jpg", "title": { "ja": "作品 29", "en": "Work 29", "sp": "Obra 29" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01030.jpg", "title": { "ja": "作品 30", "en": "Work 30", "sp": "Obra 30" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01031.jpg", "title": { "ja": "作品 31", "en": "Work 31", "sp": "Obra 31" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01032.jpg", "title": { "ja": "作品 32", "en": "Work 32", "sp": "Obra 32" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01033.jpg", "title": { "ja": "作品 33", "en": "Work 33", "sp": "Obra 33" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01034.jpg", "title": { "ja": "作品 34", "en": "Work 34", "sp": "Obra 34" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01035.jpg", "title": { "ja": "作品 35", "en": "Work 35", "sp": "Obra 35" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01036.jpg", "title": { "ja": "作品 36", "en": "Work 36", "sp": "Obra 36" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01037.jpg", "title": { "ja": "作品 37", "en": "Work 37", "sp": "Obra 37" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01038.jpg", "title": { "ja": "作品 38", "en": "Work 38", "sp": "Obra 38" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01039.jpg", "title": { "ja": "作品 39", "en": "Work 39", "sp": "Obra 39" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01040.jpg", "title": { "ja": "作品 40", "en": "Work 40", "sp": "Obra 40" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01041.jpg", "title": { "ja": "作品 41", "en": "Work 41", "sp": "Obra 41" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01042.jpg", "title": { "ja": "作品 42", "en": "Work 42", "sp": "Obra 42" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01043.jpg", "title": { "ja": "作品 43", "en": "Work 43", "sp": "Obra 43" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01044.jpg", "title": { "ja": "作品 44", "en": "Work 44", "sp": "Obra 44" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01045.jpg", "title": { "ja": "作品 45", "en": "Work 45", "sp": "Obra 45" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01046.jpg", "title": { "ja": "作品 46", "en": "Work 46", "sp": "Obra 46" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01047.jpg", "title": { "ja": "作品 47", "en": "Work 47", "sp": "Obra 47" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01048.jpg", "title": { "ja": "作品 48", "en": "Work 48", "sp": "Obra 48" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01049.jpg", "title": { "ja": "作品 49", "en": "Work 49", "sp": "Obra 49" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01050.jpg", "title": { "ja": "作品 50", "en": "Work 50", "sp": "Obra 50" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
-  { "file": "01051.jpg", "title": { "ja": "作品 51", "en": "Work 51", "sp": "Obra 51" }, "artist": { "ja": "徳永卓磨", "en": "Takuma Tokunaga", "sp": "Takuma Tokunaga" }, "year": { "ja": "", "en": "", "sp": "" }, "size": { "ja": "", "en": "", "sp": "" }, "description": { "ja": "", "en": "", "sp": "" } },
+  {
+    "file": "01011.jpg",
+    "title": {
+      "ja": "作品 11",
+      "en": "Work 11",
+      "sp": "Obra 11"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01012.jpg",
+    "title": {
+      "ja": "作品 12",
+      "en": "Work 12",
+      "sp": "Obra 12"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01013.jpg",
+    "title": {
+      "ja": "作品 13",
+      "en": "Work 13",
+      "sp": "Obra 13"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01014.jpg",
+    "title": {
+      "ja": "作品 14",
+      "en": "Work 14",
+      "sp": "Obra 14"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01015.jpg",
+    "title": {
+      "ja": "作品 15",
+      "en": "Work 15",
+      "sp": "Obra 15"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01016.jpg",
+    "title": {
+      "ja": "作品 16",
+      "en": "Work 16",
+      "sp": "Obra 16"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01017.jpg",
+    "title": {
+      "ja": "作品 17",
+      "en": "Work 17",
+      "sp": "Obra 17"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01018.jpg",
+    "title": {
+      "ja": "作品 18",
+      "en": "Work 18",
+      "sp": "Obra 18"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01019.jpg",
+    "title": {
+      "ja": "作品 19",
+      "en": "Work 19",
+      "sp": "Obra 19"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01020.jpg",
+    "title": {
+      "ja": "作品 20",
+      "en": "Work 20",
+      "sp": "Obra 20"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01021.jpg",
+    "title": {
+      "ja": "作品 21",
+      "en": "Work 21",
+      "sp": "Obra 21"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01022.jpg",
+    "title": {
+      "ja": "作品 22",
+      "en": "Work 22",
+      "sp": "Obra 22"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01023.jpg",
+    "title": {
+      "ja": "作品 23",
+      "en": "Work 23",
+      "sp": "Obra 23"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01024.jpg",
+    "title": {
+      "ja": "作品 24",
+      "en": "Work 24",
+      "sp": "Obra 24"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01025.jpg",
+    "title": {
+      "ja": "作品 25",
+      "en": "Work 25",
+      "sp": "Obra 25"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01026.jpg",
+    "title": {
+      "ja": "作品 26",
+      "en": "Work 26",
+      "sp": "Obra 26"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01027.jpg",
+    "title": {
+      "ja": "作品 27",
+      "en": "Work 27",
+      "sp": "Obra 27"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01028.jpg",
+    "title": {
+      "ja": "作品 28",
+      "en": "Work 28",
+      "sp": "Obra 28"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01029.jpg",
+    "title": {
+      "ja": "作品 29",
+      "en": "Work 29",
+      "sp": "Obra 29"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01030.jpg",
+    "title": {
+      "ja": "作品 30",
+      "en": "Work 30",
+      "sp": "Obra 30"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01031.jpg",
+    "title": {
+      "ja": "作品 31",
+      "en": "Work 31",
+      "sp": "Obra 31"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01032.jpg",
+    "title": {
+      "ja": "作品 32",
+      "en": "Work 32",
+      "sp": "Obra 32"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01033.jpg",
+    "title": {
+      "ja": "作品 33",
+      "en": "Work 33",
+      "sp": "Obra 33"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01034.jpg",
+    "title": {
+      "ja": "作品 34",
+      "en": "Work 34",
+      "sp": "Obra 34"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01035.jpg",
+    "title": {
+      "ja": "作品 35",
+      "en": "Work 35",
+      "sp": "Obra 35"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01036.jpg",
+    "title": {
+      "ja": "作品 36",
+      "en": "Work 36",
+      "sp": "Obra 36"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01037.jpg",
+    "title": {
+      "ja": "作品 37",
+      "en": "Work 37",
+      "sp": "Obra 37"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01038.jpg",
+    "title": {
+      "ja": "作品 38",
+      "en": "Work 38",
+      "sp": "Obra 38"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01039.jpg",
+    "title": {
+      "ja": "作品 39",
+      "en": "Work 39",
+      "sp": "Obra 39"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01040.jpg",
+    "title": {
+      "ja": "作品 40",
+      "en": "Work 40",
+      "sp": "Obra 40"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01041.jpg",
+    "title": {
+      "ja": "作品 41",
+      "en": "Work 41",
+      "sp": "Obra 41"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01042.jpg",
+    "title": {
+      "ja": "作品 42",
+      "en": "Work 42",
+      "sp": "Obra 42"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01043.jpg",
+    "title": {
+      "ja": "作品 43",
+      "en": "Work 43",
+      "sp": "Obra 43"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01044.jpg",
+    "title": {
+      "ja": "作品 44",
+      "en": "Work 44",
+      "sp": "Obra 44"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01045.jpg",
+    "title": {
+      "ja": "作品 45",
+      "en": "Work 45",
+      "sp": "Obra 45"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01046.jpg",
+    "title": {
+      "ja": "作品 46",
+      "en": "Work 46",
+      "sp": "Obra 46"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01047.jpg",
+    "title": {
+      "ja": "作品 47",
+      "en": "Work 47",
+      "sp": "Obra 47"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01048.jpg",
+    "title": {
+      "ja": "作品 48",
+      "en": "Work 48",
+      "sp": "Obra 48"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01049.jpg",
+    "title": {
+      "ja": "作品 49",
+      "en": "Work 49",
+      "sp": "Obra 49"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01050.jpg",
+    "title": {
+      "ja": "作品 50",
+      "en": "Work 50",
+      "sp": "Obra 50"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "01051.jpg",
+    "title": {
+      "ja": "作品 51",
+      "en": "Work 51",
+      "sp": "Obra 51"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": null,
+    "published": true
+  },
   {
     "file": "02001.jpg",
-    "title": { "ja": "マリカルメン 1", "en": "Maricarmen 1", "sp": "Maricarmen 1" },
-    "artist": { "ja": "徳永幸子", "en": "Sachiko Tokunaga", "sp": "Sachiko Tokunaga" },
-    "year": { "ja": "1994年", "en": "1994", "sp": "1994" },
-    "size": { "ja": "20号", "en": "No. 20", "sp": "Nº 20" },
-    "description": { "ja": "仲良しの気さくで器量のよいカンポ・デ・クリプターナの娘", "en": "A friendly, easygoing, and beautiful girl from Campo de Criptana.", "sp": "Una chica amable, sencilla y hermosa de Campo de Criptana." }
+    "title": {
+      "ja": "マリカルメン 1",
+      "en": "Maricarmen 1",
+      "sp": "Maricarmen 1"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "1994年",
+      "en": "1994",
+      "sp": "1994"
+    },
+    "size": {
+      "ja": "20号",
+      "en": "No. 20",
+      "sp": "Nº 20"
+    },
+    "description": {
+      "ja": "仲良しの気さくで器量のよいカンポ・デ・クリプターナの娘",
+      "en": "A friendly, easygoing, and beautiful girl from Campo de Criptana.",
+      "sp": "Una chica amable, sencilla y hermosa de Campo de Criptana."
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
   },
   {
     "file": "02002.jpg",
-    "title": { "ja": "宿のおばさん 1", "en": "Innkeeper Aunt 1", "sp": "La Señora de la Posada 1" },
-    "artist": { "ja": "徳永幸子", "en": "Sachiko Tokunaga", "sp": "Sachiko Tokunaga" },
-    "year": { "ja": "2005年", "en": "2005", "sp": "2005" },
-    "size": { "ja": "30号", "en": "No. 30", "sp": "Nº 30" },
-    "description": { "ja": "いつも矍鑠とした立ち振る舞いでした。", "en": "She was always full of energy and carried herself with grace.", "sp": "Siempre estaba llena de energía y se movía con agilidad." }
+    "title": {
+      "ja": "宿のおばさん 1",
+      "en": "Innkeeper Aunt 1",
+      "sp": "La Señora de la Posada 1"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "2005年",
+      "en": "2005",
+      "sp": "2005"
+    },
+    "size": {
+      "ja": "30号",
+      "en": "No. 30",
+      "sp": "Nº 30"
+    },
+    "description": {
+      "ja": "いつも矍鑠とした立ち振る舞いでした。",
+      "en": "She was always full of energy and carried herself with grace.",
+      "sp": "Siempre estaba llena de energía y se movía con agilidad."
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02003.jpg",
+    "title": {
+      "ja": "作品 3",
+      "en": "Work 3",
+      "sp": "Obra 3"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02004.jpg",
+    "title": {
+      "ja": "作品 4",
+      "en": "Work 4",
+      "sp": "Obra 4"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02005.jpg",
+    "title": {
+      "ja": "作品 5",
+      "en": "Work 5",
+      "sp": "Obra 5"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02006.jpg",
+    "title": {
+      "ja": "作品 6",
+      "en": "Work 6",
+      "sp": "Obra 6"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02007.jpg",
+    "title": {
+      "ja": "作品 7",
+      "en": "Work 7",
+      "sp": "Obra 7"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02008.jpg",
+    "title": {
+      "ja": "作品 8",
+      "en": "Work 8",
+      "sp": "Obra 8"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02009.jpg",
+    "title": {
+      "ja": "作品 9",
+      "en": "Work 9",
+      "sp": "Obra 9"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02010.jpg",
+    "title": {
+      "ja": "作品 10",
+      "en": "Work 10",
+      "sp": "Obra 10"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02011.jpg",
+    "title": {
+      "ja": "作品 11",
+      "en": "Work 11",
+      "sp": "Obra 11"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02012.jpg",
+    "title": {
+      "ja": "作品 12",
+      "en": "Work 12",
+      "sp": "Obra 12"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02013.jpg",
+    "title": {
+      "ja": "作品 13",
+      "en": "Work 13",
+      "sp": "Obra 13"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02014.jpg",
+    "title": {
+      "ja": "作品 14",
+      "en": "Work 14",
+      "sp": "Obra 14"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02015.jpg",
+    "title": {
+      "ja": "作品 15",
+      "en": "Work 15",
+      "sp": "Obra 15"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02016.jpg",
+    "title": {
+      "ja": "作品 16",
+      "en": "Work 16",
+      "sp": "Obra 16"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02017.jpg",
+    "title": {
+      "ja": "作品 17",
+      "en": "Work 17",
+      "sp": "Obra 17"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "02018.jpg",
+    "title": {
+      "ja": "作品 18",
+      "en": "Work 18",
+      "sp": "Obra 18"
+    },
+    "artist": {
+      "ja": "徳永幸子",
+      "en": "Sachiko Tokunaga",
+      "sp": "Sachiko Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "sachiko",
+    "genre": null,
+    "published": true
+  },
+  {
+    "file": "013.jpg",
+    "title": {
+      "ja": "013",
+      "en": "013",
+      "sp": "013"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "ijinkan",
+    "published": false
+  },
+  {
+    "file": "99001.jpg",
+    "title": {
+      "ja": "未整理 1",
+      "en": "Unclassified 1",
+      "sp": "Sin clasificar 1"
+    },
+    "artist": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": null,
+    "genre": null,
+    "published": false
+  },
+  {
+    "file": "99002.jpg",
+    "title": {
+      "ja": "未整理 2",
+      "en": "Unclassified 2",
+      "sp": "Sin clasificar 2"
+    },
+    "artist": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": null,
+    "genre": null,
+    "published": false
   }
 ]
