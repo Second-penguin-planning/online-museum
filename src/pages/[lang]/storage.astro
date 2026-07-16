@@ -102,6 +102,7 @@ function localize(info) {
     artistKey: info.artistKey ?? null,
     genre: info.genre ?? 'unclassified',
     published: !!info.published,
+    raw: info, // 編集フォームの初期値に使う元エントリ（3言語すべて）
   };
 }
 
@@ -735,6 +736,18 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       cursor: pointer;
     }
 
+    .admin-edit-btn {
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      font-size: 0.7rem;
+      padding: 5px 0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .admin-edit-btn:hover { background: rgba(212, 175, 55, 0.3); }
+
     .admin-save-status {
       font-size: 0.62rem;
       letter-spacing: 0.06em;
@@ -1235,7 +1248,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
                       <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
                     </div>
                     <div class="gallery-item-label">{art.title}</div>
-                    <div class="admin-controls" data-file={art.file}>
+                    <div class="admin-controls" data-file={art.file} data-entry={JSON.stringify(art.raw)}>
                       <select class="admin-genre-select">
                         {takumaCatKeys.map((k2, j) => (
                           <option value={k2} selected={k2 === art.genre}>{tS.cats.takuma[j]}</option>
@@ -1245,6 +1258,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
                         <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
                         {tS.publishLabel}
                       </label>
+                      <button type="button" class="admin-edit-btn">✎</button>
                       <span class="admin-save-status"></span>
                     </div>
                   </div>
@@ -1289,7 +1303,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
                       <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
                     </div>
                     <div class="gallery-item-label">{art.title}</div>
-                    <div class="admin-controls" data-file={art.file}>
+                    <div class="admin-controls" data-file={art.file} data-entry={JSON.stringify(art.raw)}>
                       <select class="admin-genre-select">
                         {sachikoCatKeys.map((k2, j) => (
                           <option value={k2} selected={k2 === art.genre}>{tS.cats.sachiko[j]}</option>
@@ -1299,6 +1313,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
                         <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
                         {tS.publishLabel}
                       </label>
+                      <button type="button" class="admin-edit-btn">✎</button>
                       <span class="admin-save-status"></span>
                     </div>
                   </div>
@@ -1332,11 +1347,12 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
                   <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
                 </div>
                 <div class="gallery-item-label">{art.title}</div>
-                <div class="admin-controls" data-file={art.file}>
+                <div class="admin-controls" data-file={art.file} data-entry={JSON.stringify(art.raw)}>
                   <label class="admin-publish-toggle">
                     <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
                     {tS.publishLabel}
                   </label>
+                  <button type="button" class="admin-edit-btn">✎</button>
                   <span class="admin-save-status"></span>
                 </div>
               </div>
@@ -1370,8 +1386,8 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
   <div class="admin-modal-overlay" id="adminFormOverlay">
     <div class="admin-modal">
       <button class="admin-modal-close" id="adminFormClose">✕</button>
-      <p class="admin-modal-eyebrow">ARTWORK REGISTRATION</p>
-      <h2 class="admin-modal-title">作 品 情 報 登 録</h2>
+      <p class="admin-modal-eyebrow" id="adminFormEyebrow">ARTWORK REGISTRATION</p>
+      <h2 class="admin-modal-title" id="adminFormTitle">作 品 情 報 登 録</h2>
 
       <form id="artworkForm" autocomplete="off">
 
@@ -1601,6 +1617,8 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
 
     // PATはページを開いている間だけメモリ上に保持する（sessionStorageには保存しない）
     let adminToken = null;
+    // nullなら新規登録モード。ファイル名が入っていれば、そのファイルの編集モード
+    let editingFile = null;
 
     const adminOpenBtn     = document.getElementById('adminOpenBtn');
     const adminPwOverlay   = document.getElementById('adminPwOverlay');
@@ -1611,9 +1629,23 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
     const adminPwEnterBtn  = document.getElementById('adminPwEnterBtn');
     const adminFormOverlay = document.getElementById('adminFormOverlay');
     const adminFormClose   = document.getElementById('adminFormClose');
+    const adminFormTitle   = document.getElementById('adminFormTitle');
+    const adminFormEyebrow = document.getElementById('adminFormEyebrow');
+    const fFileInput       = document.getElementById('f-file');
+
+    function resetFormToAddMode() {
+      editingFile = null;
+      document.getElementById('artworkForm').reset();
+      fFileInput.readOnly = false;
+      adminFormTitle.textContent = '作 品 情 報 登 録';
+      adminFormEyebrow.textContent = 'ARTWORK REGISTRATION';
+      populateGenreSelect(document.getElementById('f-artist').value);
+      document.getElementById('form-status').textContent = '';
+    }
 
     adminOpenBtn.addEventListener('click', () => {
       if (adminToken) {
+        resetFormToAddMode();
         adminFormOverlay.classList.add('active');
       } else {
         adminPwOverlay.classList.add('active');
@@ -1641,6 +1673,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
         adminPwInput.value = '';
         adminTokenInput.value = '';
         adminPwError.textContent = '';
+        resetFormToAddMode();
         adminFormOverlay.classList.add('active');
       } else {
         adminPwInput.classList.add('error');
@@ -1742,15 +1775,27 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       submitBtn.disabled    = true;
 
       try {
-        await updateArtworksJson(
-          (current) => current.push(newEntry),
-          `作品情報追加: ${newEntry.file}`
-        );
+        if (editingFile) {
+          await updateArtworksJson((current) => {
+            const entry = current.find(a => a.file === editingFile);
+            if (!entry) throw new Error(`${editingFile} が見つかりませんでした`);
+            Object.assign(entry, newEntry);
+          }, `作品情報更新: ${newEntry.file}`);
 
-        statusEl.textContent = '✓ 登録が完了しました。サイトに反映されるまで数分かかります。';
-        statusEl.className   = 'success';
-        document.getElementById('artworkForm').reset();
-        populateGenreSelect(fArtistSelect.value);
+          statusEl.textContent = '✓ 更新しました。サイトに反映されるまで数分かかります。';
+        } else {
+          await updateArtworksJson((current) => {
+            if (current.some(a => a.file === newEntry.file)) {
+              throw new Error('このファイル名は既に登録されています。カードの✎ボタンから編集してください。');
+            }
+            current.push(newEntry);
+          }, `作品情報追加: ${newEntry.file}`);
+
+          statusEl.textContent = '✓ 登録が完了しました。サイトに反映されるまで数分かかります。';
+        }
+
+        statusEl.className = 'success';
+        resetFormToAddMode();
 
       } catch (err) {
         statusEl.textContent = `エラー: ${err.message}`;
@@ -1758,6 +1803,43 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       } finally {
         submitBtn.disabled = false;
       }
+    });
+
+    /* ===== 既存作品の編集（✎ボタン） ===== */
+    document.querySelectorAll('.admin-edit-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const panel = btn.closest('.admin-controls');
+        const entry = JSON.parse(panel.dataset.entry || '{}');
+
+        editingFile = entry.file;
+        fFileInput.value = entry.file || '';
+        fFileInput.readOnly = true;
+
+        const artistKey = entry.artistKey || 'takuma';
+        fArtistSelect.value = artistKey;
+        populateGenreSelect(artistKey);
+        document.getElementById('f-genre').value = entry.genre || 'unclassified';
+        document.getElementById('f-published').checked = !!entry.published;
+
+        document.getElementById('f-title-ja').value = entry.title?.ja || '';
+        document.getElementById('f-title-en').value = entry.title?.en || '';
+        document.getElementById('f-title-sp').value = entry.title?.sp || '';
+        document.getElementById('f-year-ja').value  = entry.year?.ja || '';
+        document.getElementById('f-year-en').value  = entry.year?.en || '';
+        document.getElementById('f-size-ja').value  = entry.size?.ja || '';
+        document.getElementById('f-size-en').value  = entry.size?.en || '';
+        document.getElementById('f-desc-ja').value  = entry.description?.ja || '';
+        document.getElementById('f-desc-en').value  = entry.description?.en || '';
+        document.getElementById('f-desc-sp').value  = entry.description?.sp || '';
+
+        adminFormTitle.textContent   = '作 品 情 報 編 集';
+        adminFormEyebrow.textContent = 'EDIT ARTWORK';
+        document.getElementById('form-status').textContent = '';
+
+        // ✎ボタンは管理者モード中（=認証済み）のカードにしか表示されないため、そのままフォームを開く
+        adminFormOverlay.classList.add('active');
+      });
     });
 
     /* ===== 各作品カードの公開/ジャンル切り替え（管理者モード） ===== */
