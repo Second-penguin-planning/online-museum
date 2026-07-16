@@ -869,6 +869,21 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       border-color: rgba(212, 175, 55, 0.45);
     }
 
+    .admin-logout-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.66rem;
+      letter-spacing: 0.15em;
+      padding: 8px 10px;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.3s;
+    }
+
+    .admin-logout-btn:hover { color: var(--gold-dim); }
+
     /* ========== 管理者モーダル共通 ========== */
     .admin-modal-overlay {
       display: none;
@@ -1243,6 +1258,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
     <!-- 管理者ボタン -->
     <div class="admin-btn-wrap">
       <button class="admin-open-btn" id="adminOpenBtn">⚙ ADMIN</button>
+      <button class="admin-logout-btn" id="adminLogoutBtn" style="display:none;">🔓 ログアウト</button>
     </div>
 
     <!-- ===== 徳永 卓磨 ===== -->
@@ -1644,13 +1660,16 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
 
     /* ===== 管理者パネル ===== */
     const ADMIN_PW = 'art2024admin';
+    const TOKEN_KEY = 'online_museum_admin_pat';
 
-    // PATはページを開いている間だけメモリ上に保持する（sessionStorageには保存しない）
-    let adminToken = null;
+    // PATはこの端末のブラウザ(localStorage)に保存し、次回以降は入力を省略する
+    // （共有端末で使う場合は下の「🔓 ログアウト」で忘れさせられる）
+    let adminToken = localStorage.getItem(TOKEN_KEY);
     // nullなら新規登録モード。ファイル名が入っていれば、そのファイルの編集モード
     let editingFile = null;
 
     const adminOpenBtn     = document.getElementById('adminOpenBtn');
+    const adminLogoutBtn   = document.getElementById('adminLogoutBtn');
     const adminPwOverlay   = document.getElementById('adminPwOverlay');
     const adminPwClose     = document.getElementById('adminPwClose');
     const adminPwInput     = document.getElementById('admin-pw-input');
@@ -1696,6 +1715,9 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       showPreview('');
     }
 
+    // 前回このブラウザで認証済みなら、最初からADMIN操作を有効にしておく
+    if (adminToken) setAdminMode(true);
+
     adminOpenBtn.addEventListener('click', () => {
       if (adminToken) {
         resetFormToAddMode();
@@ -1704,6 +1726,12 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
         adminPwOverlay.classList.add('active');
         adminPwInput.focus();
       }
+    });
+
+    adminLogoutBtn.addEventListener('click', () => {
+      adminToken = null;
+      localStorage.removeItem(TOKEN_KEY);
+      setAdminMode(false);
     });
 
     adminPwClose.addEventListener('click', () => adminPwOverlay.classList.remove('active'));
@@ -1716,12 +1744,18 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       if (e.target === adminFormOverlay) adminFormOverlay.classList.remove('active');
     });
 
+    function setAdminMode(active) {
+      document.body.classList.toggle('admin-mode', active);
+      adminLogoutBtn.style.display = active ? 'inline-block' : 'none';
+    }
+
     function checkAdminPw() {
       const tokenVal = adminTokenInput.value.trim();
 
       if (adminPwInput.value === ADMIN_PW && tokenVal) {
         adminToken = tokenVal;
-        document.body.classList.add('admin-mode');
+        localStorage.setItem(TOKEN_KEY, tokenVal);
+        setAdminMode(true);
         adminPwOverlay.classList.remove('active');
         adminPwInput.value = '';
         adminTokenInput.value = '';
