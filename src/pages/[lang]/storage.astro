@@ -980,6 +980,30 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
     }
 
     /* ========== 作品登録フォーム ========== */
+    .form-preview-wrap {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #f-preview-img {
+      max-width: 220px;
+      max-height: 220px;
+      border-style: solid;
+      border-width: 8px;
+      border-color:
+        hsl(30, 45%, 36%)
+        hsl(30, 45%, 20%)
+        hsl(30, 45%, 20%)
+        hsl(30, 45%, 36%);
+      box-shadow: 4px 6px 16px rgba(0,0,0,0.6);
+    }
+
+    .form-preview-error {
+      font-size: 0.72rem;
+      color: #c06060;
+      margin-top: 8px;
+    }
+
     .form-section {
       margin-bottom: 28px;
     }
@@ -1389,6 +1413,11 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       <p class="admin-modal-eyebrow" id="adminFormEyebrow">ARTWORK REGISTRATION</p>
       <h2 class="admin-modal-title" id="adminFormTitle">作 品 情 報 登 録</h2>
 
+      <div id="f-preview-wrap" class="form-preview-wrap" style="display:none;">
+        <img id="f-preview-img" alt="" />
+        <p id="f-preview-error" class="form-preview-error" style="display:none;">画像が見つかりません（ファイル名を確認してください）</p>
+      </div>
+
       <form id="artworkForm" autocomplete="off">
 
         <!-- 基本情報 -->
@@ -1509,6 +1538,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
     takumaCatKeys,
     sachikoCatKeys,
     catLabels: { takuma: tS.cats.takuma, sachiko: tS.cats.sachiko },
+    galleryBase: `${base}/gallery`,
   }}>
     /* ===== パスワード認証 ===== */
     const CORRECT_PW = '2405';
@@ -1632,6 +1662,28 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
     const adminFormTitle   = document.getElementById('adminFormTitle');
     const adminFormEyebrow = document.getElementById('adminFormEyebrow');
     const fFileInput       = document.getElementById('f-file');
+    const fPreviewWrap     = document.getElementById('f-preview-wrap');
+    const fPreviewImg      = document.getElementById('f-preview-img');
+    const fPreviewError    = document.getElementById('f-preview-error');
+
+    function showPreview(file) {
+      if (!file) {
+        fPreviewWrap.style.display = 'none';
+        return;
+      }
+      fPreviewWrap.style.display = 'block';
+      fPreviewImg.style.display = 'inline-block';
+      fPreviewError.style.display = 'none';
+      fPreviewImg.src = `${galleryBase}/${file}`;
+      fPreviewImg.alt = file;
+    }
+
+    fPreviewImg.addEventListener('error', () => {
+      fPreviewImg.style.display = 'none';
+      fPreviewError.style.display = 'block';
+    });
+
+    fFileInput.addEventListener('input', () => showPreview(fFileInput.value.trim()));
 
     function resetFormToAddMode() {
       editingFile = null;
@@ -1641,6 +1693,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
       adminFormEyebrow.textContent = 'ARTWORK REGISTRATION';
       populateGenreSelect(document.getElementById('f-artist').value);
       document.getElementById('form-status').textContent = '';
+      showPreview('');
     }
 
     adminOpenBtn.addEventListener('click', () => {
@@ -1815,6 +1868,7 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
         editingFile = entry.file;
         fFileInput.value = entry.file || '';
         fFileInput.readOnly = true;
+        showPreview(entry.file);
 
         const artistKey = entry.artistKey || 'takuma';
         fArtistSelect.value = artistKey;
