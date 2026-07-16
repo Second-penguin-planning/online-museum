@@ -37,6 +37,16 @@ const storageUI = {
     unpublished: '非公開',
     genreLabel: 'ジャンル',
     publishLabel: 'ギャラリーに公開',
+    table: {
+      toggleBtn: '📋 一覧表',
+      backBtn: '🖼 カード表示に戻る',
+      heading: '徳永卓磨 所蔵画一覧',
+      colNumber: '番号',
+      colTitle: '作品名',
+      colYear: '作成年度',
+      colSize: 'サイズ',
+      colStatus: '公開状況',
+    },
   },
   en: {
     nav: { gallery: 'Gallery', about: 'About', storage: 'Storage' },
@@ -61,6 +71,16 @@ const storageUI = {
     unpublished: 'Unpublished',
     genreLabel: 'Genre',
     publishLabel: 'Show in gallery',
+    table: {
+      toggleBtn: '📋 Table',
+      backBtn: '🖼 Back to cards',
+      heading: 'Takuma Tokunaga — Full Collection',
+      colNumber: 'No.',
+      colTitle: 'Title',
+      colYear: 'Year',
+      colSize: 'Size',
+      colStatus: 'Status',
+    },
   },
   sp: {
     nav: { gallery: 'Galería', about: 'Acerca', storage: 'Archivo' },
@@ -85,6 +105,16 @@ const storageUI = {
     unpublished: 'No publicado',
     genreLabel: 'Género',
     publishLabel: 'Mostrar en la galería',
+    table: {
+      toggleBtn: '📋 Tabla',
+      backBtn: '🖼 Volver a las tarjetas',
+      heading: 'Takuma Tokunaga — Colección completa',
+      colNumber: 'N.º',
+      colTitle: 'Título',
+      colYear: 'Año',
+      colSize: 'Tamaño',
+      colStatus: 'Estado',
+    },
   },
 };
 
@@ -113,6 +143,18 @@ function artworksFor(artistKey, catKey) {
 }
 
 const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
+
+// 一覧表（徳永卓磨の全所蔵画、公開/非公開を問わず）
+const takumaTableRows = artworks
+  .filter(a => a.artistKey === 'takuma')
+  .sort((a, b) => a.file.localeCompare(b.file, 'ja', { numeric: true }))
+  .map(a => ({
+    file: a.file,
+    title: a.title?.[lang] || a.title?.ja || '—',
+    year: a.year?.[lang] || a.year?.ja || '',
+    size: a.size?.[lang] || a.size?.ja || '',
+    published: !!a.published,
+  }));
 ---
 
 <!DOCTYPE html>
@@ -884,6 +926,65 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
 
     .admin-logout-btn:hover { color: var(--gold-dim); }
 
+    .table-view-toggle-btn {
+      background: none;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      padding: 8px 20px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .table-view-toggle-btn:hover {
+      color: var(--gold-dim);
+      border-color: rgba(212, 175, 55, 0.45);
+    }
+
+    .table-view-heading {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-light);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .table-view-scroll {
+      overflow-x: auto;
+    }
+
+    .artwork-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .artwork-table th,
+    .artwork-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      white-space: nowrap;
+    }
+
+    .artwork-table th {
+      color: var(--gold-bright);
+      letter-spacing: 0.1em;
+      font-weight: 400;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+
+    .artwork-table td { color: var(--text-sub); }
+
+    .artwork-table tbody tr:hover { background: rgba(212, 175, 55, 0.05); }
+
+    .status-published { color: var(--gold-light); }
+    .status-unpublished { color: var(--text-muted); }
+
     /* ========== 管理者モーダル共通 ========== */
     .admin-modal-overlay {
       display: none;
@@ -1257,9 +1358,12 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
 
     <!-- 管理者ボタン -->
     <div class="admin-btn-wrap">
+      <button class="table-view-toggle-btn" id="tableViewToggleBtn" data-label-table={tS.table.toggleBtn} data-label-cards={tS.table.backBtn}>{tS.table.toggleBtn}</button>
       <button class="admin-open-btn" id="adminOpenBtn">⚙ ADMIN</button>
       <button class="admin-logout-btn" id="adminLogoutBtn" style="display:none;">🔓 ログアウト</button>
     </div>
+
+    <div class="card-view">
 
     <!-- ===== 徳永 卓磨 ===== -->
     <section class="artist-section">
@@ -1401,6 +1505,39 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
         </section>
       </>
     )}
+
+    </div>
+
+    <!-- ===== 一覧表（徳永卓磨） ===== -->
+    <div class="table-view" id="tableView" style="display:none;">
+      <h3 class="table-view-heading">{tS.table.heading}</h3>
+      <div class="table-view-scroll">
+        <table class="artwork-table">
+          <thead>
+            <tr>
+              <th>{tS.table.colNumber}</th>
+              <th>{tS.table.colTitle}</th>
+              <th>{tS.table.colYear}</th>
+              <th>{tS.table.colSize}</th>
+              <th>{tS.table.colStatus}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {takumaTableRows.map(row => (
+              <tr>
+                <td>{row.file}</td>
+                <td>{row.title}</td>
+                <td>{row.year}</td>
+                <td>{row.size}</td>
+                <td class={row.published ? 'status-published' : 'status-unpublished'}>
+                  {row.published ? tS.published : tS.unpublished}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- ========== 管理者パスワードモーダル ========== -->
@@ -1618,6 +1755,20 @@ const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
     });
 
     mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    /* ===== 一覧表 / カード表示 切り替え ===== */
+    const tableViewToggleBtn = document.getElementById('tableViewToggleBtn');
+    const cardView = document.querySelector('.card-view');
+    const tableView = document.getElementById('tableView');
+
+    tableViewToggleBtn.addEventListener('click', () => {
+      const showingTable = tableView.style.display !== 'none';
+      tableView.style.display = showingTable ? 'none' : 'block';
+      cardView.style.display  = showingTable ? 'block' : 'none';
+      tableViewToggleBtn.textContent = showingTable
+        ? tableViewToggleBtn.dataset.labelTable
+        : tableViewToggleBtn.dataset.labelCards;
+    });
 
     /* ===== カテゴリタブ ===== */
     document.querySelectorAll('.category-tabs').forEach((tabGroup) => {
