@@ -169,16 +169,16 @@ const takumaTableRows = artworks
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --crimson-deep:  #4a0a0a;
-      --crimson-mid:   #6b1212;
-      --crimson-rich:  #8b1a1a;
-      --crimson-warm:  #a52020;
-      --gold-dim:      #b8960c;
-      --gold-bright:   #d4af37;
-      --gold-light:    #e8cc6a;
-      --text-main:     #f0e6d3;
-      --text-sub:      #c4a882;
-      --text-muted:    #7a6452;
+      --crimson-deep:  #ffffff;
+      --crimson-mid:   #f6f1e8;
+      --crimson-rich:  #ede2c9;
+      --crimson-warm:  #e3d3ab;
+      --gold-dim:      #c9a227;
+      --gold-bright:   #b8860b;
+      --gold-light:    #8a6508;
+      --text-main:     #2a2015;
+      --text-sub:      #5c4a35;
+      --text-muted:    #8c7a63;
     }
 
     body {
@@ -201,8 +201,8 @@ const takumaTableRows = artworks
       z-index: 1000;
       background: linear-gradient(
         to bottom,
-        rgba(20, 4, 4, 0.95) 0%,
-        rgba(20, 4, 4, 0.0) 100%
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.0) 100%
       );
       border-bottom: 1px solid rgba(212, 175, 55, 0.15);
     }
@@ -327,8 +327,8 @@ const takumaTableRows = artworks
       height: 100%;
       background: linear-gradient(
         160deg,
-        rgba(20, 4, 4, 0.98) 0%,
-        rgba(50, 8, 8, 0.98) 100%
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(246, 241, 232, 0.98) 100%
       );
       border-left: 1px solid rgba(212, 175, 55, 0.2);
       z-index: 1050;
@@ -404,9 +404,9 @@ const takumaTableRows = artworks
       background:
         linear-gradient(
           160deg,
-          rgba(30, 4, 4, 0.92) 0%,
-          rgba(74, 10, 10, 0.85) 50%,
-          rgba(30, 4, 4, 0.95) 100%
+          rgba(255, 255, 255, 0.92) 0%,
+          rgba(246, 241, 232, 0.9) 50%,
+          rgba(237, 226, 201, 0.95) 100%
         ),
         repeating-linear-gradient(
           45deg,
@@ -493,7 +493,7 @@ const takumaTableRows = artworks
     }
 
     #pw-input {
-      background: rgba(74, 10, 10, 0.4);
+      background: rgba(255, 255, 255, 0.6);
       border: 1px solid rgba(212, 175, 55, 0.3);
       color: var(--text-main);
       font-family: "Garamond", "Times New Roman", serif;
@@ -652,7 +652,7 @@ const takumaTableRows = artworks
     .tab-btn {
       position: relative;
       padding: 10px 22px;
-      background: rgba(74, 10, 10, 0.35);
+      background: rgba(237, 226, 201, 0.5);
       color: var(--text-sub);
       font-family: inherit;
       font-size: 0.78rem;
@@ -686,7 +686,7 @@ const takumaTableRows = artworks
 
     .tab-btn:hover,
     .tab-btn.active {
-      background: rgba(139, 26, 26, 0.55);
+      background: rgba(227, 211, 171, 0.7);
       color: var(--gold-light);
     }
 
@@ -752,7 +752,7 @@ const takumaTableRows = artworks
       gap: 6px;
       margin-top: 10px;
       padding: 10px;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(237, 226, 201, 0.5);
       border: 1px solid rgba(212, 175, 55, 0.25);
     }
 
@@ -760,7 +760,7 @@ const takumaTableRows = artworks
 
     .admin-genre-select {
       width: 100%;
-      background: rgba(20, 4, 4, 0.8);
+      background: rgba(255, 255, 255, 0.9);
       color: var(--text-main);
       border: 1px solid rgba(212, 175, 55, 0.35);
       font-family: inherit;
@@ -844,7 +844,7 @@ const takumaTableRows = artworks
     .modal-overlay.active { display: flex; }
 
     .modal {
-      background: linear-gradient(160deg, #1e0808 0%, #150404 100%);
+      background: linear-gradient(160deg, #ffffff 0%, #f6f1e8 100%);
       border: 1px solid rgba(212, 175, 55, 0.2);
       padding: 32px 24px;
       max-width: 700px;
@@ -1002,7 +1002,7 @@ const takumaTableRows = artworks
     .admin-modal-overlay.active { display: flex; }
 
     .admin-modal {
-      background: linear-gradient(160deg, #1e0606 0%, #120303 100%);
+      background: linear-gradient(160deg, #ffffff 0%, #f6f1e8 100%);
       border: 1px solid rgba(212, 175, 55, 0.25);
       padding: 40px 32px 48px;
       width: 100%;
@@ -1049,7 +1049,7 @@ const takumaTableRows = artworks
     #admin-pw-screen { text-align: center; }
 
     #admin-pw-input {
-      background: rgba(74, 10, 10, 0.4);
+      background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(212, 175, 55, 0.3);
       color: var(--text-main);
       font-family: inherit;
@@ -1068,7 +1068,7 @@ const takumaTableRows = artworks
     #admin-pw-input.error { border-color: #c04040; animation: shake 0.35s ease; }
 
     #admin-token-input {
-      background: rgba(74, 10, 10, 0.4);
+      background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(212, 175, 55, 0.3);
       color: var(--text-main);
       font-family: inherit;
@@ -1159,7 +1159,7 @@ const takumaTableRows = artworks
     .form-group input,
     .form-group select,
     .form-group textarea {
-      background: rgba(74, 10, 10, 0.35);
+      background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(212, 175, 55, 0.2);
       color: var(--text-main);
       font-family: inherit;
@@ -1180,7 +1180,7 @@ const takumaTableRows = artworks
     .form-group select:focus,
     .form-group textarea:focus { border-color: var(--gold-bright); }
 
-    .form-group select option { background: #2a0808; }
+    .form-group select option { background: #ffffff; }
 
     .github-token-note {
       font-size: 0.68rem;

@@ -71,18 +71,18 @@ function getCardWidth(sizeStr) {
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
       :root {
-        --crimson-deep:   #4a0a0a;
-        --crimson-mid:    #6b1212;
-        --crimson-rich:   #8b1a1a;
-        --crimson-warm:   #a52020;
-        --gold-dim:       #b8960c;
-        --gold-bright:    #d4af37;
-        --gold-light:     #e8cc6a;
-        --parchment:      #f5efe0;
-        --text-main:      #f0e6d3;
-        --text-sub:       #c4a882;
-        --text-muted:     #7a6452;
-        --overlay-dark:   rgba(20, 4, 4, 0.75);
+        --crimson-deep:   #ffffff;
+        --crimson-mid:    #f6f1e8;
+        --crimson-rich:   #ede2c9;
+        --crimson-warm:   #e3d3ab;
+        --gold-dim:       #c9a227;
+        --gold-bright:    #b8860b;
+        --gold-light:     #8a6508;
+        --parchment:      #faf7f0;
+        --text-main:      #2a2015;
+        --text-sub:       #5c4a35;
+        --text-muted:     #8c7a63;
+        --overlay-dark:   rgba(255, 255, 255, 0.75);
       }
 
       body {
@@ -103,8 +103,8 @@ function getCardWidth(sizeStr) {
         z-index: 1000;
         background: linear-gradient(
           to bottom,
-          rgba(20, 4, 4, 0.95) 0%,
-          rgba(20, 4, 4, 0.0) 100%
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.0) 100%
         );
         border-bottom: 1px solid rgba(212, 175, 55, 0.15);
       }
@@ -211,8 +211,8 @@ function getCardWidth(sizeStr) {
         height: 100%;
         background: linear-gradient(
           160deg,
-          rgba(20, 4, 4, 0.98) 0%,
-          rgba(50, 8, 8, 0.98) 100%
+          rgba(255, 255, 255, 0.98) 0%,
+          rgba(246, 241, 232, 0.98) 100%
         );
         border-left: 1px solid rgba(212, 175, 55, 0.2);
         z-index: 1050;
@@ -355,8 +355,8 @@ function getCardWidth(sizeStr) {
         line-height: 1.15;
         color: var(--text-main);
         text-shadow:
-          0 2px 20px rgba(0,0,0,0.9),
-          0 0 60px rgba(180, 30, 30, 0.4);
+          0 2px 14px rgba(255, 255, 255, 0.85),
+          0 0 44px rgba(255, 255, 255, 0.65);
         margin-bottom: 10px;
       }
 
@@ -425,14 +425,14 @@ function getCardWidth(sizeStr) {
         background:
           linear-gradient(
             135deg,
-            rgba(20, 4, 4, 0.97) 0%,
-            rgba(50, 8, 8, 0.95) 50%,
-            rgba(20, 4, 4, 0.97) 100%
+            rgba(255, 255, 255, 0.97) 0%,
+            rgba(246, 241, 232, 0.95) 50%,
+            rgba(255, 255, 255, 0.97) 100%
           ),
           repeating-linear-gradient(
             0deg,
-            rgba(212, 175, 55, 0.02) 0px,
-            rgba(212, 175, 55, 0.02) 1px,
+            rgba(212, 175, 55, 0.04) 0px,
+            rgba(212, 175, 55, 0.04) 1px,
             transparent 1px,
             transparent 60px
           );
@@ -475,7 +475,7 @@ function getCardWidth(sizeStr) {
       .room-btn {
         position: relative;
         padding: 18px 28px;
-        background: rgba(74, 10, 10, 0.35);
+        background: rgba(237, 226, 201, 0.5);
         color: var(--text-sub);
         font-family: inherit;
         font-size: clamp(0.78rem, 2.5vw, 0.82rem);
@@ -512,7 +512,7 @@ function getCardWidth(sizeStr) {
       }
 
       .room-btn:hover {
-        background: rgba(139, 26, 26, 0.45);
+        background: rgba(227, 211, 171, 0.65);
         color: var(--gold-light);
       }
 
@@ -571,9 +571,9 @@ function getCardWidth(sizeStr) {
           linear-gradient(
             to bottom,
             var(--crimson-deep) 0%,
-            #2a0808 18%,
-            #1a0505 35%,
-            #120303 100%
+            #f6f1e8 18%,
+            #efe6d4 35%,
+            #ede2c9 100%
           );
       }
 
@@ -657,7 +657,7 @@ function getCardWidth(sizeStr) {
       .scroll-arrow {
         position: absolute;
         z-index: 10;
-        background: rgba(74, 10, 10, 0.7);
+        background: rgba(237, 226, 201, 0.85);
         border: 1px solid rgba(212, 175, 55, 0.3);
         color: var(--gold-bright);
         width: 40px;
@@ -674,7 +674,7 @@ function getCardWidth(sizeStr) {
       }
 
       .scroll-arrow:hover {
-        background: rgba(139, 26, 26, 0.9);
+        background: rgba(227, 211, 171, 0.95);
         border-color: var(--gold-bright);
       }
 
@@ -747,7 +747,7 @@ function getCardWidth(sizeStr) {
       .modal-overlay.active { display: flex; }
 
       .modal {
-        background: linear-gradient(160deg, #1e0808 0%, #150404 100%);
+        background: linear-gradient(160deg, #ffffff 0%, #f6f1e8 100%);
         border: 1px solid rgba(212, 175, 55, 0.2);
         padding: 32px 24px;
         max-width: 740px;
@@ -804,7 +804,7 @@ function getCardWidth(sizeStr) {
         font-size: clamp(0.8rem, 2.5vw, 0.85rem);
         line-height: 1.75;
         color: var(--text-sub);
-        background: rgba(255,255,255,0.03);
+        background: rgba(0,0,0,0.03);
         border-left: 2px solid var(--gold-dim);
         padding: 14px 16px;
       }

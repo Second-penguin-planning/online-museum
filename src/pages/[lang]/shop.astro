@@ -174,15 +174,15 @@ const ts = shopUI[lang];
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --crimson-deep:  #4a0a0a;
-      --crimson-mid:   #6b1212;
-      --crimson-rich:  #8b1a1a;
-      --gold-dim:      #b8960c;
-      --gold-bright:   #d4af37;
-      --gold-light:    #e8cc6a;
-      --text-main:     #f0e6d3;
-      --text-sub:      #c4a882;
-      --text-muted:    #7a6452;
+      --crimson-deep:  #ffffff;
+      --crimson-mid:   #f6f1e8;
+      --crimson-rich:  #ede2c9;
+      --gold-dim:      #c9a227;
+      --gold-bright:   #b8860b;
+      --gold-light:    #8a6508;
+      --text-main:     #2a2015;
+      --text-sub:      #5c4a35;
+      --text-muted:    #8c7a63;
     }
 
     body {
@@ -203,7 +203,7 @@ const ts = shopUI[lang];
       align-items: center;
       padding: 16px 50px;
       z-index: 1000;
-      background: linear-gradient(to bottom, rgba(20,4,4,0.95) 0%, rgba(20,4,4,0) 100%);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
       border-bottom: 1px solid rgba(212,175,55,0.15);
     }
 
@@ -301,7 +301,7 @@ const ts = shopUI[lang];
       position: fixed;
       top: 0; right: 0;
       width: min(280px, 80vw); height: 100%;
-      background: linear-gradient(160deg, rgba(20,4,4,0.98) 0%, rgba(50,8,8,0.98) 100%);
+      background: linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(246,241,232,0.98) 100%);
       border-left: 1px solid rgba(212,175,55,0.2);
       z-index: 1050;
       display: flex;
@@ -478,7 +478,7 @@ const ts = shopUI[lang];
     .modal-overlay.active { display: flex; }
 
     .modal {
-      background: linear-gradient(160deg, #1e0808 0%, #120303 100%);
+      background: linear-gradient(160deg, #ffffff 0%, #f6f1e8 100%);
       border: 1px solid rgba(212,175,55,0.2);
       padding: 36px 28px;
       max-width: 700px;
@@ -558,7 +558,7 @@ const ts = shopUI[lang];
       font-size: 0.85rem;
       line-height: 1.85;
       color: var(--text-sub);
-      background: rgba(255,255,255,0.03);
+      background: rgba(0,0,0,0.03);
       border-left: 2px solid var(--gold-dim);
       padding: 14px 16px;
     }
@@ -623,7 +623,7 @@ const ts = shopUI[lang];
     .admin-modal-overlay.active { display: flex; }
 
     .admin-modal {
-      background: linear-gradient(160deg, #1e0606 0%, #120303 100%);
+      background: linear-gradient(160deg, #ffffff 0%, #f6f1e8 100%);
       border: 1px solid rgba(212,175,55,0.25);
       padding: 40px 32px 48px;
       width: 100%; max-width: 680px;
@@ -669,7 +669,7 @@ const ts = shopUI[lang];
     #admin-pw-screen { text-align: center; }
 
     #admin-pw-input {
-      background: rgba(74,10,10,0.4);
+      background: rgba(0,0,0,0.04);
       border: 1px solid rgba(212,175,55,0.3);
       color: var(--text-main);
       font-family: inherit;
@@ -769,7 +769,7 @@ const ts = shopUI[lang];
 
     .form-group input,
     .form-group textarea {
-      background: rgba(74,10,10,0.35);
+      background: rgba(0,0,0,0.04);
       border: 1px solid rgba(212,175,55,0.2);
       color: var(--text-main);
       font-family: inherit;
