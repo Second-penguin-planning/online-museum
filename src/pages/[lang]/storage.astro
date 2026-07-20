@@ -1937,6 +1937,23 @@ const takumaTableRows = artworks
 
     const GITHUB_API = 'https://api.github.com/repos/Second-penguin-planning/online-museum/contents/src/data/artworks.json';
 
+    // GitHub Contents APIのbase64はUTF-8のバイト列。atob/btoaはLatin-1前提のため
+    // TextDecoder/TextEncoderを介して正しくUTF-8として変換する（日本語の文字化け防止）
+    function base64ToUtf8(b64) {
+      const binary = atob(b64);
+      const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+      return new TextDecoder('utf-8').decode(bytes);
+    }
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+      }
+      return btoa(binary);
+    }
+
     // 現在のartworks.jsonを取得→コールバックで更新→コミット、を1本化
     async function updateArtworksJson(mutate, commitMessage) {
       const getRes = await fetch(GITHUB_API, {
@@ -1945,11 +1962,11 @@ const takumaTableRows = artworks
       if (!getRes.ok) throw new Error(`ファイル取得エラー (${getRes.status})`);
 
       const fileData = await getRes.json();
-      const current  = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
+      const current  = JSON.parse(base64ToUtf8(fileData.content.replace(/\n/g, '')));
 
       mutate(current);
 
-      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+      const newContent = utf8ToBase64(JSON.stringify(current, null, 2));
 
       const putRes = await fetch(GITHUB_API, {
         method: 'PUT',
