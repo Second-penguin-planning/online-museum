@@ -1,5 +1,6 @@
 ---
 import artworks from '../../data/artworks.json';
+import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 
 export function getStaticPaths() {
   return [
@@ -15,7 +16,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // 多言語テキスト
 const storageUI = {
   ja: {
-    nav: { gallery: 'ギャラリー', about: 'アバウト', storage: '保管庫' },
+    nav: { gallery: 'ギャラリー', storage: '保管庫' },
     page: { eyebrow: 'STORAGE COLLECTION', title: '保 管 庫' },
     lock: {
       eyebrow: 'RESTRICTED ACCESS',
@@ -49,7 +50,7 @@ const storageUI = {
     },
   },
   en: {
-    nav: { gallery: 'Gallery', about: 'About', storage: 'Storage' },
+    nav: { gallery: 'Gallery', storage: 'Storage' },
     page: { eyebrow: 'STORAGE COLLECTION', title: 'Storage' },
     lock: {
       eyebrow: 'RESTRICTED ACCESS',
@@ -83,7 +84,7 @@ const storageUI = {
     },
   },
   sp: {
-    nav: { gallery: 'Galería', about: 'Acerca', storage: 'Archivo' },
+    nav: { gallery: 'Galería', storage: 'Archivo' },
     page: { eyebrow: 'COLECCIÓN DE ARCHIVO', title: 'Archivo' },
     lock: {
       eyebrow: 'ACCESO RESTRINGIDO',
@@ -1292,7 +1293,7 @@ const takumaTableRows = artworks
     <!-- PC用ナビ -->
     <nav class="header-nav">
       <a href={`${base}/${lang}/`}>{tS.nav.gallery}</a>
-      <a href={`${base}/${lang}/about/`}>{tS.nav.about}</a>
+      <AboutNavDropdown lang={lang} base={base} mode="desktop" />
       <a href={`${base}/${lang}/shop/`}>SHOP</a>
       <a href={`${base}/${lang}/storage/`} class="current">{tS.nav.storage}</a>
       <div class="lang-switcher">
@@ -1316,7 +1317,7 @@ const takumaTableRows = artworks
   <div class="mobile-menu" id="mobileMenu">
     <nav class="mobile-menu-nav">
       <a href={`${base}/${lang}/`}>{tS.nav.gallery}</a>
-      <a href={`${base}/${lang}/about/`}>{tS.nav.about}</a>
+      <AboutNavDropdown lang={lang} base={base} mode="mobile" />
       <a href={`${base}/${lang}/shop/`}>SHOP</a>
       <a href={`${base}/${lang}/storage/`} class="current">{tS.nav.storage}</a>
     </nav>

@@ -1,6 +1,7 @@
 ---
 import shopData from '../../data/shop.json';
 import { ui } from '../../data/ui.ts';
+import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 
@@ -41,7 +42,7 @@ const shopUI = {
   ja: {
     eyebrow: 'MUSEUM SHOP',
     title:   'ミュージアムショップ',
-    nav:     { gallery: 'ギャラリー', about: 'アバウト', storage: '所蔵庫' },
+    nav:     { gallery: 'ギャラリー', storage: '所蔵庫' },
     soldOut: '売切れ',
     inquiry: 'お問い合わせ',
     noPrice: '価格未登録',
@@ -81,7 +82,7 @@ const shopUI = {
   en: {
     eyebrow: 'MUSEUM SHOP',
     title:   'Museum Shop',
-    nav:     { gallery: 'Gallery', about: 'About', storage: 'Storage' },
+    nav:     { gallery: 'Gallery', storage: 'Storage' },
     soldOut: 'Sold Out',
     inquiry: 'Inquire',
     noPrice: 'Price not set',
@@ -121,7 +122,7 @@ const shopUI = {
   sp: {
     eyebrow: 'TIENDA DEL MUSEO',
     title:   'Tienda del Museo',
-    nav:     { gallery: 'Galería', about: 'Acerca', storage: 'Archivo' },
+    nav:     { gallery: 'Galería', storage: 'Archivo' },
     soldOut: 'Agotado',
     inquiry: 'Consultar',
     noPrice: 'Precio no registrado',
@@ -898,7 +899,7 @@ const ts = shopUI[lang];
     <div class="header-logo">TOKUNAGA ART MUSEUM</div>
     <nav class="header-nav">
       <a href={`${base}/${lang}/`}>{ts.nav.gallery}</a>
-      <a href={`${base}/${lang}/about/`}>{ts.nav.about}</a>
+      <AboutNavDropdown lang={lang} base={base} mode="desktop" />
       <a href={`${base}/${lang}/shop/`} class="current">SHOP</a>
       <a href={`${base}/${lang}/storage/`}>{ts.nav.storage}</a>
       <div class="lang-switcher">
@@ -917,7 +918,7 @@ const ts = shopUI[lang];
   <div class="mobile-menu" id="mobileMenu">
     <nav class="mobile-menu-nav">
       <a href={`${base}/${lang}/`}>{ts.nav.gallery}</a>
-      <a href={`${base}/${lang}/about/`}>{ts.nav.about}</a>
+      <AboutNavDropdown lang={lang} base={base} mode="mobile" />
       <a href={`${base}/${lang}/shop/`} class="current">SHOP</a>
       <a href={`${base}/${lang}/storage/`}>{ts.nav.storage}</a>
     </nav>

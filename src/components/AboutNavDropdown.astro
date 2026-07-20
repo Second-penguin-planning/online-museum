@@ -1,0 +1,177 @@
+---
+// src/components/AboutNavDropdown.astro
+// ヘッダーの「概要」ドロップダウン。mode="desktop" はPCナビ用、mode="mobile" はモバイルメニュー用（details/summaryのみでJS不要）。
+import { getAboutNav, aboutNavLabel, type Lang } from '../data/aboutNav';
+
+interface Props {
+  lang: Lang;
+  base: string;
+  mode: 'desktop' | 'mobile';
+}
+
+const { lang, base, mode } = Astro.props;
+const label = aboutNavLabel[lang] ?? aboutNavLabel.ja;
+const entries = getAboutNav(lang, base);
+---
+
+{mode === 'desktop' ? (
+  <div class="nav-dropdown">
+    <button type="button" class="nav-dropdown-toggle">{label}</button>
+    <div class="nav-dropdown-menu">
+      {entries.map(entry => (
+        'children' in entry ? (
+          <div class="nav-dropdown-item has-submenu">
+            <span>{entry.label}</span>
+            <div class="nav-dropdown-submenu">
+              {entry.children.map(child => (
+                <a href={child.href}>{child.label}</a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a href={entry.href}>{entry.label}</a>
+        )
+      ))}
+    </div>
+  </div>
+) : (
+  <details class="mnav-group">
+    <summary>{label}</summary>
+    <div class="mnav-group-body">
+      {entries.map(entry => (
+        'children' in entry ? (
+          <details class="mnav-subgroup">
+            <summary>{entry.label}</summary>
+            <div class="mnav-group-body">
+              {entry.children.map(child => (
+                <a href={child.href}>{child.label}</a>
+              ))}
+            </div>
+          </details>
+        ) : (
+          <a href={entry.href}>{entry.label}</a>
+        )
+      ))}
+    </div>
+  </details>
+)}
+
+<style>
+  /* ── デスクトップ ドロップダウン ── */
+  .nav-dropdown { position: relative; }
+
+  .nav-dropdown-toggle {
+    background: none;
+    border: none;
+    font: inherit;
+    color: var(--text-sub, inherit);
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.15em;
+    opacity: 0.85;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.3s, color 0.3s, transform 0.3s;
+  }
+  .nav-dropdown-toggle:hover { opacity: 1; color: var(--gold-light, var(--gold-bright, inherit)); transform: translateY(-1px); }
+  .nav-dropdown.open .nav-dropdown-toggle { opacity: 1; color: var(--gold-light, var(--gold-bright, inherit)); }
+
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 18px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: var(--crimson-deep, #2a1210);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 6px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    padding: 8px 0;
+    z-index: 300;
+  }
+  .nav-dropdown.open .nav-dropdown-menu { display: block; }
+
+  .nav-dropdown-menu a,
+  .nav-dropdown-item > span {
+    display: block;
+    padding: 9px 20px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    color: var(--text-sub, #ccc);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .nav-dropdown-menu a:hover,
+  .nav-dropdown-item:hover > span {
+    color: var(--gold-light, var(--gold-bright, #d4af37));
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .nav-dropdown-item.has-submenu { position: relative; }
+  .nav-dropdown-item.has-submenu > span::after { content: '›'; float: right; margin-left: 12px; }
+
+  .nav-dropdown-submenu {
+    display: none;
+    position: absolute;
+    top: -8px;
+    left: 100%;
+    min-width: 200px;
+    background: var(--crimson-deep, #2a1210);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 6px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    padding: 8px 0;
+  }
+  .nav-dropdown-item.has-submenu:hover .nav-dropdown-submenu { display: block; }
+
+  /* ── モバイル アコーディオン（details / summary、JS不要） ── */
+  .mnav-group, .mnav-subgroup { border-bottom: 1px solid rgba(212,175,55,0.12); }
+  .mnav-group:first-child { border-top: 1px solid rgba(212,175,55,0.12); }
+  .mnav-subgroup { border-bottom: none; border-top: 1px solid rgba(212,175,55,0.08); }
+
+  .mnav-group > summary,
+  .mnav-subgroup > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+  }
+  .mnav-subgroup > summary { padding-left: 16px; font-size: 0.88rem; opacity: 0.9; }
+  .mnav-group > summary::-webkit-details-marker,
+  .mnav-subgroup > summary::-webkit-details-marker { display: none; }
+  .mnav-group > summary::after,
+  .mnav-subgroup > summary::after { content: '+'; float: right; }
+  .mnav-group[open] > summary::after,
+  .mnav-subgroup[open] > summary::after { content: '\2212'; }
+
+  .mnav-group-body { padding-left: 16px; }
+  .mnav-group-body a {
+    display: block;
+    padding: 12px 0;
+    font-size: 0.88rem;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.85;
+  }
+  .mnav-group-body a:hover { opacity: 1; }
+</style>
+
+<script>
+  document.querySelectorAll('.nav-dropdown').forEach((dd) => {
+    const toggle = dd.querySelector('.nav-dropdown-toggle');
+    toggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dd.classList.contains('open');
+      document.querySelectorAll('.nav-dropdown.open').forEach((other) => other.classList.remove('open'));
+      dd.classList.toggle('open', !isOpen);
+    });
+  });
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.nav-dropdown.open').forEach((dd) => {
+      if (!dd.contains(e.target)) dd.classList.remove('open');
+    });
+  });
+</script>

@@ -1,0 +1,50 @@
+---
+// src/pages/[lang]/about/takuma-biography.astro — 德永卓磨の経歴
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const meta: Record<Lang, { title: string; description: string; pageTitle: string; body: string }> = {
+  ja: {
+    title: '德永卓磨 経歴 — 德永アートミュージアム',
+    description: '画家・德永卓磨の経歴',
+    pageTitle: '德永卓磨　経歴',
+    body: '現在準備中です。近日公開予定ですので、しばらくお待ちください。',
+  },
+  en: {
+    title: 'Takuma Tokunaga — Biography',
+    description: 'Biography of the painter Takuma Tokunaga',
+    pageTitle: 'Takuma Tokunaga — Biography',
+    body: 'This page is currently being prepared. Please check back soon.',
+  },
+  sp: {
+    title: 'Takuma Tokunaga — Biografía',
+    description: 'Biografía del pintor Takuma Tokunaga',
+    pageTitle: 'Takuma Tokunaga — Biografía',
+    body: 'Esta página está actualmente en preparación. Vuelva pronto, por favor.',
+  },
+};
+const m = meta[lang] ?? meta.ja;
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="takuma-biography/"
+  metaTitle={m.title}
+  metaDescription={m.description}
+  pageTitle={m.pageTitle}
+>
+  <p class="placeholder-notice">{lang === 'ja' ? '準備中' : lang === 'en' ? 'Coming soon' : 'Próximamente'}</p>
+  <p>{m.body}</p>
+</AboutSectionLayout>

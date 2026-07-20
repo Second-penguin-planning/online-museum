@@ -1,0 +1,50 @@
+---
+// src/pages/[lang]/about/takuma-records.astro — 德永卓磨の記録（新聞記事・動画）
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const meta: Record<Lang, { title: string; description: string; pageTitle: string; body: string }> = {
+  ja: {
+    title: '德永卓磨 記録 — 德永アートミュージアム',
+    description: '德永卓磨に関する新聞記事・映像記録',
+    pageTitle: '德永卓磨　記録',
+    body: '新聞記事やYouTube動画などを近日掲載予定です。しばらくお待ちください。',
+  },
+  en: {
+    title: 'Takuma Tokunaga — Records',
+    description: 'Newspaper articles and video records related to Takuma Tokunaga',
+    pageTitle: 'Takuma Tokunaga — Records',
+    body: 'Newspaper articles and YouTube videos will be added here soon. Please check back soon.',
+  },
+  sp: {
+    title: 'Takuma Tokunaga — Registros',
+    description: 'Artículos de periódico y videos relacionados con Takuma Tokunaga',
+    pageTitle: 'Takuma Tokunaga — Registros',
+    body: 'Próximamente se añadirán artículos de periódico y videos de YouTube. Vuelva pronto, por favor.',
+  },
+};
+const m = meta[lang] ?? meta.ja;
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="takuma-records/"
+  metaTitle={m.title}
+  metaDescription={m.description}
+  pageTitle={m.pageTitle}
+>
+  <p class="placeholder-notice">{lang === 'ja' ? '準備中' : lang === 'en' ? 'Coming soon' : 'Próximamente'}</p>
+  <p>{m.body}</p>
+</AboutSectionLayout>

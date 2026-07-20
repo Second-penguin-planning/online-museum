@@ -1,0 +1,50 @@
+---
+// src/pages/[lang]/about/campo-de-criptana.astro — カンポ・デ・クリプターナ概要
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const meta: Record<Lang, { title: string; description: string; pageTitle: string; body: string }> = {
+  ja: {
+    title: 'カンポ・デ・クリプターナ概要 — 德永アートミュージアム',
+    description: 'カンポ・デ・クリプターナについて',
+    pageTitle: 'カンポ・デ・クリプターナ概要',
+    body: '現在準備中です。近日公開予定ですので、しばらくお待ちください。',
+  },
+  en: {
+    title: 'Overview of Campo de Criptana — Tokunaga Art Museum',
+    description: 'An overview of Campo de Criptana',
+    pageTitle: 'Overview of Campo de Criptana',
+    body: 'This page is currently being prepared. Please check back soon.',
+  },
+  sp: {
+    title: 'Resumen de Campo de Criptana — Museo de Arte Tokunaga',
+    description: 'Un resumen de Campo de Criptana',
+    pageTitle: 'Resumen de Campo de Criptana',
+    body: 'Esta página está actualmente en preparación. Vuelva pronto, por favor.',
+  },
+};
+const m = meta[lang] ?? meta.ja;
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="campo-de-criptana/"
+  metaTitle={m.title}
+  metaDescription={m.description}
+  pageTitle={m.pageTitle}
+>
+  <p class="placeholder-notice">{lang === 'ja' ? '準備中' : lang === 'en' ? 'Coming soon' : 'Próximamente'}</p>
+  <p>{m.body}</p>
+</AboutSectionLayout>

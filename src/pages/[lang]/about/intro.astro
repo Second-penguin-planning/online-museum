@@ -1,0 +1,50 @@
+---
+// src/pages/[lang]/about/intro.astro — はじめに
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const meta: Record<Lang, { title: string; description: string; pageTitle: string; body: string }> = {
+  ja: {
+    title: 'はじめに — 德永アートミュージアム',
+    description: '德永アートミュージアムのご案内',
+    pageTitle: 'はじめに',
+    body: '現在準備中です。近日公開予定ですので、しばらくお待ちください。',
+  },
+  en: {
+    title: 'Introduction — Tokunaga Art Museum',
+    description: 'An introduction to the Tokunaga Art Museum',
+    pageTitle: 'Introduction',
+    body: 'This page is currently being prepared. Please check back soon.',
+  },
+  sp: {
+    title: 'Introducción — Museo de Arte Tokunaga',
+    description: 'Una introducción al Museo de Arte Tokunaga',
+    pageTitle: 'Introducción',
+    body: 'Esta página está actualmente en preparación. Vuelva pronto, por favor.',
+  },
+};
+const m = meta[lang] ?? meta.ja;
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="intro/"
+  metaTitle={m.title}
+  metaDescription={m.description}
+  pageTitle={m.pageTitle}
+>
+  <p class="placeholder-notice">{lang === 'ja' ? '準備中' : lang === 'en' ? 'Coming soon' : 'Próximamente'}</p>
+  <p>{m.body}</p>
+</AboutSectionLayout>
