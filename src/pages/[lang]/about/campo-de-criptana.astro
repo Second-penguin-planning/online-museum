@@ -1,7 +1,10 @@
 ---
 // src/pages/[lang]/about/campo-de-criptana.astro — カンポ・デ・クリプターナ概要
+// カンポ・デ・クリプターナの町と、徳永卓磨・幸子との40年以上にわたる縁を伝える
+// 4篇の寄稿文（西・英・日 全訳）を掲載。出典は src/data/campoDeCriptana.ts 参照。
 import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
 import type { Lang } from '../../../data/aboutNav';
+import { campoIntro, campoArticles, campoLabels } from '../../../data/campoDeCriptana';
 
 export function getStaticPaths() {
   return [
@@ -14,27 +17,27 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const meta: Record<Lang, { title: string; description: string; pageTitle: string; body: string }> = {
+const meta: Record<Lang, { title: string; description: string; pageTitle: string }> = {
   ja: {
     title: 'カンポ・デ・クリプターナ概要 — 德永アートミュージアム',
-    description: 'カンポ・デ・クリプターナについて',
+    description: 'カンポ・デ・クリプターナと徳永卓磨・幸子夫妻の40年以上にわたる縁を伝える4篇の証言',
     pageTitle: 'カンポ・デ・クリプターナ概要',
-    body: '現在準備中です。近日公開予定ですので、しばらくお待ちください。',
   },
   en: {
     title: 'Overview of Campo de Criptana — Tokunaga Art Museum',
-    description: 'An overview of Campo de Criptana',
+    description: 'Four testimonies on the decades-long bond between Takuma & Yukiko Tokunaga and Campo de Criptana',
     pageTitle: 'Overview of Campo de Criptana',
-    body: 'This page is currently being prepared. Please check back soon.',
   },
   sp: {
     title: 'Resumen de Campo de Criptana — Museo de Arte Tokunaga',
-    description: 'Un resumen de Campo de Criptana',
+    description: 'Cuatro testimonios sobre el vínculo de más de cuarenta años entre Takuma y Yukiko Tokunaga y Campo de Criptana',
     pageTitle: 'Resumen de Campo de Criptana',
-    body: 'Esta página está actualmente en preparación. Vuelva pronto, por favor.',
   },
 };
 const m = meta[lang] ?? meta.ja;
+const intro = campoIntro[lang] ?? campoIntro.ja;
+const articles = campoArticles[lang] ?? campoArticles.ja;
+const labels = campoLabels[lang] ?? campoLabels.ja;
 ---
 
 <AboutSectionLayout
@@ -45,6 +48,159 @@ const m = meta[lang] ?? meta.ja;
   metaDescription={m.description}
   pageTitle={m.pageTitle}
 >
-  <p class="placeholder-notice">{lang === 'ja' ? '準備中' : lang === 'en' ? 'Coming soon' : 'Próximamente'}</p>
-  <p>{m.body}</p>
+  <div class="campo-intro">
+    {intro.map((p) => <p>{p}</p>)}
+  </div>
+
+  <nav class="campo-toc" aria-label="index">
+    <ol>
+      {articles.map((a, i) => (
+        <li><a href={`#campo-article-${i + 1}`}>{a.title}</a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="campo-articles">
+    {articles.map((a, i) => (
+      <section class="campo-article" id={`campo-article-${i + 1}`}>
+        <p class="campo-article__num">{String(i + 1).padStart(2, '0')}</p>
+        <h2>{a.title}</h2>
+        {a.author && (
+          <p class="campo-byline">
+            <span class="campo-byline__name">{a.author}</span>
+            {a.role && <span class="campo-byline__role">{a.role}</span>}
+          </p>
+        )}
+        {a.paragraphs.map((p) => <p>{p}</p>)}
+        {a.coAuthor && (
+          <p class="campo-byline campo-byline--co">
+            <span class="campo-byline__name">{a.coAuthor}</span>
+            {a.coRole && <span class="campo-byline__role">{a.coRole}</span>}
+          </p>
+        )}
+        {a.footnotes && a.footnotes.length > 0 && (
+          <details class="campo-notes">
+            <summary>{labels.notesHeading}</summary>
+            <ol>
+              {a.footnotes.map((fn) => (
+                <li><strong>[{fn.marker}]</strong> {fn.text}</li>
+              ))}
+            </ol>
+          </details>
+        )}
+      </section>
+    ))}
+  </div>
+
+  <p class="campo-closing">{labels.closing}</p>
 </AboutSectionLayout>
+
+<style>
+  .campo-intro :global(p) {
+    font-size: 1.05rem;
+  }
+
+  .campo-toc {
+    margin: 1.6rem 0 2.4rem;
+    padding: 1rem 1.3rem;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-radius: 6px;
+  }
+  .campo-toc ol {
+    list-style: decimal;
+    padding-left: 1.3rem;
+    display: grid;
+    gap: .35rem;
+  }
+  .campo-toc a {
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: .95rem;
+    border-bottom: 1px dotted transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .campo-toc a:hover {
+    color: var(--crimson);
+    border-bottom-color: var(--gold);
+  }
+
+  .campo-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .campo-article {
+    position: relative;
+    padding-top: .2rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    scroll-margin-top: 130px;
+  }
+  .campo-article:first-child { border-top: none; }
+
+  .campo-article__num {
+    font-family: 'EB Garamond', serif;
+    font-size: .85rem;
+    letter-spacing: .2em;
+    color: var(--gold);
+    opacity: .85;
+    margin: 1.4rem 0 .2rem;
+  }
+
+  .campo-article h2 {
+    color: var(--crimson);
+    font-size: 1.35rem;
+    letter-spacing: .03em;
+    line-height: 1.5;
+    margin-bottom: .6rem;
+  }
+
+  .campo-byline {
+    font-style: italic;
+    color: var(--text-mid);
+    margin-bottom: 1.2rem !important;
+    font-size: .95rem;
+  }
+  .campo-byline__name { font-weight: 600; }
+  .campo-byline__role::before { content: ' — '; font-style: normal; }
+  .campo-byline--co {
+    margin-top: -.4rem !important;
+  }
+
+  .campo-notes {
+    margin-top: 1.4rem;
+    background: rgba(74, 10, 10, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 6px;
+    padding: .8rem 1.1rem;
+  }
+  .campo-notes summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--crimson);
+    letter-spacing: .04em;
+    font-size: .92rem;
+  }
+  .campo-notes ol {
+    margin-top: .8rem;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: .55rem;
+  }
+  .campo-notes li {
+    font-size: .88rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+  }
+
+  .campo-closing {
+    margin-top: 2.8rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    font-size: .88rem;
+    color: var(--text-mid);
+    opacity: .8;
+    text-align: right;
+  }
+</style>
