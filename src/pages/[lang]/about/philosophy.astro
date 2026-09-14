@@ -1,0 +1,273 @@
+---
+// src/pages/[lang]/about/philosophy.astro — 「白」の哲学
+// 西洋批評でしばしば指摘される「白が多く、平面的である」という評に対し、
+// 徳永卓磨自身の言葉で、その真の芸術的企図（描き重ねた末に到達する白＝アジア的絵画哲学）を伝えるページ。
+// 出典は src/data/philosophy.ts 参照。
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+import { philosophyContent } from '../../../data/philosophy';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const c = philosophyContent[lang] ?? philosophyContent.ja;
+
+const [sectionFlatness, sectionEast, sectionCampo] = c.sections;
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="philosophy/"
+  metaTitle={c.metaTitle}
+  metaDescription={c.metaDescription}
+  pageTitle={c.navTitle}
+>
+  <div class="phi-hero">
+    <h2 class="phi-title">{c.title}</h2>
+    <p class="phi-subtitle">{c.subtitle}</p>
+    <div class="phi-gradient" aria-hidden="true"></div>
+  </div>
+
+  <div class="phi-lead">
+    {c.lead.map((p) => <p>{p}</p>)}
+  </div>
+
+  <section class="phi-section">
+    <p class="phi-section__num">01</p>
+    <h3>{sectionFlatness.heading}</h3>
+    {sectionFlatness.paragraphs.map((p) => <p>{p}</p>)}
+  </section>
+
+  <section class="phi-section">
+    <p class="phi-section__num">02</p>
+    <h3>{sectionEast.heading}</h3>
+    {sectionEast.paragraphs.map((p) => <p>{p}</p>)}
+
+    {sectionEast.pullQuote && (
+      <blockquote class="phi-pullquote">
+        <span class="phi-pullquote__mark" aria-hidden="true">”</span>
+        {sectionEast.pullQuote}
+      </blockquote>
+    )}
+
+    <p class="phi-comparison-intro">{c.comparison.intro}</p>
+
+    <div class="phi-compare">
+      <div class="phi-compare__card phi-compare__card--dark">
+        <p class="phi-compare__label">{c.comparison.west.label}</p>
+        <p class="phi-compare__text">{c.comparison.west.text}</p>
+      </div>
+      <div class="phi-compare__arrow" aria-hidden="true">⇄</div>
+      <div class="phi-compare__card phi-compare__card--light">
+        <p class="phi-compare__label">{c.comparison.east.label}</p>
+        <p class="phi-compare__text">{c.comparison.east.text}</p>
+      </div>
+    </div>
+
+    <div class="phi-compare phi-compare--print">
+      <div class="phi-compare__card phi-compare__card--dark">
+        <p class="phi-compare__label">{c.comparison.etching.label}</p>
+        <p class="phi-compare__text">{c.comparison.etching.text}</p>
+      </div>
+      <div class="phi-compare__arrow" aria-hidden="true">⇄</div>
+      <div class="phi-compare__card phi-compare__card--light">
+        <p class="phi-compare__label">{c.comparison.woodblock.label}</p>
+        <p class="phi-compare__text">{c.comparison.woodblock.text}</p>
+      </div>
+    </div>
+
+    <p class="phi-synthesis">{c.comparison.synthesis}</p>
+  </section>
+
+  <section class="phi-section phi-section--campo">
+    <p class="phi-section__num">03</p>
+    <h3>{sectionCampo.heading}</h3>
+    {sectionCampo.paragraphs.map((p) => <p>{p}</p>)}
+  </section>
+
+  <p class="phi-signature">— {c.signature}</p>
+</AboutSectionLayout>
+
+<style>
+  .phi-hero {
+    position: relative;
+    padding: 1.4rem 0 1.8rem;
+    margin-bottom: 1.6rem;
+  }
+  .phi-title {
+    font-size: 1.55rem;
+    line-height: 1.55;
+    color: var(--crimson);
+    letter-spacing: .04em;
+    margin-bottom: .5rem;
+  }
+  .phi-subtitle {
+    font-style: italic;
+    color: var(--text-mid);
+    font-size: 1rem;
+    letter-spacing: .08em;
+    opacity: .85;
+  }
+  .phi-gradient {
+    margin-top: 1.4rem;
+    height: 10px;
+    border-radius: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--crimson) 0%,
+      var(--crimson-mid) 18%,
+      var(--gold) 55%,
+      var(--gold-pale) 78%,
+      #fffdf7 100%
+    );
+    box-shadow:
+      0 6px 0 -4px rgba(212,175,55,.35),
+      0 12px 0 -8px rgba(212,175,55,.2);
+  }
+
+  .phi-lead {
+    font-style: italic;
+    color: var(--text-mid);
+    font-size: .98rem;
+    line-height: 1.9;
+    padding-bottom: 1.6rem;
+    margin-bottom: 2.2rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  }
+
+  .phi-section {
+    position: relative;
+    padding-top: .2rem;
+    margin-bottom: 2.6rem;
+  }
+  .phi-section__num {
+    font-family: 'EB Garamond', serif;
+    font-size: .85rem;
+    letter-spacing: .3em;
+    color: var(--gold);
+    opacity: .85;
+    margin-bottom: .3rem;
+  }
+  .phi-section h3 {
+    color: var(--crimson);
+    font-size: 1.25rem;
+    letter-spacing: .03em;
+    line-height: 1.5;
+    margin-bottom: .8rem;
+  }
+  .phi-section :global(p) {
+    line-height: 1.95;
+  }
+
+  .phi-pullquote {
+    position: relative;
+    margin: 1.6rem 0 1.8rem;
+    padding: 1.3rem 1.6rem 1.3rem 2.2rem;
+    font-size: 1.15rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--crimson);
+    background:
+      linear-gradient(135deg, rgba(212,175,55,0.10), rgba(212,175,55,0.02) 60%),
+      #fffefb;
+    border-left: 3px solid var(--gold);
+    box-shadow:
+      6px 6px 0 -3px rgba(212,175,55,.18),
+      12px 12px 0 -6px rgba(212,175,55,.10);
+  }
+  .phi-pullquote__mark {
+    position: absolute;
+    top: -.3rem;
+    left: .4rem;
+    font-size: 2.6rem;
+    color: var(--gold);
+    opacity: .5;
+    font-style: normal;
+  }
+
+  .phi-comparison-intro {
+    color: var(--text-mid);
+    font-size: .95rem;
+    margin-bottom: 1rem;
+  }
+
+  .phi-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+    gap: .9rem;
+    margin-bottom: 1.2rem;
+  }
+  .phi-compare--print {
+    margin-bottom: 1.6rem;
+  }
+  .phi-compare__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 1.1rem;
+    opacity: .8;
+  }
+  .phi-compare__card {
+    padding: 1rem 1.15rem;
+    border-radius: 6px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+  }
+  .phi-compare__card--dark {
+    background: rgba(74, 10, 10, 0.05);
+  }
+  .phi-compare__card--light {
+    background: linear-gradient(135deg, #fffefb, rgba(212,175,55,0.12));
+  }
+  .phi-compare__label {
+    font-weight: 600;
+    color: var(--crimson);
+    font-size: .88rem;
+    letter-spacing: .04em;
+    margin-bottom: .4rem;
+  }
+  .phi-compare__text {
+    font-size: .92rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .phi-synthesis {
+    font-size: .98rem;
+    color: var(--text);
+    line-height: 1.9;
+    padding: 1rem 1.2rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  }
+
+  .phi-section--campo {
+    background: radial-gradient(ellipse at top left, rgba(212,175,55,0.08), transparent 70%);
+    padding: 1.4rem 1.6rem;
+    border-radius: 8px;
+  }
+
+  .phi-signature {
+    margin-top: 1rem;
+    text-align: right;
+    font-style: italic;
+    color: var(--text-mid);
+    font-size: .95rem;
+    letter-spacing: .04em;
+    opacity: .85;
+  }
+
+  @media (max-width: 640px) {
+    .phi-compare { grid-template-columns: 1fr; }
+    .phi-compare__arrow { transform: rotate(90deg); padding: .2rem 0; }
+  }
+</style>

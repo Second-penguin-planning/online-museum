@@ -22,7 +22,7 @@ export const aboutNavLabel: Record<Lang, string> = {
 };
 
 const labels: Record<Lang, Record<
-  'intro' | 'contact' | 'takuma' | 'sachiko' | 'biography' | 'essay' | 'records' | 'campo',
+  'intro' | 'contact' | 'takuma' | 'sachiko' | 'biography' | 'essay' | 'philosophy' | 'records' | 'campo',
   string
 >> = {
   ja: {
@@ -32,6 +32,7 @@ const labels: Record<Lang, Record<
     sachiko: '德永幸子',
     biography: '経歴',
     essay: '随想',
+    philosophy: '「白」の哲学',
     records: '記録',
     campo: 'カンポ・デ・クリプターナ概要',
   },
@@ -42,6 +43,7 @@ const labels: Record<Lang, Record<
     sachiko: 'Sachiko Tokunaga',
     biography: 'Biography',
     essay: 'Essays',
+    philosophy: 'Philosophy of White',
     records: 'Records',
     campo: 'Overview of Campo de Criptana',
   },
@@ -52,6 +54,7 @@ const labels: Record<Lang, Record<
     sachiko: 'Sachiko Tokunaga',
     biography: 'Biografía',
     essay: 'Ensayos',
+    philosophy: 'Filosofía del Blanco',
     records: 'Registros',
     campo: 'Resumen de Campo de Criptana',
   },
@@ -69,6 +72,7 @@ export function getAboutNav(lang: Lang, base: string): AboutNavEntry[] {
       children: [
         { label: L.biography, href: `${p}/takuma-biography/` },
         { label: L.essay, href: `${p}/` },
+        { label: L.philosophy, href: `${p}/philosophy/` },
         { label: L.records, href: `${p}/takuma-records/` },
       ],
     },
