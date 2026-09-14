@@ -94,6 +94,12 @@ const [sectionFlatness, sectionEast, sectionCampo] = c.sections;
   </section>
 
   <p class="phi-signature">— {c.signature}</p>
+
+  <p class="phi-related">
+    <a href={`${base}/${lang}/about/campo-notes/`}>
+      {lang === 'ja' ? '→ 関連ページ：カンポ・デ・クリプターナ 現地の記録' : lang === 'en' ? '→ Related: Field Notes from Campo de Criptana' : '→ Relacionado: Notas de campo de Campo de Criptana'}
+    </a>
+  </p>
 </AboutSectionLayout>
 
 <style>
@@ -265,6 +271,22 @@ const [sectionFlatness, sectionEast, sectionCampo] = c.sections;
     letter-spacing: .04em;
     opacity: .85;
   }
+
+  .phi-related {
+    margin-top: 1.6rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    text-align: right;
+  }
+  .phi-related a {
+    color: var(--crimson);
+    text-decoration: none;
+    font-size: .92rem;
+    font-style: italic;
+    border-bottom: 1px dotted var(--gold);
+    transition: color .2s;
+  }
+  .phi-related a:hover { color: var(--gold); }
 
   @media (max-width: 640px) {
     .phi-compare { grid-template-columns: 1fr; }

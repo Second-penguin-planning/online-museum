@@ -1,0 +1,210 @@
+---
+// src/pages/[lang]/about/campo-works.astro — カンポ・デ・クリプターナ 絵画作品目録
+// 父のスケッチ・絵画ノートより清書された絵画作品目録（全4カテゴリ・200点）を掲載。
+// 出典は src/data/campoWorks.ts 参照。演題・サイズは3言語共通（原資料の表記をそのまま保持）。
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+import { workCategories, campoWorksContent } from '../../../data/campoWorks';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const c = campoWorksContent[lang] ?? campoWorksContent.ja;
+
+const totalCount = workCategories.reduce((sum, cat) => sum + cat.items.length, 0);
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="campo-works/"
+  metaTitle={c.metaTitle}
+  metaDescription={c.metaDescription}
+  pageTitle={c.navTitle}
+>
+  <div class="cw-hero">
+    <h2 class="cw-title">{c.title}</h2>
+    <p class="cw-subtitle">{c.subtitle}</p>
+  </div>
+
+  <div class="cw-lead">
+    {c.lead.map((p) => <p>{p}</p>)}
+    <p class="placeholder-notice">{c.placeholderNotice}</p>
+  </div>
+
+  <p class="cw-total">{c.countTemplate.replace('{n}', String(totalCount))}</p>
+
+  <div class="cw-categories">
+    {workCategories.map((cat, i) => (
+      <details class="cw-category" open={i === 0}>
+        <summary>
+          <span class="cw-category__title">{c.categoryTitles[cat.key]}</span>
+          <span class="cw-category__count">{c.countTemplate.replace('{n}', String(cat.items.length))}</span>
+        </summary>
+        <div class="cw-table-wrap">
+          <table class="cw-table">
+            <thead>
+              <tr>
+                <th class="cw-col-no">{c.columns[0]}</th>
+                <th>{c.columns[1]}</th>
+                <th class="cw-col-size">{c.columns[2]}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cat.items.map((item) => (
+                <tr>
+                  <td class="cw-col-no">{item.no}</td>
+                  <td>{item.title}</td>
+                  <td class="cw-col-size">{item.size}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    ))}
+  </div>
+
+  <p class="cw-glossary">{c.glossary}</p>
+</AboutSectionLayout>
+
+<style>
+  .cw-hero {
+    padding: 1.2rem 0 1.6rem;
+  }
+  .cw-title {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--crimson);
+    letter-spacing: .04em;
+    margin-bottom: .5rem;
+  }
+  .cw-subtitle {
+    font-style: italic;
+    color: var(--text-mid);
+    font-size: .95rem;
+    opacity: .85;
+  }
+
+  .cw-lead {
+    padding-bottom: 1rem;
+    margin-bottom: .6rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  }
+  .cw-lead :global(p) {
+    font-size: .95rem;
+  }
+
+  .cw-total {
+    color: var(--crimson);
+    font-weight: 600;
+    letter-spacing: .06em;
+    font-size: .95rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .cw-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .cw-category {
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-radius: 6px;
+    background: rgba(212, 175, 55, 0.04);
+    overflow: hidden;
+  }
+  .cw-category summary {
+    cursor: pointer;
+    list-style: none;
+    padding: .9rem 1.2rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    background: rgba(212, 175, 55, 0.1);
+    font-weight: 600;
+  }
+  .cw-category summary::-webkit-details-marker { display: none; }
+  .cw-category summary::before {
+    content: '▸';
+    color: var(--gold);
+    margin-right: .6rem;
+    display: inline-block;
+    transition: transform .2s;
+  }
+  .cw-category[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .cw-category__title {
+    color: var(--crimson);
+    font-size: 1rem;
+    letter-spacing: .02em;
+  }
+  .cw-category__count {
+    color: var(--text-mid);
+    font-size: .85rem;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .cw-table-wrap {
+    overflow-x: auto;
+    padding: 0 .2rem;
+  }
+  .cw-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9rem;
+  }
+  .cw-table thead th {
+    text-align: left;
+    padding: .6rem .8rem;
+    color: var(--text-mid);
+    font-size: .78rem;
+    letter-spacing: .08em;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+    white-space: nowrap;
+  }
+  .cw-table tbody td {
+    padding: .5rem .8rem;
+    border-bottom: 1px solid rgba(74, 10, 10, 0.08);
+    color: var(--text);
+  }
+  .cw-table tbody tr:last-child td { border-bottom: none; }
+  .cw-table tbody tr:hover { background: rgba(212, 175, 55, 0.08); }
+  .cw-col-no {
+    width: 3.2rem;
+    color: var(--gold);
+    font-weight: 600;
+    text-align: right;
+  }
+  .cw-col-size {
+    width: 5rem;
+    white-space: nowrap;
+    color: var(--text-mid);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cw-glossary {
+    font-size: .82rem;
+    color: var(--text-mid);
+    opacity: .85;
+    line-height: 1.8;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+  }
+
+  @media (max-width: 640px) {
+    .cw-category summary { padding: .8rem 1rem; flex-wrap: wrap; }
+  }
+</style>
