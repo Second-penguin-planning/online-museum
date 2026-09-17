@@ -60,6 +60,14 @@ export const campoTimeline: TimelineEntry[] = [
     },
   },
   {
+    year: '2018',
+    text: {
+      ja: '同じ「ムセオ・エル・ポシト」にて、再び展覧会を開催。',
+      en: 'A further exhibition is held at the same Museo "El Pósito."',
+      sp: 'Se celebra una nueva exposición en el mismo Museo "El Pósito".',
+    },
+  },
+  {
     year: '2026年9〜11月（予定）',
     text: {
       ja: 'カンポ・デ・クリプターナへの現地取材を予定。現地の方々への聞き取り、絵画作品と現地風景の比較撮影を行い、本コレクションに順次反映する。',
@@ -213,6 +221,8 @@ export interface CampoHistoryContent {
   figuresIntro: string;
   readFullText: string;
   interviewPendingNotice: string;
+  jumpButtonLabel: string;
+  backToGalleryLabel: string;
 }
 
 export const campoHistoryContent: Record<Lang, CampoHistoryContent> = {
@@ -223,6 +233,8 @@ export const campoHistoryContent: Record<Lang, CampoHistoryContent> = {
     figuresIntro: '2017年の「エル・ポシト美術館」展に際して寄せられた寄稿文、および徳永卓磨自身の現地記録から、カンポでお世話になった方々を紹介する。Q&A形式のインタビューは、2026年9〜11月の現地取材後に別途追加予定。',
     readFullText: '寄稿文の全文を読む →',
     interviewPendingNotice: '本人への聞き取り（インタビュー）は現地取材後に追加予定です。',
+    jumpButtonLabel: '沿革・関係者の言葉を見る ↓',
+    backToGalleryLabel: '↑ 作品一覧に戻る',
   },
   en: {
     historyHeading: 'History',
@@ -231,6 +243,8 @@ export const campoHistoryContent: Record<Lang, CampoHistoryContent> = {
     figuresIntro: 'Drawn from the essays contributed for the 2017 exhibition at the Museo "El Pósito," and from Takuma Tokunaga\'s own field notes, introducing the people who looked after him in Campo. Q&A-style interviews will be added separately after the on-site research trip planned for September–November 2026.',
     readFullText: 'Read the full text →',
     interviewPendingNotice: 'A direct interview with this person will be added after the on-site research trip.',
+    jumpButtonLabel: 'See the History & Voices of Those Involved ↓',
+    backToGalleryLabel: '↑ Back to the Works',
   },
   sp: {
     historyHeading: 'Historia',
@@ -239,5 +253,7 @@ export const campoHistoryContent: Record<Lang, CampoHistoryContent> = {
     figuresIntro: 'A partir de los textos aportados para la exposición de 2017 en el Museo "El Pósito", y de las propias notas de campo de Takuma Tokunaga, se presenta a las personas que lo acompañaron en Campo. Las entrevistas en formato de preguntas y respuestas se añadirán por separado tras el viaje de investigación previsto para septiembre–noviembre de 2026.',
     readFullText: 'Leer el texto completo →',
     interviewPendingNotice: 'Una entrevista directa con esta persona se añadirá tras el viaje de investigación in situ.',
+    jumpButtonLabel: 'Ver la Historia y las Voces de los Implicados ↓',
+    backToGalleryLabel: '↑ Volver a las Obras',
   },
 };

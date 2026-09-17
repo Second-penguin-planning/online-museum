@@ -73,6 +73,35 @@ const figures = campoFigures.map((f) => ({
 
   <div class="cc-lead">
     {c.lead.map((p) => <p>{p}</p>)}
+    <a class="cc-jump-btn" href="#cc-history-heading">{h.jumpButtonLabel}</a>
+  </div>
+
+  <div class="cc-filters" role="tablist" aria-label={c.filterAll}>
+    <button class="cc-filter is-active" data-filter="all" type="button">
+      {c.filterAll} <span class="cc-filter__count">{c.countTemplate.replace('{n}', String(items.length))}</span>
+    </button>
+    {campoCategoryOrder.map((cat) => (
+      <button class="cc-filter" data-filter={cat} type="button">
+        {catLabels[cat]} <span class="cc-filter__count">{c.countTemplate.replace('{n}', String(categoryCounts[cat]))}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="cc-grid" id="ccGrid">
+    {items.map((item) => (
+      <button class="cc-card" data-category={item.category} data-id={item.id} type="button">
+        <span class="cc-card__frame">
+          {item.paintingImage ? (
+            <img src={`${base}/gallery/${item.paintingImage}`} alt={item.title} loading="lazy" />
+          ) : (
+            <span class="cc-card__pending">{c.pendingWorkNotice}</span>
+          )}
+        </span>
+        <span class="cc-card__badge">{catLabels[item.category]}</span>
+        <span class="cc-card__title">{item.title}</span>
+        <span class="cc-card__open">{c.openLabel}</span>
+      </button>
+    ))}
   </div>
 
   <section class="cc-history" aria-labelledby="cc-history-heading">
@@ -111,35 +140,8 @@ const figures = campoFigures.map((f) => ({
         </article>
       ))}
     </div>
+    <a class="cc-jump-btn cc-jump-btn--back" href="#ccGrid">{h.backToGalleryLabel}</a>
   </section>
-
-  <div class="cc-filters" role="tablist" aria-label={c.filterAll}>
-    <button class="cc-filter is-active" data-filter="all" type="button">
-      {c.filterAll} <span class="cc-filter__count">{c.countTemplate.replace('{n}', String(items.length))}</span>
-    </button>
-    {campoCategoryOrder.map((cat) => (
-      <button class="cc-filter" data-filter={cat} type="button">
-        {catLabels[cat]} <span class="cc-filter__count">{c.countTemplate.replace('{n}', String(categoryCounts[cat]))}</span>
-      </button>
-    ))}
-  </div>
-
-  <div class="cc-grid" id="ccGrid">
-    {items.map((item) => (
-      <button class="cc-card" data-category={item.category} data-id={item.id} type="button">
-        <span class="cc-card__frame">
-          {item.paintingImage ? (
-            <img src={`${base}/gallery/${item.paintingImage}`} alt={item.title} loading="lazy" />
-          ) : (
-            <span class="cc-card__pending">{c.pendingWorkNotice}</span>
-          )}
-        </span>
-        <span class="cc-card__badge">{catLabels[item.category]}</span>
-        <span class="cc-card__title">{item.title}</span>
-        <span class="cc-card__open">{c.openLabel}</span>
-      </button>
-    ))}
-  </div>
 
   <!-- ===== 比較モーダル ===== -->
   <div class="cc-modal" id="ccModal" hidden aria-hidden="true">
@@ -266,6 +268,22 @@ const figures = campoFigures.map((f) => ({
   .cc-lead { padding-bottom: 1rem; margin-bottom: 1.2rem; border-bottom: 1px solid rgba(212, 175, 55, 0.4); }
   .cc-lead :global(p) { font-size: .95rem; }
 
+  .cc-jump-btn {
+    display: inline-block;
+    margin-top: .4rem;
+    font-size: .85rem;
+    letter-spacing: .03em;
+    color: var(--crimson);
+    text-decoration: none;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    border-radius: 999px;
+    padding: .5rem 1.1rem;
+    transition: background .2s, border-color .2s;
+  }
+  .cc-jump-btn:hover { background: rgba(212, 175, 55, 0.22); border-color: var(--gold); }
+  .cc-jump-btn--back { margin-top: 1.6rem; }
+
   .cc-section-heading {
     color: var(--crimson);
     font-size: 1.15rem;
@@ -279,7 +297,7 @@ const figures = campoFigures.map((f) => ({
     margin-bottom: 1.2rem;
   }
 
-  .cc-history { margin-bottom: 2.4rem; }
+  .cc-history { margin-top: 2.8rem; padding-top: 1.6rem; border-top: 1px solid rgba(212, 175, 55, 0.4); margin-bottom: 2.4rem; scroll-margin-top: 130px; }
   .cc-timeline {
     list-style: none;
     display: flex;
@@ -404,6 +422,7 @@ const figures = campoFigures.map((f) => ({
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 1.4rem;
     margin-bottom: 1rem;
+    scroll-margin-top: 130px;
   }
   .cc-card {
     font-family: inherit;
