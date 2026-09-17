@@ -23,7 +23,7 @@ export const aboutNavLabel: Record<Lang, string> = {
 
 const labels: Record<Lang, Record<
   'intro' | 'contact' | 'takuma' | 'sachiko' | 'biography' | 'essay' | 'philosophy' | 'records'
-  | 'campo' | 'campoOverview' | 'campoWorks' | 'campoNotes',
+  | 'campo' | 'campoCollection' | 'campoOverview' | 'campoWorks' | 'campoNotes',
   string
 >> = {
   ja: {
@@ -36,6 +36,7 @@ const labels: Record<Lang, Record<
     philosophy: '「白」の哲学',
     records: '記録',
     campo: 'カンポ・デ・クリプターナ',
+    campoCollection: '★ 特別コレクション',
     campoOverview: '概要',
     campoWorks: '作品目録',
     campoNotes: '現地の記録',
@@ -50,6 +51,7 @@ const labels: Record<Lang, Record<
     philosophy: 'Philosophy of White',
     records: 'Records',
     campo: 'Campo de Criptana',
+    campoCollection: '★ Special Collection',
     campoOverview: 'Overview',
     campoWorks: 'Paintings Catalog',
     campoNotes: 'Field Notes',
@@ -64,6 +66,7 @@ const labels: Record<Lang, Record<
     philosophy: 'Filosofía del Blanco',
     records: 'Registros',
     campo: 'Campo de Criptana',
+    campoCollection: '★ Colección Especial',
     campoOverview: 'Resumen',
     campoWorks: 'Catálogo de obras',
     campoNotes: 'Notas de campo',
@@ -96,6 +99,7 @@ export function getAboutNav(lang: Lang, base: string): AboutNavEntry[] {
     {
       label: L.campo,
       children: [
+        { label: L.campoCollection, href: `${p}/campo-collection/` },
         { label: L.campoOverview, href: `${p}/campo-de-criptana/` },
         { label: L.campoWorks, href: `${p}/campo-works/` },
         { label: L.campoNotes, href: `${p}/campo-notes/` },

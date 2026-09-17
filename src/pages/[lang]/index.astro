@@ -1,6 +1,7 @@
 ---
 import artworks from '../../data/artworks.json';
 import { ui, rooms } from '../../data/ui.ts';
+import { campoConceptContent } from '../../data/campoConcept.ts';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 
 export function getStaticPaths() {
@@ -16,6 +17,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const t = ui[lang];
 const roomNames = rooms[lang];
+const concept = campoConceptContent[lang] ?? campoConceptContent.ja;
 
 // 所蔵庫で「ギャラリーに公開」を選んだ作品だけを展示する
 const publishedArtworks = artworks.filter(a => a.published);
@@ -153,6 +155,21 @@ function getCardWidth(sizeStr) {
         opacity: 1;
         color: var(--gold-light);
         transform: translateY(-1px);
+      }
+
+      .header-nav a.nav-campo-highlight {
+        opacity: 1;
+        color: var(--gold-bright);
+        border: 1px solid rgba(212, 175, 55, 0.5);
+        border-radius: 999px;
+        padding: 6px 14px !important;
+      }
+      .header-nav a.nav-campo-highlight:hover {
+        background: rgba(212, 175, 55, 0.12);
+        border-color: var(--gold-bright);
+      }
+      .mobile-menu-nav a.nav-campo-highlight {
+        color: var(--gold-bright);
       }
 
       .lang-switcher {
@@ -415,6 +432,102 @@ function getCardWidth(sizeStr) {
         min-height: 52px;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+      }
+
+      .concept-link {
+        margin-top: 22px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        color: var(--gold-bright);
+        opacity: 0.85;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        transition: opacity 0.3s;
+      }
+      .concept-link:hover { opacity: 1; }
+      .concept-link span {
+        font-family: 'Garamond', 'Times New Roman', '游明朝', serif;
+        letter-spacing: 0.08em;
+        font-size: 0.92rem;
+        color: var(--text-main);
+        text-decoration: underline;
+        text-decoration-color: var(--gold-dim);
+        text-underline-offset: 4px;
+      }
+
+      .campo-concept {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 991;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+        padding: 90px 24px 60px;
+        background: var(--parchment);
+        transition: opacity 1.2s ease, visibility 1.2s ease;
+      }
+      .campo-concept.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .campo-concept-inner {
+        max-width: 720px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .campo-concept-eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 0.35em;
+        color: var(--gold-bright);
+        margin-bottom: 18px;
+      }
+
+      .campo-concept-title {
+        font-size: clamp(1.4rem, 3.5vw, 2rem);
+        letter-spacing: 0.06em;
+        color: var(--text-main);
+        margin-bottom: 28px;
+      }
+
+      .campo-concept-text {
+        font-size: 0.98rem;
+        line-height: 2;
+        color: var(--text-sub);
+        margin-bottom: 20px;
+        text-align: left;
+      }
+      .campo-concept-text:last-of-type { margin-bottom: 36px; }
+
+      .campo-concept-cta {
+        display: inline-block;
+        color: var(--gold-bright);
+        text-decoration: none;
+        font-size: 0.88rem;
+        letter-spacing: 0.12em;
+        border-bottom: 1px solid var(--gold-dim);
+        padding-bottom: 4px;
+        transition: color 0.3s, border-color 0.3s;
+      }
+      .campo-concept-cta:hover {
+        color: var(--gold-light);
+        border-color: var(--gold-light);
+      }
+
+      @media (max-width: 640px) {
+        .campo-concept { padding: 60px 20px; }
+        .campo-concept-text { font-size: 0.92rem; line-height: 1.9; }
       }
 
       .room-selector {
@@ -873,6 +986,7 @@ function getCardWidth(sizeStr) {
         <a href="#" id="navTop">{t.backTop}</a>
         <AboutNavDropdown lang={lang} base={base} mode="desktop" />
         <a href="#" id="navExhibition">{t.roomSelect}</a>
+        <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{t.navCampoCollection}</a>
         <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
         <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
         <div class="lang-switcher">
@@ -899,6 +1013,7 @@ function getCardWidth(sizeStr) {
         <a href="#" id="mNavTop">{t.backTop}</a>
         <AboutNavDropdown lang={lang} base={base} mode="mobile" />
         <button id="mNavExhibition">{t.roomSelect}</button>
+        <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{t.navCampoCollection}</a>
         <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
         <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
       </nav>
@@ -917,6 +1032,18 @@ function getCardWidth(sizeStr) {
         <p class="hero-subtitle">PERMANENT COLLECTION</p>
         <div class="hero-divider"><span class="hero-divider-diamond"></span></div>
         <button class="enter-btn" id="enterBtn">{t.enter}</button>
+        <button class="concept-link" id="conceptLink">{concept.eyebrow}<span>{concept.title}</span></button>
+      </div>
+    </div>
+
+    <!-- カンポ・デ・クリプターナ構想セクション -->
+    <div class="campo-concept hidden" id="campoConceptScreen">
+      <div class="campo-concept-inner">
+        <p class="campo-concept-eyebrow">{concept.eyebrow}</p>
+        <h2 class="campo-concept-title">{concept.title}</h2>
+        {concept.paragraphs.map((p) => <p class="campo-concept-text">{p}</p>)}
+        <a class="campo-concept-cta" href={`${base}/${lang}/about/campo-collection/`}>{concept.cta}</a>
+        <button class="back-btn" id="backToTopFromConcept">{t.backTop}</button>
       </div>
     </div>
 
@@ -1002,6 +1129,7 @@ function getCardWidth(sizeStr) {
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
       const entrance     = document.getElementById('entrance');
       const roomSelector = document.getElementById('roomSelector');
+      const campoConcept = document.getElementById('campoConceptScreen');
       const museum       = document.getElementById('museum');
       const galleryTrack = document.getElementById('galleryTrack');
 
@@ -1039,6 +1167,7 @@ function getCardWidth(sizeStr) {
       function showEntrance() {
         entrance.classList.remove('hidden');
         roomSelector.classList.add('hidden');
+        campoConcept.classList.add('hidden');
         museum.classList.remove('visible');
         closeMobileMenu();
       }
@@ -1046,9 +1175,24 @@ function getCardWidth(sizeStr) {
       function showSelector() {
         entrance.classList.add('hidden');
         roomSelector.classList.remove('hidden');
+        campoConcept.classList.add('hidden');
         museum.classList.remove('visible');
         closeMobileMenu();
       }
+
+      function showConcept() {
+        entrance.classList.add('hidden');
+        roomSelector.classList.add('hidden');
+        campoConcept.classList.remove('hidden');
+        museum.classList.remove('visible');
+        closeMobileMenu();
+      }
+
+      document.getElementById('conceptLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        showConcept();
+      });
+      document.getElementById('backToTopFromConcept').addEventListener('click', showEntrance);
 
       document.getElementById('navExhibition').addEventListener('click', (e) => {
         e.preventDefault();

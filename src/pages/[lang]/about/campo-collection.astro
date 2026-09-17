@@ -1,0 +1,391 @@
+---
+// src/pages/[lang]/about/campo-collection.astro — カンポ・デ・クリプターナ特別コレクション
+// 絵画画像と現地取材写真を並べて比較しながら、作品ごとに Impresión（インパクト）・
+// Técnica（技能）・Historia（物語）の3要素評価を紹介する特別ギャラリー。
+// カテゴリー（風車・街並み・扉と窓）でのフィルタリングに対応。
+// データは src/data/campoCollection.ts 参照。
+import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
+import type { Lang } from '../../../data/aboutNav';
+import {
+  campoCollectionItems,
+  campoCategoryOrder,
+  campoCategoryLabels,
+  campoCollectionContent,
+} from '../../../data/campoCollection';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ja' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'sp' } },
+  ];
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const c = campoCollectionContent[lang] ?? campoCollectionContent.ja;
+const catLabels = campoCategoryLabels[lang] ?? campoCategoryLabels.ja;
+
+const items = campoCollectionItems.map((item) => ({
+  id: item.id,
+  category: item.category,
+  paintingImage: item.paintingImage,
+  fieldPhoto: item.fieldPhoto,
+  title: item.title[lang] ?? item.title.ja,
+  impresion: item.impresion[lang] ?? item.impresion.ja,
+  tecnica: item.tecnica[lang] ?? item.tecnica.ja,
+  historia: item.historia[lang] ?? item.historia.ja,
+}));
+
+const categoryCounts = Object.fromEntries(
+  campoCategoryOrder.map((cat) => [cat, items.filter((i) => i.category === cat).length])
+);
+---
+
+<AboutSectionLayout
+  lang={lang}
+  base={base}
+  slug="campo-collection/"
+  metaTitle={c.metaTitle}
+  metaDescription={c.metaDescription}
+  pageTitle={c.navTitle}
+>
+  <div class="cc-hero">
+    <h2 class="cc-title">{c.title}</h2>
+    <p class="cc-subtitle">{c.subtitle}</p>
+  </div>
+
+  <div class="cc-lead">
+    {c.lead.map((p) => <p>{p}</p>)}
+  </div>
+
+  <div class="cc-filters" role="tablist" aria-label={c.filterAll}>
+    <button class="cc-filter is-active" data-filter="all" type="button">
+      {c.filterAll} <span class="cc-filter__count">{c.countTemplate.replace('{n}', String(items.length))}</span>
+    </button>
+    {campoCategoryOrder.map((cat) => (
+      <button class="cc-filter" data-filter={cat} type="button">
+        {catLabels[cat]} <span class="cc-filter__count">{c.countTemplate.replace('{n}', String(categoryCounts[cat]))}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="cc-grid" id="ccGrid">
+    {items.map((item) => (
+      <button class="cc-card" data-category={item.category} data-id={item.id} type="button">
+        <span class="cc-card__frame">
+          {item.paintingImage ? (
+            <img src={`${base}/gallery/${item.paintingImage}`} alt={item.title} loading="lazy" />
+          ) : (
+            <span class="cc-card__pending">{c.pendingWorkNotice}</span>
+          )}
+        </span>
+        <span class="cc-card__badge">{catLabels[item.category]}</span>
+        <span class="cc-card__title">{item.title}</span>
+        <span class="cc-card__open">{c.openLabel}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- ===== 比較モーダル ===== -->
+  <div class="cc-modal" id="ccModal" hidden aria-hidden="true">
+    <div class="cc-modal__backdrop" id="ccModalBackdrop"></div>
+    <div class="cc-modal__panel" role="dialog" aria-modal="true" aria-labelledby="ccModalTitle">
+      <button class="cc-modal__close" id="ccModalClose" type="button" aria-label={c.closeLabel}>&times;</button>
+      <p class="cc-modal__badge" id="ccModalBadge"></p>
+      <h3 class="cc-modal__title" id="ccModalTitle"></h3>
+
+      <div class="cc-toggle" id="ccToggle">
+        <button class="cc-toggle__btn is-active" data-panel="painting" type="button">{c.paintingLabel}</button>
+        <button class="cc-toggle__btn" data-panel="field" type="button">{c.fieldPhotoLabel}</button>
+      </div>
+
+      <div class="cc-compare">
+        <figure class="cc-panel is-active" data-panel="painting">
+          <span class="cc-panel__label">{c.paintingLabel}</span>
+          <span class="cc-panel__frame" id="ccPaintingFrame"></span>
+        </figure>
+        <figure class="cc-panel" data-panel="field">
+          <span class="cc-panel__label">{c.fieldPhotoLabel}</span>
+          <span class="cc-panel__frame" id="ccFieldFrame"></span>
+        </figure>
+      </div>
+      <p class="cc-hint">{c.toggleHint}</p>
+
+      <div class="cc-eval">
+        <div class="cc-eval__item">
+          <p class="cc-eval__label">{c.evalLabels.impresion}</p>
+          <p class="cc-eval__text" id="ccImpresion"></p>
+        </div>
+        <div class="cc-eval__item">
+          <p class="cc-eval__label">{c.evalLabels.tecnica}</p>
+          <p class="cc-eval__text" id="ccTecnica"></p>
+        </div>
+        <div class="cc-eval__item cc-eval__item--historia">
+          <p class="cc-eval__label">{c.evalLabels.historia}</p>
+          <p class="cc-eval__text" id="ccHistoria"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</AboutSectionLayout>
+
+<script define:vars={{ items, base, pendingPhotoNotice: c.pendingPhotoNotice, pendingWorkNotice: c.pendingWorkNotice, catLabelsJson: catLabels }}>
+  const ITEMS = items;
+  const BASE = base;
+  const CAT_LABELS = catLabelsJson;
+
+  const grid = document.getElementById('ccGrid');
+  const filters = document.querySelectorAll('.cc-filter');
+  const modal = document.getElementById('ccModal');
+  const modalBackdrop = document.getElementById('ccModalBackdrop');
+  const modalClose = document.getElementById('ccModalClose');
+  const toggleBtns = document.querySelectorAll('.cc-toggle__btn');
+  const panels = document.querySelectorAll('.cc-panel');
+
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filters.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const filter = btn.dataset.filter;
+      grid.querySelectorAll('.cc-card').forEach((card) => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+
+  function frameHtml(file, pendingText) {
+    if (!file) return `<span class="cc-panel__pending">${pendingText}</span>`;
+    return `<img src="${BASE}/gallery/${file}" alt="" loading="lazy" />`;
+  }
+
+  function openModal(item) {
+    document.getElementById('ccModalBadge').textContent = CAT_LABELS[item.category] || '';
+    document.getElementById('ccModalTitle').textContent = item.title;
+    document.getElementById('ccPaintingFrame').innerHTML = frameHtml(item.paintingImage, pendingWorkNotice);
+    document.getElementById('ccFieldFrame').innerHTML = frameHtml(item.fieldPhoto, pendingPhotoNotice);
+    document.getElementById('ccImpresion').textContent = item.impresion;
+    document.getElementById('ccTecnica').textContent = item.tecnica;
+    document.getElementById('ccHistoria').textContent = item.historia;
+
+    toggleBtns.forEach((b) => b.classList.toggle('is-active', b.dataset.panel === 'painting'));
+    panels.forEach((p) => p.classList.toggle('is-active', p.dataset.panel === 'painting'));
+
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  grid.querySelectorAll('.cc-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const item = ITEMS.find((i) => i.id === card.dataset.id);
+      if (item) openModal(item);
+    });
+  });
+
+  modalClose.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+
+  toggleBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      toggleBtns.forEach((b) => b.classList.toggle('is-active', b === btn));
+      panels.forEach((p) => p.classList.toggle('is-active', p.dataset.panel === btn.dataset.panel));
+    });
+  });
+</script>
+
+<style>
+  .cc-hero { padding: 1.2rem 0 1.6rem; }
+  .cc-title { font-size: 1.5rem; line-height: 1.5; color: var(--crimson); letter-spacing: .04em; margin-bottom: .5rem; }
+  .cc-subtitle { font-style: italic; color: var(--text-mid); font-size: .95rem; opacity: .85; }
+
+  .cc-lead { padding-bottom: 1rem; margin-bottom: 1.2rem; border-bottom: 1px solid rgba(212, 175, 55, 0.4); }
+  .cc-lead :global(p) { font-size: .95rem; }
+
+  .cc-filters { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.6rem; }
+  .cc-filter {
+    font-family: inherit;
+    cursor: pointer;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-radius: 999px;
+    padding: .5rem 1.1rem;
+    font-size: .88rem;
+    color: var(--text-mid);
+    letter-spacing: .02em;
+    transition: all .2s;
+  }
+  .cc-filter:hover { border-color: var(--gold); color: var(--crimson); }
+  .cc-filter.is-active { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+  .cc-filter__count { opacity: .75; font-size: .8em; margin-left: .25em; }
+
+  .cc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .cc-card {
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-radius: 8px;
+    padding: .9rem .9rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .cc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(74, 10, 10, 0.12);
+    border-color: var(--gold);
+  }
+  .cc-card__frame {
+    display: block;
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(74, 10, 10, 0.05);
+  }
+  .cc-card__frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cc-card__pending {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: .5rem;
+    text-align: center;
+    font-size: .78rem;
+    color: var(--text-mid);
+    opacity: .75;
+  }
+  .cc-card__badge {
+    align-self: flex-start;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    color: var(--gold);
+    background: rgba(74, 10, 10, 0.06);
+    border-radius: 3px;
+    padding: .15rem .5rem;
+  }
+  .cc-card__title { font-weight: 600; color: var(--text); font-size: .98rem; line-height: 1.4; }
+  .cc-card__open { font-size: .8rem; color: var(--crimson); opacity: .8; }
+
+  /* ===== モーダル ===== */
+  .cc-modal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+  .cc-modal[hidden] { display: none; }
+  .cc-modal__backdrop { position: absolute; inset: 0; background: rgba(26, 18, 8, 0.72); backdrop-filter: blur(3px); }
+  .cc-modal__panel {
+    position: relative;
+    background: var(--cream);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    max-width: 920px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem 2rem 2.2rem;
+  }
+  .cc-modal__close {
+    position: absolute;
+    top: .8rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--text-mid);
+    cursor: pointer;
+  }
+  .cc-modal__close:hover { color: var(--crimson); }
+  .cc-modal__badge {
+    font-size: .78rem;
+    letter-spacing: .06em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: .3rem;
+  }
+  .cc-modal__title { color: var(--crimson); font-size: 1.3rem; letter-spacing: .02em; margin-bottom: 1.2rem; padding-right: 2rem; }
+
+  .cc-toggle { display: none; gap: .5rem; margin-bottom: .8rem; }
+  .cc-toggle__btn {
+    flex: 1;
+    font-family: inherit;
+    cursor: pointer;
+    padding: .55rem;
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    background: transparent;
+    color: var(--text-mid);
+    border-radius: 6px;
+    font-size: .85rem;
+  }
+  .cc-toggle__btn.is-active { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+
+  .cc-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: .6rem; }
+  .cc-panel__label {
+    display: block;
+    font-size: .78rem;
+    letter-spacing: .05em;
+    color: var(--text-mid);
+    margin-bottom: .4rem;
+  }
+  .cc-panel__frame {
+    display: block;
+    aspect-ratio: 4 / 3;
+    background: rgba(74, 10, 10, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .cc-panel__frame :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cc-panel__pending {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
+    text-align: center;
+    font-size: .82rem;
+    color: var(--text-mid);
+    opacity: .75;
+  }
+  .cc-hint { font-size: .78rem; color: var(--text-mid); opacity: .7; text-align: center; margin-bottom: 1.4rem; }
+
+  .cc-eval { display: grid; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(212, 175, 55, 0.4); }
+  .cc-eval__item {
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 6px;
+    padding: .8rem 1rem;
+  }
+  .cc-eval__item--historia { background: rgba(74, 10, 10, 0.04); }
+  .cc-eval__label { color: var(--crimson); font-weight: 600; font-size: .85rem; letter-spacing: .03em; margin-bottom: .35rem; }
+  .cc-eval__text { font-size: .92rem; line-height: 1.75; color: var(--text); }
+
+  @media (max-width: 720px) {
+    .cc-toggle { display: flex; }
+    .cc-compare { grid-template-columns: 1fr; }
+    .cc-panel { display: none; }
+    .cc-panel.is-active { display: block; }
+    .cc-modal__panel { padding: 1.4rem 1.2rem 1.8rem; }
+  }
+
+  @media (max-width: 480px) {
+    .cc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+    .cc-filters { gap: .45rem; }
+    .cc-filter { padding: .4rem .8rem; font-size: .8rem; }
+  }
+</style>
