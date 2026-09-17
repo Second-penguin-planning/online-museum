@@ -12,6 +12,11 @@ import {
   campoCategoryLabels,
   campoCollectionContent,
 } from '../../../data/campoCollection';
+import {
+  campoTimeline,
+  campoFigures,
+  campoHistoryContent,
+} from '../../../data/campoHistory';
 
 export function getStaticPaths() {
   return [
@@ -40,6 +45,17 @@ const items = campoCollectionItems.map((item) => ({
 const categoryCounts = Object.fromEntries(
   campoCategoryOrder.map((cat) => [cat, items.filter((i) => i.category === cat).length])
 );
+
+const h = campoHistoryContent[lang] ?? campoHistoryContent.ja;
+const figures = campoFigures.map((f) => ({
+  id: f.id,
+  name: f.name[lang] ?? f.name.ja,
+  role: f.role[lang] ?? f.role.ja,
+  badge: f.badge ? (f.badge[lang] ?? f.badge.ja) : null,
+  blurb: f.blurb ? (f.blurb[lang] ?? f.blurb.ja) : null,
+  quote: f.quote ? (f.quote[lang] ?? f.quote.ja) : null,
+  articleHref: f.articleAnchor ? `${base}/${lang}/about/campo-de-criptana/#${f.articleAnchor}` : null,
+}));
 ---
 
 <AboutSectionLayout
@@ -58,6 +74,44 @@ const categoryCounts = Object.fromEntries(
   <div class="cc-lead">
     {c.lead.map((p) => <p>{p}</p>)}
   </div>
+
+  <section class="cc-history" aria-labelledby="cc-history-heading">
+    <h3 id="cc-history-heading" class="cc-section-heading">{h.historyHeading}</h3>
+    <p class="cc-section-intro">{h.historyIntro}</p>
+    <ol class="cc-timeline">
+      {campoTimeline.map((entry) => (
+        <li class="cc-timeline__item">
+          <span class="cc-timeline__year">{entry.year}</span>
+          <span class="cc-timeline__text">{entry.text[lang] ?? entry.text.ja}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="cc-figures" aria-labelledby="cc-figures-heading">
+    <h3 id="cc-figures-heading" class="cc-section-heading">{h.figuresHeading}</h3>
+    <p class="cc-section-intro">{h.figuresIntro}</p>
+    <div class="cc-figures-grid">
+      {figures.map((f) => (
+        <article class="cc-figure">
+          <div class="cc-figure__head">
+            <span class="cc-figure__avatar" aria-hidden="true">{f.name.charAt(0)}</span>
+            <div>
+              <p class="cc-figure__name">{f.name}{f.badge && <span class="cc-figure__badge">{f.badge}</span>}</p>
+              <p class="cc-figure__role">{f.role}</p>
+            </div>
+          </div>
+          {f.quote && <blockquote class="cc-figure__quote">“{f.quote}”</blockquote>}
+          {f.blurb && <p class="cc-figure__blurb">{f.blurb}</p>}
+          {f.articleHref ? (
+            <a class="cc-figure__link" href={f.articleHref}>{h.readFullText}</a>
+          ) : (
+            <p class="cc-figure__pending">{h.interviewPendingNotice}</p>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
 
   <div class="cc-filters" role="tablist" aria-label={c.filterAll}>
     <button class="cc-filter is-active" data-filter="all" type="button">
@@ -211,6 +265,122 @@ const categoryCounts = Object.fromEntries(
 
   .cc-lead { padding-bottom: 1rem; margin-bottom: 1.2rem; border-bottom: 1px solid rgba(212, 175, 55, 0.4); }
   .cc-lead :global(p) { font-size: .95rem; }
+
+  .cc-section-heading {
+    color: var(--crimson);
+    font-size: 1.15rem;
+    letter-spacing: .04em;
+    margin-bottom: .5rem;
+  }
+  .cc-section-intro {
+    font-size: .88rem;
+    color: var(--text-mid);
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+  }
+
+  .cc-history { margin-bottom: 2.4rem; }
+  .cc-timeline {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 2px solid rgba(212, 175, 55, 0.5);
+    padding-left: 1.3rem;
+  }
+  .cc-timeline__item {
+    position: relative;
+    padding-bottom: 1.1rem;
+  }
+  .cc-timeline__item::before {
+    content: '';
+    position: absolute;
+    left: -1.55rem;
+    top: .3rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--cream);
+  }
+  .cc-timeline__year {
+    display: block;
+    font-weight: 600;
+    color: var(--crimson);
+    font-size: .85rem;
+    letter-spacing: .04em;
+    margin-bottom: .2rem;
+  }
+  .cc-timeline__text {
+    display: block;
+    font-size: .92rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .cc-figures { margin-bottom: 2.6rem; }
+  .cc-figures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+  }
+  .cc-figure {
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 8px;
+    padding: 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+  }
+  .cc-figure__head { display: flex; align-items: flex-start; gap: .7rem; }
+  .cc-figure__avatar {
+    flex-shrink: 0;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--crimson);
+    color: var(--gold-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .cc-figure__name { font-weight: 600; color: var(--text); font-size: .96rem; line-height: 1.4; }
+  .cc-figure__badge {
+    display: inline-block;
+    margin-left: .5rem;
+    font-size: .7rem;
+    color: var(--text-mid);
+    background: rgba(74, 10, 10, 0.06);
+    border-radius: 3px;
+    padding: .1rem .4rem;
+    vertical-align: middle;
+  }
+  .cc-figure__role { font-size: .8rem; color: var(--text-mid); opacity: .85; margin-top: .15rem; }
+  .cc-figure__quote {
+    font-size: .88rem;
+    line-height: 1.7;
+    color: var(--text);
+    font-style: italic;
+    border-left: 2px solid var(--gold);
+    padding-left: .7rem;
+  }
+  .cc-figure__blurb { font-size: .86rem; line-height: 1.7; color: var(--text-mid); }
+  .cc-figure__link {
+    align-self: flex-start;
+    font-size: .8rem;
+    color: var(--crimson);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--gold);
+  }
+  .cc-figure__link:hover { color: var(--gold-light, var(--gold)); }
+  .cc-figure__pending {
+    font-size: .78rem;
+    color: var(--text-mid);
+    opacity: .7;
+  }
 
   .cc-filters { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.6rem; }
   .cc-filter {
