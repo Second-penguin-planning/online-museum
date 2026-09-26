@@ -2230,5 +2230,873 @@
     "artistKey": null,
     "genre": null,
     "published": false
+  },
+  {
+    "file": "01052.jpg",
+    "title": {
+      "ja": "作品 52",
+      "en": "Work 52",
+      "sp": "Obra 52"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01053.jpg",
+    "title": {
+      "ja": "作品 53",
+      "en": "Work 53",
+      "sp": "Obra 53"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01054.jpg",
+    "title": {
+      "ja": "作品 54",
+      "en": "Work 54",
+      "sp": "Obra 54"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01055.jpg",
+    "title": {
+      "ja": "作品 55",
+      "en": "Work 55",
+      "sp": "Obra 55"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01056.jpg",
+    "title": {
+      "ja": "作品 56",
+      "en": "Work 56",
+      "sp": "Obra 56"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01057.jpg",
+    "title": {
+      "ja": "作品 57",
+      "en": "Work 57",
+      "sp": "Obra 57"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01058.jpg",
+    "title": {
+      "ja": "作品 58",
+      "en": "Work 58",
+      "sp": "Obra 58"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01059.jpg",
+    "title": {
+      "ja": "作品 59",
+      "en": "Work 59",
+      "sp": "Obra 59"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01060.jpg",
+    "title": {
+      "ja": "作品 60",
+      "en": "Work 60",
+      "sp": "Obra 60"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01061.jpg",
+    "title": {
+      "ja": "作品 61",
+      "en": "Work 61",
+      "sp": "Obra 61"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01062.jpg",
+    "title": {
+      "ja": "作品 62",
+      "en": "Work 62",
+      "sp": "Obra 62"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01063.jpg",
+    "title": {
+      "ja": "作品 63",
+      "en": "Work 63",
+      "sp": "Obra 63"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01064.jpg",
+    "title": {
+      "ja": "作品 64",
+      "en": "Work 64",
+      "sp": "Obra 64"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01065.jpg",
+    "title": {
+      "ja": "作品 65",
+      "en": "Work 65",
+      "sp": "Obra 65"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01066.jpg",
+    "title": {
+      "ja": "作品 66",
+      "en": "Work 66",
+      "sp": "Obra 66"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01067.jpg",
+    "title": {
+      "ja": "作品 67",
+      "en": "Work 67",
+      "sp": "Obra 67"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01068.jpg",
+    "title": {
+      "ja": "作品 68",
+      "en": "Work 68",
+      "sp": "Obra 68"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01069.jpg",
+    "title": {
+      "ja": "作品 69",
+      "en": "Work 69",
+      "sp": "Obra 69"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01070.jpg",
+    "title": {
+      "ja": "作品 70",
+      "en": "Work 70",
+      "sp": "Obra 70"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01071.jpg",
+    "title": {
+      "ja": "作品 71",
+      "en": "Work 71",
+      "sp": "Obra 71"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01072.jpg",
+    "title": {
+      "ja": "作品 72",
+      "en": "Work 72",
+      "sp": "Obra 72"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01073.jpg",
+    "title": {
+      "ja": "作品 73",
+      "en": "Work 73",
+      "sp": "Obra 73"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01074.jpg",
+    "title": {
+      "ja": "作品 74",
+      "en": "Work 74",
+      "sp": "Obra 74"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01075.jpg",
+    "title": {
+      "ja": "作品 75",
+      "en": "Work 75",
+      "sp": "Obra 75"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01076.jpg",
+    "title": {
+      "ja": "作品 76",
+      "en": "Work 76",
+      "sp": "Obra 76"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01077.jpg",
+    "title": {
+      "ja": "作品 77",
+      "en": "Work 77",
+      "sp": "Obra 77"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01078.jpg",
+    "title": {
+      "ja": "作品 78",
+      "en": "Work 78",
+      "sp": "Obra 78"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
+  },
+  {
+    "file": "01079.jpg",
+    "title": {
+      "ja": "作品 79",
+      "en": "Work 79",
+      "sp": "Obra 79"
+    },
+    "artist": {
+      "ja": "徳永卓磨",
+      "en": "Takuma Tokunaga",
+      "sp": "Takuma Tokunaga"
+    },
+    "year": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "size": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "description": {
+      "ja": "",
+      "en": "",
+      "sp": ""
+    },
+    "artistKey": "takuma",
+    "genre": "kobe",
+    "published": false
   }
 ]
