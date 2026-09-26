@@ -341,7 +341,7 @@ function getCardWidth(sizeStr) {
         z-index: 990;
         transition: opacity 1.4s ease, visibility 1.4s ease;
         background:
-          url('/hero.jpg') center / cover no-repeat;
+          url('/hero/hero-1.jpg') center / cover no-repeat;
       }
 
       .entrance.hidden {
@@ -1038,6 +1038,11 @@ function getCardWidth(sizeStr) {
 
     <!-- ヒーロー / 入口 -->
     <div class="entrance" id="entrance">
+      <script is:inline define:vars={{ heroBase: `${base}/hero/`, heroCount: 8 }}>
+        // 所蔵作品を壁に掛けた入口写真を、訪問ごとにランダムで選ぶ
+        const n = 1 + Math.floor(Math.random() * heroCount);
+        document.getElementById('entrance').style.backgroundImage = `url('${heroBase}hero-${n}.jpg')`;
+      </script>
       <div class="hero-inner">
         <p class="hero-eyebrow">{t.headerTitle}</p>
         <h1 class="hero-title">{lang === 'ja' ? (<>德永アート<br />ミュージアム</>) : t.title}</h1>
