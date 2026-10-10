@@ -2,9 +2,9 @@
 import artworks from '../../data/artworks.json';
 import { ui, rooms, home } from '../../data/ui.ts';
 import { campoConceptContent } from '../../data/campoConcept.ts';
-import { campoCollectionItems } from '../../data/campoCollection.ts';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 import SeoMeta from '../../components/SeoMeta.astro';
+import { legacy, pillarWorks, VIP_EMAIL } from '../../data/legacy.ts';
 
 export function getStaticPaths() {
   return [
@@ -21,10 +21,6 @@ const t = ui[lang];
 const roomNames = rooms[lang];
 const concept = campoConceptContent[lang] ?? campoConceptContent.ja;
 const h = home[lang] ?? home.ja;
-const worksUnit = { ja: '点', en: 'works', sp: 'obras' }[lang];
-const storyStats = h.storyStats.map((s) =>
-  s.num === 'WORKS' ? { ...s, num: `${campoCollectionItems.length}${lang === 'ja' ? '' : ' '}${worksUnit}` } : s
-);
 
 // 所蔵庫で「ギャラリーに公開」を選んだ作品だけを展示する
 const publishedArtworks = artworks.filter(a => a.published);
@@ -70,7 +66,17 @@ const roomCards = roomNames.map((room) => {
 
 // 「今日の一枚」の初期表示（JSが読み込まれると訪問ごとに入れ替わる）
 const todayDefault = categorizedArtworks.find((a) => a.file === '01044.jpg') ?? categorizedArtworks[0];
-const storyImage = '01018.jpg';
+
+// 「2つの柱」（神戸／カンポ）で取り上げる作品
+const lg = legacy[lang] ?? legacy.ja;
+const workByFile = (file) => categorizedArtworks.find((a) => a.file === file);
+const pillars = (['kobe', 'campo'] as const).map((key) => ({
+  key,
+  ...lg[key],
+  feature: workByFile(pillarWorks[key].feature),
+  others: pillarWorks[key].others.map(workByFile).filter(Boolean),
+}));
+const lpUrl = 'https://campo-criptana-lp.vercel.app/';
 
 function getCardWidth(sizeStr) {
   const defaultWidth = 280; 
@@ -96,26 +102,32 @@ function getCardWidth(sizeStr) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{`${t.title}｜${h.tagline}`}</title>
     <SeoMeta lang={lang} title={`${t.title}｜${h.tagline}`} description={h.description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+JP:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
+      /* 美術館の展示室のような、チャコールの地に金のアクセント */
       :root {
-        --crimson-deep:   #ffffff;
-        --crimson-mid:    #f6f1e8;
-        --crimson-rich:   #ede2c9;
-        --crimson-warm:   #e3d3ab;
-        --gold-dim:       #c9a227;
-        --gold-bright:    #b8860b;
-        --gold-light:     #8a6508;
-        --parchment:      #faf7f0;
-        --text-main:      #2a2015;
-        --text-sub:       #5c4a35;
-        --text-muted:     #8c7a63;
-        --overlay-dark:   rgba(255, 255, 255, 0.75);
+        --crimson-deep:   #141210;
+        --crimson-mid:    #1c1915;
+        --crimson-rich:   #25211b;
+        --crimson-warm:   #302a21;
+        --gold-dim:       #8f7642;
+        --gold-bright:    #c9a961;
+        --gold-light:     #e6cf96;
+        --parchment:      #171512;
+        --text-main:      #efe8d8;
+        --text-sub:       #c4baa5;
+        --text-muted:     #8e8574;
+        --overlay-dark:   rgba(12, 10, 8, 0.8);
+        --serif-jp:       "Noto Serif JP", "游明朝", "Yu Mincho", serif;
+        --serif-latin:    "Cormorant Garamond", "Garamond", serif;
       }
 
       body {
-        font-family: "Garamond", "Times New Roman", "游明朝", serif;
+        font-family: var(--serif-latin), var(--serif-jp);
         background: var(--crimson-deep);
         color: var(--text-main);
         overflow-x: hidden;
@@ -133,15 +145,15 @@ function getCardWidth(sizeStr) {
         z-index: 1000;
         background: linear-gradient(
           to bottom,
-          rgba(255, 255, 255, 0.95) 0%,
-          rgba(255, 255, 255, 0.0) 100%
+          rgba(12, 10, 8, 0.85) 0%,
+          rgba(12, 10, 8, 0.0) 100%
         );
-        border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        border-bottom: 1px solid rgba(201, 169, 97, 0.12);
       }
 
       .site-header.solid {
-        background: rgba(255, 253, 248, 0.97);
-        box-shadow: 0 1px 12px rgba(60, 40, 10, 0.08);
+        background: rgba(16, 14, 12, 0.96);
+        box-shadow: 0 1px 20px rgba(0, 0, 0, 0.5);
       }
 
       .header-logo {
@@ -150,7 +162,7 @@ function getCardWidth(sizeStr) {
         font-weight: 400;
         color: var(--gold-bright);
         text-decoration: none;
-        text-shadow: 0 1px 8px rgba(255,255,255,0.9);
+        text-shadow: 0 1px 8px rgba(0,0,0,0.6);
         flex-shrink: 0;
       }
 
@@ -168,7 +180,7 @@ function getCardWidth(sizeStr) {
         letter-spacing: 0.15em;
         opacity: 0.85;
         transition: opacity 0.3s, color 0.3s, transform 0.3s;
-        text-shadow: 0 1px 8px rgba(255,255,255,0.9);
+        text-shadow: 0 1px 8px rgba(0,0,0,0.6);
         white-space: nowrap;
         background: none;
         border: none;
@@ -262,8 +274,8 @@ function getCardWidth(sizeStr) {
         height: 100%;
         background: linear-gradient(
           160deg,
-          rgba(255, 255, 255, 0.98) 0%,
-          rgba(246, 241, 232, 0.98) 100%
+          rgba(22, 19, 16, 0.99) 0%,
+          rgba(14, 12, 10, 0.99) 100%
         );
         border-left: 1px solid rgba(212, 175, 55, 0.2);
         z-index: 1050;
@@ -363,6 +375,7 @@ function getCardWidth(sizeStr) {
         inset: 0;
         z-index: 990;
         overflow-y: auto;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         background: var(--parchment);
         transition: opacity 1.2s ease, visibility 1.2s ease;
@@ -398,8 +411,8 @@ function getCardWidth(sizeStr) {
         background: linear-gradient(
           to bottom,
           rgba(20, 14, 6, 0) 30%,
-          rgba(20, 14, 6, 0.38) 55%,
-          rgba(20, 14, 6, 0.72) 100%
+          rgba(12, 10, 8, 0.5) 55%,
+          rgba(12, 10, 8, 0.88) 100%
         );
         pointer-events: none;
       }
@@ -429,8 +442,9 @@ function getCardWidth(sizeStr) {
       }
 
       .hero-title {
+        font-family: var(--serif-jp);
         font-size: clamp(1.9rem, 6vw, 3.6rem);
-        font-weight: 400;
+        font-weight: 300;
         letter-spacing: 0.15em;
         line-height: 1.2;
         color: #ffffff;
@@ -475,16 +489,17 @@ function getCardWidth(sizeStr) {
       .enter-btn {
         position: relative;
         padding: 14px 40px;
-        background: var(--gold-bright);
-        color: #ffffff;
+        background: rgba(12, 10, 8, 0.35);
+        color: #f6ecd2;
         font-family: inherit;
         font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         letter-spacing: 0.4em;
         text-transform: uppercase;
         white-space: nowrap;
         cursor: pointer;
-        border: 1px solid #d9b65c;
-        border-radius: 2px;
+        border: 1px solid rgba(230, 207, 150, 0.85);
+        border-radius: 0;
+        backdrop-filter: blur(2px);
         min-width: 220px;
         min-height: 52px;
         touch-action: manipulation;
@@ -494,7 +509,8 @@ function getCardWidth(sizeStr) {
       }
 
       .enter-btn:hover {
-        background: var(--gold-light);
+        background: rgba(201, 169, 97, 0.9);
+        color: #141210;
         transform: translateY(-1px);
       }
 
@@ -516,7 +532,7 @@ function getCardWidth(sizeStr) {
       }
       .concept-link:hover { opacity: 0.85; }
       .concept-link span {
-        font-family: 'Garamond', 'Times New Roman', '游明朝', serif;
+        font-family: var(--serif-jp);
         letter-spacing: 0.08em;
         font-size: 0.95rem;
         color: #ffffff;
@@ -556,34 +572,39 @@ function getCardWidth(sizeStr) {
 
       /* ── ホームの各区画 ── */
       .home-sec {
-        max-width: 1040px;
+        max-width: 1160px;
         margin: 0 auto;
-        padding: 88px 24px;
-        border-top: 1px solid rgba(201, 162, 39, 0.22);
+        padding: 150px 32px;
+        border-top: 1px solid rgba(201, 169, 97, 0.14);
       }
       .entrance + .home-sec { border-top: 0; }
       .sec-eyebrow {
-        font-size: 0.68rem;
-        letter-spacing: 0.35em;
+        font-family: var(--serif-latin);
+        font-size: 0.74rem;
+        letter-spacing: 0.4em;
         color: var(--gold-bright);
-        margin-bottom: 10px;
+        margin-bottom: 18px;
       }
       .sec-heading {
-        font-size: clamp(1.35rem, 4vw, 2rem);
+        font-family: var(--serif-jp);
+        font-size: clamp(1.45rem, 3.6vw, 2.25rem);
         font-weight: 400;
-        letter-spacing: 0.12em;
-        line-height: 1.5;
+        letter-spacing: 0.1em;
+        line-height: 1.6;
         color: var(--text-main);
-        margin-bottom: 18px;
+        margin-bottom: 32px;
         text-wrap: balance;
       }
       .sec-text {
+        font-family: var(--serif-jp);
         font-size: 0.98rem;
-        line-height: 2;
+        font-weight: 300;
+        line-height: 2.2;
+        letter-spacing: 0.04em;
         color: var(--text-sub);
         max-width: 34em;
       }
-      .sec-text + .sec-text { margin-top: 12px; }
+      .sec-text + .sec-text { margin-top: 18px; }
       .sec-links {
         display: flex;
         flex-wrap: wrap;
@@ -596,17 +617,17 @@ function getCardWidth(sizeStr) {
         align-items: center;
         gap: 10px;
         padding: 12px 26px;
-        background: var(--text-main);
-        color: #fff;
+        background: transparent;
+        color: var(--gold-light);
         text-decoration: none;
         font-size: 0.85rem;
-        letter-spacing: 0.15em;
-        border: none;
-        font-family: inherit;
+        letter-spacing: 0.18em;
+        border: 1px solid var(--gold-dim);
+        font-family: var(--serif-jp);
         cursor: pointer;
-        transition: background 0.3s;
+        transition: background 0.3s, color 0.3s, border-color 0.3s;
       }
-      .sec-cta:hover { background: var(--gold-light); }
+      .sec-cta:hover { background: var(--gold-bright); color: #141210; border-color: var(--gold-bright); }
       .sec-link {
         color: var(--gold-light);
         text-decoration: none;
@@ -629,15 +650,36 @@ function getCardWidth(sizeStr) {
       }
       .split > * { min-width: 0; }
 
+      /* 額縁：木の外枠＋金の縁＋マット（余白紙）＋壁に落ちる影 */
       .home-frame {
-        border-width: 16px;
-        border-style: solid;
-        border-color: #a97c50 #6b4423 #6b4423 #a97c50;
-        border-radius: 4px;
-        box-shadow: 8px 14px 30px rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.3), inset 0 0 16px rgba(0,0,0,0.3);
-        background: #2a1a0e;
+        display: block;
+        position: relative;
+        padding: 14px;
+        background: linear-gradient(135deg, #5a4128 0%, #3a2715 45%, #24170b 100%);
+        box-shadow:
+          0 0 0 1px #0a0806,
+          inset 0 0 0 2px rgba(201, 169, 97, 0.55),
+          0 30px 60px -12px rgba(0, 0, 0, 0.85),
+          0 12px 24px -8px rgba(0, 0, 0, 0.6);
       }
-      .home-frame img { display: block; width: 100%; height: auto; }
+      .home-frame img {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: var(--mat, clamp(10px, 2.4vw, 22px));
+        background: #e9e2d2;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+      }
+      /* 作品を照らすスポットライト */
+      .spot { position: relative; isolation: isolate; }
+      .spot::before {
+        content: '';
+        position: absolute;
+        inset: -18% -12% -6%;
+        background: radial-gradient(ellipse at 50% 30%, rgba(255, 236, 196, 0.11) 0%, rgba(255, 236, 196, 0.04) 40%, transparent 70%);
+        z-index: -1;
+        pointer-events: none;
+      }
 
       .today-figure {
         margin: 0;
@@ -657,20 +699,9 @@ function getCardWidth(sizeStr) {
       .today-btn:hover { transform: translateY(-4px); }
       .today-btn img { max-height: 62vh; width: auto; max-width: 100%; }
       .today-caption { text-align: center; }
-      .today-caption b { display: block; font-weight: 400; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--text-main); }
+      .today-caption b { display: block; font-family: var(--serif-jp); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.1em; color: var(--text-main); }
       .today-caption span { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.06em; }
 
-      .story-stats {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        justify-content: start;
-        gap: 10px 32px;
-        margin-top: 28px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(201, 162, 39, 0.3);
-      }
-      .story-stats b { display: block; font-weight: 400; font-size: 1.3rem; color: var(--text-main); letter-spacing: 0.04em; }
-      .story-stats span { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.08em; }
 
       /* 展示室カード（ホームと部屋選び画面で共通） */
       .room-cards {
@@ -685,8 +716,8 @@ function getCardWidth(sizeStr) {
         display: flex;
         flex-direction: column;
         text-align: left;
-        background: #fffdf8;
-        border: 1px solid rgba(201, 162, 39, 0.35);
+        background: var(--crimson-mid);
+        border: 1px solid rgba(201, 169, 97, 0.22);
         padding: 0;
         cursor: pointer;
         font-family: inherit;
@@ -698,7 +729,7 @@ function getCardWidth(sizeStr) {
       .room-card:hover {
         transform: translateY(-4px);
         border-color: var(--gold-bright);
-        box-shadow: 0 14px 30px -14px rgba(60, 40, 10, 0.45);
+        box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.9);
       }
       .room-card img {
         display: block;
@@ -720,18 +751,19 @@ function getCardWidth(sizeStr) {
         color: var(--gold-bright);
         margin-bottom: 4px;
       }
-      .room-card-name { font-size: 1.05rem; letter-spacing: 0.12em; }
+      .room-card-name { font-family: var(--serif-jp); font-size: 1.05rem; letter-spacing: 0.12em; }
       .room-card-count { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; letter-spacing: 0.06em; }
 
       .report-box {
         background: var(--crimson-mid);
-        border: 1px solid rgba(201, 162, 39, 0.3);
-        padding: 40px clamp(20px, 5vw, 56px);
+        border: 1px solid rgba(201, 169, 97, 0.2);
+        padding: 56px clamp(24px, 6vw, 72px);
       }
 
       .home-footer {
-        background: #26211b;
-        color: #d8cfbf;
+        background: #0c0b09;
+        border-top: 1px solid rgba(201, 169, 97, 0.18);
+        color: #b9b09f;
         padding: 48px 24px 40px;
         font-size: 0.82rem;
         letter-spacing: 0.06em;
@@ -746,16 +778,247 @@ function getCardWidth(sizeStr) {
       }
       .home-footer-logo { color: #d9b65c; letter-spacing: 0.25em; font-size: 0.9rem; margin-bottom: 8px; }
       .home-footer nav { display: flex; flex-wrap: wrap; gap: 10px 22px; }
-      .home-footer a { color: #d8cfbf; text-decoration: none; }
+      .home-footer a { color: #b9b09f; text-decoration: none; }
       .home-footer a:hover { color: #f1dfae; text-decoration: underline; }
       .home-footer .family { display: block; margin-top: 14px; color: #a99f8e; }
 
+      /* ── 2つの柱（神戸／カンポ） ── */
+      .sec-head-center { text-align: center; max-width: 760px; margin: 0 auto 110px; }
+      .sec-head-center .sec-text { margin: 0 auto; }
+      .sec-rule {
+        width: 1px;
+        height: 56px;
+        margin: 0 auto 28px;
+        background: linear-gradient(to bottom, transparent, var(--gold-dim));
+      }
+      .pillar + .pillar { margin-top: 170px; }
+      .pillar-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: clamp(48px, 7vw, 96px);
+        align-items: center;
+      }
+      .pillar-grid > * { min-width: 0; }
+      .pillar.reverse .pillar-art { order: 2; }
+      .pillar-num {
+        display: flex;
+        align-items: baseline;
+        gap: 18px;
+        font-family: var(--serif-latin);
+        color: var(--gold-bright);
+        margin-bottom: 18px;
+      }
+      .pillar-num b { font-weight: 400; font-size: 3.2rem; line-height: 1; font-style: italic; }
+      .pillar-num span { font-size: 0.74rem; letter-spacing: 0.4em; }
+      .pillar-years {
+        font-family: var(--serif-latin);
+        font-style: italic;
+        color: var(--text-muted);
+        letter-spacing: 0.12em;
+        margin: -18px 0 28px;
+      }
+      .pillar-feature { background: none; border: 0; padding: 0; cursor: pointer; width: 100%; text-align: left; }
+      .pillar-feature .home-frame { transition: transform 0.5s ease; }
+      .pillar-feature:hover .home-frame { transform: translateY(-4px); }
+      .plate {
+        margin-top: 22px;
+        font-family: var(--serif-jp);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        letter-spacing: 0.08em;
+        text-align: center;
+      }
+      .plate b { color: var(--text-sub); font-weight: 400; margin-right: 10px; }
+      .pillar-thumbs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 44px;
+      }
+      .pillar-thumbs button { background: none; border: 0; padding: 0; cursor: pointer; }
+      .pillar-thumbs .home-frame { padding: 7px; --mat: 7px; transition: transform 0.4s ease; }
+      .pillar-thumbs .home-frame img { aspect-ratio: 1; object-fit: cover; }
+      .pillar-thumbs button:hover .home-frame { transform: translateY(-3px); }
+
+      /* ── レガシープロジェクト ── */
+      .legacy {
+        position: relative;
+        background:
+          radial-gradient(ellipse at 15% 0%, rgba(201, 169, 97, 0.10) 0%, transparent 55%),
+          linear-gradient(180deg, #1d1915 0%, #14120f 100%);
+        border: 1px solid rgba(201, 169, 97, 0.28);
+        padding: clamp(48px, 8vw, 104px) clamp(24px, 7vw, 96px);
+        outline: 1px solid rgba(201, 169, 97, 0.12);
+        outline-offset: 10px;
+      }
+      .legacy-news {
+        margin: 40px 0 0;
+        padding: 26px 30px;
+        border-left: 2px solid var(--gold-bright);
+        background: rgba(201, 169, 97, 0.06);
+        max-width: 40em;
+      }
+      .legacy-news b {
+        display: block;
+        font-family: var(--serif-jp);
+        font-weight: 500;
+        font-size: 0.78rem;
+        letter-spacing: 0.2em;
+        color: var(--gold-bright);
+        margin-bottom: 8px;
+      }
+      .legacy-news p { font-family: var(--serif-jp); font-weight: 300; line-height: 2; color: var(--text-main); }
+      .legacy-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-top: 56px;
+        padding-top: 36px;
+        border-top: 1px solid rgba(201, 169, 97, 0.2);
+      }
+      .legacy-stats b {
+        display: block;
+        font-family: var(--serif-latin);
+        font-weight: 400;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.1;
+        color: var(--gold-light);
+      }
+      .legacy-stats span { font-family: var(--serif-jp); font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.08em; }
+
+      /* ── Limited Edition（支援コミュニティ） ── */
+      .vip-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin-bottom: 72px;
+      }
+      .vip-card {
+        position: relative;
+        padding: 52px clamp(26px, 4vw, 48px) 44px;
+        background: linear-gradient(160deg, #201c17 0%, #161411 100%);
+        border: 1px solid rgba(201, 169, 97, 0.3);
+      }
+      .vip-card::after {
+        content: '';
+        position: absolute;
+        inset: 8px;
+        border: 1px solid rgba(201, 169, 97, 0.1);
+        pointer-events: none;
+      }
+      .vip-mark {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        font-family: var(--serif-latin);
+        color: var(--gold-bright);
+        margin-bottom: 22px;
+      }
+      .vip-mark b { font-weight: 400; font-size: 3.4rem; line-height: 1; }
+      .vip-mark span { font-size: 0.72rem; letter-spacing: 0.4em; }
+      .vip-card h3 {
+        font-family: var(--serif-jp);
+        font-weight: 500;
+        font-size: 1.2rem;
+        letter-spacing: 0.08em;
+        line-height: 1.6;
+        color: var(--text-main);
+        margin-bottom: 16px;
+      }
+      .vip-card p { font-family: var(--serif-jp); font-weight: 300; font-size: 0.92rem; line-height: 2.1; color: var(--text-sub); }
+      .vip-card small { display: block; margin-top: 18px; font-size: 0.76rem; color: var(--text-muted); font-family: var(--serif-jp); }
+
+      .vip-form {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: clamp(36px, 6vw, 64px) clamp(22px, 6vw, 64px);
+        border: 1px solid rgba(201, 169, 97, 0.4);
+        background: rgba(12, 10, 8, 0.55);
+      }
+      .vip-form h3 {
+        font-family: var(--serif-jp);
+        font-weight: 400;
+        font-size: 1.15rem;
+        letter-spacing: 0.15em;
+        text-align: center;
+        color: var(--gold-light);
+        margin-bottom: 36px;
+      }
+      .vip-field { display: block; margin-bottom: 26px; }
+      .vip-field > span, .vip-field legend {
+        display: block;
+        font-family: var(--serif-jp);
+        font-size: 0.78rem;
+        letter-spacing: 0.15em;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+      }
+      fieldset.vip-field { border: 0; padding: 0; min-width: 0; }
+      .vip-field input[type="text"],
+      .vip-field input[type="email"],
+      .vip-field textarea {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid rgba(201, 169, 97, 0.35);
+        color: var(--text-main);
+        font-family: var(--serif-jp);
+        font-size: 1rem;
+        padding: 10px 2px;
+        transition: border-color 0.3s;
+        border-radius: 0;
+      }
+      .vip-field textarea { resize: vertical; min-height: 96px; border: 1px solid rgba(201, 169, 97, 0.25); padding: 12px; }
+      .vip-field input:focus, .vip-field textarea:focus { outline: none; border-color: var(--gold-light); }
+      .vip-check {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--serif-jp);
+        font-size: 0.95rem;
+        color: var(--text-sub);
+        padding: 8px 0;
+        cursor: pointer;
+      }
+      .vip-check input { appearance: none; width: 18px; height: 18px; border: 1px solid var(--gold-dim); flex: none; display: grid; place-items: center; cursor: pointer; }
+      .vip-check input:checked { background: var(--gold-bright); border-color: var(--gold-bright); }
+      .vip-check input:checked::after { content: '✓'; color: #141210; font-size: 0.75rem; line-height: 1; }
+      .vip-check input:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+      .vip-submit {
+        display: block;
+        width: 100%;
+        margin-top: 12px;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, #d8bb76 0%, #b8954d 50%, #d2b26a 100%);
+        color: #141210;
+        border: 0;
+        font-family: var(--serif-jp);
+        font-weight: 500;
+        font-size: 0.98rem;
+        letter-spacing: 0.3em;
+        cursor: pointer;
+        box-shadow: 0 14px 30px -12px rgba(201, 169, 97, 0.45);
+        transition: filter 0.3s, transform 0.3s;
+      }
+      .vip-submit:hover { filter: brightness(1.08); transform: translateY(-1px); }
+      .vip-note { margin-top: 16px; font-family: var(--serif-jp); font-size: 0.76rem; line-height: 1.9; color: var(--text-muted); text-align: center; }
+      .vip-error { color: #e8a48a; font-family: var(--serif-jp); font-size: 0.82rem; text-align: center; margin-top: 12px; min-height: 1em; }
+
+      @media (max-width: 860px) {
+        .pillar-grid { grid-template-columns: 1fr; gap: 48px; }
+        .pillar.reverse .pillar-art { order: 0; }
+        .vip-cards { grid-template-columns: 1fr; }
+        .sec-head-center { margin-bottom: 72px; }
+        .pillar + .pillar { margin-top: 120px; }
+      }
+      @media (max-width: 480px) {
+        .legacy-stats { grid-template-columns: 1fr; gap: 18px; }
+        .pillar-thumbs { gap: 12px; }
+      }
+
       @media (max-width: 768px) {
-        .home-sec { padding: 64px 20px; }
+        .home-sec { padding: 96px 20px; }
         .split { grid-template-columns: 1fr; gap: 36px; }
-        .story .split > figure { order: -1; }
-        .story-stats { grid-template-columns: repeat(3, 1fr); gap: 10px 14px; }
-        .story-stats b { font-size: 1.05rem; }
       }
 
       .campo-concept {
@@ -791,6 +1054,8 @@ function getCardWidth(sizeStr) {
       }
 
       .campo-concept-title {
+        font-family: var(--serif-jp);
+        font-weight: 400;
         font-size: clamp(1.4rem, 3.5vw, 2rem);
         letter-spacing: 0.06em;
         color: var(--text-main);
@@ -798,8 +1063,10 @@ function getCardWidth(sizeStr) {
       }
 
       .campo-concept-text {
+        font-family: var(--serif-jp);
+        font-weight: 300;
         font-size: 0.98rem;
-        line-height: 2;
+        line-height: 2.2;
         color: var(--text-sub);
         margin-bottom: 20px;
         text-align: left;
@@ -839,16 +1106,12 @@ function getCardWidth(sizeStr) {
         overflow-y: auto;
         padding: 80px 20px 40px;
         background:
-          linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.97) 0%,
-            rgba(246, 241, 232, 0.95) 50%,
-            rgba(255, 255, 255, 0.97) 100%
-          ),
+          radial-gradient(ellipse at 50% 0%, rgba(201, 169, 97, 0.08) 0%, transparent 60%),
+          linear-gradient(180deg, #171512 0%, #100e0c 100%),
           repeating-linear-gradient(
             0deg,
-            rgba(212, 175, 55, 0.04) 0px,
-            rgba(212, 175, 55, 0.04) 1px,
+            rgba(201, 169, 97, 0.025) 0px,
+            rgba(201, 169, 97, 0.025) 1px,
             transparent 1px,
             transparent 60px
           );
@@ -891,7 +1154,7 @@ function getCardWidth(sizeStr) {
       .room-btn {
         position: relative;
         padding: 18px 28px;
-        background: rgba(237, 226, 201, 0.5);
+        background: rgba(37, 33, 27, 0.6);
         color: var(--text-sub);
         font-family: inherit;
         font-size: clamp(0.78rem, 2.5vw, 0.82rem);
@@ -928,7 +1191,7 @@ function getCardWidth(sizeStr) {
       }
 
       .room-btn:hover {
-        background: rgba(227, 211, 171, 0.65);
+        background: rgba(48, 42, 33, 0.8);
         color: var(--gold-light);
       }
 
@@ -984,13 +1247,8 @@ function getCardWidth(sizeStr) {
         transition: opacity 1.2s ease, visibility 1.2s ease;
         min-height: 100vh;
         background:
-          linear-gradient(
-            to bottom,
-            var(--crimson-deep) 0%,
-            #f6f1e8 18%,
-            #efe6d4 35%,
-            #ede2c9 100%
-          );
+          radial-gradient(ellipse at 50% 35%, rgba(255, 236, 196, 0.07) 0%, transparent 60%),
+          linear-gradient(to bottom, #12100e 0%, #1b1814 45%, #15130f 100%);
       }
 
       .museum.visible {
@@ -1025,6 +1283,7 @@ function getCardWidth(sizeStr) {
       }
 
       .museum-title {
+        font-family: var(--serif-jp);
         font-size: clamp(1rem, 4vw, 1.8rem);
         font-weight: 400;
         letter-spacing: 0.3em;
@@ -1073,8 +1332,8 @@ function getCardWidth(sizeStr) {
       .scroll-arrow {
         position: absolute;
         z-index: 10;
-        background: rgba(237, 226, 201, 0.85);
-        border: 1px solid rgba(212, 175, 55, 0.3);
+        background: rgba(28, 25, 21, 0.85);
+        border: 1px solid rgba(201, 169, 97, 0.3);
         color: var(--gold-bright);
         width: 40px;
         height: 40px;
@@ -1090,7 +1349,7 @@ function getCardWidth(sizeStr) {
       }
 
       .scroll-arrow:hover {
-        background: rgba(227, 211, 171, 0.95);
+        background: rgba(48, 42, 33, 0.95);
         border-color: var(--gold-bright);
       }
 
@@ -1116,8 +1375,8 @@ function getCardWidth(sizeStr) {
           var(--frame-dark)
           var(--frame-light);
         box-shadow:
-          8px 12px 28px rgba(0,0,0,0.8),
-          0 0 0 1px rgba(0,0,0,0.4),
+          0 28px 50px -10px rgba(0,0,0,0.9),
+          0 0 0 1px rgba(0,0,0,0.6),
           inset 0 0 16px rgba(0,0,0,0.3);
       }
 
@@ -1140,7 +1399,8 @@ function getCardWidth(sizeStr) {
       }
 
       .artwork-label-title {
-        font-size: 0.78rem;
+        font-family: var(--serif-jp);
+        font-size: 0.8rem;
         color: var(--text-sub);
         letter-spacing: 0.08em;
       }
@@ -1168,8 +1428,8 @@ function getCardWidth(sizeStr) {
       .modal-overlay.active { display: flex; }
 
       .modal {
-        background: linear-gradient(160deg, #ffffff 0%, #f6f1e8 100%);
-        border: 1px solid rgba(212, 175, 55, 0.2);
+        background: linear-gradient(160deg, #1f1b17 0%, #15130f 100%);
+        border: 1px solid rgba(201, 169, 97, 0.22);
         padding: 32px 24px;
         max-width: 740px;
         width: 100%;
@@ -1205,6 +1465,7 @@ function getCardWidth(sizeStr) {
       }
 
       .modal-title {
+        font-family: var(--serif-jp);
         font-size: clamp(1rem, 3.5vw, 1.2rem);
         font-weight: 400;
         letter-spacing: 0.1em;
@@ -1225,7 +1486,7 @@ function getCardWidth(sizeStr) {
         font-size: clamp(0.8rem, 2.5vw, 0.85rem);
         line-height: 1.75;
         color: var(--text-sub);
-        background: rgba(0,0,0,0.03);
+        background: rgba(255,255,255,0.03);
         border-left: 2px solid var(--gold-dim);
         padding: 14px 16px;
       }
@@ -1273,6 +1534,7 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/${lang}/#rooms`} id="navExhibition">{h.navRooms}</a>
         <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{h.navCampo}</a>
         <AboutNavDropdown lang={lang} base={base} mode="desktop" label={h.navArtist} />
+        <a href={`${base}/${lang}/#limited`} id="navLimited" class="nav-campo-highlight">{lg.navLimited}</a>
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
           <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
@@ -1298,6 +1560,7 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/${lang}/#rooms`} id="mNavExhibition">{h.navRooms}</a>
         <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{h.navCampo}</a>
         <AboutNavDropdown lang={lang} base={base} mode="mobile" label={h.navArtist} />
+        <a href={`${base}/${lang}/#limited`} id="mNavLimited" class="nav-campo-highlight">{lg.navLimited}</a>
       </nav>
       <div class="mobile-lang-switcher">
         <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
@@ -1324,6 +1587,77 @@ function getCardWidth(sizeStr) {
         <button class="scroll-cue" id="scrollCue" type="button">{h.scrollCue}</button>
       </section>
 
+      <!-- 画家を形づくった二つの地（神戸／カンポ） -->
+      <section class="home-sec" id="pillars">
+        <div class="sec-head-center">
+          <div class="sec-rule"></div>
+          <p class="sec-eyebrow">{lg.pillarsEyebrow}</p>
+          <h2 class="sec-heading">{lg.pillarsHeading}</h2>
+          <p class="sec-text">{lg.pillarsLead}</p>
+        </div>
+
+        {pillars.map((p, i) => (
+          <article class={`pillar ${i % 2 ? 'reverse' : ''}`} id={`pillar-${p.key}`}>
+            <div class="pillar-grid">
+              <div class="pillar-art">
+                {p.feature && (
+                  <figure style="margin:0" class="spot">
+                    <button class="pillar-feature" type="button" data-open-file={p.feature.file}>
+                      <span class="home-frame"><img src={`${base}/gallery/${p.feature.file}`} alt={p.feature.title} loading="lazy" /></span>
+                    </button>
+                    <figcaption class="plate"><b>{p.feature.title}</b>{p.feature.year !== '—' ? p.feature.year : ''}{p.feature.size !== '—' ? ` ・ ${p.feature.size}` : ''}</figcaption>
+                  </figure>
+                )}
+              </div>
+              <div>
+                <p class="pillar-num"><b>{p.num}</b><span>{p.eyebrow}</span></p>
+                <h3 class="sec-heading">{p.heading}</h3>
+                <p class="pillar-years">{p.years}</p>
+                {p.body.map((para) => <p class="sec-text">{para}</p>)}
+                <div class="pillar-thumbs">
+                  {p.others.map((w) => (
+                    <button type="button" data-open-file={w.file} aria-label={w.title} title={w.title}>
+                      <span class="home-frame"><img src={`${base}/gallery/${w.file}`} alt={w.title} loading="lazy" /></span>
+                    </button>
+                  ))}
+                </div>
+                <div class="sec-links">
+                  {p.key === 'kobe' ? (
+                    <button class="sec-cta" type="button" id="kobeOpen" data-files={[p.feature?.file, ...p.others.map((w) => w.file)].join(',')} data-title={p.heading}>{p.cta} →</button>
+                  ) : (
+                    <>
+                      <a class="sec-cta" href={`${base}/${lang}/about/campo-collection/`}>{p.cta} →</a>
+                      <a class="sec-link" href={`${base}/${lang}/about/philosophy/`}>{p.sub}</a>
+                      <button class="sec-link" id="storyConcept" type="button">{h.storyConcept}</button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <!-- 日西文化交流レガシープロジェクト -->
+      <section class="home-sec" id="legacy">
+        <div class="legacy">
+          <p class="sec-eyebrow">{lg.legacyEyebrow}</p>
+          <h2 class="sec-heading">{lg.legacyHeading}</h2>
+          {lg.legacyBody.map((p) => <p class="sec-text">{p}</p>)}
+          <div class="legacy-news">
+            <b>{lg.legacyNewsLabel}</b>
+            <p>{lg.legacyNews}</p>
+          </div>
+          <div class="legacy-stats">
+            {lg.legacyStats.map((s) => <div><b>{s.num}</b><span>{s.label}</span></div>)}
+          </div>
+          <div class="sec-links">
+            <a class="sec-cta" href={`${lpUrl}#legacy`} target="_blank" rel="noopener">{lg.legacyCta} →</a>
+            <a class="sec-link" href={`#limited`} id="legacyToVip">{lg.vipHeading}</a>
+          </div>
+        </div>
+      </section>
+
       <!-- 今日の一枚 -->
       <section class="home-sec" id="today">
         <div class="split">
@@ -1336,7 +1670,7 @@ function getCardWidth(sizeStr) {
               <button class="sec-link" id="todayAnother" type="button">{h.todayAnother}</button>
             </div>
           </div>
-          <figure class="today-figure">
+          <figure class="today-figure spot">
             <button class="today-btn" id="todayBtn" type="button" data-file={todayDefault.file}>
               <div class="home-frame"><img id="todayImg" src={`${base}/gallery/${todayDefault.file}`} alt={todayDefault.title} /></div>
             </button>
@@ -1348,28 +1682,6 @@ function getCardWidth(sizeStr) {
         </div>
       </section>
 
-      <!-- 物語 -->
-      <section class="home-sec story">
-        <div class="split">
-          <figure style="margin:0">
-            <a href={`${base}/${lang}/about/campo-collection/`} class="home-frame" style="display:block">
-              <img src={`${base}/gallery/${storyImage}`} alt="" loading="lazy" />
-            </a>
-          </figure>
-          <div>
-            <p class="sec-eyebrow">{h.storyEyebrow}</p>
-            <h2 class="sec-heading">{h.storyHeading}</h2>
-            {h.storyBody.map((p) => <p class="sec-text">{p}</p>)}
-            <div class="story-stats">
-              {storyStats.map((s) => <div><b>{s.num}</b><span>{s.label}</span></div>)}
-            </div>
-            <div class="sec-links">
-              <a class="sec-cta" href={`${base}/${lang}/about/campo-collection/`}>{h.storyCta} →</a>
-              <button class="sec-link" id="storyConcept" type="button">{h.storyConcept}</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- 展示室 -->
       <section class="home-sec" id="rooms">
@@ -1389,6 +1701,49 @@ function getCardWidth(sizeStr) {
             </button>
           ))}
         </div>
+      </section>
+
+      <!-- Limited Edition ／ プロジェクト支援コミュニティ -->
+      <section class="home-sec" id="limited">
+        <div class="sec-head-center" style="margin-bottom:80px">
+          <div class="sec-rule"></div>
+          <p class="sec-eyebrow">{lg.vipEyebrow}</p>
+          <h2 class="sec-heading">{lg.vipHeading}</h2>
+          <p class="sec-text">{lg.vipLead}</p>
+        </div>
+        <div class="vip-cards">
+          {lg.vipCards.map((c) => (
+            <article class="vip-card">
+              <p class="vip-mark"><b>{c.mark}</b><span>{c.unit}</span></p>
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+              <small>{c.note}</small>
+            </article>
+          ))}
+        </div>
+        <form class="vip-form" id="vipForm" novalidate data-email={VIP_EMAIL} data-subject={lg.mailSubject}>
+          <h3>{lg.formTitle}</h3>
+          <label class="vip-field">
+            <span>{lg.formName}</span>
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label class="vip-field">
+            <span>{lg.formEmail}</span>
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <fieldset class="vip-field">
+            <legend>{lg.formInterest}</legend>
+            <label class="vip-check"><input type="checkbox" name="interest" value={lg.formOptEdition} checked /> {lg.formOptEdition}</label>
+            <label class="vip-check"><input type="checkbox" name="interest" value={lg.formOptBoard} /> {lg.formOptBoard}</label>
+          </fieldset>
+          <label class="vip-field">
+            <span>{lg.formMessage}</span>
+            <textarea name="message" rows="4"></textarea>
+          </label>
+          <button class="vip-submit" type="submit">{lg.formSubmit}</button>
+          <p class="vip-error" id="vipError" role="alert"></p>
+          <p class="vip-note">{lg.formNote}</p>
+        </form>
       </section>
 
       <!-- 現地取材 -->
@@ -1623,7 +1978,10 @@ function getCardWidth(sizeStr) {
       onNav('enterBtn', () => showOnly('selector'));
       onNav('conceptLink', () => showOnly('concept'));
       onNav('storyConcept', () => showOnly('concept'));
-      onNav('scrollCue', () => showHome('today'));
+      onNav('scrollCue', () => showHome('pillars'));
+      onNav('navLimited', () => showHome('limited'));
+      onNav('mNavLimited', () => showHome('limited'));
+      onNav('legacyToVip', () => showHome('limited'));
       document.getElementById('backToTopFromConcept').addEventListener('click', () => showHome());
       document.getElementById('backToTopFromSelector').addEventListener('click', () => showHome());
 
@@ -1638,9 +1996,27 @@ function getCardWidth(sizeStr) {
       }, { passive: true });
 
       // 他のページから「展示室」で来たとき（/ja/#rooms）
-      if (location.hash === '#rooms') {
-        requestAnimationFrame(() => showHome('rooms'));
+      if (location.hash === '#rooms' || location.hash === '#limited') {
+        const sectionId = location.hash.slice(1);
+        requestAnimationFrame(() => showHome(sectionId));
       }
+
+      // テーマ（神戸など）の作品だけを展示室に並べる
+      function openFiles(files, title) {
+        let count = 0;
+        document.querySelectorAll('.artwork-card').forEach(card => {
+          const show = files.includes(card.dataset.file);
+          card.style.display = show ? 'block' : 'none';
+          if (show) count++;
+        });
+        document.getElementById('museumTitle').textContent = title;
+        document.getElementById('museumCount').textContent = count + ' WORKS';
+        galleryTrack.scrollLeft = 0;
+        window.scrollTo(0, 0);
+        showOnly('museum');
+      }
+      const kobeOpen = document.getElementById('kobeOpen');
+      kobeOpen?.addEventListener('click', () => openFiles(kobeOpen.dataset.files.split(','), kobeOpen.dataset.title));
 
       // スクロール矢印
       document.getElementById('arrowLeft').addEventListener('click', () => {
@@ -1668,6 +2044,38 @@ function getCardWidth(sizeStr) {
 
       document.querySelectorAll('.artwork-card').forEach(card => {
         card.addEventListener('click', () => openArtwork(card));
+      });
+
+      // 「2つの柱」の作品をクリックしたら、その作品を拡大表示する
+      document.querySelectorAll('[data-open-file]').forEach(btn => {
+        const card = document.querySelector(`.artwork-card[data-file="${btn.dataset.openFile}"]`);
+        if (card) btn.addEventListener('click', () => openArtwork(card));
+      });
+
+      // Limited Edition の申込：入力内容を入れたメール作成画面を開く
+      const vipForm = document.getElementById('vipForm');
+      vipForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(vipForm);
+        const name = String(data.get('name') || '').trim();
+        const email = String(data.get('email') || '').trim();
+        const interests = data.getAll('interest');
+        const error = document.getElementById('vipError');
+        if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || interests.length === 0) {
+          const msg = { ja: 'お名前・メールアドレス・ご関心のある項目をご確認ください。', en: 'Please check your name, email and interests.', sp: 'Revise su nombre, correo e intereses.' };
+          error.textContent = msg[document.documentElement.lang] ?? msg.ja;
+          return;
+        }
+        error.textContent = '';
+        const body = [
+          `${name}`,
+          `${email}`,
+          '',
+          ...interests.map((i) => `■ ${i}`),
+          '',
+          String(data.get('message') || '').trim(),
+        ].join('\n');
+        location.href = `mailto:${vipForm.dataset.email}?subject=${encodeURIComponent(vipForm.dataset.subject)}&body=${encodeURIComponent(body)}`;
       });
 
       document.getElementById('modalClose').addEventListener('click', () => {
