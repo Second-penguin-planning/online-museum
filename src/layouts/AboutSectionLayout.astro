@@ -3,6 +3,7 @@
 // 「概要」配下の各ページ（はじめに・製作者と連絡先・経歴・記録・カンポ概要）共通レイアウト。
 // about.astro（随想ページ）と同じ配色・ヘッダー様式に合わせている。
 import { getAboutNav, aboutNavLabel, type Lang } from '../data/aboutNav';
+import SeoMeta from '../components/SeoMeta.astro';
 
 interface Props {
   lang: Lang;
@@ -29,7 +30,7 @@ const backLabel: Record<Lang, string> = {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{metaTitle}</title>
-  <meta name="description" content={metaDescription} />
+  <SeoMeta lang={lang} title={metaTitle} description={metaDescription} image={slug.startsWith('campo') ? 'og-campo.jpg' : 'og-home.jpg'} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />

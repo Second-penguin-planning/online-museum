@@ -29,8 +29,8 @@ const labels: Record<Lang, Record<
   ja: {
     intro: 'はじめに',
     contact: '製作者と連絡先',
-    takuma: '德永卓磨',
-    sachiko: '德永幸子',
+    takuma: '徳永卓磨',
+    sachiko: '徳永幸子',
     biography: '経歴',
     essay: '随想',
     philosophy: '「白」の哲学',

@@ -1,8 +1,10 @@
 ---
 import artworks from '../../data/artworks.json';
-import { ui, rooms } from '../../data/ui.ts';
+import { ui, rooms, home } from '../../data/ui.ts';
 import { campoConceptContent } from '../../data/campoConcept.ts';
+import { campoCollectionItems } from '../../data/campoCollection.ts';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
+import SeoMeta from '../../components/SeoMeta.astro';
 
 export function getStaticPaths() {
   return [
@@ -18,6 +20,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const t = ui[lang];
 const roomNames = rooms[lang];
 const concept = campoConceptContent[lang] ?? campoConceptContent.ja;
+const h = home[lang] ?? home.ja;
+const worksUnit = { ja: '点', en: 'works', sp: 'obras' }[lang];
+const storyStats = h.storyStats.map((s) =>
+  s.num === 'WORKS' ? { ...s, num: `${campoCollectionItems.length}${lang === 'ja' ? '' : ' '}${worksUnit}` } : s
+);
 
 // 所蔵庫で「ギャラリーに公開」を選んだ作品だけを展示する
 const publishedArtworks = artworks.filter(a => a.published);
@@ -53,6 +60,18 @@ const categorizedArtworks = publishedArtworks.map((info, i) => {
   };
 });
 
+// ホームの「展示室」カード用：部屋ごとの作品数と代表作
+const ROOM_COVER: Record<string, string> = { '1': '01018.jpg' };
+const roomCards = roomNames.map((room) => {
+  const works = categorizedArtworks.filter((a) => String(a.category) === room.id);
+  const cover = works.find((a) => a.file === ROOM_COVER[room.id]) ?? works[0];
+  return { ...room, count: works.length, cover: cover?.file };
+}).filter((room) => room.count > 0);
+
+// 「今日の一枚」の初期表示（JSが読み込まれると訪問ごとに入れ替わる）
+const todayDefault = categorizedArtworks.find((a) => a.file === '01044.jpg') ?? categorizedArtworks[0];
+const storyImage = '01018.jpg';
+
 function getCardWidth(sizeStr) {
   const defaultWidth = 280; 
   if (!sizeStr) return defaultWidth;
@@ -75,7 +94,8 @@ function getCardWidth(sizeStr) {
     <meta charset="utf-8" />
     <meta name="base-url" content={base} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{t.title}</title>
+    <title>{`${t.title}｜${h.tagline}`}</title>
+    <SeoMeta lang={lang} title={`${t.title}｜${h.tagline}`} description={h.description} />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -109,6 +129,7 @@ function getCardWidth(sizeStr) {
         justify-content: space-between;
         align-items: center;
         padding: 16px 50px;
+        gap: 32px;
         z-index: 1000;
         background: linear-gradient(
           to bottom,
@@ -118,12 +139,18 @@ function getCardWidth(sizeStr) {
         border-bottom: 1px solid rgba(212, 175, 55, 0.15);
       }
 
+      .site-header.solid {
+        background: rgba(255, 253, 248, 0.97);
+        box-shadow: 0 1px 12px rgba(60, 40, 10, 0.08);
+      }
+
       .header-logo {
         font-size: 1.1rem;
         letter-spacing: 0.25em;
         font-weight: 400;
         color: var(--gold-bright);
-        text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+        text-decoration: none;
+        text-shadow: 0 1px 8px rgba(255,255,255,0.9);
         flex-shrink: 0;
       }
 
@@ -141,7 +168,7 @@ function getCardWidth(sizeStr) {
         letter-spacing: 0.15em;
         opacity: 0.85;
         transition: opacity 0.3s, color 0.3s, transform 0.3s;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+        text-shadow: 0 1px 8px rgba(255,255,255,0.9);
         white-space: nowrap;
         background: none;
         border: none;
@@ -330,67 +357,95 @@ function getCardWidth(sizeStr) {
         color: var(--gold-bright);
       }
 
-      .entrance {
+      /* ホーム：入口写真の下に区画が続く縦スクロール画面 */
+      .home {
         position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        inset: 0;
         z-index: 990;
-        transition: opacity 1.4s ease, visibility 1.4s ease;
-        background:
-          url('/hero/hero-1.jpg') center / cover no-repeat;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: var(--parchment);
+        transition: opacity 1.2s ease, visibility 1.2s ease;
       }
 
-      .entrance.hidden {
+      .home.hidden {
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
       }
 
+      .entrance {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        height: 100svh;
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #ddd8cf;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      /* 写真の下半分に影を敷いて、白文字を読めるようにする */
+      .entrance::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(20, 14, 6, 0) 30%,
+          rgba(20, 14, 6, 0.38) 55%,
+          rgba(20, 14, 6, 0.72) 100%
+        );
+        pointer-events: none;
+      }
+
       .hero-inner {
         position: absolute;
-        bottom: 28%;
+        bottom: 11%;
         left: 50%;
         transform: translateX(-50%);
+        width: min(760px, 100%);
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 0;
         padding: 0 24px;
+        z-index: 1;
       }
 
       .hero-eyebrow {
-        font-size: clamp(0.55rem, 2.5vw, 0.75rem);
+        font-size: clamp(0.6rem, 2.5vw, 0.75rem);
         letter-spacing: 0.35em;
-        color: var(--gold-dim);
+        color: #f1dfae;
         text-transform: uppercase;
-        margin-bottom: 16px;
-        opacity: 0.9;
+        margin-bottom: 14px;
+        text-shadow: 0 1px 6px rgba(0,0,0,0.6);
       }
 
       .hero-title {
-        font-size: clamp(1.6rem, 6vw, 3.8rem);
+        font-size: clamp(1.9rem, 6vw, 3.6rem);
         font-weight: 400;
         letter-spacing: 0.15em;
-        line-height: 1.15;
-        color: var(--text-main);
-        text-shadow:
-          0 2px 14px rgba(255, 255, 255, 0.85),
-          0 0 44px rgba(255, 255, 255, 0.65);
-        margin-bottom: 10px;
+        line-height: 1.2;
+        color: #ffffff;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+        margin-bottom: 14px;
       }
 
       .hero-subtitle {
-        font-size: clamp(0.55rem, 2.5vw, 0.85rem);
-        letter-spacing: 0.4em;
-        color: var(--gold-bright);
-        text-transform: uppercase;
-        margin-bottom: 36px;
-        opacity: 0.8;
+        font-size: clamp(0.88rem, 3.4vw, 1.12rem);
+        letter-spacing: 0.12em;
+        line-height: 1.8;
+        color: #fbf6ea;
+        margin-bottom: 26px;
+        text-shadow: 0 1px 10px rgba(0,0,0,0.6);
+        text-wrap: balance;
       }
 
       .hero-divider {
@@ -419,59 +474,288 @@ function getCardWidth(sizeStr) {
 
       .enter-btn {
         position: relative;
-        padding: 14px 48px;
-        background: rgba(255, 255, 255, 0.14);
-        color: var(--gold-bright);
+        padding: 14px 40px;
+        background: var(--gold-bright);
+        color: #ffffff;
         font-family: inherit;
-        font-size: clamp(0.68rem, 2.5vw, 0.82rem);
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         letter-spacing: 0.4em;
         text-transform: uppercase;
+        white-space: nowrap;
         cursor: pointer;
-        border: 1px solid rgba(212, 175, 55, 0.65);
+        border: 1px solid #d9b65c;
         border-radius: 2px;
-        width: 220px;
+        min-width: 220px;
         min-height: 52px;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+        transition: background 0.3s ease, transform 0.3s ease;
       }
 
       .enter-btn:hover {
-        background: rgba(255, 255, 255, 0.24);
-        border-color: var(--gold-bright);
-        color: var(--gold-light);
+        background: var(--gold-light);
         transform: translateY(-1px);
       }
 
       .concept-link {
-        margin-top: 22px;
+        margin-top: 20px;
         background: none;
         border: none;
         cursor: pointer;
         font-family: inherit;
-        color: var(--gold-bright);
-        opacity: 0.85;
-        font-size: 0.7rem;
+        color: #f1dfae;
+        font-size: 0.66rem;
         letter-spacing: 0.3em;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+        text-shadow: 0 1px 6px rgba(0,0,0,0.7);
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 6px;
         transition: opacity 0.3s;
       }
-      .concept-link:hover { opacity: 1; }
+      .concept-link:hover { opacity: 0.85; }
       .concept-link span {
         font-family: 'Garamond', 'Times New Roman', '游明朝', serif;
         letter-spacing: 0.08em;
-        font-size: 0.92rem;
-        color: var(--text-main);
+        font-size: 0.95rem;
+        color: #ffffff;
         text-decoration: underline;
-        text-decoration-color: var(--gold-dim);
+        text-decoration-color: rgba(241, 223, 174, 0.8);
         text-underline-offset: 4px;
+      }
+
+      .scroll-cue {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        color: rgba(255,255,255,0.8);
+        font-size: 0.6rem;
+        letter-spacing: 0.35em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        background: none;
+        border: none;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .scroll-cue::after {
+        content: '';
+        width: 1px;
+        height: 22px;
+        background: rgba(255,255,255,0.7);
+        animation: cue 2.2s ease-in-out infinite;
+        transform-origin: top;
+      }
+      @keyframes cue { 0%,100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+      @media (prefers-reduced-motion: reduce) { .scroll-cue::after { animation: none; } }
+
+      /* ── ホームの各区画 ── */
+      .home-sec {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 88px 24px;
+        border-top: 1px solid rgba(201, 162, 39, 0.22);
+      }
+      .entrance + .home-sec { border-top: 0; }
+      .sec-eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.35em;
+        color: var(--gold-bright);
+        margin-bottom: 10px;
+      }
+      .sec-heading {
+        font-size: clamp(1.35rem, 4vw, 2rem);
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        line-height: 1.5;
+        color: var(--text-main);
+        margin-bottom: 18px;
+        text-wrap: balance;
+      }
+      .sec-text {
+        font-size: 0.98rem;
+        line-height: 2;
+        color: var(--text-sub);
+        max-width: 34em;
+      }
+      .sec-text + .sec-text { margin-top: 12px; }
+      .sec-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 24px;
+        align-items: center;
+        margin-top: 28px;
+      }
+      .sec-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 26px;
+        background: var(--text-main);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.85rem;
+        letter-spacing: 0.15em;
+        border: none;
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .sec-cta:hover { background: var(--gold-light); }
+      .sec-link {
+        color: var(--gold-light);
+        text-decoration: none;
+        font-size: 0.88rem;
+        letter-spacing: 0.08em;
+        border-bottom: 1px solid var(--gold-dim);
+        padding-bottom: 2px;
+        background: none;
+        border-top: 0; border-left: 0; border-right: 0;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .sec-link:hover { color: var(--text-main); }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 56px;
+        align-items: center;
+      }
+      .split > * { min-width: 0; }
+
+      .home-frame {
+        border-width: 16px;
+        border-style: solid;
+        border-color: #a97c50 #6b4423 #6b4423 #a97c50;
+        border-radius: 4px;
+        box-shadow: 8px 14px 30px rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.3), inset 0 0 16px rgba(0,0,0,0.3);
+        background: #2a1a0e;
+      }
+      .home-frame img { display: block; width: 100%; height: auto; }
+
+      .today-figure {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+      }
+      .today-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        max-width: min(520px, 100%);
+        transition: transform 0.35s ease;
+      }
+      .today-btn:hover { transform: translateY(-4px); }
+      .today-btn img { max-height: 62vh; width: auto; max-width: 100%; }
+      .today-caption { text-align: center; }
+      .today-caption b { display: block; font-weight: 400; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--text-main); }
+      .today-caption span { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.06em; }
+
+      .story-stats {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        justify-content: start;
+        gap: 10px 32px;
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(201, 162, 39, 0.3);
+      }
+      .story-stats b { display: block; font-weight: 400; font-size: 1.3rem; color: var(--text-main); letter-spacing: 0.04em; }
+      .story-stats span { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.08em; }
+
+      /* 展示室カード（ホームと部屋選び画面で共通） */
+      .room-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 860px;
+        margin: 0 auto;
+      }
+      .room-card {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        background: #fffdf8;
+        border: 1px solid rgba(201, 162, 39, 0.35);
+        padding: 0;
+        cursor: pointer;
+        font-family: inherit;
+        color: var(--text-main);
+        transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .room-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--gold-bright);
+        box-shadow: 0 14px 30px -14px rgba(60, 40, 10, 0.45);
+      }
+      .room-card img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+      }
+      .room-card-body {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 18px;
+      }
+      .room-card-number {
+        display: block;
+        font-size: 0.6rem;
+        letter-spacing: 0.3em;
+        color: var(--gold-bright);
+        margin-bottom: 4px;
+      }
+      .room-card-name { font-size: 1.05rem; letter-spacing: 0.12em; }
+      .room-card-count { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; letter-spacing: 0.06em; }
+
+      .report-box {
+        background: var(--crimson-mid);
+        border: 1px solid rgba(201, 162, 39, 0.3);
+        padding: 40px clamp(20px, 5vw, 56px);
+      }
+
+      .home-footer {
+        background: #26211b;
+        color: #d8cfbf;
+        padding: 48px 24px 40px;
+        font-size: 0.82rem;
+        letter-spacing: 0.06em;
+      }
+      .home-footer-inner {
+        max-width: 1040px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 28px;
+      }
+      .home-footer-logo { color: #d9b65c; letter-spacing: 0.25em; font-size: 0.9rem; margin-bottom: 8px; }
+      .home-footer nav { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+      .home-footer a { color: #d8cfbf; text-decoration: none; }
+      .home-footer a:hover { color: #f1dfae; text-decoration: underline; }
+      .home-footer .family { display: block; margin-top: 14px; color: #a99f8e; }
+
+      @media (max-width: 768px) {
+        .home-sec { padding: 64px 20px; }
+        .split { grid-template-columns: 1fr; gap: 36px; }
+        .story .split > figure { order: -1; }
+        .story-stats { grid-template-columns: repeat(3, 1fr); gap: 10px 14px; }
+        .story-stats b { font-size: 1.05rem; }
       }
 
       .campo-concept {
@@ -946,6 +1230,12 @@ function getCardWidth(sizeStr) {
         padding: 14px 16px;
       }
 
+      /* メニューが収まらない幅ではハンバーガーに切り替える */
+      @media (max-width: 900px) {
+        .header-nav  { display: none; }
+        .hamburger   { display: flex; }
+      }
+
       @media (max-width: 768px) {
         .site-header { padding: 12px 18px; }
         .header-logo { font-size: 0.82rem; letter-spacing: 0.15em; }
@@ -974,37 +1264,19 @@ function getCardWidth(sizeStr) {
   </head>
   <body>
 
-    <!-- ===== SP-FAMILYBAR START ===== -->
-    <div class="sp-familybar sp-familybar--dark">
-      <a href="https://second-penguin.com/#sp-apps" target="_blank" rel="noopener" class="sp-familybar__link">
-        セコンドペンギン企画 ファミリーサイト一覧へ <span aria-hidden="true">→</span>
-      </a>
-    </div>
-    <style>
-      .sp-familybar { padding: 8px 16px; text-align: center; font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; }
-      .sp-familybar--dark { background: #16181d; border-bottom: 1px solid #33363f; }
-      .sp-familybar__link { font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-      .sp-familybar--dark .sp-familybar__link { color: #e8e2d0; }
-      .sp-familybar__link:hover { text-decoration: underline; }
-    </style>
-    <!-- ===== SP-FAMILYBAR END ===== -->
-
     <!-- ヘッダー -->
     <header class="site-header">
-      <div class="header-logo">{t.headerTitle}</div>
+      <a href={`${base}/${lang}/`} class="header-logo" id="navLogo">{t.headerTitle}</a>
 
       <!-- PC用ナビ -->
       <nav class="header-nav">
-        <a href="#" id="navTop">{t.backTop}</a>
-        <AboutNavDropdown lang={lang} base={base} mode="desktop" />
-        <a href="#" id="navExhibition">{t.roomSelect}</a>
-        <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{t.navCampoCollection}</a>
-        <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
-        <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
+        <a href={`${base}/${lang}/#rooms`} id="navExhibition">{h.navRooms}</a>
+        <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{h.navCampo}</a>
+        <AboutNavDropdown lang={lang} base={base} mode="desktop" label={h.navArtist} />
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
           <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
-          <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+          <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>ES</a>
         </div>
       </nav>
 
@@ -1022,35 +1294,146 @@ function getCardWidth(sizeStr) {
     <!-- モバイルメニュー -->
     <div class="mobile-menu" id="mobileMenu">
       <nav class="mobile-menu-nav">
-        <a href="#" id="mNavTop">{t.backTop}</a>
-        <AboutNavDropdown lang={lang} base={base} mode="mobile" />
-        <button id="mNavExhibition">{t.roomSelect}</button>
-        <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{t.navCampoCollection}</a>
-        <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
-        <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
+        <a href={`${base}/${lang}/`} id="mNavTop">{t.backTop}</a>
+        <a href={`${base}/${lang}/#rooms`} id="mNavExhibition">{h.navRooms}</a>
+        <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{h.navCampo}</a>
+        <AboutNavDropdown lang={lang} base={base} mode="mobile" label={h.navArtist} />
       </nav>
       <div class="mobile-lang-switcher">
         <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
         <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
-        <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>SP</a>
+        <a href={`${base}/sp/`} class={lang === 'sp' ? 'active' : ''}>ES</a>
       </div>
     </div>
 
-    <!-- ヒーロー / 入口 -->
-    <div class="entrance" id="entrance">
-      <script is:inline define:vars={{ heroBase: `${base}/hero/`, heroCount: 8 }}>
-        // 所蔵作品を壁に掛けた入口写真を、訪問ごとにランダムで選ぶ
-        const n = 1 + Math.floor(Math.random() * heroCount);
-        document.getElementById('entrance').style.backgroundImage = `url('${heroBase}hero-${n}.jpg')`;
-      </script>
-      <div class="hero-inner">
-        <p class="hero-eyebrow">{t.headerTitle}</p>
-        <h1 class="hero-title">{lang === 'ja' ? (<>德永アート<br />ミュージアム</>) : t.title}</h1>
-        <p class="hero-subtitle">PERMANENT COLLECTION</p>
-        <div class="hero-divider"><span class="hero-divider-diamond"></span></div>
-        <button class="enter-btn" id="enterBtn">{t.enter}</button>
-        <button class="concept-link" id="conceptLink">{concept.eyebrow}<span>{concept.title}</span></button>
-      </div>
+    <!-- ホーム：入口写真＋区画 -->
+    <div class="home" id="home">
+      <section class="entrance" id="entrance">
+        <script is:inline define:vars={{ heroBase: `${base}/hero/`, heroCount: 8 }}>
+          // 所蔵作品を壁に掛けた入口写真を、訪問ごとにランダムで選ぶ
+          const n = 1 + Math.floor(Math.random() * heroCount);
+          document.getElementById('entrance').style.backgroundImage = `url('${heroBase}hero-${n}.jpg')`;
+        </script>
+        <div class="hero-inner">
+          <p class="hero-eyebrow">{t.headerTitle}</p>
+          <h1 class="hero-title">{lang === 'ja' ? (<>徳永アート<br />ミュージアム</>) : t.title}</h1>
+          <p class="hero-subtitle">{h.tagline}</p>
+          <button class="enter-btn" id="enterBtn">{t.enter}</button>
+          <button class="concept-link" id="conceptLink">{concept.eyebrow}<span>{concept.title}</span></button>
+        </div>
+        <button class="scroll-cue" id="scrollCue" type="button">{h.scrollCue}</button>
+      </section>
+
+      <!-- 今日の一枚 -->
+      <section class="home-sec" id="today">
+        <div class="split">
+          <div>
+            <p class="sec-eyebrow">{h.todayEyebrow}</p>
+            <h2 class="sec-heading">{h.todayHeading}</h2>
+            <p class="sec-text">{h.todayNote}</p>
+            <div class="sec-links">
+              <button class="sec-cta" id="todayOpen" type="button">{h.todayOpen}</button>
+              <button class="sec-link" id="todayAnother" type="button">{h.todayAnother}</button>
+            </div>
+          </div>
+          <figure class="today-figure">
+            <button class="today-btn" id="todayBtn" type="button" data-file={todayDefault.file}>
+              <div class="home-frame"><img id="todayImg" src={`${base}/gallery/${todayDefault.file}`} alt={todayDefault.title} /></div>
+            </button>
+            <figcaption class="today-caption">
+              <b id="todayTitle">{todayDefault.title}</b>
+              <span id="todayMeta">{todayDefault.artist}{todayDefault.year !== '—' ? ` ／ ${todayDefault.year}` : ''}</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- 物語 -->
+      <section class="home-sec story">
+        <div class="split">
+          <figure style="margin:0">
+            <a href={`${base}/${lang}/about/campo-collection/`} class="home-frame" style="display:block">
+              <img src={`${base}/gallery/${storyImage}`} alt="" loading="lazy" />
+            </a>
+          </figure>
+          <div>
+            <p class="sec-eyebrow">{h.storyEyebrow}</p>
+            <h2 class="sec-heading">{h.storyHeading}</h2>
+            {h.storyBody.map((p) => <p class="sec-text">{p}</p>)}
+            <div class="story-stats">
+              {storyStats.map((s) => <div><b>{s.num}</b><span>{s.label}</span></div>)}
+            </div>
+            <div class="sec-links">
+              <a class="sec-cta" href={`${base}/${lang}/about/campo-collection/`}>{h.storyCta} →</a>
+              <button class="sec-link" id="storyConcept" type="button">{h.storyConcept}</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 展示室 -->
+      <section class="home-sec" id="rooms">
+        <p class="sec-eyebrow" style="text-align:center">{h.roomsEyebrow}</p>
+        <h2 class="sec-heading" style="text-align:center;margin-bottom:36px">{h.roomsHeading}</h2>
+        <div class="room-cards">
+          {roomCards.map((room, idx) => (
+            <button class="room-card" type="button" data-room={room.id} data-name={room.name}>
+              {room.cover && <img src={`${base}/gallery/${room.cover}`} alt="" loading="lazy" />}
+              <span class="room-card-body">
+                <span>
+                  <span class="room-card-number">ROOM {String(idx + 1).padStart(2, '0')}</span>
+                  <span class="room-card-name">{room.name}</span>
+                </span>
+                <span class="room-card-count">{room.count}{lang === 'ja' ? '' : ' '}{h.roomsWorks} →</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <!-- 現地取材 -->
+      <section class="home-sec">
+        <div class="report-box">
+          <p class="sec-eyebrow">{h.reportEyebrow}</p>
+          <h2 class="sec-heading">{h.reportHeading}</h2>
+          <p class="sec-text">{h.reportBody}</p>
+          <div class="sec-links">
+            <a class="sec-link" href={`${base}/${lang}/about/campo-notes/`}>{h.reportCta} →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 画家について -->
+      <section class="home-sec">
+        <p class="sec-eyebrow">{h.artistEyebrow}</p>
+        <h2 class="sec-heading">{h.artistHeading}</h2>
+        <p class="sec-text">{h.artistBody}</p>
+        <div class="sec-links">
+          <a class="sec-link" href={`${base}/${lang}/about/`}>{h.artistMemoir} →</a>
+          <a class="sec-link" href={`${base}/${lang}/about/philosophy/`}>{h.artistWhite} →</a>
+        </div>
+      </section>
+
+      <footer class="home-footer">
+        <div class="home-footer-inner">
+          <div>
+            <p class="home-footer-logo">{t.headerTitle}</p>
+            <nav>
+              <a href={`${base}/${lang}/about/campo-collection/`}>{h.navCampo}</a>
+              <a href={`${base}/${lang}/about/`}>{h.navArtist}</a>
+              <a href={`${base}/${lang}/about/contact/`}>{h.footerContact}</a>
+              <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
+              <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
+            </nav>
+            <a class="family" href="https://second-penguin.com/#sp-apps" target="_blank" rel="noopener">{h.footerFamily} →</a>
+          </div>
+          <nav aria-label="Language">
+            <a href={`${base}/ja/`}>日本語</a>
+            <a href={`${base}/en/`}>English</a>
+            <a href={`${base}/sp/`}>Español</a>
+          </nav>
+        </div>
+      </footer>
     </div>
 
     <!-- カンポ・デ・クリプターナ構想セクション -->
@@ -1064,15 +1447,21 @@ function getCardWidth(sizeStr) {
       </div>
     </div>
 
-    <!-- 展示室セレクター -->
+    <!-- 展示室セレクター（「入館する」から） -->
     <div class="room-selector hidden" id="roomSelector">
       <p class="room-selector-title">EXHIBITION ROOMS</p>
       <h2 class="room-selector-heading">{t.roomSelect}</h2>
-      <div class="room-list">
-        {roomNames.map((room, idx) => (
-          <button class="room-btn" data-room={room.id} data-name={room.name}>
-            <span class="room-btn-number">ROOM {String(idx + 1).padStart(2, '0')}</span>
-            {room.prefix}{room.name}
+      <div class="room-cards">
+        {roomCards.map((room, idx) => (
+          <button class="room-card" type="button" data-room={room.id} data-name={room.name}>
+            {room.cover && <img src={`${base}/gallery/${room.cover}`} alt="" loading="lazy" />}
+            <span class="room-card-body">
+              <span>
+                <span class="room-card-number">ROOM {String(idx + 1).padStart(2, '0')}</span>
+                <span class="room-card-name">{room.name}</span>
+              </span>
+              <span class="room-card-count">{room.count}{lang === 'ja' ? '' : ' '}{h.roomsWorks} →</span>
+            </span>
           </button>
         ))}
       </div>
@@ -1142,13 +1531,14 @@ function getCardWidth(sizeStr) {
       </div>
     </div>
 
-    <script define:vars={{ alertPreparing: t.alertPreparing, alertShop: t.alertShop }}>
+    <script is:inline>
       const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
-      const entrance     = document.getElementById('entrance');
+      const homeView     = document.getElementById('home');
       const roomSelector = document.getElementById('roomSelector');
       const campoConcept = document.getElementById('campoConceptScreen');
       const museum       = document.getElementById('museum');
       const galleryTrack = document.getElementById('galleryTrack');
+      const siteHeader   = document.querySelector('.site-header');
 
       const hamburgerBtn  = document.getElementById('hamburgerBtn');
       const mobileMenu    = document.getElementById('mobileMenu');
@@ -1180,88 +1570,77 @@ function getCardWidth(sizeStr) {
 
       mobileOverlay.addEventListener('click', closeMobileMenu);
 
-      // 画面遷移
-      function showEntrance() {
-        entrance.classList.remove('hidden');
-        roomSelector.classList.add('hidden');
-        campoConcept.classList.add('hidden');
-        museum.classList.remove('visible');
+      // 画面遷移（ホーム / 構想 / 部屋選び / ギャラリー）
+      function showOnly(view) {
+        homeView.classList.toggle('hidden', view !== 'home');
+        siteHeader.classList.toggle('solid', view === 'home' && homeView.scrollTop > window.innerHeight * 0.6);
+        campoConcept.classList.toggle('hidden', view !== 'concept');
+        roomSelector.classList.toggle('hidden', view !== 'selector');
+        museum.classList.toggle('visible', view === 'museum');
         closeMobileMenu();
       }
 
-      function showSelector() {
-        entrance.classList.add('hidden');
-        roomSelector.classList.remove('hidden');
-        campoConcept.classList.add('hidden');
-        museum.classList.remove('visible');
-        closeMobileMenu();
+      function showHome(sectionId) {
+        showOnly('home');
+        if (sectionId) {
+          const target = document.getElementById(sectionId);
+          if (target) homeView.scrollTo({ top: target.offsetTop - 60, behavior: 'smooth' });
+        } else {
+          homeView.scrollTo({ top: 0 });
+        }
       }
 
-      function showConcept() {
-        entrance.classList.add('hidden');
-        roomSelector.classList.add('hidden');
-        campoConcept.classList.remove('hidden');
-        museum.classList.remove('visible');
-        closeMobileMenu();
-      }
-
-      document.getElementById('conceptLink').addEventListener('click', (e) => {
-        e.preventDefault();
-        showConcept();
-      });
-      document.getElementById('backToTopFromConcept').addEventListener('click', showEntrance);
-
-      document.getElementById('navExhibition').addEventListener('click', (e) => {
-        e.preventDefault();
-        showSelector();
-      });
-      document.getElementById('navTop').addEventListener('click', (e) => {
-        e.preventDefault();
-        showEntrance();
-      });
-      document.getElementById('backToTopFromSelector').addEventListener('click', showEntrance);
-      document.getElementById('enterBtn').addEventListener('click', (e) => {
-        e.preventDefault();
-        showSelector();
-      });
-      document.getElementById('mNavTop').addEventListener('click', (e) => {
-        e.preventDefault();
-        showEntrance();
-      });
-      document.getElementById('mNavExhibition').addEventListener('click', (e) => {
-        e.preventDefault();
-        showSelector();
-      });
-
-      // 展示室選択
-      document.querySelectorAll('.room-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const roomId   = btn.dataset.room;
-          const roomName = btn.dataset.name;
-
-          if (parseInt(roomId) >= 3) {
-            alert(alertPreparing);
-            return;
+      function openRoom(roomId, roomName) {
+        let count = 0;
+        document.querySelectorAll('.artwork-card').forEach(card => {
+          if (card.dataset.category === roomId) {
+            card.style.display = 'block';
+            count++;
+          } else {
+            card.style.display = 'none';
           }
-
-          let count = 0;
-          document.querySelectorAll('.artwork-card').forEach(card => {
-            if (card.dataset.category === roomId) {
-              card.style.display = 'block';
-              count++;
-            } else {
-              card.style.display = 'none';
-            }
-          });
-
-          document.getElementById('museumTitle').textContent = roomName;
-          document.getElementById('museumCount').textContent = count + ' WORKS';
-
-          galleryTrack.scrollLeft = 0;
-          roomSelector.classList.add('hidden');
-          museum.classList.add('visible');
         });
+
+        document.getElementById('museumTitle').textContent = roomName;
+        document.getElementById('museumCount').textContent = count + ' WORKS';
+
+        galleryTrack.scrollLeft = 0;
+        window.scrollTo(0, 0);
+        showOnly('museum');
+      }
+
+      // ロゴとメニュー
+      function onNav(id, handler) {
+        document.getElementById(id).addEventListener('click', (e) => {
+          e.preventDefault();
+          handler();
+        });
+      }
+      onNav('navLogo', () => showHome());
+      onNav('mNavTop', () => showHome());
+      onNav('navExhibition', () => showHome('rooms'));
+      onNav('mNavExhibition', () => showHome('rooms'));
+      onNav('enterBtn', () => showOnly('selector'));
+      onNav('conceptLink', () => showOnly('concept'));
+      onNav('storyConcept', () => showOnly('concept'));
+      onNav('scrollCue', () => showHome('today'));
+      document.getElementById('backToTopFromConcept').addEventListener('click', () => showHome());
+      document.getElementById('backToTopFromSelector').addEventListener('click', () => showHome());
+
+      // 展示室カード（ホームと部屋選び画面）
+      document.querySelectorAll('.room-card').forEach(btn => {
+        btn.addEventListener('click', () => openRoom(btn.dataset.room, btn.dataset.name));
       });
+
+      // ホームを下へスクロールしたらヘッダーに地色を敷く（絵や文字と重ならないように）
+      homeView.addEventListener('scroll', () => {
+        siteHeader.classList.toggle('solid', homeView.scrollTop > window.innerHeight * 0.6);
+      }, { passive: true });
+
+      // 他のページから「展示室」で来たとき（/ja/#rooms）
+      if (location.hash === '#rooms') {
+        requestAnimationFrame(() => showHome('rooms'));
+      }
 
       // スクロール矢印
       document.getElementById('arrowLeft').addEventListener('click', () => {
@@ -1272,21 +1651,23 @@ function getCardWidth(sizeStr) {
       });
 
       // アートワークモーダル
+      function openArtwork(card) {
+        document.getElementById('modalImg').src                 = `${base}/gallery/${card.dataset.file}`;
+        document.getElementById('modalTitle').textContent       = card.dataset.title;
+        document.getElementById('modalArtist').textContent      = card.dataset.artist;
+        document.getElementById('modalYear').textContent        = card.dataset.year;
+        document.getElementById('modalSize').textContent        = card.dataset.size;
+        document.getElementById('modalDescription').textContent = card.dataset.description;
+        const frameLight = card.dataset.frameLight;
+        const frameDark  = card.dataset.frameDark;
+        const modalFrame = document.getElementById('modalFrame');
+        modalFrame.style.borderColor = `${frameLight} ${frameDark} ${frameDark} ${frameLight}`;
+        modalFrame.className = `frame-shape-${card.dataset.frameShape}`;
+        document.getElementById('modalOverlay').classList.add('active');
+      }
+
       document.querySelectorAll('.artwork-card').forEach(card => {
-        card.addEventListener('click', () => {
-          document.getElementById('modalImg').src                 = `${base}/gallery/${card.dataset.file}`;
-          document.getElementById('modalTitle').textContent       = card.dataset.title;
-          document.getElementById('modalArtist').textContent      = card.dataset.artist;
-          document.getElementById('modalYear').textContent        = card.dataset.year;
-          document.getElementById('modalSize').textContent        = card.dataset.size;
-          document.getElementById('modalDescription').textContent = card.dataset.description;
-          const frameLight = card.dataset.frameLight;
-          const frameDark  = card.dataset.frameDark;
-          const modalFrame = document.getElementById('modalFrame');
-          modalFrame.style.borderColor = `${frameLight} ${frameDark} ${frameDark} ${frameLight}`;
-          modalFrame.className = `frame-shape-${card.dataset.frameShape}`;
-          document.getElementById('modalOverlay').classList.add('active');
-        });
+        card.addEventListener('click', () => openArtwork(card));
       });
 
       document.getElementById('modalClose').addEventListener('click', () => {
@@ -1298,6 +1679,36 @@ function getCardWidth(sizeStr) {
           e.target.classList.remove('active');
         }
       });
+
+      // 今日の一枚：訪問ごとに所蔵作品から1点を選ぶ
+      const todayBtn = document.getElementById('todayBtn');
+      // 題名が仮（「作品 3」など）のものは除く
+      const todayPool = [...document.querySelectorAll('.artwork-card')]
+        .filter(c => !/^(作品|Work|Obra)\s*\d+$/.test(c.dataset.title.trim()));
+      let todayCard = todayPool.find(c => c.dataset.file === todayBtn.dataset.file) ?? todayPool[0];
+
+      function showToday(card) {
+        if (!card) return;
+        todayCard = card;
+        const img = document.getElementById('todayImg');
+        img.src = `${base}/gallery/${card.dataset.file}`;
+        img.alt = card.dataset.title;
+        document.getElementById('todayTitle').textContent = card.dataset.title;
+        const year = card.dataset.year && card.dataset.year !== '—' ? ` ／ ${card.dataset.year}` : '';
+        document.getElementById('todayMeta').textContent = card.dataset.artist + year;
+      }
+
+      function pickToday() {
+        if (todayPool.length < 2) return todayCard;
+        let next;
+        do { next = todayPool[Math.floor(Math.random() * todayPool.length)]; } while (next === todayCard);
+        return next;
+      }
+
+      showToday(pickToday());
+      todayBtn.addEventListener('click', () => openArtwork(todayCard));
+      document.getElementById('todayOpen').addEventListener('click', () => openArtwork(todayCard));
+      document.getElementById('todayAnother').addEventListener('click', () => showToday(pickToday()));
     </script>
   </body>
 </html>

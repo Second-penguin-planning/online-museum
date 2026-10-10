@@ -43,7 +43,7 @@ export interface CampoNotesContent {
 
 export const campoNotesContent: Record<Lang, CampoNotesContent> = {
   ja: {
-    metaTitle: '現地の記録 — カンポ・デ・クリプターナ — 德永アートミュージアム',
+    metaTitle: '現地の記録 — カンポ・デ・クリプターナ — 徳永アートミュージアム',
     metaDescription: 'カンポ・デ・クリプターナの人々への謝辞・小旅行の記録・芸術についての覚書',
     navTitle: '現地の記録',
     title: 'カンポ・デ・クリプターナ　現地の記録',

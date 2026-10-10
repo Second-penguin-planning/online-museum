@@ -835,7 +835,7 @@ export interface CampoCollectionContent {
 
 export const campoCollectionContent: Record<Lang, CampoCollectionContent> = {
   ja: {
-    metaTitle: 'カンポ・デ・クリプターナ特別コレクション — 德永アートミュージアム',
+    metaTitle: 'カンポ・デ・クリプターナ特別コレクション — 徳永アートミュージアム',
     metaDescription: '風車・街並み・扉と窓——絵画と現地取材写真を見比べながら、作品ごとのインパクト・技能・物語をたどる特別コレクション',
     navTitle: '特別コレクション',
     title: 'カンポ・デ・クリプターナ特別コレクション',

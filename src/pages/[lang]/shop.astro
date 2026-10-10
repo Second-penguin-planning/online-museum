@@ -1,4 +1,6 @@
 ---
+import SeoMeta from '../../components/SeoMeta.astro';
+import { home } from '../../data/ui.ts';
 import shopData from '../../data/shop.json';
 import { ui } from '../../data/ui.ts';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
@@ -171,6 +173,7 @@ const ts = shopUI[lang];
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="base-url" content={base} />
   <title>{ts.title} | Tokunaga Art Museum</title>
+  <SeoMeta lang={lang} title={`${ts.title} | Tokunaga Art Museum`} description={home[lang].description} />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 

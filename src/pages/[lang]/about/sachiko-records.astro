@@ -1,5 +1,5 @@
 ---
-// src/pages/[lang]/about/sachiko-records.astro — 德永幸子の記録（新聞記事・動画）
+// src/pages/[lang]/about/sachiko-records.astro — 徳永幸子の記録（新聞記事・動画）
 import AboutSectionLayout from '../../../layouts/AboutSectionLayout.astro';
 import type { Lang } from '../../../data/aboutNav';
 
@@ -16,9 +16,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const meta: Record<Lang, { title: string; description: string; pageTitle: string; body: string }> = {
   ja: {
-    title: '德永幸子 記録 — 德永アートミュージアム',
-    description: '德永幸子に関する新聞記事・映像記録',
-    pageTitle: '德永幸子　記録',
+    title: '徳永幸子 記録 — 徳永アートミュージアム',
+    description: '徳永幸子に関する新聞記事・映像記録',
+    pageTitle: '徳永幸子　記録',
     body: '新聞記事やYouTube動画などを近日掲載予定です。しばらくお待ちください。',
   },
   en: {

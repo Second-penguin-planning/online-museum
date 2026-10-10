@@ -37,7 +37,7 @@ export interface PhilosophyContent {
 
 export const philosophyContent: Record<Lang, PhilosophyContent> = {
   ja: {
-    metaTitle: '「白」の哲学 — 德永アートミュージアム',
+    metaTitle: '「白」の哲学 — 徳永アートミュージアム',
     metaDescription: '描き重ねた末に到達する白。西洋の視線と東洋の還元 — 徳永卓磨の絵画哲学',
     navTitle: '「白」の哲学',
     title: '描き重ねられた「白」の哲学',

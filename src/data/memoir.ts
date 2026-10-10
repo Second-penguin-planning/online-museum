@@ -16,7 +16,7 @@ export const memoirMeta: Record<Lang, { title: string; subtitle: string; author:
   ja: {
     title: '回顧録',
     subtitle: '画業と人生の記録',
-    author: '德永 卓磨',
+    author: '徳永 卓磨',
     backLabel: '← ギャラリーへ戻る',
     tocLabel: '目次',
     chapterLabel: '第',

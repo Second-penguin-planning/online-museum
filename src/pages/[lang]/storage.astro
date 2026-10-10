@@ -1,4 +1,6 @@
 ---
+import SeoMeta from '../../components/SeoMeta.astro';
+import { home } from '../../data/ui.ts';
 import artworks from '../../data/artworks.json';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 
@@ -26,7 +28,7 @@ const storageUI = {
     },
     artists: {
       takuma: { ja: '徳永 卓磨', en: 'Takuma Tokunaga' },
-      sachiko: { ja: '德永 幸子', en: 'Sachiko Tokunaga' },
+      sachiko: { ja: '徳永 幸子', en: 'Sachiko Tokunaga' },
     },
     cats: {
       takuma: ['異人館', '神戸', 'スペイン', '静物', '未分類'],
@@ -165,6 +167,7 @@ const takumaTableRows = artworks
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="base-url" content={base} />
   <title>{tS.page.title} | Tokunaga Art Museum</title>
+  <SeoMeta lang={lang} title={`${tS.page.title} | Tokunaga Art Museum`} description={home[lang].description} noindex />
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1421,7 +1424,7 @@ const takumaTableRows = artworks
       <div class="section-divider-diamond"></div>
     </div>
 
-    <!-- ===== 德永 幸子 ===== -->
+    <!-- ===== 徳永 幸子 ===== -->
     <section class="artist-section">
       <div class="artist-header">
         <span class="artist-name-ja">{tS.artists.sachiko.ja}</span>

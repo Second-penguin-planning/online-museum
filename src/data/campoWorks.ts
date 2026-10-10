@@ -259,7 +259,7 @@ export interface CampoWorksContent {
 
 export const campoWorksContent: Record<Lang, CampoWorksContent> = {
   ja: {
-    metaTitle: '作品目録 — カンポ・デ・クリプターナ — 德永アートミュージアム',
+    metaTitle: '作品目録 — カンポ・デ・クリプターナ — 徳永アートミュージアム',
     metaDescription: 'カンポ・デ・クリプターナで制作された油彩・水彩作品、全200点の目録',
     navTitle: '作品目録',
     title: 'カンポ・デ・クリプターナ 絵画作品目録',

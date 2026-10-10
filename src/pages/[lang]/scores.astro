@@ -1,4 +1,6 @@
 ---
+import SeoMeta from '../../components/SeoMeta.astro';
+import { home } from '../../data/ui.ts';
 import scores from '../../data/scores.json';
 
 export async function getStaticPaths() {
@@ -13,7 +15,7 @@ const { lang } = Astro.params as { lang: 'ja' | 'en' | 'sp' };
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const meta = {
-  ja: { title: '楽譜 — 德永アートミュージアム', description: '徳永卓磨の楽譜コレクション' },
+  ja: { title: '楽譜 — 徳永アートミュージアム', description: '徳永卓磨の楽譜コレクション' },
   en: { title: 'Scores — Tokunaga Art Museum', description: 'Musical scores by Takuma Tokunaga' },
   sp: { title: 'Partituras — Museo de Arte Tokunaga', description: 'Partituras musicales de Takuma Tokunaga' },
 };
@@ -73,6 +75,7 @@ const scoresData = scores.map(s => ({
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{currentMeta.title}</title>
+  <SeoMeta lang={lang} title={currentMeta.title} description={currentMeta.description ?? home[lang].description} />
   <meta name="description" content={currentMeta.description} />
   <!-- OpenSheetMusicDisplay -->
   <script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.8.9/build/opensheetmusicdisplay.min.js"></script>

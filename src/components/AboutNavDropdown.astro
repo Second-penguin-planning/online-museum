@@ -7,10 +7,12 @@ interface Props {
   lang: Lang;
   base: string;
   mode: 'desktop' | 'mobile';
+  /** 見出しの表示名。省略時は「概要」 */
+  label?: string;
 }
 
-const { lang, base, mode } = Astro.props;
-const label = aboutNavLabel[lang] ?? aboutNavLabel.ja;
+const { lang, base, mode, label: labelProp } = Astro.props;
+const label = labelProp ?? aboutNavLabel[lang] ?? aboutNavLabel.ja;
 const entries = getAboutNav(lang, base);
 ---
 
@@ -68,6 +70,7 @@ const entries = getAboutNav(lang, base);
     text-decoration: none;
     font-size: 0.82rem;
     letter-spacing: 0.15em;
+    white-space: nowrap;
     opacity: 0.85;
     cursor: pointer;
     padding: 0;
