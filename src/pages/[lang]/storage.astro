@@ -45,6 +45,7 @@ const storageUI = {
       toggleBtn: '📋 一覧表',
       backBtn: '🖼 カード表示に戻る',
       heading: '徳永卓磨 所蔵画一覧',
+      headingSachiko: '徳永幸子 所蔵画一覧',
       colNumber: '番号',
       colTitle: '作品名',
       colYear: '作成年度',
@@ -80,6 +81,7 @@ const storageUI = {
       toggleBtn: '📋 Table',
       backBtn: '🖼 Back to cards',
       heading: 'Takuma Tokunaga — Full Collection',
+      headingSachiko: 'Sachiko Tokunaga — Full Collection',
       colNumber: 'No.',
       colTitle: 'Title',
       colYear: 'Year',
@@ -115,6 +117,7 @@ const storageUI = {
       toggleBtn: '📋 Tabla',
       backBtn: '🖼 Volver a las tarjetas',
       heading: 'Takuma Tokunaga — Colección completa',
+      headingSachiko: 'Sachiko Tokunaga — Colección completa',
       colNumber: 'N.º',
       colTitle: 'Título',
       colYear: 'Año',
@@ -150,17 +153,24 @@ function artworksFor(artistKey, catKey) {
 
 const unsortedArtworks = localizedArtworks.filter(a => a.artistKey === null);
 
-// 一覧表（徳永卓磨の全所蔵画、公開/非公開を問わず）
-const takumaTableRows = artworks
-  .filter(a => a.artistKey === 'takuma')
-  .sort((a, b) => a.file.localeCompare(b.file, 'ja', { numeric: true }))
-  .map(a => ({
-    file: a.file,
-    title: a.title?.[lang] || a.title?.ja || '—',
-    year: a.year?.[lang] || a.year?.ja || '',
-    size: a.size?.[lang] || a.size?.ja || '',
-    published: !!a.published,
-  }));
+// 一覧表（画家ごとの全所蔵画、公開/非公開を問わず）
+function tableRowsFor(artistKey) {
+  return artworks
+    .filter(a => a.artistKey === artistKey)
+    .sort((a, b) => a.file.localeCompare(b.file, 'ja', { numeric: true }))
+    .map(a => ({
+      file: a.file,
+      title: a.title?.[lang] || a.title?.ja || '—',
+      year: a.year?.[lang] || a.year?.ja || '',
+      size: a.size?.[lang] || a.size?.ja || '',
+      published: !!a.published,
+    }));
+}
+
+const tableSections = [
+  { heading: tS.table.heading,        rows: tableRowsFor('takuma') },
+  { heading: tS.table.headingSachiko, rows: tableRowsFor('sachiko') },
+];
 ---
 
 <!DOCTYPE html>
@@ -974,6 +984,8 @@ const takumaTableRows = artworks
       overflow-x: auto;
     }
 
+    .table-view-section + .table-view-section { margin-top: 64px; }
+
     .artwork-table {
       width: 100%;
       border-collapse: collapse;
@@ -1542,41 +1554,45 @@ const takumaTableRows = artworks
 
     </div>
 
-    <!-- ===== 一覧表（徳永卓磨） ===== -->
+    <!-- ===== 一覧表（画家ごと） ===== -->
     <div class="table-view" id="tableView" style="display:none;">
-      <h3 class="table-view-heading">{tS.table.heading}</h3>
-      <div class="table-view-scroll">
-        <table class="artwork-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>{tS.table.colNumber}</th>
-              <th>{tS.table.colTitle}</th>
-              <th>{tS.table.colYear}</th>
-              <th>{tS.table.colSize}</th>
-              <th>{tS.table.colStatus}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {takumaTableRows.map(row => (
-              <tr>
-                <td class="table-thumb-cell">
-                  <button type="button" class="table-thumb" data-src={`${base}/gallery/${row.file}`} data-label={row.title}>
-                    <img src={`${base}/gallery/thumbs/${row.file}`} alt={row.title} loading="lazy" onerror={`this.onerror=null;this.src='${base}/gallery/${row.file}'`} />
-                  </button>
-                </td>
-                <td>{row.file}</td>
-                <td>{row.title}</td>
-                <td>{row.year}</td>
-                <td>{row.size}</td>
-                <td class={row.published ? 'status-published' : 'status-unpublished'}>
-                  {row.published ? tS.published : tS.unpublished}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {tableSections.map(section => (
+        <section class="table-view-section">
+          <h3 class="table-view-heading">{section.heading}</h3>
+          <div class="table-view-scroll">
+            <table class="artwork-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{tS.table.colNumber}</th>
+                  <th>{tS.table.colTitle}</th>
+                  <th>{tS.table.colYear}</th>
+                  <th>{tS.table.colSize}</th>
+                  <th>{tS.table.colStatus}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {section.rows.map(row => (
+                  <tr>
+                    <td class="table-thumb-cell">
+                      <button type="button" class="table-thumb" data-src={`${base}/gallery/${row.file}`} data-label={row.title}>
+                        <img src={`${base}/gallery/thumbs/${row.file}`} alt={row.title} loading="lazy" onerror={`this.onerror=null;this.src='${base}/gallery/${row.file}'`} />
+                      </button>
+                    </td>
+                    <td>{row.file}</td>
+                    <td>{row.title}</td>
+                    <td>{row.year}</td>
+                    <td>{row.size}</td>
+                    <td class={row.published ? 'status-published' : 'status-unpublished'}>
+                      {row.published ? tS.published : tS.unpublished}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
     </div>
   </div>
 
