@@ -47,4 +47,9 @@ const m = meta[lang] ?? meta.ja;
 >
   <p class="placeholder-notice">{lang === 'ja' ? '準備中' : lang === 'en' ? 'Coming soon' : 'Próximamente'}</p>
   <p>{m.body}</p>
+  <p>
+    <a href={`${base}/${lang}/#feedback`}>
+      {lang === 'ja' ? 'ご感想・ご意見はトップページのフォームからお寄せください →' : lang === 'en' ? 'Please send your feedback using the form on the home page →' : 'Envíe sus opiniones desde el formulario de la página de inicio →'}
+    </a>
+  </p>
 </AboutSectionLayout>

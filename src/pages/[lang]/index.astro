@@ -5,6 +5,7 @@ import { campoConceptContent } from '../../data/campoConcept.ts';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 import SeoMeta from '../../components/SeoMeta.astro';
 import { legacy, pillarWorks, VIP_EMAIL } from '../../data/legacy.ts';
+import { launch, CAMPO_LP_URL, FEEDBACK_FORM_URL, FEEDBACK_EMAIL, EXHIBITION } from '../../data/launch.ts';
 
 export function getStaticPaths() {
   return [
@@ -76,7 +77,13 @@ const pillars = (['kobe', 'campo'] as const).map((key) => ({
   feature: workByFile(pillarWorks[key].feature),
   others: pillarWorks[key].others.map(workByFile).filter(Boolean),
 }));
-const lpUrl = 'https://campo-criptana-lp.vercel.app/';
+const lpUrl = CAMPO_LP_URL;
+const ln = launch[lang] ?? launch.ja;
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(EXHIBITION.mapQuery)}&output=embed`;
+const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(EXHIBITION.mapQuery)}`;
+const calLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ln.exCalTitle)}&dates=${EXHIBITION.calendarDates}&location=${encodeURIComponent(EXHIBITION.mapQuery)}`;
+// 「二つの故郷」バナーの背景に使うカンポの作品
+const lpBanner = workByFile(pillarWorks.campo.feature);
 
 function getCardWidth(sizeStr) {
   const defaultWidth = 280; 
@@ -207,6 +214,8 @@ function getCardWidth(sizeStr) {
         background: rgba(212, 175, 55, 0.12);
         border-color: var(--gold-bright);
       }
+      .header-nav a.nav-event { background: rgba(201, 169, 97, 0.16); }
+      .header-nav a.nav-external { color: var(--gold-light); }
       .mobile-menu-nav a.nav-campo-highlight {
         color: var(--gold-bright);
       }
@@ -893,6 +902,7 @@ function getCardWidth(sizeStr) {
         gap: 32px;
         margin-bottom: 72px;
       }
+      .vip-cards > * { min-width: 0; }
       .vip-card {
         position: relative;
         padding: 52px clamp(26px, 4vw, 48px) 44px;
@@ -981,6 +991,7 @@ function getCardWidth(sizeStr) {
         cursor: pointer;
       }
       .vip-check input { appearance: none; width: 18px; height: 18px; border: 1px solid var(--gold-dim); flex: none; display: grid; place-items: center; cursor: pointer; }
+      .vip-check input[type="radio"] { border-radius: 50%; }
       .vip-check input:checked { background: var(--gold-bright); border-color: var(--gold-bright); }
       .vip-check input:checked::after { content: '✓'; color: #141210; font-size: 0.75rem; line-height: 1; }
       .vip-check input:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
@@ -1003,6 +1014,159 @@ function getCardWidth(sizeStr) {
       .vip-submit:hover { filter: brightness(1.08); transform: translateY(-1px); }
       .vip-note { margin-top: 16px; font-family: var(--serif-jp); font-size: 0.76rem; line-height: 1.9; color: var(--text-muted); text-align: center; }
       .vip-error { color: #e8a48a; font-family: var(--serif-jp); font-size: 0.82rem; text-align: center; margin-top: 12px; min-height: 1em; }
+
+      /* ── 入口の展示会お知らせ ── */
+      .event-badge {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 4px 12px;
+        margin-bottom: 22px;
+        padding: 8px 18px;
+        background: rgba(12, 10, 8, 0.55);
+        border: 1px solid rgba(230, 207, 150, 0.7);
+        color: #f6ecd2;
+        text-decoration: none;
+        font-family: var(--serif-jp);
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        backdrop-filter: blur(2px);
+        transition: background 0.3s, color 0.3s;
+      }
+      .event-badge b { font-weight: 500; color: var(--gold-light); letter-spacing: 0.15em; }
+      .event-badge:hover { background: rgba(201, 169, 97, 0.9); color: #141210; }
+      .event-badge:hover b { color: #141210; }
+      .event-badge[hidden] { display: none; }
+
+      /* ── コンセプト・ストーリー ── */
+      .story { max-width: 820px; margin: 0 auto; text-align: center; }
+      .story .sec-text { margin: 0 auto; text-align: left; }
+      .story .sec-text + .sec-text { margin-top: 18px; }
+      .story-heading {
+        font-family: var(--serif-jp);
+        font-size: clamp(1.6rem, 4.4vw, 2.7rem);
+        font-weight: 300;
+        letter-spacing: 0.08em;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-wrap: balance;
+        margin-bottom: 28px;
+      }
+      .story-lead {
+        font-family: var(--serif-jp);
+        font-size: clamp(1rem, 2.4vw, 1.25rem);
+        letter-spacing: 0.08em;
+        line-height: 1.9;
+        color: var(--gold-light);
+        margin-bottom: 44px;
+        text-wrap: balance;
+      }
+      .story-sign {
+        margin: 32px auto 0;
+        max-width: 34em;
+        text-align: right;
+        font-family: var(--serif-jp);
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+      }
+      .story-sign::before { content: '— '; }
+      .story-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-top: 64px;
+        padding-top: 40px;
+        border-top: 1px solid rgba(201, 169, 97, 0.2);
+      }
+      .story-stats b {
+        display: block;
+        font-family: var(--serif-latin);
+        font-weight: 400;
+        font-size: clamp(2.2rem, 6vw, 3.4rem);
+        line-height: 1.1;
+        color: var(--gold-light);
+      }
+      .story-stats small { font-family: var(--serif-jp); font-size: 0.9rem; margin-left: 4px; color: var(--gold-bright); }
+      .story-stats span { font-family: var(--serif-jp); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.08em; }
+
+      /* ── ローンチング展示会 ── */
+      .exhibit {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: clamp(36px, 6vw, 72px);
+        align-items: stretch;
+        background: var(--crimson-mid);
+        border: 1px solid rgba(201, 169, 97, 0.3);
+        padding: clamp(32px, 6vw, 72px);
+      }
+      .exhibit > * { min-width: 0; }
+      .exhibit .sec-heading { font-size: clamp(1.4rem, 2.6vw, 1.85rem); }
+      .exhibit-rows { margin-top: 36px; border-top: 1px solid rgba(201, 169, 97, 0.2); }
+      .exhibit-rows > div {
+        display: grid;
+        grid-template-columns: 5.5em 1fr;
+        gap: 16px;
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+      }
+      .exhibit-rows dt { font-family: var(--serif-jp); font-size: 0.78rem; letter-spacing: 0.2em; color: var(--gold-bright); padding-top: 3px; }
+      .exhibit-rows dd b { display: block; font-family: var(--serif-jp); font-weight: 400; font-size: 1.02rem; line-height: 1.7; color: var(--text-main); }
+      .exhibit-rows dd span { display: block; font-family: var(--serif-jp); font-weight: 300; font-size: 0.88rem; line-height: 1.8; color: var(--text-sub); }
+      .exhibit-ended { margin-top: 20px; font-family: var(--serif-jp); color: var(--gold-light); }
+      .exhibit-map { min-height: 320px; border: 1px solid rgba(201, 169, 97, 0.25); }
+      .exhibit-map iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 320px;
+        border: 0;
+        filter: grayscale(0.6) sepia(0.15) brightness(0.9);
+      }
+
+      /* ── 二つの故郷：スペイン特設サイトへのバナー ── */
+      .lp-sec { padding-top: 0; border-top: 0; }
+      .lp-banner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 380px;
+        padding: clamp(36px, 6vw, 72px);
+        text-decoration: none;
+        color: var(--text-main);
+        border: 1px solid rgba(201, 169, 97, 0.35);
+        background:
+          linear-gradient(90deg, rgba(12, 10, 8, 0.94) 0%, rgba(12, 10, 8, 0.78) 50%, rgba(12, 10, 8, 0.25) 100%),
+          var(--lp-bg, none) center / cover no-repeat,
+          var(--crimson-mid);
+        overflow: hidden;
+      }
+      .lp-banner-text { display: flex; flex-direction: column; align-items: flex-start; max-width: 32em; }
+      .lp-banner-heading {
+        font-family: var(--serif-jp);
+        font-size: clamp(1.4rem, 3.4vw, 2.1rem);
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        line-height: 1.6;
+        margin-bottom: 18px;
+      }
+      .lp-banner-body { font-family: var(--serif-jp); font-weight: 300; font-size: 0.95rem; line-height: 2.1; color: var(--text-sub); margin-bottom: 30px; }
+      .lp-banner:hover .lp-banner-cta { background: var(--gold-bright); color: #141210; border-color: var(--gold-bright); }
+
+      .fb-external { display: inline-block; width: auto; padding: 20px 40px; text-decoration: none; }
+
+      @media (max-width: 860px) {
+        .exhibit { grid-template-columns: 1fr; }
+        .lp-banner { background:
+          linear-gradient(180deg, rgba(12, 10, 8, 0.55) 0%, rgba(12, 10, 8, 0.92) 55%),
+          var(--lp-bg, none) center / cover no-repeat,
+          var(--crimson-mid); align-items: flex-end; min-height: 460px; }
+      }
+      @media (max-width: 480px) {
+        .story-stats { grid-template-columns: 1fr; gap: 22px; }
+        .exhibit-rows > div { grid-template-columns: 1fr; gap: 4px; }
+      }
 
       @media (max-width: 860px) {
         .pillar-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -1492,7 +1656,7 @@ function getCardWidth(sizeStr) {
       }
 
       /* メニューが収まらない幅ではハンバーガーに切り替える */
-      @media (max-width: 900px) {
+      @media (max-width: 1180px) {
         .header-nav  { display: none; }
         .hamburger   { display: flex; }
       }
@@ -1534,7 +1698,9 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/${lang}/#rooms`} id="navExhibition">{h.navRooms}</a>
         <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{h.navCampo}</a>
         <AboutNavDropdown lang={lang} base={base} mode="desktop" label={h.navArtist} />
-        <a href={`${base}/${lang}/#limited`} id="navLimited" class="nav-campo-highlight">{lg.navLimited}</a>
+        <a href={`${base}/${lang}/#limited`} id="navLimited">{lg.navLimited}</a>
+        <a href={`${base}/${lang}/#exhibition`} id="navExhibitionInfo" class="nav-campo-highlight nav-event">{ln.navExhibition}</a>
+        <a href={lpUrl} target="_blank" rel="noopener" class="nav-external">{ln.navLp}<span aria-hidden="true"> ↗</span></a>
         <div class="lang-switcher">
           <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
           <a href={`${base}/en/`} class={lang === 'en' ? 'active' : ''}>EN</a>
@@ -1560,7 +1726,10 @@ function getCardWidth(sizeStr) {
         <a href={`${base}/${lang}/#rooms`} id="mNavExhibition">{h.navRooms}</a>
         <a href={`${base}/${lang}/about/campo-collection/`} class="nav-campo-highlight">{h.navCampo}</a>
         <AboutNavDropdown lang={lang} base={base} mode="mobile" label={h.navArtist} />
-        <a href={`${base}/${lang}/#limited`} id="mNavLimited" class="nav-campo-highlight">{lg.navLimited}</a>
+        <a href={`${base}/${lang}/#exhibition`} id="mNavExhibitionInfo" class="nav-campo-highlight">{ln.navExhibition}</a>
+        <a href={`${base}/${lang}/#limited`} id="mNavLimited">{lg.navLimited}</a>
+        <a href={`${base}/${lang}/#feedback`} id="mNavFeedback">{ln.navFeedback}</a>
+        <a href={lpUrl} target="_blank" rel="noopener">{ln.navLp} ↗</a>
       </nav>
       <div class="mobile-lang-switcher">
         <a href={`${base}/ja/`} class={lang === 'ja' ? 'active' : ''}>JP</a>
@@ -1578,6 +1747,7 @@ function getCardWidth(sizeStr) {
           document.getElementById('entrance').style.backgroundImage = `url('${heroBase}hero-${n}.jpg')`;
         </script>
         <div class="hero-inner">
+          <a class="event-badge" href="#exhibition" id="eventBadge"><b>{ln.exBadge}</b><span>{ln.exBadgeWhen}</span></a>
           <p class="hero-eyebrow">{t.headerTitle}</p>
           <h1 class="hero-title">{lang === 'ja' ? (<>徳永アート<br />ミュージアム</>) : t.title}</h1>
           <p class="hero-subtitle">{h.tagline}</p>
@@ -1585,6 +1755,45 @@ function getCardWidth(sizeStr) {
           <button class="concept-link" id="conceptLink">{concept.eyebrow}<span>{concept.title}</span></button>
         </div>
         <button class="scroll-cue" id="scrollCue" type="button">{h.scrollCue}</button>
+      </section>
+
+      <!-- コンセプト・ストーリー -->
+      <section class="home-sec" id="story">
+        <div class="story">
+          <div class="sec-rule"></div>
+          <p class="sec-eyebrow">{ln.storyEyebrow}</p>
+          <h2 class="story-heading">{ln.storyHeading.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h2>
+          <p class="story-lead">{ln.storyLead}</p>
+          {ln.storyBody.map((p) => <p class="sec-text">{p}</p>)}
+          <p class="story-sign">{ln.storySign}</p>
+          <div class="story-stats">
+            {ln.storyStats.map((s) => <div><b>{s.num}<small>{s.unit}</small></b><span>{s.label}</span></div>)}
+          </div>
+        </div>
+      </section>
+
+      <!-- ローンチング展示会のご案内 -->
+      <section class="home-sec" id="exhibition" data-end={EXHIBITION.end}>
+        <div class="exhibit">
+          <div class="exhibit-info">
+            <p class="sec-eyebrow">{ln.exEyebrow}</p>
+            <h2 class="sec-heading">{ln.exHeading}</h2>
+            <p class="sec-text">{ln.exLead}</p>
+            <p class="exhibit-ended" id="exhibitEnded" hidden>{ln.exEnded}</p>
+            <dl class="exhibit-rows">
+              {ln.exRows.map((r) => (
+                <div><dt>{r.label}</dt><dd><b>{r.value}</b><span>{r.sub}</span></dd></div>
+              ))}
+            </dl>
+            <div class="sec-links">
+              <a class="sec-cta" href={mapLink} target="_blank" rel="noopener">{ln.exMap} ↗</a>
+              <a class="sec-link" href={calLink} target="_blank" rel="noopener" id="exhibitCal">{ln.exCalendar}</a>
+            </div>
+          </div>
+          <div class="exhibit-map">
+            <iframe src={mapSrc} title={ln.exMapTitle} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
       </section>
 
       <!-- 画家を形づくった二つの地（神戸／カンポ） -->
@@ -1629,6 +1838,7 @@ function getCardWidth(sizeStr) {
                       <a class="sec-cta" href={`${base}/${lang}/about/campo-collection/`}>{p.cta} →</a>
                       <a class="sec-link" href={`${base}/${lang}/about/philosophy/`}>{p.sub}</a>
                       <button class="sec-link" id="storyConcept" type="button">{h.storyConcept}</button>
+                      <a class="sec-link" href={lpUrl} target="_blank" rel="noopener">{ln.lpShort} ↗</a>
                     </>
                   )}
                 </div>
@@ -1636,6 +1846,18 @@ function getCardWidth(sizeStr) {
             </div>
           </article>
         ))}
+      </section>
+
+      <!-- 二つの故郷：スペイン特設サイトへ -->
+      <section class="home-sec lp-sec">
+        <a class="lp-banner" href={lpUrl} target="_blank" rel="noopener" style={lpBanner ? `--lp-bg: url('${base}/gallery/${lpBanner.file}')` : ''}>
+          <span class="lp-banner-text">
+            <span class="sec-eyebrow">{ln.lpEyebrow}</span>
+            <span class="lp-banner-heading">{ln.lpHeading.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</span>
+            <span class="lp-banner-body">{ln.lpBody}</span>
+            <span class="sec-cta lp-banner-cta">{ln.lpCta} ↗</span>
+          </span>
+        </a>
       </section>
 
       <!-- 日西文化交流レガシープロジェクト -->
@@ -1746,6 +1968,45 @@ function getCardWidth(sizeStr) {
         </form>
       </section>
 
+      <!-- ご感想・ご意見（将来の展開について） -->
+      <section class="home-sec" id="feedback">
+        <div class="sec-head-center" style="margin-bottom:56px">
+          <div class="sec-rule"></div>
+          <p class="sec-eyebrow">{ln.fbEyebrow}</p>
+          <h2 class="sec-heading">{ln.fbHeading}</h2>
+          <p class="sec-text">{ln.fbLead}</p>
+        </div>
+        {FEEDBACK_FORM_URL ? (
+          <div style="text-align:center">
+            <a class="vip-submit fb-external" href={FEEDBACK_FORM_URL} target="_blank" rel="noopener">{ln.fbFormButton} ↗</a>
+          </div>
+        ) : (
+          <form class="vip-form" id="fbForm" novalidate data-email={FEEDBACK_EMAIL} data-subject={ln.fbSubject}>
+            <fieldset class="vip-field">
+              <legend>{ln.fbTopic}</legend>
+              {ln.fbTopics.map((topic, i) => (
+                <label class="vip-check"><input type="radio" name="topic" value={topic} checked={i === 0} /> {topic}</label>
+              ))}
+            </fieldset>
+            <label class="vip-field">
+              <span>{ln.fbMessage}</span>
+              <textarea name="message" rows="6" placeholder={ln.fbPlaceholder} required></textarea>
+            </label>
+            <label class="vip-field">
+              <span>{ln.fbName}</span>
+              <input type="text" name="name" autocomplete="name" />
+            </label>
+            <label class="vip-field">
+              <span>{ln.fbEmail}</span>
+              <input type="email" name="email" autocomplete="email" />
+            </label>
+            <button class="vip-submit" type="submit">{ln.fbSubmit}</button>
+            <p class="vip-error" id="fbError" role="alert" data-msg={ln.fbError}></p>
+            <p class="vip-note">{ln.fbNote}</p>
+          </form>
+        )}
+      </section>
+
       <!-- 現地取材 -->
       <section class="home-sec">
         <div class="report-box">
@@ -1776,6 +2037,9 @@ function getCardWidth(sizeStr) {
             <nav>
               <a href={`${base}/${lang}/about/campo-collection/`}>{h.navCampo}</a>
               <a href={`${base}/${lang}/about/`}>{h.navArtist}</a>
+              <a href={lpUrl} target="_blank" rel="noopener">{ln.navLp} ↗</a>
+              <a href={`${base}/${lang}/#exhibition`} id="footExhibition">{ln.navExhibition}</a>
+              <a href={`${base}/${lang}/#feedback`} id="footFeedback">{ln.navFeedback}</a>
               <a href={`${base}/${lang}/about/contact/`}>{h.footerContact}</a>
               <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
               <a href={`${base}/${lang}/storage/`}>{t.navStorage}</a>
@@ -1978,7 +2242,13 @@ function getCardWidth(sizeStr) {
       onNav('enterBtn', () => showOnly('selector'));
       onNav('conceptLink', () => showOnly('concept'));
       onNav('storyConcept', () => showOnly('concept'));
-      onNav('scrollCue', () => showHome('pillars'));
+      onNav('scrollCue', () => showHome('story'));
+      onNav('eventBadge', () => showHome('exhibition'));
+      onNav('navExhibitionInfo', () => showHome('exhibition'));
+      onNav('mNavExhibitionInfo', () => showHome('exhibition'));
+      onNav('mNavFeedback', () => showHome('feedback'));
+      onNav('footExhibition', () => showHome('exhibition'));
+      onNav('footFeedback', () => showHome('feedback'));
       onNav('navLimited', () => showHome('limited'));
       onNav('mNavLimited', () => showHome('limited'));
       onNav('legacyToVip', () => showHome('limited'));
@@ -1996,7 +2266,7 @@ function getCardWidth(sizeStr) {
       }, { passive: true });
 
       // 他のページから「展示室」で来たとき（/ja/#rooms）
-      if (location.hash === '#rooms' || location.hash === '#limited') {
+      if (['#rooms', '#limited', '#exhibition', '#feedback', '#story'].includes(location.hash)) {
         const sectionId = location.hash.slice(1);
         requestAnimationFrame(() => showHome(sectionId));
       }
@@ -2077,6 +2347,37 @@ function getCardWidth(sizeStr) {
         ].join('\n');
         location.href = `mailto:${vipForm.dataset.email}?subject=${encodeURIComponent(vipForm.dataset.subject)}&body=${encodeURIComponent(body)}`;
       });
+
+      // ご感想・ご意見：入力内容を入れたメール作成画面を開く（Googleフォーム未設定のとき）
+      const fbForm = document.getElementById('fbForm');
+      fbForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(fbForm);
+        const message = String(data.get('message') || '').trim();
+        const error = document.getElementById('fbError');
+        if (!message) {
+          error.textContent = error.dataset.msg;
+          return;
+        }
+        error.textContent = '';
+        const body = [
+          `■ ${data.get('topic')}`,
+          '',
+          message,
+          '',
+          String(data.get('name') || '').trim(),
+          String(data.get('email') || '').trim(),
+        ].join('\n').trim();
+        location.href = `mailto:${fbForm.dataset.email}?subject=${encodeURIComponent(fbForm.dataset.subject)}&body=${encodeURIComponent(body)}`;
+      });
+
+      // 展示会が終わったら「終了しました」と表示し、入口のお知らせを隠す
+      const exhibitSec = document.getElementById('exhibition');
+      if (Date.now() > Date.parse(exhibitSec.dataset.end)) {
+        document.getElementById('exhibitEnded').hidden = false;
+        document.getElementById('eventBadge').hidden = true;
+        document.getElementById('exhibitCal').hidden = true;
+      }
 
       document.getElementById('modalClose').addEventListener('click', () => {
         document.getElementById('modalOverlay').classList.remove('active');
