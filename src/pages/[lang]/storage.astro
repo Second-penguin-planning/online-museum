@@ -998,6 +998,22 @@ const takumaTableRows = artworks
 
     .artwork-table td { color: var(--text-sub); }
 
+    /* 一覧表の小さなサムネイル（クリックで拡大） */
+    .artwork-table td.table-thumb-cell { padding: 6px 8px 6px 0; width: 64px; }
+    .table-thumb {
+      display: block;
+      padding: 0;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      background: none;
+      cursor: zoom-in;
+    }
+    .table-thumb img {
+      display: block;
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+    }
+
     .artwork-table tbody tr:hover { background: rgba(212, 175, 55, 0.05); }
 
     .status-published { color: var(--gold-light); }
@@ -1533,6 +1549,7 @@ const takumaTableRows = artworks
         <table class="artwork-table">
           <thead>
             <tr>
+              <th></th>
               <th>{tS.table.colNumber}</th>
               <th>{tS.table.colTitle}</th>
               <th>{tS.table.colYear}</th>
@@ -1543,6 +1560,11 @@ const takumaTableRows = artworks
           <tbody>
             {takumaTableRows.map(row => (
               <tr>
+                <td class="table-thumb-cell">
+                  <button type="button" class="table-thumb" data-src={`${base}/gallery/${row.file}`} data-label={row.title}>
+                    <img src={`${base}/gallery/thumbs/${row.file}`} alt={row.title} loading="lazy" onerror={`this.onerror=null;this.src='${base}/gallery/${row.file}'`} />
+                  </button>
+                </td>
                 <td>{row.file}</td>
                 <td>{row.title}</td>
                 <td>{row.year}</td>
@@ -1817,7 +1839,7 @@ const takumaTableRows = artworks
     });
 
     /* ===== ライトボックス ===== */
-    document.querySelectorAll('.gallery-item').forEach((item) => {
+    document.querySelectorAll('.gallery-item, .table-thumb').forEach((item) => {
       item.addEventListener('click', (e) => {
         if (e.target.closest('.admin-controls')) return;
         document.getElementById('modalImg').src = item.dataset.src ?? '';
