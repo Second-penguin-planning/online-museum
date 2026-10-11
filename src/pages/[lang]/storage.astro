@@ -39,6 +39,7 @@ const storageUI = {
     published: '公開中',
     unpublished: '非公開',
     genreLabel: 'ジャンル',
+    medium: { label: '技法', oil: '油彩', drawing: '素描' },
     publishLabel: 'ギャラリーに公開',
     table: {
       toggleBtn: '📋 一覧表',
@@ -73,6 +74,7 @@ const storageUI = {
     published: 'Published',
     unpublished: 'Unpublished',
     genreLabel: 'Genre',
+    medium: { label: 'Medium', oil: 'Oil', drawing: 'Drawing' },
     publishLabel: 'Show in gallery',
     table: {
       toggleBtn: '📋 Table',
@@ -107,6 +109,7 @@ const storageUI = {
     published: 'Publicado',
     unpublished: 'No publicado',
     genreLabel: 'Género',
+    medium: { label: 'Técnica', oil: 'Óleo', drawing: 'Dibujo' },
     publishLabel: 'Mostrar en la galería',
     table: {
       toggleBtn: '📋 Tabla',
@@ -747,6 +750,17 @@ const takumaTableRows = artworks
       font-size: 0.68rem;
       color: var(--text-muted);
       letter-spacing: 0.06em;
+    }
+
+    /* 素描など油彩以外の作品に付ける小さな印 */
+    .medium-badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 0 5px;
+      border: 1px solid currentColor;
+      border-radius: 2px;
+      font-size: 0.6rem;
+      opacity: 0.8;
     }
 
     /* ========== 管理者モード用コントロール ========== */
@@ -1395,7 +1409,7 @@ const takumaTableRows = artworks
                     <div class="gallery-frame">
                       <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
                     </div>
-                    <div class="gallery-item-label">{art.title}</div>
+                    <div class="gallery-item-label">{art.title}{art.raw.medium === 'drawing' && <span class="medium-badge">{tS.medium.drawing}</span>}</div>
                     <div class="admin-controls" data-file={art.file} data-entry={JSON.stringify(art.raw)}>
                       <select class="admin-genre-select">
                         {takumaCatKeys.map((k2, j) => (
@@ -1450,7 +1464,7 @@ const takumaTableRows = artworks
                     <div class="gallery-frame">
                       <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
                     </div>
-                    <div class="gallery-item-label">{art.title}</div>
+                    <div class="gallery-item-label">{art.title}{art.raw.medium === 'drawing' && <span class="medium-badge">{tS.medium.drawing}</span>}</div>
                     <div class="admin-controls" data-file={art.file} data-entry={JSON.stringify(art.raw)}>
                       <select class="admin-genre-select">
                         {sachikoCatKeys.map((k2, j) => (
@@ -1494,7 +1508,7 @@ const takumaTableRows = artworks
                 <div class="gallery-frame">
                   <img src={`${base}/gallery/${art.file}`} alt={art.title} loading="lazy" />
                 </div>
-                <div class="gallery-item-label">{art.title}</div>
+                <div class="gallery-item-label">{art.title}{art.raw.medium === 'drawing' && <span class="medium-badge">{tS.medium.drawing}</span>}</div>
                 <div class="admin-controls" data-file={art.file} data-entry={JSON.stringify(art.raw)}>
                   <label class="admin-publish-toggle">
                     <input type="checkbox" class="admin-publish-checkbox" checked={art.published} />
@@ -1593,10 +1607,17 @@ const takumaTableRows = artworks
               </select>
             </div>
           </div>
-          <div class="form-row">
+          <div class="form-row three">
             <div class="form-group">
               <label>{tS.genreLabel}</label>
               <select id="f-genre"></select>
+            </div>
+            <div class="form-group">
+              <label>{tS.medium.label}</label>
+              <select id="f-medium">
+                <option value="oil">{tS.medium.oil}</option>
+                <option value="drawing">{tS.medium.drawing}</option>
+              </select>
             </div>
             <div class="form-group">
               <label class="admin-publish-toggle" style="margin-top:28px;">
@@ -2028,6 +2049,9 @@ const takumaTableRows = artworks
         genre:       document.getElementById('f-genre').value,
         published:   document.getElementById('f-published').checked,
       };
+      // 技法は油彩が既定。素描のときだけ medium を持たせる
+      const medium = document.getElementById('f-medium').value;
+      if (medium !== 'oil') newEntry.medium = medium;
 
       statusEl.textContent  = '送信中...';
       statusEl.className    = 'loading';
@@ -2039,6 +2063,7 @@ const takumaTableRows = artworks
             const entry = current.find(a => a.file === editingFile);
             if (!entry) throw new Error(`${editingFile} が見つかりませんでした`);
             Object.assign(entry, newEntry);
+            if (!newEntry.medium) delete entry.medium;
           }, `作品情報更新: ${newEntry.file}`);
 
           statusEl.textContent = '✓ 更新しました。サイトに反映されるまで数分かかります。';
@@ -2081,6 +2106,7 @@ const takumaTableRows = artworks
         populateGenreSelect(artistKey);
         document.getElementById('f-genre').value = entry.genre || 'unclassified';
         document.getElementById('f-published').checked = !!entry.published;
+        document.getElementById('f-medium').value = entry.medium || 'oil';
 
         document.getElementById('f-title-ja').value = entry.title?.ja || '';
         document.getElementById('f-title-en').value = entry.title?.en || '';

@@ -34,6 +34,8 @@ const FRAME_COLORS = [
 ];
 const FRAME_SHAPES = ['classic', 'ridge', 'sharp', 'groove', 'ornate'];
 
+const DRAWING_LABEL = { ja: '素描', en: 'Drawing', sp: 'Dibujo' };
+
 const categorizedArtworks = publishedArtworks.map((info, i) => {
   let category = 0;
   if (info.artistKey === 'takuma') category = 1;
@@ -51,7 +53,8 @@ const categorizedArtworks = publishedArtworks.map((info, i) => {
     title:       info.title?.[lang]       || info.title?.ja       || '—',
     artist:      info.artist?.[lang]      || info.artist?.ja      || '—',
     year:        info.year?.[lang]        || info.year?.ja        || '—',
-    size:        info.size?.[lang]        || info.size?.ja        || '—',
+    // 素描は号数の後ろに技法を添える（油彩は表記しない）
+    size:        [info.size?.[lang] || info.size?.ja, info.medium === 'drawing' ? DRAWING_LABEL[lang] : ''].filter(Boolean).join(' ・ ') || '—',
     description: info.description?.[lang] || info.description?.ja || '',
     rawSizeJa:   info.size?.ja
   };
