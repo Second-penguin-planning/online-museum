@@ -180,7 +180,7 @@ const tableSections = [
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="base-url" content={base} />
   <title>{tS.page.title} | Tokunaga Art Museum</title>
-  <SeoMeta lang={lang} title={`${tS.page.title} | Tokunaga Art Museum`} description={home[lang].description} noindex />
+  <SeoMeta lang={lang} title={`${tS.page.title} | Tokunaga Art Museum`} description={home[lang].description} />
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -589,7 +589,7 @@ const tableSections = [
 
     /* ========== 保管庫メイン ========== */
     #storage-main {
-      display: none;
+      display: block;
       padding: 120px 40px 80px;
       max-width: 1200px;
       margin: 0 auto;
@@ -1374,27 +1374,6 @@ const tableSections = [
     </div>
   </div>
 
-  <!-- ========== パスワード画面 ========== -->
-  <div id="password-screen">
-    <div class="lock-frame">
-      <div class="lock-icon-wrap">🔒</div>
-      <p class="lock-eyebrow">{tS.lock.eyebrow}</p>
-      <h1 class="lock-title">{tS.lock.title}</h1>
-      <div class="lock-divider">
-        <div class="lock-divider-diamond"></div>
-      </div>
-      <input
-        id="pw-input"
-        type="password"
-        maxlength="10"
-        placeholder="· · · ·"
-        autocomplete="off"
-      />
-      <p id="pw-error"></p>
-      <button class="enter-btn" id="enterBtn">{tS.lock.btn}</button>
-    </div>
-  </div>
-
   <!-- ========== 保管庫メイン ========== -->
   <div id="storage-main">
     <div class="storage-page-header">
@@ -1750,49 +1729,11 @@ const tableSections = [
   </div>
 
   <script define:vars={{
-    pwError: tS.lock.error,
     takumaCatKeys,
     sachikoCatKeys,
     catLabels: { takuma: tS.cats.takuma, sachiko: tS.cats.sachiko },
     galleryBase: `${base}/gallery`,
   }}>
-    /* ===== パスワード認証 ===== */
-    const CORRECT_PW = '2405';
-
-    function showStorage() {
-      document.getElementById('password-screen').style.display = 'none';
-      document.getElementById('storage-main').style.display    = 'block';
-      // ★ストレージ認証をキーに言語コードを含めない
-      //   → どの言語でも同じキーで認証を引き継ぐ
-      sessionStorage.setItem('storage_auth', '1');
-    }
-
-    function checkPassword() {
-      const input   = document.getElementById('pw-input');
-      const errorEl = document.getElementById('pw-error');
-
-      if (input.value === CORRECT_PW) {
-        showStorage();
-      } else {
-        input.classList.add('error');
-        errorEl.textContent = pwError;
-        setTimeout(() => input.classList.remove('error'), 400);
-        input.value = '';
-        input.focus();
-      }
-    }
-
-    // ★言語切替時も認証済みなら即表示
-    if (sessionStorage.getItem('storage_auth') === '1') {
-      showStorage();
-    }
-
-    document.getElementById('pw-input')
-      .addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPassword(); });
-
-    document.getElementById('enterBtn')
-      .addEventListener('click', checkPassword);
-
     /* ===== ハンバーガーメニュー ===== */
     const hamburgerBtn  = document.getElementById('hamburgerBtn');
     const mobileMenu    = document.getElementById('mobileMenu');
@@ -1824,14 +1765,20 @@ const tableSections = [
     const cardView = document.querySelector('.card-view');
     const tableView = document.getElementById('tableView');
 
+    function setTableView(showTable) {
+      tableView.style.display = showTable ? 'block' : 'none';
+      cardView.style.display  = showTable ? 'none' : 'block';
+      tableViewToggleBtn.textContent = showTable
+        ? tableViewToggleBtn.dataset.labelCards
+        : tableViewToggleBtn.dataset.labelTable;
+    }
+
     tableViewToggleBtn.addEventListener('click', () => {
-      const showingTable = tableView.style.display !== 'none';
-      tableView.style.display = showingTable ? 'none' : 'block';
-      cardView.style.display  = showingTable ? 'block' : 'none';
-      tableViewToggleBtn.textContent = showingTable
-        ? tableViewToggleBtn.dataset.labelTable
-        : tableViewToggleBtn.dataset.labelCards;
+      setTableView(tableView.style.display === 'none');
     });
+
+    // ギャラリーの「一覧を見る」から来たとき（/ja/storage/#list）は一覧表で開く
+    if (location.hash === '#list') setTableView(true);
 
     /* ===== カテゴリタブ ===== */
     document.querySelectorAll('.category-tabs').forEach((tabGroup) => {

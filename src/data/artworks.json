@@ -2170,68 +2170,6 @@
     "published": false
   },
   {
-    "file": "99001.jpg",
-    "title": {
-      "ja": "未整理 1",
-      "en": "Unclassified 1",
-      "sp": "Sin clasificar 1"
-    },
-    "artist": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "year": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "size": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "description": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "artistKey": null,
-    "genre": null,
-    "published": false
-  },
-  {
-    "file": "99002.jpg",
-    "title": {
-      "ja": "未整理 2",
-      "en": "Unclassified 2",
-      "sp": "Sin clasificar 2"
-    },
-    "artist": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "year": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "size": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "description": {
-      "ja": "",
-      "en": "",
-      "sp": ""
-    },
-    "artistKey": null,
-    "genre": null,
-    "published": false
-  },
-  {
     "file": "01052.jpg",
     "title": {
       "ja": "作品 52",
