@@ -8,6 +8,15 @@ export const CAMPO_LP_URL = 'https://campo-criptana-lp.vercel.app/';
 // トップのフォームが「アンケートに回答する」ボタンに切り替わる（空のままならメール作成画面を開く）
 export const FEEDBACK_FORM_URL = '';
 export const FEEDBACK_EMAIL = 'info@second-penguin.com';
+// Googleフォームに「いちばん好きな一枚」の設問を作ったら、その事前入力用の番号（例 'entry.123456789'）を入れる。
+// 作品ページの「この一枚が好き」から来た人は、作品番号が入った状態でフォームが開く
+export const FEEDBACK_FORM_FAV_ENTRY = '';
+
+// 2027年 ラ・マンチャの旅（構想）の事前登録。Googleフォームを作ったら TOUR_FORM_URL に貼ると
+// トップの登録欄が「事前登録フォームを開く」ボタンに切り替わる（空のままならメール作成画面を開く）
+// ※旅行の申込ではなく関心の登録。代金・確定日程は旅行会社が決まるまで載せない（旅行業法）
+export const TOUR_FORM_URL = '';
+export const TOUR_EMAIL = 'info@second-penguin.com';
 
 // 展示会の会期（日本時間）。終了後はトップの案内に「終了しました」と表示し、入口のお知らせを隠す
 export const EXHIBITION = {
@@ -59,6 +68,37 @@ export const launch = {
     lpShort:    'スペイン特設サイト',
     navLp:      'スペイン特設サイト',
 
+    tourEyebrow: 'JOURNEY 2027',
+    tourHeading: '絵の中の町へ\nラ・マンチャを巡る旅（構想）',
+    tourBody: [
+      '2027年の初夏、画家が半世紀通い続けたスペインの町、カンポ・デ・クリプターナを訪ねる旅を構想しています。',
+      'マドリードからラ・マンチャへ。風車の丘や白壁の路地など、父が絵を描いた場所に実際に立ち、町の人たちと交流します。グラナダのアルハンブラ宮殿も巡る、9日間ほどの行程を考えています。',
+      '日程や費用はまだ決まっていません。ご関心のある方は事前登録をお願いします。内容が決まり次第、優先してご案内します。',
+    ],
+    tourRows: [
+      { label: '時期', value: '2027年6月上旬ごろ（予定）' },
+      { label: '行き先', value: 'マドリード／カンポ・デ・クリプターナ（ラ・マンチャ）／グラナダ' },
+      { label: '内容', value: '絵が描かれた場所めぐり、町の人との交流、アルハンブラ宮殿' },
+    ],
+    tourFormTitle: '旅の事前登録',
+    tourFormButton: '事前登録フォームを開く（Googleフォーム）',
+    tourName:   'お名前',
+    tourEmail:  'メールアドレス',
+    tourPeople: '参加を考えている人数',
+    tourTiming: '参加しやすい時期',
+    tourTimings: ['2027年5月下旬', '2027年6月上旬', '2027年6月中旬', '時期は問わない'],
+    tourInterest: '特に関心のあること（複数可）',
+    tourInterests: ['絵が描かれた場所めぐり', '町の人との交流', 'マドリード・グラナダの観光', 'スケッチや写真撮影'],
+    tourMessage: 'ご質問・ご要望（任意）',
+    tourSubmit: '事前登録する',
+    tourNote:   '送信ボタンを押すと、入力内容が入ったメールの作成画面が開きます。そのまま送信してください。',
+    tourLegal:  'このページは旅の構想のご案内と、関心の登録の受付です。旅行のお申し込みではありません。正式な募集は旅行会社を通じて行う予定です。',
+    tourError:  'お名前とメールアドレスをご確認ください。',
+    tourSubject:'【徳永アートミュージアム】ラ・マンチャの旅 事前登録',
+    tourLabelPeople: '人数',
+    tourLabelTiming: '時期',
+    navTour:    '2027年の旅',
+
     fbEyebrow:  'FEEDBACK',
     fbHeading:  'ご感想・ご意見をお寄せください',
     fbLead:     'オンライン美術館のご感想や、作品の管理・AIの活用など今後の展開についてのご意見を募集しています。いただいた声は、これからの美術館づくりの参考にさせていただきます。',
@@ -69,6 +109,9 @@ export const launch = {
     fbTopics:   ['オンライン美術館の感想', '作品管理・AI活用など将来の展開について', '展示会について', 'その他'],
     fbMessage:  'ご感想・ご意見',
     fbPlaceholder: '例：好きだった作品／見づらかったところ／AIによる作品解説や多言語の音声ガイドがあれば使ってみたい など',
+    fbFav:      'いちばん好きな一枚（任意・題名か作品番号）',
+    fbFavPlaceholder: '例：01018／ラマンチャの風車',
+    fbFavLabel: '好きな一枚',
     fbSubmit:   '送信する',
     fbNote:     '送信ボタンを押すと、入力内容が入ったメールの作成画面が開きます。そのまま送信してください。',
     fbError:    'ご感想・ご意見の欄をご記入ください。',
@@ -114,6 +157,37 @@ export const launch = {
     lpShort:    'Spain website',
     navLp:      'Spain Site',
 
+    tourEyebrow: 'JOURNEY 2027',
+    tourHeading: 'Into the town in the paintings: a journey through La Mancha (planned)',
+    tourBody: [
+      'In early summer 2027, we are planning a journey to Campo de Criptana, the Spanish town the painter has returned to for half a century.',
+      'From Madrid into La Mancha: stand where my father painted, on the windmill hill and in the whitewashed lanes, and meet the people of the town. The plan is about nine days, including the Alhambra in Granada.',
+      'Dates and costs are not fixed yet. If you are interested, please register below and we will contact you first once the details are set.',
+    ],
+    tourRows: [
+      { label: 'When', value: 'Around early June 2027 (planned)' },
+      { label: 'Where', value: 'Madrid / Campo de Criptana (La Mancha) / Granada' },
+      { label: 'What', value: 'The places in the paintings, meeting the townspeople, the Alhambra' },
+    ],
+    tourFormTitle: 'Register your interest',
+    tourFormButton: 'Open the registration form (Google Forms)',
+    tourName:   'Name',
+    tourEmail:  'Email',
+    tourPeople: 'Number of people',
+    tourTiming: 'Preferred timing',
+    tourTimings: ['Late May 2027', 'Early June 2027', 'Mid June 2027', 'Any time'],
+    tourInterest: 'What interests you most (choose any)',
+    tourInterests: ['The places in the paintings', 'Meeting the townspeople', 'Sightseeing in Madrid and Granada', 'Sketching or photography'],
+    tourMessage: 'Questions or requests (optional)',
+    tourSubmit: 'Register',
+    tourNote:   'Pressing the button opens your email app with your details filled in. Please send it as is.',
+    tourLegal:  'This page introduces a planned journey and collects expressions of interest. It is not a booking. The official tour will be offered through a travel agency.',
+    tourError:  'Please check your name and email.',
+    tourSubject:'[Tokunaga Art Museum] La Mancha journey: interest',
+    tourLabelPeople: 'People',
+    tourLabelTiming: 'Timing',
+    navTour:    'Journey 2027',
+
     fbEyebrow:  'FEEDBACK',
     fbHeading:  'Share your thoughts',
     fbLead:     'We welcome your impressions of the online museum, and your ideas on its future, such as caring for the collection and using AI. Your voice will help shape the museum.',
@@ -124,6 +198,9 @@ export const launch = {
     fbTopics:   ['Impressions of the online museum', 'Future plans: collection care, AI and more', 'The exhibition', 'Other'],
     fbMessage:  'Your comments',
     fbPlaceholder: 'e.g. works you liked / anything hard to see / whether you would use AI commentary or a multilingual audio guide',
+    fbFav:      'Your favourite work (optional: title or number)',
+    fbFavPlaceholder: 'e.g. 01018 / La Mancha windmills',
+    fbFavLabel: 'Favourite work',
     fbSubmit:   'Send',
     fbNote:     'Pressing the button opens your email app with your message filled in. Please send it as is.',
     fbError:    'Please write your comments.',
@@ -169,6 +246,37 @@ export const launch = {
     lpShort:    'Web de Campo de Criptana',
     navLp:      'Web de Campo',
 
+    tourEyebrow: 'VIAJE 2027',
+    tourHeading: 'Al pueblo de los cuadros: un viaje por La Mancha (en proyecto)',
+    tourBody: [
+      'Para principios del verano de 2027 estamos preparando un viaje desde Japón a Campo de Criptana, el pueblo al que el pintor ha vuelto durante medio siglo.',
+      'De Madrid a La Mancha: estar en los lugares que pintó mi padre, en la sierra de los molinos y en las calles encaladas, y conocer a la gente del pueblo. Pensamos en unos nueve días, con visita a la Alhambra de Granada.',
+      'Las fechas y el precio aún no están decididos. Si le interesa, regístrese y le avisaremos primero cuando se concreten.',
+    ],
+    tourRows: [
+      { label: 'Cuándo', value: 'Hacia principios de junio de 2027 (previsto)' },
+      { label: 'Dónde', value: 'Madrid / Campo de Criptana (La Mancha) / Granada' },
+      { label: 'Qué', value: 'Los lugares de los cuadros, encuentro con los vecinos, la Alhambra' },
+    ],
+    tourFormTitle: 'Registro de interés',
+    tourFormButton: 'Abrir el formulario de registro (Google Forms)',
+    tourName:   'Nombre',
+    tourEmail:  'Correo electrónico',
+    tourPeople: 'Número de personas',
+    tourTiming: 'Fechas preferidas',
+    tourTimings: ['Finales de mayo de 2027', 'Principios de junio de 2027', 'Mediados de junio de 2027', 'Indiferente'],
+    tourInterest: 'Lo que más le interesa (varias opciones)',
+    tourInterests: ['Los lugares de los cuadros', 'Conocer a los vecinos', 'Visitar Madrid y Granada', 'Dibujo o fotografía'],
+    tourMessage: 'Preguntas o comentarios (opcional)',
+    tourSubmit: 'Registrarme',
+    tourNote:   'Al pulsar el botón se abrirá su programa de correo con los datos ya escritos. Envíelo tal cual.',
+    tourLegal:  'Esta página presenta un viaje en proyecto y recoge muestras de interés. No es una reserva. La convocatoria oficial se hará a través de una agencia de viajes.',
+    tourError:  'Revise su nombre y correo, por favor.',
+    tourSubject:'[Museo de Arte Tokunaga] Viaje a La Mancha: interés',
+    tourLabelPeople: 'Personas',
+    tourLabelTiming: 'Fechas',
+    navTour:    'Viaje 2027',
+
     fbEyebrow:  'OPINIONES',
     fbHeading:  'Comparta su opinión',
     fbLead:     'Agradecemos sus impresiones sobre el museo en línea y sus ideas sobre su futuro, como la conservación de la colección o el uso de la IA. Sus opiniones nos ayudarán a construir el museo.',
@@ -179,6 +287,9 @@ export const launch = {
     fbTopics:   ['Impresiones del museo en línea', 'El futuro: gestión de la colección, IA, etc.', 'La exposición', 'Otro'],
     fbMessage:  'Sus comentarios',
     fbPlaceholder: 'p. ej.: obras que le gustaron / algo difícil de ver / si usaría comentarios de obras con IA o una audioguía multilingüe',
+    fbFav:      'Su obra favorita (opcional: título o número)',
+    fbFavPlaceholder: 'p. ej.: 01018 / Molinos de La Mancha',
+    fbFavLabel: 'Obra favorita',
     fbSubmit:   'Enviar',
     fbNote:     'Al pulsar el botón se abrirá su programa de correo con el mensaje ya escrito. Envíelo tal cual.',
     fbError:    'Escriba sus comentarios, por favor.',

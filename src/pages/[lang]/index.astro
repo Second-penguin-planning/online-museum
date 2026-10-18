@@ -4,8 +4,9 @@ import { ui, rooms, home } from '../../data/ui.ts';
 import { campoConceptContent } from '../../data/campoConcept.ts';
 import AboutNavDropdown from '../../components/AboutNavDropdown.astro';
 import SeoMeta from '../../components/SeoMeta.astro';
+import { WORK_LABELS } from '../../data/works.ts';
 import { legacy, pillarWorks, VIP_EMAIL } from '../../data/legacy.ts';
-import { launch, CAMPO_LP_URL, FEEDBACK_FORM_URL, FEEDBACK_EMAIL, EXHIBITION } from '../../data/launch.ts';
+import { launch, CAMPO_LP_URL, FEEDBACK_FORM_URL, FEEDBACK_FORM_FAV_ENTRY, FEEDBACK_EMAIL, TOUR_FORM_URL, TOUR_EMAIL, EXHIBITION } from '../../data/launch.ts';
 
 export function getStaticPaths() {
   return [
@@ -1182,7 +1183,58 @@ function getFrameWidth(cardWidth) {
 
       .fb-external { display: inline-block; width: auto; padding: 20px 40px; text-decoration: none; }
 
+      /* ── 2027年 ラ・マンチャの旅（構想）：左に案内、右に事前登録 ── */
+      .tour {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(36px, 6vw, 72px);
+        align-items: start;
+      }
+      .tour > * { min-width: 0; }
+      .tour .vip-form { max-width: none; margin: 0; }
+      .tour .vip-form h3 { text-align: left; margin-bottom: 28px; }
+      .tour-legal {
+        margin-top: 28px;
+        padding: 16px 20px;
+        border-left: 2px solid var(--gold-dim);
+        background: rgba(201, 169, 97, 0.05);
+        font-family: var(--serif-jp);
+        font-size: 0.8rem;
+        line-height: 1.9;
+        color: var(--text-muted);
+        max-width: 40em;
+      }
+      .tour-people { display: flex; gap: 8px 18px; flex-wrap: wrap; }
+      .vip-field input[type="number"] {
+        width: 6em;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid rgba(201, 169, 97, 0.35);
+        color: var(--text-main);
+        font-family: var(--serif-jp);
+        font-size: 1rem;
+        padding: 10px 2px;
+        border-radius: 0;
+      }
+      .vip-field input[type="number"]:focus { outline: none; border-color: var(--gold-light); }
+      .tour-cta-wrap { text-align: left; }
+
+      /* モーダルから作品ページへ */
+      .modal-page-link {
+        display: inline-block;
+        margin-top: 22px;
+        color: var(--gold-light);
+        font-family: var(--serif-jp);
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        border-bottom: 1px solid var(--gold-dim);
+        padding-bottom: 2px;
+      }
+      .modal-page-link:hover { color: #fff; }
+
       @media (max-width: 860px) {
+        .tour { grid-template-columns: 1fr; }
         .exhibit { grid-template-columns: 1fr; }
         .lp-banner { background:
           linear-gradient(180deg, rgba(12, 10, 8, 0.55) 0%, rgba(12, 10, 8, 0.92) 55%),
@@ -1759,6 +1811,7 @@ function getFrameWidth(cardWidth) {
         <AboutNavDropdown lang={lang} base={base} mode="mobile" label={h.navArtist} />
         <a href={`${base}/${lang}/#exhibition`} id="mNavExhibitionInfo" class="nav-campo-highlight">{ln.navExhibition}</a>
         <a href={`${base}/${lang}/#limited`} id="mNavLimited">{lg.navLimited}</a>
+        <a href={`${base}/${lang}/#journey`} id="mNavJourney">{ln.navTour}</a>
         <a href={`${base}/${lang}/#feedback`} id="mNavFeedback">{ln.navFeedback}</a>
         <a href={lpUrl} target="_blank" rel="noopener">{ln.navLp} ↗</a>
       </nav>
@@ -1891,6 +1944,65 @@ function getFrameWidth(cardWidth) {
         </a>
       </section>
 
+      <!-- 2027年 ラ・マンチャの旅（構想）と事前登録 -->
+      <section class="home-sec" id="journey">
+        <div class="tour">
+          <div>
+            <p class="sec-eyebrow">{ln.tourEyebrow}</p>
+            <h2 class="sec-heading">{ln.tourHeading.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h2>
+            {ln.tourBody.map((p) => <p class="sec-text">{p}</p>)}
+            <dl class="exhibit-rows">
+              {ln.tourRows.map((r) => (
+                <div><dt>{r.label}</dt><dd><b>{r.value}</b></dd></div>
+              ))}
+            </dl>
+            <p class="tour-legal">{ln.tourLegal}</p>
+          </div>
+          {TOUR_FORM_URL ? (
+            <div class="vip-form tour-cta-wrap">
+              <h3>{ln.tourFormTitle}</h3>
+              <a class="vip-submit fb-external" href={TOUR_FORM_URL} target="_blank" rel="noopener">{ln.tourFormButton} ↗</a>
+            </div>
+          ) : (
+            <form class="vip-form" id="tourForm" novalidate data-email={TOUR_EMAIL} data-subject={ln.tourSubject}
+              data-label-people={ln.tourLabelPeople} data-label-timing={ln.tourLabelTiming} data-msg={ln.tourError}>
+              <h3>{ln.tourFormTitle}</h3>
+              <label class="vip-field">
+                <span>{ln.tourName}</span>
+                <input type="text" name="name" id="tourName" autocomplete="name" required />
+              </label>
+              <label class="vip-field">
+                <span>{ln.tourEmail}</span>
+                <input type="email" name="email" id="tourEmail" autocomplete="email" required />
+              </label>
+              <label class="vip-field">
+                <span>{ln.tourPeople}</span>
+                <input type="number" name="people" id="tourPeople" min="1" max="20" value="1" inputmode="numeric" />
+              </label>
+              <fieldset class="vip-field">
+                <legend>{ln.tourTiming}</legend>
+                {ln.tourTimings.map((v, i) => (
+                  <label class="vip-check"><input type="radio" name="timing" value={v} checked={i === 1} /> {v}</label>
+                ))}
+              </fieldset>
+              <fieldset class="vip-field">
+                <legend>{ln.tourInterest}</legend>
+                {ln.tourInterests.map((v) => (
+                  <label class="vip-check"><input type="checkbox" name="interest" value={v} /> {v}</label>
+                ))}
+              </fieldset>
+              <label class="vip-field">
+                <span>{ln.tourMessage}</span>
+                <textarea name="message" id="tourMessage" rows="3"></textarea>
+              </label>
+              <button class="vip-submit" type="submit">{ln.tourSubmit}</button>
+              <p class="vip-error" id="tourError" role="alert"></p>
+              <p class="vip-note">{ln.tourNote}</p>
+            </form>
+          )}
+        </div>
+      </section>
+
       <!-- 日西文化交流レガシープロジェクト -->
       <section class="home-sec" id="legacy">
         <div class="legacy">
@@ -2016,7 +2128,7 @@ function getFrameWidth(cardWidth) {
         </div>
         {FEEDBACK_FORM_URL ? (
           <div style="text-align:center">
-            <a class="vip-submit fb-external" href={FEEDBACK_FORM_URL} target="_blank" rel="noopener">{ln.fbFormButton} ↗</a>
+            <a class="vip-submit fb-external" id="fbExternal" href={FEEDBACK_FORM_URL} data-fav-entry={FEEDBACK_FORM_FAV_ENTRY} target="_blank" rel="noopener">{ln.fbFormButton} ↗</a>
           </div>
         ) : (
           <form class="vip-form" id="fbForm" novalidate data-email={FEEDBACK_EMAIL} data-subject={ln.fbSubject}>
@@ -2029,6 +2141,10 @@ function getFrameWidth(cardWidth) {
             <label class="vip-field">
               <span>{ln.fbMessage}</span>
               <textarea name="message" rows="6" placeholder={ln.fbPlaceholder} required></textarea>
+            </label>
+            <label class="vip-field">
+              <span>{ln.fbFav}</span>
+              <input type="text" name="fav" id="fbFav" placeholder={ln.fbFavPlaceholder} data-label={ln.fbFavLabel} />
             </label>
             <label class="vip-field">
               <span>{ln.fbName}</span>
@@ -2077,6 +2193,7 @@ function getFrameWidth(cardWidth) {
               <a href={`${base}/${lang}/about/`}>{h.navArtist}</a>
               <a href={lpUrl} target="_blank" rel="noopener">{ln.navLp} ↗</a>
               <a href={`${base}/${lang}/#exhibition`} id="footExhibition">{ln.navExhibition}</a>
+              <a href={`${base}/${lang}/#journey`} id="footJourney">{ln.navTour}</a>
               <a href={`${base}/${lang}/#feedback`} id="footFeedback">{ln.navFeedback}</a>
               <a href={`${base}/${lang}/about/contact/`}>{h.footerContact}</a>
               <a href={`${base}/${lang}/shop/`}>{t.navShop}</a>
@@ -2192,6 +2309,7 @@ function getFrameWidth(cardWidth) {
           <span id="modalSize"></span>
         </p>
         <div class="modal-description" id="modalDescription"></div>
+        <div style="text-align:center"><a class="modal-page-link" id="modalPageLink" href="#">{WORK_LABELS[lang].openPage} →</a></div>
       </div>
     </div>
 
@@ -2294,6 +2412,8 @@ function getFrameWidth(cardWidth) {
       onNav('mNavFeedback', () => showHome('feedback'));
       onNav('footExhibition', () => showHome('exhibition'));
       onNav('footFeedback', () => showHome('feedback'));
+      onNav('mNavJourney', () => showHome('journey'));
+      onNav('footJourney', () => showHome('journey'));
       onNav('navLimited', () => showHome('limited'));
       onNav('mNavLimited', () => showHome('limited'));
       onNav('legacyToVip', () => showHome('limited'));
@@ -2311,7 +2431,21 @@ function getFrameWidth(cardWidth) {
       }, { passive: true });
 
       // 他のページから「展示室」で来たとき（/ja/#rooms）
-      if (['#rooms', '#limited', '#exhibition', '#feedback', '#story'].includes(location.hash)) {
+      // 作品ページの「この一枚が好き」から来たとき（/ja/?fav=01018#feedback）、好きな一枚の欄に作品番号を入れる
+      const favParam = new URLSearchParams(location.search).get('fav');
+      if (favParam && /^[\w-]{1,40}$/.test(favParam)) {
+        const favInput = document.getElementById('fbFav');
+        if (favInput) favInput.value = favParam;
+        const fbExternal = document.getElementById('fbExternal');
+        if (fbExternal?.dataset.favEntry) {
+          const url = new URL(fbExternal.href);
+          url.searchParams.set('usp', 'pp_url');
+          url.searchParams.set(fbExternal.dataset.favEntry, favParam);
+          fbExternal.href = url.toString();
+        }
+      }
+
+      if (['#rooms', '#limited', '#exhibition', '#feedback', '#story', '#journey'].includes(location.hash)) {
         const sectionId = location.hash.slice(1);
         requestAnimationFrame(() => showHome(sectionId));
       }
@@ -2349,6 +2483,7 @@ function getFrameWidth(cardWidth) {
         document.getElementById('modalYear').textContent        = card.dataset.year;
         document.getElementById('modalSize').textContent        = card.dataset.size;
         document.getElementById('modalDescription').textContent = card.dataset.description;
+        document.getElementById('modalPageLink').href = `${base}/${document.documentElement.lang}/works/${card.dataset.file.replace(/\.[^.]+$/, '')}/`;
         document.getElementById('modalOverlay').classList.add('active');
       }
 
@@ -2405,10 +2540,37 @@ function getFrameWidth(cardWidth) {
           '',
           message,
           '',
+          ...(String(data.get('fav') || '').trim() ? [`■ ${document.getElementById('fbFav').dataset.label}：${String(data.get('fav')).trim()}`, ''] : []),
           String(data.get('name') || '').trim(),
           String(data.get('email') || '').trim(),
         ].join('\n').trim();
         location.href = `mailto:${fbForm.dataset.email}?subject=${encodeURIComponent(fbForm.dataset.subject)}&body=${encodeURIComponent(body)}`;
+      });
+
+      // 2027年の旅の事前登録：入力内容を入れたメール作成画面を開く（Googleフォーム未設定のとき）
+      const tourForm = document.getElementById('tourForm');
+      tourForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(tourForm);
+        const name = String(data.get('name') || '').trim();
+        const email = String(data.get('email') || '').trim();
+        const error = document.getElementById('tourError');
+        if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          error.textContent = tourForm.dataset.msg;
+          return;
+        }
+        error.textContent = '';
+        const body = [
+          name,
+          email,
+          '',
+          `■ ${tourForm.dataset.labelPeople}：${data.get('people') || ''}`,
+          `■ ${tourForm.dataset.labelTiming}：${data.get('timing') || ''}`,
+          ...data.getAll('interest').map((i) => `■ ${i}`),
+          '',
+          String(data.get('message') || '').trim(),
+        ].join('\n').trim();
+        location.href = `mailto:${tourForm.dataset.email}?subject=${encodeURIComponent(tourForm.dataset.subject)}&body=${encodeURIComponent(body)}`;
       });
 
       // 展示会が終わったら「終了しました」と表示し、入口のお知らせを隠す

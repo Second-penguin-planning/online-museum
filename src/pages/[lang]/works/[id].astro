@@ -1,0 +1,274 @@
+---
+// 作品ごとのページ（/ja/works/01018/ など）。ギャラリーに公開した作品だけを作る。
+// Instagram・note・LINE や会場のQRコードから「この一枚」に直接案内し、共有してもらうためのページ
+import artworks from '../../../data/artworks.json';
+import { ui } from '../../../data/ui.ts';
+import { WORK_LABELS } from '../../../data/works.ts';
+import SeoMeta from '../../../components/SeoMeta.astro';
+
+const LANGS = ['ja', 'en', 'sp'] as const;
+const DRAWING_LABEL = { ja: '素描', en: 'Drawing', sp: 'Dibujo' };
+const idOf = (file: string) => file.replace(/\.[^.]+$/, '');
+
+export function getStaticPaths() {
+  // getStaticPaths は他の定数を参照できないので、言語の一覧をここにも書く
+  const published = artworks.filter((a) => a.published);
+  return (['ja', 'en', 'sp'] as const).flatMap((lang) =>
+    published.map((work, i) => ({
+      params: { lang, id: work.file.replace(/\.[^.]+$/, '') },
+      props: {
+        work,
+        prev: published[(i - 1 + published.length) % published.length],
+        next: published[(i + 1) % published.length],
+      },
+    })),
+  );
+}
+
+const { lang } = Astro.params as { lang: 'ja' | 'en' | 'sp' };
+const { work, prev, next } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const t = ui[lang];
+const L = WORK_LABELS[lang];
+
+const pick = (v) => v?.[lang] || v?.ja || '';
+const id = idOf(work.file);
+const title = pick(work.title) || '—';
+const artist = pick(work.artist);
+const year = pick(work.year);
+const size = [pick(work.size), work.medium === 'drawing' ? DRAWING_LABEL[lang] : ''].filter(Boolean).join(' ・ ');
+const description = pick(work.description);
+
+const site = (Astro.site ?? new URL('https://second-penguin-planning.github.io')).origin.toLowerCase();
+const pageUrl = `${site}${base}/${lang}/works/${id}/`;
+const shareText = L.shareText(title);
+const enc = encodeURIComponent;
+const shares = [
+  { key: 'line', label: L.shareLine, href: `https://social-plugins.line.me/lineit/share?url=${enc(pageUrl)}` },
+  { key: 'x',    label: L.shareX,    href: `https://twitter.com/intent/tweet?text=${enc(shareText)}&url=${enc(pageUrl)}` },
+  { key: 'fb',   label: L.shareFb,   href: `https://www.facebook.com/sharer/sharer.php?u=${enc(pageUrl)}` },
+];
+
+const seoTitle = `${title}｜${artist}｜${L.siteName}`;
+const seoDesc = [title, year, size, description].filter(Boolean).join(' / ');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VisualArtwork',
+  name: title,
+  creator: { '@type': 'Person', name: artist },
+  dateCreated: String(work.year?.en || '').match(/\d{4}/)?.[0],
+  image: `${site}${base}/gallery/${work.file}`,
+  description: description || undefined,
+  url: pageUrl,
+};
+const neighbour = (w, label: string, cls: string) => ({ id: idOf(w.file), file: w.file, title: pick(w.title), label, cls });
+const neighbours = [neighbour(prev, L.prev, 'prev'), neighbour(next, L.next, 'next')];
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{seoTitle}</title>
+    <SeoMeta lang={lang} title={seoTitle} description={seoDesc} image={`gallery/${work.file}`} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* トップと同じ、チャコールの地に金のアクセント */
+      :root {
+        --bg: #141210;
+        --panel: #1c1915;
+        --gold-dim: #8f7642;
+        --gold: #c9a961;
+        --gold-light: #e6cf96;
+        --text: #efe8d8;
+        --text-sub: #c4baa5;
+        --text-muted: #8e8574;
+        --line: rgba(201, 169, 97, 0.2);
+        --serif-jp: "Noto Serif JP", "游明朝", "Yu Mincho", serif;
+        --serif-latin: "Cormorant Garamond", "Garamond", serif;
+        color-scheme: dark;
+      }
+      body { background: var(--bg); color: var(--text); font-family: var(--serif-latin), var(--serif-jp); min-height: 100vh; }
+      a { color: inherit; }
+
+      .bar {
+        display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+        padding: 16px clamp(16px, 4vw, 50px);
+        border-bottom: 1px solid var(--line);
+      }
+      .bar-logo { color: var(--gold); text-decoration: none; letter-spacing: 0.25em; font-size: 1.05rem; }
+      .bar-nav { display: flex; gap: 8px 22px; align-items: center; flex-wrap: wrap; font-size: 0.82rem; letter-spacing: 0.12em; }
+      .bar-nav a { color: var(--text-sub); text-decoration: none; }
+      .bar-nav a:hover, .bar-nav a.active { color: var(--gold-light); }
+      .langs { display: flex; gap: 10px; }
+
+      main {
+        max-width: 1180px; margin: 0 auto;
+        padding: clamp(36px, 7vw, 88px) clamp(16px, 4vw, 40px) 64px;
+        display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: clamp(36px, 6vw, 80px); align-items: start;
+      }
+      .art { display: flex; justify-content: center; }
+      /* 額縁：トップの展示室と同じ濃い茶色、左上からの光 */
+      .wood-frame {
+        position: relative; display: inline-block;
+        border: 22px solid; border-color: #5f3f25 #2f1d10 #24160b #4b301c;
+        background: #1a1008;
+        box-shadow: -1px -1px 0 rgba(255,214,170,0.12), 0 0 0 1px #140b05, 0 28px 50px -10px rgba(0,0,0,0.9);
+        max-width: 100%;
+      }
+      .wood-frame::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.55), inset 3px 3px 6px rgba(0,0,0,0.5); }
+      .wood-frame img { display: block; max-width: 100%; max-height: 72vh; width: auto; height: auto; }
+
+      .eyebrow { font-family: var(--serif-latin); font-size: 0.78rem; letter-spacing: 0.35em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+      h1 { font-family: var(--serif-jp); font-weight: 400; font-size: clamp(1.5rem, 3.4vw, 2.2rem); letter-spacing: 0.08em; line-height: 1.6; text-wrap: balance; }
+      .meta { margin-top: 28px; border-top: 1px solid var(--line); }
+      .meta div { display: grid; grid-template-columns: 6em 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); font-family: var(--serif-jp); }
+      .meta dt { font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold); padding-top: 2px; }
+      .meta dd { font-size: 0.98rem; color: var(--text); font-variant-numeric: tabular-nums; }
+      .desc { margin-top: 24px; font-family: var(--serif-jp); font-weight: 300; font-size: 0.96rem; line-height: 2.1; color: var(--text-sub); }
+
+      .actions { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
+      .btn {
+        display: block; text-align: center; text-decoration: none; cursor: pointer;
+        font-family: var(--serif-jp); font-size: 0.92rem; letter-spacing: 0.12em;
+        padding: 15px 20px; border: 1px solid var(--gold-dim); color: var(--gold-light); background: transparent;
+        transition: background 0.25s, color 0.25s;
+      }
+      .btn:hover, .btn:focus-visible { background: var(--gold); color: #141210; outline: none; }
+      .btn.primary { background: linear-gradient(135deg, #d8bb76 0%, #b8954d 50%, #d2b26a 100%); color: #141210; border: 0; font-weight: 500; }
+      .btn.primary:hover { filter: brightness(1.08); }
+      .fav-note { font-family: var(--serif-jp); font-size: 0.76rem; line-height: 1.8; color: var(--text-muted); }
+
+      .share { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line); }
+      .share h2 { font-family: var(--serif-jp); font-weight: 400; font-size: 0.86rem; letter-spacing: 0.15em; color: var(--text-sub); margin-bottom: 14px; }
+      .share-row { display: flex; flex-wrap: wrap; gap: 10px; }
+      .share-row a, .share-row button {
+        font: inherit; font-family: var(--serif-jp); font-size: 0.82rem; letter-spacing: 0.06em;
+        padding: 9px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--text);
+        text-decoration: none; cursor: pointer;
+      }
+      .share-row a:hover, .share-row button:hover, .share-row a:focus-visible, .share-row button:focus-visible { border-color: var(--gold); color: var(--gold-light); outline: none; }
+      .share-row .line { border-color: #06c755; }
+      .copied { margin-top: 10px; min-height: 1.2em; font-family: var(--serif-jp); font-size: 0.8rem; color: var(--gold-light); }
+
+      .neighbours {
+        max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px) 72px;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      }
+      .neighbours a {
+        display: flex; align-items: center; gap: 14px; padding: 14px; min-width: 0;
+        border: 1px solid var(--line); background: var(--panel); text-decoration: none;
+      }
+      .neighbours a.next { flex-direction: row-reverse; text-align: right; }
+      .neighbours a:hover { border-color: var(--gold-dim); }
+      .neighbours img { width: 64px; height: 64px; object-fit: cover; flex: none; }
+      .neighbours span { min-width: 0; }
+      .neighbours small { display: block; font-size: 0.72rem; letter-spacing: 0.2em; color: var(--gold); }
+      .neighbours b { display: block; font-family: var(--serif-jp); font-weight: 400; font-size: 0.9rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      footer { border-top: 1px solid var(--line); padding: 28px 16px 40px; text-align: center; font-family: var(--serif-jp); font-size: 0.78rem; color: var(--text-muted); }
+      footer a { color: var(--gold-light); text-decoration: none; margin: 0 10px; }
+
+      @media (max-width: 860px) {
+        main { grid-template-columns: minmax(0, 1fr); }
+        .wood-frame { border-width: 14px; }
+        .wood-frame img { max-height: 60vh; }
+      }
+      @media (max-width: 480px) {
+        .neighbours { grid-template-columns: 1fr; }
+        .neighbours a.next { flex-direction: row; text-align: left; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bar">
+      <a class="bar-logo" href={`${base}/${lang}/`}>{t.headerTitle}</a>
+      <nav class="bar-nav">
+        <a href={`${base}/${lang}/#rooms`}>{L.back}</a>
+        <div class="langs">
+          {LANGS.map((l) => <a href={`${base}/${l}/works/${id}/`} class={l === lang ? 'active' : ''}>{l === 'sp' ? 'ES' : l === 'ja' ? 'JP' : 'EN'}</a>)}
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="art">
+        <div class="wood-frame">
+          <img src={`${base}/gallery/${work.file}`} alt={title} />
+        </div>
+      </div>
+
+      <div>
+        <p class="eyebrow">{L.eyebrow} · No. {id}</p>
+        <h1>{title}</h1>
+        <dl class="meta">
+          {artist && <div><dt>{L.artist}</dt><dd>{artist}</dd></div>}
+          {year && <div><dt>{L.year}</dt><dd>{year}</dd></div>}
+          {size && <div><dt>{L.size}</dt><dd>{size}</dd></div>}
+          <div><dt>{L.number}</dt><dd>{id}</dd></div>
+        </dl>
+        {description && <p class="desc">{description}</p>}
+
+        <div class="actions">
+          <a class="btn primary" href={`${base}/${lang}/?fav=${id}#feedback`}>{L.fav}</a>
+          <p class="fav-note">{L.favNote}</p>
+          <a class="btn" href={`${base}/${lang}/#limited`}>{L.limited}</a>
+          {work.genre === 'spain' && <a class="btn" href={`${base}/${lang}/#journey`}>{L.journey}</a>}
+        </div>
+
+        <section class="share" aria-labelledby="shareHeading">
+          <h2 id="shareHeading">{L.share}</h2>
+          <div class="share-row">
+            {shares.map((s) => <a class={s.key} href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
+            <button type="button" id="copyLink" data-url={pageUrl} data-done={L.copied}>{L.shareCopy}</button>
+            <button type="button" id="nativeShare" hidden data-title={shareText} data-url={pageUrl}>{L.shareNative}</button>
+          </div>
+          <p class="copied" id="copied" role="status"></p>
+        </section>
+      </div>
+    </main>
+
+    <nav class="neighbours" aria-label={`${L.prev} / ${L.next}`}>
+      {neighbours.map((n) => (
+        <a class={n.cls} href={`${base}/${lang}/works/${n.id}/`}>
+          <img src={`${base}/gallery/thumbs/${n.file}`} alt="" loading="lazy" onerror={`this.onerror=null;this.src='${base}/gallery/${n.file}'`} />
+          <span><small>{n.label}</small><b>{n.title}</b></span>
+        </a>
+      ))}
+    </nav>
+
+    <footer>
+      <a href={`${base}/${lang}/`}>{L.home}</a>
+      <a href={`${base}/${lang}/#rooms`}>{L.back}</a>
+      <p style="margin-top:14px">© Tokunaga Art Museum</p>
+    </footer>
+
+    <script is:inline>
+      // リンクのコピー（コピーできない環境では、URLを選択状態で表示する）
+      const copyBtn = document.getElementById('copyLink');
+      const copied = document.getElementById('copied');
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(copyBtn.dataset.url);
+          copied.textContent = copyBtn.dataset.done;
+        } catch {
+          copied.textContent = copyBtn.dataset.url;
+        }
+      });
+      // スマホの共有メニュー（Instagram などのアプリにも送れる）
+      const nativeBtn = document.getElementById('nativeShare');
+      if (navigator.share) {
+        nativeBtn.hidden = false;
+        nativeBtn.addEventListener('click', () => {
+          navigator.share({ title: nativeBtn.dataset.title, url: nativeBtn.dataset.url }).catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

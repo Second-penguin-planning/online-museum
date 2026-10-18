@@ -8,8 +8,8 @@ interface Props {
   lang: Lang;
   title: string;
   description: string;
-  /** public/og/ 配下の画像名。省略時はトップ用 */
-  image?: 'og-home.jpg' | 'og-campo.jpg';
+  /** public/og/ 配下の画像名、または public/ からのパス（例 'gallery/01018.jpg'）。省略時はトップ用 */
+  image?: 'og-home.jpg' | 'og-campo.jpg' | `gallery/${string}`;
   /** 検索結果に出したくないページ（所蔵庫など） */
   noindex?: boolean;
 }
@@ -20,7 +20,9 @@ const site = (Astro.site ?? new URL('https://second-penguin-planning.github.io')
 
 const path = Astro.url.pathname;
 const pageUrl = `${site}${path}`;
-const imageUrl = `${site}${base}/og/${image}`;
+// 作品ページは作品画像そのものを共有カードに使う（1200×630 の共有用画像ではないので寸法は書かない）
+const isOgImage = !image.includes('/');
+const imageUrl = isOgImage ? `${site}${base}/og/${image}` : `${site}${base}/${image}`;
 
 const ogLocale: Record<Lang, string> = { ja: 'ja_JP', en: 'en_US', sp: 'es_ES' };
 const hreflang: Record<Lang, string> = { ja: 'ja', en: 'en', sp: 'es' };
@@ -38,8 +40,8 @@ const altUrl = (l: Lang) => `${site}${path.replace(`${base}/${lang}/`, `${base}/
 <meta property="og:description" content={description} />
 <meta property="og:url" content={pageUrl} />
 <meta property="og:image" content={imageUrl} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+{isOgImage && <meta property="og:image:width" content="1200" />}
+{isOgImage && <meta property="og:image:height" content="630" />}
 <meta property="og:locale" content={ogLocale[lang]} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
