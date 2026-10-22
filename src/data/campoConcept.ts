@@ -31,7 +31,7 @@ export const campoConceptContent: Record<Lang, CampoConceptContent> = {
     eyebrow: 'PROYECTO CAMPO DE CRIPTANA',
     title: 'A Bond with Campo de Criptana',
     paragraphs: [
-      'Since 1973, the painter Takuma Tokunaga has returned to Campo de Criptana every summer for more than forty years, painting its windmills, its streets, and the people who live there. His wife, Yukiko, came to love this town just as deeply, and together they have long thought of it as a second home away from Japan.',
+      'Takuma Tokunaga has visited Campo de Criptana almost every summer since 1973, for more than fifty years, painting its windmills, its streets and its people. His wife, Yukiko, later began to travel there with him. For both of them, the town is a second home.',
       "Our family hopes not only to record and pass on this long bond, but eventually to share the body of work created in Campo de Criptana with the people of the town itself. This collection is a first step in that direction, presenting each painting alongside the memories tied to it.",
       "Note: this is a concept still under discussion within our family. We would like to work out the concrete details together with Andrea and others in the town going forward.",
     ],
@@ -41,7 +41,7 @@ export const campoConceptContent: Record<Lang, CampoConceptContent> = {
     eyebrow: 'PROYECTO CAMPO DE CRIPTANA',
     title: 'Un vínculo con Campo de Criptana',
     paragraphs: [
-      'Desde 1973, el pintor Takuma Tokunaga ha regresado a Campo de Criptana cada verano durante más de cuarenta años, pintando sus molinos, sus calles y a las personas que allí viven. Su esposa, Yukiko, llegó a querer este pueblo con la misma intensidad, y juntos lo consideran desde hace tiempo como un segundo hogar, lejos de Japón.',
+      'Takuma Tokunaga visita Campo de Criptana casi todos los veranos desde 1973, desde hace más de cincuenta años, y pinta sus molinos, sus calles y a su gente. Su esposa, Yukiko, empezó más tarde a acompañarle. Para los dos, el pueblo es un segundo hogar.',
       'Nuestra familia desea no solo registrar y transmitir este vínculo de tantos años, sino también, con el tiempo, compartir con la gente del propio pueblo el conjunto de obras nacidas en Campo de Criptana. Esta colección es un primer paso en esa dirección, presentando cada cuadro junto con los recuerdos que lo acompañan.',
       'Nota: esta es todavía una idea en fase de estudio dentro de la familia. Nos gustaría concretar los detalles junto con Andrea y con las demás personas del pueblo en los próximos pasos.',
     ],
