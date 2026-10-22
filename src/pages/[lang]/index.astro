@@ -582,6 +582,7 @@ function getFrameWidth(cardWidth) {
         border-top: 1px solid rgba(201, 169, 97, 0.14);
       }
       .entrance + .home-sec { border-top: 0; }
+      .sec-eyebrow:empty { display: none; }
       .sec-eyebrow {
         font-family: var(--serif-latin);
         font-size: 0.74rem;
@@ -1850,9 +1851,9 @@ function getFrameWidth(cardWidth) {
           <p class="story-lead">{ln.storyLead}</p>
           {ln.storyBody.map((p) => <p class="sec-text">{p}</p>)}
           <p class="story-sign">{ln.storySign}</p>
-          <div class="story-stats">
+          {ln.storyStats.length > 0 && <div class="story-stats">
             {ln.storyStats.map((s) => <div><b>{s.num}<small>{s.unit}</small></b><span>{s.label}</span></div>)}
-          </div>
+          </div>}
         </div>
       </section>
 
@@ -1903,7 +1904,7 @@ function getFrameWidth(cardWidth) {
                 )}
               </div>
               <div>
-                <p class="pillar-num"><b>{p.num}</b><span>{p.eyebrow}</span></p>
+                {p.num && <p class="pillar-num"><b>{p.num}</b><span>{p.eyebrow}</span></p>}
                 <h3 class="sec-heading">{p.heading}</h3>
                 <p class="pillar-years">{p.years}</p>
                 {p.body.map((para) => <p class="sec-text">{para}</p>)}
@@ -2013,9 +2014,9 @@ function getFrameWidth(cardWidth) {
             <b>{lg.legacyNewsLabel}</b>
             <p>{lg.legacyNews}</p>
           </div>
-          <div class="legacy-stats">
+          {lg.legacyStats.length > 0 && <div class="legacy-stats">
             {lg.legacyStats.map((s) => <div><b>{s.num}</b><span>{s.label}</span></div>)}
-          </div>
+          </div>}
           <div class="sec-links">
             <a class="sec-cta" href={`${lpUrl}#legacy`} target="_blank" rel="noopener">{lg.legacyCta} →</a>
             <a class="sec-link" href={`#limited`} id="legacyToVip">{lg.vipHeading}</a>
@@ -2086,7 +2087,7 @@ function getFrameWidth(cardWidth) {
         <div class="vip-cards">
           {lg.vipCards.map((c) => (
             <article class="vip-card">
-              <p class="vip-mark"><b>{c.mark}</b><span>{c.unit}</span></p>
+              {c.mark && <p class="vip-mark"><b>{c.mark}</b><span>{c.unit}</span></p>}
               <h3>{c.title}</h3>
               <p>{c.body}</p>
               <small>{c.note}</small>
