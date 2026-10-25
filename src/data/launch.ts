@@ -23,7 +23,7 @@ export const EXHIBITION = {
   start: '2026-11-12T10:00:00+09:00',
   end:   '2026-11-15T14:00:00+09:00',
   // Googleマップの検索語（地図の埋め込みと「地図を開く」に使う）
-  mapQuery: 'ゲストハウス萬家 神戸市灘区城之内通4-4-10',
+  mapQuery: 'ゲストハウス萬家 神戸市灘区城内通4-4-10',
   // Googleカレンダーに追加（初日〜最終日の終日予定）
   calendarDates: '20261112/20261116',
 };
@@ -47,7 +47,7 @@ export const launch = {
     exBadgeWhen:'2026.11.12 — 11.15　神戸・萬家ギャラリー',
     exRows: [
       { label: '日時', value: '2026年11月12日（木）〜 15日（日）', sub: '10:00〜18:00（最終日は14:00まで）' },
-      { label: '会場', value: 'ゲストハウス萬家（MAYA）併設ギャラリー', sub: '神戸市灘区城之内通り4-4-10' },
+      { label: '会場', value: 'ゲストハウス萬家（MAYA）併設ギャラリー', sub: '〒657-0836 神戸市灘区城内通4-4-10' },
       { label: '内容', value: '一部の原画などの展示', sub: '一部の複製などの販売' },
     ],
     exMap:      'Googleマップで開く',
@@ -132,7 +132,7 @@ export const launch = {
     exBadgeWhen:'12–15 Nov 2026 · Kobe',
     exRows: [
       { label: 'Dates', value: 'Thu 12 – Sun 15 November 2026', sub: '10:00–18:00 (until 14:00 on the last day)' },
-      { label: 'Venue', value: 'Gallery at Guesthouse MAYA (萬家)', sub: '4-4-10 Jonouchi-dori, Nada-ku, Kobe' },
+      { label: 'Venue', value: 'Gallery at Guesthouse MAYA (萬家)', sub: '4-4-10 Jonai-dori, Nada-ku, Kobe 657-0836' },
       { label: 'On show', value: 'Selected original paintings', sub: 'Selected reproductions for sale' },
     ],
     exMap:      'Open in Google Maps',
@@ -217,7 +217,7 @@ export const launch = {
     exBadgeWhen:'12–15 nov. 2026 · Kobe',
     exRows: [
       { label: 'Fechas', value: 'Del jueves 12 al domingo 15 de noviembre de 2026', sub: '10:00–18:00 (el último día hasta las 14:00)' },
-      { label: 'Lugar', value: 'Galería de la Guesthouse MAYA (萬家)', sub: '4-4-10 Jonouchi-dori, Nada-ku, Kobe' },
+      { label: 'Lugar', value: 'Galería de la Guesthouse MAYA (萬家)', sub: '4-4-10 Jonai-dori, Nada-ku, Kobe 657-0836' },
       { label: 'Contenido', value: 'Selección de obras originales', sub: 'Venta de algunas reproducciones' },
     ],
     exMap:      'Abrir en Google Maps',
