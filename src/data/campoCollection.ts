@@ -64,9 +64,9 @@ export const campoCollectionItems: CampoCollectionItem[] = [
     paintingImage: '01008.jpg',
     fieldPhoto: null,
     title: {
-      ja: 'カンポ　坂の街並み 1',
-      en: 'Campo, Sloping Street 1',
-      sp: 'Campo, Calle en Pendiente 1',
+      ja: '平和の丘へ',
+      en: 'Toward the Hill of Peace',
+      sp: 'Hacia la colina de la paz',
     },
     impresion: {
       ja: '風車の丘へと続く坂道の街並みを、光と影の強いコントラストで描く。画面奥へと視線を誘う構図が、訪れる者が丘を登っていく感覚をそのまま伝える。',
@@ -74,9 +74,9 @@ export const campoCollectionItems: CampoCollectionItem[] = [
       sp: 'Una calle en pendiente que asciende hacia la colina de los molinos, pintada con fuertes contrastes de luz y sombra. La composición atrae la mirada hacia el fondo, transmitiendo la sensación de subir uno mismo hacia la colina.',
     },
     tecnica: {
-      ja: '油彩・30号。厚塗りと薄塗りを使い分け、白壁の反射光と石畳の質感を対比させている。',
-      en: 'Oil on canvas, No. 30. Thick and thin layers of paint are used side by side, contrasting the reflected light off the white walls with the texture of the cobblestones.',
-      sp: 'Óleo sobre lienzo, nº 30. Se combinan capas de pintura espesa y fina, contrastando la luz reflejada en las paredes blancas con la textura del empedrado.',
+      ja: '油彩・F25号。厚塗りと薄塗りを使い分け、白壁の反射光と石畳の質感を対比させている。',
+      en: 'Oil on canvas, F25. Thick and thin layers of paint are used side by side, contrasting the reflected light off the white walls with the texture of the cobblestones.',
+      sp: 'Óleo sobre lienzo, F25. Se combinan capas de pintura espesa y fina, contrastando la luz reflejada en las paredes blancas con la textura del empedrado.',
     },
     historia: pendingHistoria,
   },
