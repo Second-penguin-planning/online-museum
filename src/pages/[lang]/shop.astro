@@ -939,9 +939,12 @@ const ts = shopUI[lang];
       <h1 class="shop-title">{ts.title}</h1>
     </div>
 
-    <div class="admin-btn-wrap">
-      <button class="admin-open-btn" id="adminOpenBtn">{ts.adminBtn}</button>
-    </div>
+    {/* 管理者ボタンはローカル開発（npm run dev）のときだけ表示する */}
+    {import.meta.env.DEV && (
+      <div class="admin-btn-wrap">
+        <button class="admin-open-btn" id="adminOpenBtn">{ts.adminBtn}</button>
+      </div>
+    )}
 
     <div class="shop-grid">
       {shopItems.map((item) => (
@@ -991,6 +994,9 @@ const ts = shopUI[lang];
     </div>
   </div>
 
+  {/* 管理画面はローカル開発のときだけ出力する（公開サイトにトークン入力欄を置かない） */}
+  {import.meta.env.DEV && (
+    <Fragment>
   <!-- ===== 管理者パスワードモーダル ===== -->
   <div class="admin-modal-overlay" id="adminPwOverlay">
     <div class="admin-modal" style="max-width:420px;">
@@ -1096,29 +1102,11 @@ const ts = shopUI[lang];
       </form>
     </div>
   </div>
+    </Fragment>
+  )}
 
-  <script define:vars={{ noPrice: ts.noPrice, soldOutLabel: ts.soldOut, inquiryLabel: ts.inquiry, adminPwErr: ts.adminPwErr, loadingLabel: ts.status.loading, successLabel: ts.status.success }}>
+  <script define:vars={{ noPrice: ts.noPrice, soldOutLabel: ts.soldOut, inquiryLabel: ts.inquiry }}>
     const base = document.querySelector('meta[name="base-url"]')?.getAttribute('content') ?? '';
-    const ADMIN_PW = 'art2024admin';
-    const GITHUB_API = 'https://api.github.com/repos/Second-penguin-planning/online-museum/contents/src/data/shop.json';
-
-    // GitHub Contents APIのbase64はUTF-8のバイト列。atob/btoaはLatin-1前提のため
-    // TextDecoder/TextEncoderを介して正しくUTF-8として変換する（日本語の文字化け防止）
-    function base64ToUtf8(b64) {
-      const binary = atob(b64);
-      const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
-      return new TextDecoder('utf-8').decode(bytes);
-    }
-    function utf8ToBase64(str) {
-      const bytes = new TextEncoder().encode(str);
-      let binary = '';
-      const chunkSize = 0x8000;
-      for (let i = 0; i < bytes.length; i += chunkSize) {
-        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
-      }
-      return btoa(binary);
-    }
-
     /* ===== ハンバーガー ===== */
     const hamburgerBtn  = document.getElementById('hamburgerBtn');
     const mobileMenu    = document.getElementById('mobileMenu');
@@ -1180,6 +1168,29 @@ const ts = shopUI[lang];
     document.getElementById('inquiryBtn').addEventListener('click', () => {
       window.location.href = `mailto:info@second-penguin.com?subject=ショップお問い合わせ`;
     });
+  </script>
+
+  {import.meta.env.DEV && (
+    <script define:vars={{ adminPwErr: ts.adminPwErr, loadingLabel: ts.status.loading, successLabel: ts.status.success }}>
+    const ADMIN_PW = 'art2024admin';
+    const GITHUB_API = 'https://api.github.com/repos/Second-penguin-planning/online-museum/contents/src/data/shop.json';
+
+    // GitHub Contents APIのbase64はUTF-8のバイト列。atob/btoaはLatin-1前提のため
+    // TextDecoder/TextEncoderを介して正しくUTF-8として変換する（日本語の文字化け防止）
+    function base64ToUtf8(b64) {
+      const binary = atob(b64);
+      const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+      return new TextDecoder('utf-8').decode(bytes);
+    }
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+      }
+      return btoa(binary);
+    }
 
     /* ===== 管理者認証 ===== */
     const adminOpenBtn     = document.getElementById('adminOpenBtn');
@@ -1273,7 +1284,8 @@ const ts = shopUI[lang];
         submitBtn.disabled = false;
       }
     });
-  </script>
+    </script>
+  )}
 
 </body>
 </html>

@@ -1384,8 +1384,13 @@ const tableSections = [
     <!-- 管理者ボタン -->
     <div class="admin-btn-wrap">
       <button class="table-view-toggle-btn" id="tableViewToggleBtn" data-label-table={tS.table.toggleBtn} data-label-cards={tS.table.backBtn}>{tS.table.toggleBtn}</button>
-      <button class="admin-open-btn" id="adminOpenBtn">⚙ ADMIN</button>
-      <button class="admin-logout-btn" id="adminLogoutBtn" style="display:none;">🔓 ログアウト</button>
+      {/* 管理者ボタンはローカル開発（npm run dev）のときだけ表示する */}
+      {import.meta.env.DEV && (
+        <Fragment>
+          <button class="admin-open-btn" id="adminOpenBtn">⚙ ADMIN</button>
+          <button class="admin-logout-btn" id="adminLogoutBtn" style="display:none;">🔓 ログアウト</button>
+        </Fragment>
+      )}
     </div>
 
     <div class="card-view">
@@ -1575,6 +1580,9 @@ const tableSections = [
     </div>
   </div>
 
+  {/* 管理画面はローカル開発のときだけ出力する（公開サイトにトークン入力欄を置かない） */}
+  {import.meta.env.DEV && (
+    <Fragment>
   <!-- ========== 管理者パスワードモーダル ========== -->
   <div class="admin-modal-overlay" id="adminPwOverlay">
     <div class="admin-modal" style="max-width:420px;">
@@ -1717,6 +1725,8 @@ const tableSections = [
       </form>
     </div>
   </div>
+    </Fragment>
+  )}
 
   <!-- ========== ライトボックス ========== -->
   <div class="modal-overlay" id="modalOverlay">
@@ -1818,7 +1828,15 @@ const tableSections = [
     document.getElementById('modalOverlay').addEventListener('click', (e) => {
       if (e.target.id === 'modalOverlay') e.target.classList.remove('active');
     });
+  </script>
 
+  {import.meta.env.DEV && (
+    <script define:vars={{
+      takumaCatKeys,
+      sachikoCatKeys,
+      catLabels: { takuma: tS.cats.takuma, sachiko: tS.cats.sachiko },
+      galleryBase: `${base}/gallery`,
+    }}>
     /* ===== 管理者パネル ===== */
     const ADMIN_PW = 'art2024admin';
     const TOKEN_KEY = 'online_museum_admin_pat';
@@ -2143,7 +2161,8 @@ const tableSections = [
         publishCheckbox.addEventListener('change', () => saveField({ published: publishCheckbox.checked }, '公開設定'));
       }
     });
-  </script>
+    </script>
+  )}
 
 </body>
 </html>
