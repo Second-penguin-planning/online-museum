@@ -14,7 +14,7 @@ export const legacy = {
   ja: {
     pillarsEyebrow: '',
     pillarsHeading: '神戸とカンポ・デ・クリプターナ',
-    pillarsLead:    '徳永卓磨の作品の多くは、育った町・神戸と、1973年から通うスペインの町カンポ・デ・クリプターナで描かれています。',
+    pillarsLead:    '徳永卓磨の作品の多くは、育った町・神戸と、1971年から通うスペインの町カンポ・デ・クリプターナで描かれています。',
     kobe: {
       num:     '',
       eyebrow: '',
@@ -30,9 +30,9 @@ export const legacy = {
       num:     '',
       eyebrow: '',
       heading: 'カンポ・デ・クリプターナ — 風車と白壁の町',
-      years:   '1973 —',
+      years:   '1971 —',
       body: [
-        '1973年に初めて訪れて以来、ほぼ毎年夏に町に滞在し、風車や白壁の家並み、家々の扉や窓を現地で描いてきました。',
+        '1971年に初めて訪れて以来、ほぼ毎年夏に町に滞在し、風車や白壁の家並み、家々の扉や窓を現地で描いてきました。',
         '「白に1%でも他の色が感じられれば、それは純白ではない」は画家の言葉です。陰影を描いたあとに純白を重ねて仕上げるのが、徳永卓磨の描き方です。',
       ],
       cta:  '特別展 カンポを見る',
@@ -81,7 +81,7 @@ export const legacy = {
   en: {
     pillarsEyebrow: '',
     pillarsHeading: 'Kobe and Campo de Criptana',
-    pillarsLead:    'Most of Takuma Tokunaga\'s works were painted in Kobe, where he grew up, and in Campo de Criptana, the Spanish town he has visited since 1973.',
+    pillarsLead:    'Most of Takuma Tokunaga\'s works were painted in Kobe, where he grew up, and in Campo de Criptana, the Spanish town he has visited since 1971.',
     kobe: {
       num:     '',
       eyebrow: '',
@@ -97,9 +97,9 @@ export const legacy = {
       num:     '',
       eyebrow: '',
       heading: 'Campo de Criptana — windmills and white walls',
-      years:   '1973 —',
+      years:   '1971 —',
       body: [
-        'Since his first visit in 1973 he has stayed in the town almost every summer, painting its windmills, whitewashed streets, and the doors and windows of its houses on location.',
+        'Since his first visit in 1971 he has stayed in the town almost every summer, painting its windmills, whitewashed streets, and the doors and windows of its houses on location.',
         '"If you can sense even 1% of another colour, it is no longer pure white," the painter says. His method is to paint the shadows first and finish with pure white on top.',
       ],
       cta:  'Visit the Campo Exhibition',
@@ -148,7 +148,7 @@ export const legacy = {
   sp: {
     pillarsEyebrow: '',
     pillarsHeading: 'Kobe y Campo de Criptana',
-    pillarsLead:    'La mayor parte de la obra de Takuma Tokunaga se pintó en Kobe, la ciudad donde creció, y en Campo de Criptana, el pueblo español que visita desde 1973.',
+    pillarsLead:    'La mayor parte de la obra de Takuma Tokunaga se pintó en Kobe, la ciudad donde creció, y en Campo de Criptana, el pueblo español que visita desde 1971.',
     kobe: {
       num:     '',
       eyebrow: '',
@@ -164,9 +164,9 @@ export const legacy = {
       num:     '',
       eyebrow: '',
       heading: 'Campo de Criptana: molinos y paredes blancas',
-      years:   '1973 —',
+      years:   '1971 —',
       body: [
-        'Desde su primera visita en 1973 ha pasado en el pueblo casi todos los veranos, pintando del natural sus molinos, sus calles encaladas y las puertas y ventanas de sus casas.',
+        'Desde su primera visita en 1971 ha pasado en el pueblo casi todos los veranos, pintando del natural sus molinos, sus calles encaladas y las puertas y ventanas de sus casas.',
         '«Si en el blanco se percibe aunque sea un 1 % de otro color, deja de ser blanco puro», dice el pintor. Su manera de trabajar consiste en pintar primero las sombras y terminar con blanco puro encima.',
       ],
       cta:  'Ver la exposición de Campo',

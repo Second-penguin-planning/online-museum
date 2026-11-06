@@ -24,15 +24,15 @@ export interface CampoArticle {
 export const campoIntro: Record<Lang, string[]> = {
   ja: [
     `カンポ・デ・クリプターナは、スペイン・カスティーリャ＝ラ・マンチャ州シウダー・レアル県にある町で、丘の上に並ぶ風車群で世界的に知られています。この風車は、ミゲル・デ・セルバンテス『ドン・キホーテ』の中でも最も有名な一場面の舞台となりました。`,
-    `画家・徳永卓磨は1973年以来、この町を毎年夏に訪れて風車や街並み、風景を描き続け、後には妻・幸子も同行するようになり、40年以上にわたる縁を紡いできました。以下は、カンポ・デ・クリプターナで開催された展覧会（2017年のエル・ポシト美術館での展覧会を含む）に際して寄せられた4篇の文章で、その関係を物語る証言です。`,
+    `画家・徳永卓磨は1971年以来、この町を毎年夏に訪れて風車や街並み、風景を描き続け、後には妻・幸子も同行するようになり、40年以上にわたる縁を紡いできました。以下は、カンポ・デ・クリプターナで開催された展覧会（2017年のエル・ポシト美術館での展覧会を含む）に際して寄せられた4篇の文章で、その関係を物語る証言です。`,
   ],
   en: [
     `Campo de Criptana is a town in the province of Ciudad Real, in Castilla-La Mancha, Spain, world-famous for the windmills crowning its ridge — the setting for the most universal episode of Miguel de Cervantes' Don Quixote.`,
-    `Since 1973, the painter Takuma Tokunaga — later joined by his partner Yukiko — has returned to this town every summer to paint its windmills, streets, and landscape, weaving a bond that now spans more than four decades. Below are four texts, written on the occasion of various exhibitions held in Campo de Criptana (including one at the Museo "El Pósito" in 2017), that bear witness to that relationship.`,
+    `Since 1971, the painter Takuma Tokunaga — later joined by his partner Yukiko — has returned to this town every summer to paint its windmills, streets, and landscape, weaving a bond that now spans more than four decades. Below are four texts, written on the occasion of various exhibitions held in Campo de Criptana (including one at the Museo "El Pósito" in 2017), that bear witness to that relationship.`,
   ],
   sp: [
     `Campo de Criptana es un municipio de la provincia de Ciudad Real, en Castilla-La Mancha, célebre en todo el mundo por los molinos de viento que coronan su sierra y que fueron escenario del episodio más universal de Don Quijote de la Mancha, de Miguel de Cervantes.`,
-    `Desde 1973, el pintor Takuma Tokunaga —al que más tarde se unió su compañera Yukiko— ha regresado cada verano a este pueblo para pintar sus molinos, sus calles y su paisaje, tejiendo con él un vínculo que suma ya más de cuarenta años. A continuación se recogen cuatro textos, escritos con motivo de distintas exposiciones celebradas en Campo de Criptana (entre ellas la del Museo "El Pósito", en 2017), que dan testimonio de esa relación.`,
+    `Desde 1971, el pintor Takuma Tokunaga —al que más tarde se unió su compañera Yukiko— ha regresado cada verano a este pueblo para pintar sus molinos, sus calles y su paisaje, tejiendo con él un vínculo que suma ya más de cuarenta años. A continuación se recogen cuatro textos, escritos con motivo de distintas exposiciones celebradas en Campo de Criptana (entre ellas la del Museo "El Pósito", en 2017), que dan testimonio de esa relación.`,
   ],
 };
 
@@ -92,7 +92,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
         `Takuma lo ha pintado todo, y se lo ha llevado hasta el Japón.`,
         `Cuando termina el verano desmonta los lienzos de sus bastidores con la misma veneración que los ha desplegado, les va enrollando hasta el fondo de su maleta.`,
         `Vuelan a miles de kilómetros y allí en Kobe[7], su ciudad de origen, portuaria, cosmopolita, al suroeste de Osaka.`,
-        `Allí le espera ese almacén de arte, donde va depositando cada trozo de esta tierra que se la va llevando como un peregrino que viviese en estado de gracia, este caballero del silencio, apasionado lector y seguidor del Quijote, que lleva viniendo a Campo de Criptana desde el año 1973 cuando descubriese los famosos molinos y el rojo apasionado de las tierras resecas de la meseta que contrastan con el amarillo intenso de los rastrojos, allí, donde agosta el verano en el calor sofocante y el color se derrite sobre este paisaje.`,
+        `Allí le espera ese almacén de arte, donde va depositando cada trozo de esta tierra que se la va llevando como un peregrino que viviese en estado de gracia, este caballero del silencio, apasionado lector y seguidor del Quijote, que lleva viniendo a Campo de Criptana desde el año 1971 cuando descubriese los famosos molinos y el rojo apasionado de las tierras resecas de la meseta que contrastan con el amarillo intenso de los rastrojos, allí, donde agosta el verano en el calor sofocante y el color se derrite sobre este paisaje.`,
         `Pero Takuma, no ha venido solo, le ha acompañado hasta en trece ocasiones, su compañera Yukiko, también pintora, quien comparte el mismo cariño por esta tierra y que nos ha traído para esta ocasión, una colección espléndida de nuestra flora autóctona, como son nuestros conocidos "cardos"[8] un homenaje a esa flor singular y sencilla como ellos, que nosotros apenas valoramos.`,
         `Hace cuarenta y cuatro veranos que Takuma y Yukiko continúan gastando sus ahorros en este viaje místico, rindiendo homenaje a nuestro pueblo.`,
         `Son como unos monjes de la Edad Media, con fervor franciscano[9], con una humildad que no se lleva.`,
@@ -119,7 +119,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
       paragraphs: [
         `No eres de Criptana si no sabes... Si no sabes quién es Takuma.`,
         `Takuma Tokunaga es nuestro particular samurái[10] de La Mancha.`,
-        `Otro de los privilegios de haber nacido en nuestro Campo de Criptana es toparte con alguien como este pintor espiritual de pincel fino y trazo minucioso que llegó a nuestro pueblo en 1973 desde Kobe, en aquellos tiempos cuando Franco[11] aún no había muerto.`,
+        `Otro de los privilegios de haber nacido en nuestro Campo de Criptana es toparte con alguien como este pintor espiritual de pincel fino y trazo minucioso que llegó a nuestro pueblo en 1971 desde Kobe, en aquellos tiempos cuando Franco[11] aún no había muerto.`,
         `Takuma, profesor japonés de pintura, inesperadamente convirtió la casa de Carmen, Vicente y Alfonsa en su pagoda manchega, y ahí llega cada verano desde hace 45 años.`,
         `Gracias a él la mayoría de los criptaneses descubrimos que los japoneses existían de verdad, eran de carne y hueso, y no malvados soldados en las películas de la II Guerra Mundial.`,
         `Si somos lo que hacemos, Takuma es como pinta: un personaje limpio, toda luz, más blanco que la cal, que huye como de un nublado de las sombras y de la oscuridad, y así plasma en cada lienzo paisajes y objetos con vida propia.`,
@@ -140,7 +140,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
       ],
       footnotes: [
         { marker: '10', text: 'Samurái: Guerrero del Japón feudal. Usado aquí alegóricamente para definir el coraje, la disciplina y la perseverancia artística de Takuma.' },
-        { marker: '11', text: 'Franco: Francisco Franco, dictador español que gobernó desde 1939 hasta su muerte en noviembre de 1975. Se menciona para contextualizar la llegada de Takuma en 1973.' },
+        { marker: '11', text: 'Franco: Francisco Franco, dictador español que gobernó desde 1939 hasta su muerte en noviembre de 1975. Se menciona para contextualizar la llegada de Takuma en 1971.' },
         { marker: '12', text: 'Armonía budista: Concepto zen de paz interior y equilibrio cósmico, reflejado en la serenidad y pulcritud de los cuadros de Takuma.' },
         { marker: '13', text: 'Katana: Sable tradicional japonés de filo único. En el texto representa el pincel con el que Takuma trabaja.' },
         { marker: '14', text: 'Yari: Lanza tradicional japonesa. En el texto se compara poéticamente con el tallo del cardo que pinta Yukiko.' },
@@ -198,7 +198,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
         `Takuma has painted everything, and taken it back to Japan.`,
         `When summer ends, he unmounts the canvases from their stretchers with the same veneration with which he unfurled them, rolling them up into the bottom of his suitcase.`,
         `They fly thousands of kilometers to Kobe, his origin city—port, cosmopolitan, southwest of Osaka.`,
-        `There an art warehouse awaits him, where he deposits each fragment of this land like a pilgrim living in a state of grace; this knight of silence, passionate reader and follower of Quixote, who has been coming to Campo de Criptana since 1973 when he discovered the famous windmills and the passionate red of the dry plateau soil contrasting with the intense yellow of the stubble, where summer fades in the suffocating heat and color melts over this landscape.`,
+        `There an art warehouse awaits him, where he deposits each fragment of this land like a pilgrim living in a state of grace; this knight of silence, passionate reader and follower of Quixote, who has been coming to Campo de Criptana since 1971 when he discovered the famous windmills and the passionate red of the dry plateau soil contrasting with the intense yellow of the stubble, where summer fades in the suffocating heat and color melts over this landscape.`,
         `But Takuma did not come alone; he has been accompanied on up to thirteen occasions by his partner Yukiko, also a painter, who shares the same affection for this land and has brought us for this occasion a splendid collection of our native flora, such as our well-known thistles—a tribute to that singular and simple flower like themselves, which we barely value.`,
         `For forty-four summers, Takuma and Yukiko have continued spending their savings on this mystical journey, paying tribute to our town.`,
         `They are like medieval monks, with Franciscan fervor, with a humility no longer seen.`,
@@ -219,7 +219,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
       paragraphs: [
         `You are not from Criptana if you don't know... if you don't know who Takuma is.`,
         `Takuma Tokunaga is our particular samurai of La Mancha.`,
-        `Another privilege of being born in Campo de Criptana is stumbling upon someone like this spiritual painter of fine brush and meticulous stroke who arrived in our town in 1973 from Kobe, in those days when Franco had not yet died.`,
+        `Another privilege of being born in Campo de Criptana is stumbling upon someone like this spiritual painter of fine brush and meticulous stroke who arrived in our town in 1971 from Kobe, in those days when Franco had not yet died.`,
         `Takuma, a Japanese painting professor, unexpectedly transformed the house of Carmen, Vicente, and Alfonsa into his Manchegan pagoda, and he has returned there every summer for 45 years.`,
         `Thanks to him, most Criptanenses discovered that Japanese people actually existed, were flesh and blood, and were not evil soldiers in World War II movies.`,
         `If we are what we do, Takuma is as he paints: a pure character, all light, whiter than lime, fleeing as if from a cloud of shadows and darkness, capturing landscapes and objects with a life of their own on every canvas.`,
@@ -290,7 +290,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
         `卓磨はそのすべてを描き、日本へと持ち帰りました。`,
         `夏が終わると、広げた時と同じ敬愛の念をもって木枠からキャンバスを外し、スーツケースの底へと丁寧に丸めて入れます。`,
         `それらは数千マイルを飛び、大阪の南西に位置する彼の故郷、港町で国際都市である神戸へと向かいます。`,
-        `そこには美術の保管庫が彼を待っており、恵みの状態に生きる巡礼者のように持ち帰ったこの地の一片一片をそこに託していくのです。この沈黙の紳士であり、ドン・キホーテの情熱的な読者・信奉者である男は、1973年に有名な風車と、刈り取り跡の鮮やかな黄色と対比をなす台地の乾いた土の情熱的な赤を発見して以来、カンポ・デ・クリプターナに来続けています。そこでは窒息するような暑さの中で夏が生気を失わせ、風景の上で色が溶け出しています。`,
+        `そこには美術の保管庫が彼を待っており、恵みの状態に生きる巡礼者のように持ち帰ったこの地の一片一片をそこに託していくのです。この沈黙の紳士であり、ドン・キホーテの情熱的な読者・信奉者である男は、1971年に有名な風車と、刈り取り跡の鮮やかな黄色と対比をなす台地の乾いた土の情熱的な赤を発見して以来、カンポ・デ・クリプターナに来続けています。そこでは窒息するような暑さの中で夏が生気を失わせ、風景の上で色が溶け出しています。`,
         `しかし卓磨は一人で来たわけではありません。13回にわたり、同じく画家でありこの地に同じ愛情を抱く伴侶の幸子が同行しました。彼女は今回、私たちがほとんど価値を見出さないアザミのような素朴で単一な花へのオマージュとして、私たちの自生植物の素晴らしいコレクションをもたらしてくれました。`,
         `44の夏の昔から、卓磨と幸子はわが村に敬意を表しながら、この神秘的な旅に蓄えを使い続けています。`,
         `彼らは中世の修道士のようであり、フランシスコ会の熱情を持ち、今や廃れてしまったほどの謙虚さを備えています。`,
@@ -311,7 +311,7 @@ export const campoArticles: Record<Lang, CampoArticle[]> = {
       paragraphs: [
         `もし君が卓磨が誰であるかを知らないなら……君はクリプターナ生まれではない。`,
         `徳永卓磨は、私たちの「ラ・マンチャの侍」です。`,
-        `カンポ・デ・クリプターナに生まれたもう一つの特権は、フランコがまだ存命であった1973年に神戸から私たちの村にやって来た、繊細な筆遣いと緻密な描線を持つこの霊的な画家に出会うことです。`,
+        `カンポ・デ・クリプターナに生まれたもう一つの特権は、フランコがまだ存命であった1971年に神戸から私たちの村にやって来た、繊細な筆遣いと緻密な描線を持つこの霊的な画家に出会うことです。`,
         `日本の絵画教授である卓磨は、思いがけずカルメン、ヴィセンテ、アルフォンサの家を「ラ・マンチャのパゴダ（仏塔）」に変え、45年前から毎夏そこへとやって来ます。`,
         `彼のおかげで、多くのクリプターナ人が日本人が実在し、血の通った人間であり、第二次世界大戦の映画に出てくるような悪逆な兵士ではないことを発見しました。`,
         `「人はその行う行動そのものである」とするならば、卓磨は彼が描く絵そのものです。汚れなき人物、すべてが光であり、石灰よりも白く、暗雲や暗闇から逃れ、一つ一つのキャンバスに独自の生命を持った風景や物体を定着させます。`,

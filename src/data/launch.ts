@@ -34,7 +34,7 @@ export const launch = {
     storyHeading: 'ごあいさつ',
     storyLead:    '父・徳永卓磨は、1960年から60年以上、油絵を描いてきました。カンポ・デ・クリプターナで描いた作品は約200点です。',
     storyBody: [
-      '神戸で育った父は、異人館や造船所のドックを描くことから始めました。1973年、スペインのラ・マンチャを旅した際に列車の窓から風車を見て、カンポ・デ・クリプターナを訪れました。それ以来この町に通い続け、父にとって神戸とこの町は二つの故郷になっています。',
+      '神戸で育った父は、異人館や造船所のドックを描くことから始めました。1971年、スペインのラ・マンチャを旅した際に列車の窓から風車を見て、カンポ・デ・クリプターナを訪れました。それ以来この町に通い続け、父にとって神戸とこの町は二つの故郷になっています。',
       'このオンライン美術館は、その作品を一点ずつ記録し、どこからでもご覧いただけるように開きました。',
     ],
     storySign:    '徳永 良雄（画家の息子）',
@@ -119,7 +119,7 @@ export const launch = {
     storyHeading: 'Welcome',
     storyLead:    'My father, Takuma Tokunaga, has painted in oils since 1960, for more than sixty years. Some 200 of his works were painted in Campo de Criptana.',
     storyBody: [
-      'He grew up in Kobe and began by painting its Western-style houses and shipyard docks. In 1973, travelling through La Mancha in Spain, he saw windmills from a train window and visited Campo de Criptana. He has returned to the town ever since, and for him Kobe and Campo de Criptana are two homes.',
+      'He grew up in Kobe and began by painting its Western-style houses and shipyard docks. In 1971, travelling through La Mancha in Spain, he saw windmills from a train window and visited Campo de Criptana. He has returned to the town ever since, and for him Kobe and Campo de Criptana are two homes.',
       'This online museum was created to record his works one by one and make them available to view from anywhere.',
     ],
     storySign:    'Yoshio Tokunaga, the artist\'s son',
@@ -204,7 +204,7 @@ export const launch = {
     storyHeading: 'Bienvenida',
     storyLead:    'Mi padre, Takuma Tokunaga, pinta al óleo desde 1960, desde hace más de sesenta años. Unas 200 de sus obras fueron pintadas en Campo de Criptana.',
     storyBody: [
-      'Creció en Kobe y empezó pintando sus casas de estilo occidental y los diques de sus astilleros. En 1973, viajando por La Mancha, vio unos molinos desde la ventanilla del tren y visitó Campo de Criptana. Desde entonces ha vuelto al pueblo una y otra vez; para él, Kobe y Campo de Criptana son sus dos hogares.',
+      'Creció en Kobe y empezó pintando sus casas de estilo occidental y los diques de sus astilleros. En 1971, viajando por La Mancha, vio unos molinos desde la ventanilla del tren y visitó Campo de Criptana. Desde entonces ha vuelto al pueblo una y otra vez; para él, Kobe y Campo de Criptana son sus dos hogares.',
       'Este museo en línea se ha creado para registrar sus obras una a una y poder verlas desde cualquier lugar.',
     ],
     storySign:    'Yoshio Tokunaga, hijo del pintor',

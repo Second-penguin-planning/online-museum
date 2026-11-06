@@ -6,7 +6,7 @@
 // 再構成・引用であり、新規の取材や創作は含まない。
 // 引用（quote）はいずれも campoDeCriptana.ts の既存訳文からの逐語抜粋。
 //
-// 年表の年代は、原資料に明記されている年（1973年・2017年）以外は「◯年代」「複数回」など
+// 年表の年代は、原資料に明記されている年（1971年・2017年）以外は「◯年代」「複数回」など
 // 幅を持たせた表記とし、原資料にない具体的な年を新たに創作しないよう配慮している。
 // 主要人物とのQ&A形式インタビューは、2026年9〜11月に予定される現地取材の実施後に
 // 追加する（本ページでは未実施）。
@@ -20,7 +20,7 @@ export interface TimelineEntry {
 
 export const campoTimeline: TimelineEntry[] = [
   {
-    year: '1973',
+    year: '1971',
     text: {
       ja: '徳永卓磨、列車の窓から風車を発見し、カンポ・デ・クリプターナを初めて訪れる。宿「バル・デ・ロス・モリノス」に投宿し、女将カルメンとヴィセンテ父子と出会う。',
       en: "Takuma Tokunaga discovers the windmills from a train window and visits Campo de Criptana for the first time. He lodges at the inn Bar de los Molinos, where he meets innkeeper Carmen and the father-and-son pair, Vicente.",

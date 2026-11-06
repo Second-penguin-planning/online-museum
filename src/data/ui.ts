@@ -64,7 +64,7 @@ export const rooms = {
 export const home = {
   ja: {
     tagline:      'ラ・マンチャの風車の町に、半世紀通い続けた日本人画家',
-    description:  'スペイン・ラ・マンチャの風車の町カンポ・デ・クリプターナに、1973年から半世紀通い続けた画家・徳永卓磨と、徳永幸子の作品を展示するオンライン美術館です。',
+    description:  'スペイン・ラ・マンチャの風車の町カンポ・デ・クリプターナに、1971年から半世紀通い続けた画家・徳永卓磨と、徳永幸子の作品を展示するオンライン美術館です。',
     navRooms:     '展示室',
     navCampo:     '特別展 カンポ',
     navArtist:    '画家について',
@@ -75,13 +75,13 @@ export const home = {
     todayOpen:    'この絵を大きく見る',
     todayAnother: '別の絵を見る',
     storyEyebrow: 'THE STORY',
-    storyHeading: '1973年、列車の窓から風車が見えた',
+    storyHeading: '1971年、列車の窓から風車が見えた',
     storyBody: [
       'スペイン・ラ・マンチャを旅していた徳永卓磨は、車窓に並ぶ白い風車に惹かれ、小さな町カンポ・デ・クリプターナを訪ねました。',
       'それから半世紀。毎夏のように町に通い、のちには妻・幸子とともに、風車や白壁の街並み、扉や窓を描き続けてきました。町の美術館では2017年と2018年に展覧会も開かれています。',
     ],
     storyStats: [
-      { num: '1973', label: '初めての訪問' },
+      { num: '1971', label: '初めての訪問' },
       { num: 'WORKS', label: '特別コレクション' },
       { num: '2017・2018', label: '町での展覧会' },
     ],
@@ -108,7 +108,7 @@ export const home = {
   },
   en: {
     tagline:      "A Japanese painter who returned to La Mancha's town of windmills for half a century",
-    description:  'An online museum of works by Takuma Tokunaga, a painter who has returned to Campo de Criptana, the windmill town of La Mancha, Spain, since 1973.',
+    description:  'An online museum of works by Takuma Tokunaga, a painter who has returned to Campo de Criptana, the windmill town of La Mancha, Spain, since 1971.',
     navRooms:     'Rooms',
     navCampo:     'Campo Exhibition',
     navArtist:    'About the Artist',
@@ -119,13 +119,13 @@ export const home = {
     todayOpen:    'View this painting',
     todayAnother: 'Show another',
     storyEyebrow: 'THE STORY',
-    storyHeading: '1973: windmills seen from a train window',
+    storyHeading: '1971: windmills seen from a train window',
     storyBody: [
       'Travelling through La Mancha, Takuma Tokunaga was drawn by the white windmills he saw from the train, and visited the small town of Campo de Criptana.',
       'Half a century later, he has returned almost every summer, later together with his wife, painting its windmills, whitewashed streets, doors and windows. The town museum held exhibitions of his work in 2017 and 2018.',
     ],
     storyStats: [
-      { num: '1973', label: 'First visit' },
+      { num: '1971', label: 'First visit' },
       { num: 'WORKS', label: 'Special collection' },
       { num: '2017 · 2018', label: 'Exhibitions in town' },
     ],
@@ -152,7 +152,7 @@ export const home = {
   },
   sp: {
     tagline:      'Un pintor japonés que volvió durante medio siglo al pueblo de los molinos de La Mancha',
-    description:  'Museo en línea con las obras de Takuma Tokunaga, pintor que desde 1973 ha vuelto a Campo de Criptana, el pueblo de los molinos de La Mancha.',
+    description:  'Museo en línea con las obras de Takuma Tokunaga, pintor que desde 1971 ha vuelto a Campo de Criptana, el pueblo de los molinos de La Mancha.',
     navRooms:     'Salas',
     navCampo:     'Exposición Campo',
     navArtist:    'El pintor',
@@ -163,13 +163,13 @@ export const home = {
     todayOpen:    'Ver el cuadro',
     todayAnother: 'Ver otro',
     storyEyebrow: 'LA HISTORIA',
-    storyHeading: '1973: unos molinos vistos desde el tren',
+    storyHeading: '1971: unos molinos vistos desde el tren',
     storyBody: [
       'Viajando por La Mancha, Takuma Tokunaga se fijó en los molinos blancos que se veían desde el tren y visitó el pequeño pueblo de Campo de Criptana.',
       'Medio siglo después, ha vuelto casi cada verano, más tarde junto a su esposa, para pintar sus molinos, sus calles encaladas, sus puertas y ventanas. El museo del pueblo acogió exposiciones de su obra en 2017 y 2018.',
     ],
     storyStats: [
-      { num: '1973', label: 'Primera visita' },
+      { num: '1971', label: 'Primera visita' },
       { num: 'WORKS', label: 'Colección especial' },
       { num: '2017 · 2018', label: 'Exposiciones en el pueblo' },
     ],
